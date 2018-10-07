@@ -26,7 +26,7 @@ namespace acaShare.WebAPI.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post(string value)
         {
         }
 
