@@ -13,4 +13,8 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\acaShare.DAL\acaShare.DAL.csproj" />
+  </ItemGroup>
+
 </Project>
