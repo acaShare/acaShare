@@ -1,30 +1,52 @@
 ﻿using acaShare.DAL.Core;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
+using Dapper;
 
 namespace acaShare.DAL.Persistence
 {
     public class DapperRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {
+        private static readonly string TEntityClassName = typeof(TEntity).Name;
+        protected readonly IDbTransaction _transaction;
+        private IDbConnection _con => _transaction.Connection;
+
+        public DapperRepository(IDbTransaction transaction)
+        {
+            _transaction = transaction;
+        }
+
         public void Add(TEntity entity)
         {
-            throw new NotImplementedException();
+            string properties = string.Empty;
+            int i = 0;
+            foreach (var property in typeof(TEntity).GetProperties())
+            {
+                properties += property.GetValue(entity);
+
+                if (i++ < properties.Length - 1)
+                    properties += ", ";
+            }
+
+            _con.Execute($"INSERT INTO {TEntityClassName} VALUES ({properties})");
         }
 
         public void Delete(TEntity entity)
         {
-            throw new NotImplementedException();
+            _con.Execute(
+                $"DELETE FROM {TEntityClassName} WHERE {TEntityClassName}Id = {entity.GetType().GetProperty($"{TEntityClassName}Id").GetValue(entity)}");
         }
 
         public TEntity FindById(int entityId)
         {
-            throw new NotImplementedException();
+            return _con.QuerySingle<TEntity>($"SELECT * FROM {TEntityClassName} WHERE {TEntityClassName}Id = {entityId}", transaction: _transaction);
         }
 
         public IEnumerable<TEntity> GetAll()
         {
-            throw new NotImplementedException();
+            return _con.Query<TEntity>($"SELECT * FROM {TEntityClassName}", transaction: _transaction);
         }
     }
 }

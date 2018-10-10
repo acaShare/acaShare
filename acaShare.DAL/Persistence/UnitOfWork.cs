@@ -1,6 +1,7 @@
 ﻿using acaShare.DAL.Configuration;
 using acaShare.DAL.Core;
 using acaShare.DAL.Core.Repositories;
+using acaShare.DAL.Persistence.Repositories;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -12,26 +13,61 @@ namespace acaShare.DAL.Persistence
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly IDbConnection _con;
+        // Connectables
+        private IDbConnection _con;
+        private IDbTransaction _transaction;
+
+        // Repositories
+        private ILessonRepository _lessons;
+        public ILessonRepository Lessons => _lessons ?? new LessonRepository(_transaction);
 
         public UnitOfWork(IOptions<AcaShareConfiguration> options)
         {
             AcaShareConfiguration configuration = options.Value;
             var connStr = configuration.ConnectionString;
+
             _con = new SqlConnection(connStr);
             _con.Open();
+            _transaction = _con.BeginTransaction();
         }
-
-        public ILessonRepository Lessons { get; }
 
         public void SaveChanges()
         {
-            throw new NotImplementedException();
+            try
+            {
+                _transaction.Commit();
+            }
+            catch(Exception e)
+            {
+                _transaction.Rollback();
+                throw;
+            }
+            finally
+            {
+                _transaction.Dispose();
+                _transaction = _con.BeginTransaction();
+                ResetRepositories();
+            }
+        }
+
+        private void ResetRepositories()
+        {
+            _lessons = null;
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            if (_transaction != null)
+            {
+                _transaction.Dispose();
+                _transaction = null;
+            }
+
+            if (_con != null)
+            {
+                _con.Dispose();
+                _con = null;
+            }
         }
     }
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using acaShare.DAL.Configuration;
+using acaShare.DAL.Core;
+using acaShare.DAL.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,6 +29,7 @@ namespace acaShare.WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<AcaShareConfiguration>(Configuration.GetSection("AcaShareConfiguration"));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
