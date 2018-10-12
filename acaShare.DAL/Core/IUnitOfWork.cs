@@ -8,6 +8,7 @@ namespace acaShare.DAL.Core
     public interface IUnitOfWork : IDisposable
     {
         ILessonRepository Lessons { get; }
+        IUniversityRepository Universities { get; }
         void SaveChanges();
     }
 }
