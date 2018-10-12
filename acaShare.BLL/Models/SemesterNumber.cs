@@ -1,23 +1,18 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace acaShare.BLL.Models
 {
-    public class SemesterNumber
+    public partial class SemesterNumber
     {
         public SemesterNumber()
         {
-            Semesters = new HashSet<Semester>();
+            Semester = new HashSet<Semester>();
         }
-        
-        public int SemesterNumberId { get; set; }
 
-        [Required]
-        [StringLength(2)]
+        public int SemesterNumberId { get; set; }
         public string Number { get; set; }
-        
-        public ICollection<Semester> Semesters { get; set; }
+
+        public virtual ICollection<Semester> Semester { get; set; }
     }
 }

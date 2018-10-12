@@ -6,7 +6,7 @@ namespace acaShare.DAL.Core
 {
     public interface IRepository<TEntity> where TEntity : class
     {
-        IEnumerable<TEntity> GetAll();
+        List<TEntity> GetAll();
         TEntity FindById(int entityId);
         void Add(TEntity entity);
         void Delete(TEntity entity);

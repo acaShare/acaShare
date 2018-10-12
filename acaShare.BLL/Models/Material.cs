@@ -1,54 +1,39 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace acaShare.BLL.Models
 {
-    public class Material
+    public partial class Material
     {
         public Material()
         {
-            Comments = new HashSet<Comment>();
-            DeleteRequests = new HashSet<DeleteRequest>();
-            EditRequests = new HashSet<EditRequest>();
-            Files = new HashSet<File>();
+            Comment = new HashSet<Comment>();
+            DeleteRequest = new HashSet<DeleteRequest>();
+            EditRequest = new HashSet<EditRequest>();
+            Favorites = new HashSet<Favorites>();
+            File = new HashSet<File>();
         }
-        
+
         public int MaterialId { get; set; }
-
-        [Required]
-        [StringLength(255)]
         public string Name { get; set; }
-
-        [StringLength(4000)]
         public string Description { get; set; }
-
         public DateTime UploadDate { get; set; }
-
         public DateTime? ModificationDate { get; set; }
-
         public int LessonId { get; set; }
-        public Lesson Lesson { get; set; }
-        
-        public int CreatorId { get; set; }
-        public User Creator { get; set; }
-
-        public int? ApproverId { get; set; }
-        public User Approver { get; set; }
-
-        public int? UpdaterId { get; set; }
-        public User Updater { get; set; }
-
-        public ICollection<Comment> Comments { get; set; }
-        
-        public ICollection<DeleteRequest> DeleteRequests { get; set; }
-        
-        public ICollection<EditRequest> EditRequests { get; set; }
-        
-        public ICollection<File> Files { get; set; }
-        
         public int StateId { get; set; }
-        public MaterialState MaterialState { get; set; }
+        public int CreatorId { get; set; }
+        public int? ApproverId { get; set; }
+        public int? UpdaterId { get; set; }
+
+        public virtual User Approver { get; set; }
+        public virtual User Creator { get; set; }
+        public virtual Lesson Lesson { get; set; }
+        public virtual MaterialState State { get; set; }
+        public virtual User Updater { get; set; }
+        public virtual ICollection<Comment> Comment { get; set; }
+        public virtual ICollection<DeleteRequest> DeleteRequest { get; set; }
+        public virtual ICollection<EditRequest> EditRequest { get; set; }
+        public virtual ICollection<Favorites> Favorites { get; set; }
+        public virtual ICollection<File> File { get; set; }
     }
 }

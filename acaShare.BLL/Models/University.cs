@@ -1,26 +1,20 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace acaShare.BLL.Models
 {
-    public class University
+    public partial class University
     {
         public University()
         {
-            Departments = new HashSet<Department>();
-            UsersParticipations = new HashSet<UserInUniversity>();
+            Department = new HashSet<Department>();
+            UserInUniversity = new HashSet<UserInUniversity>();
         }
-        
-        public int UniversityId { get; set; }
 
-        [Required]
-        [StringLength(126)]
+        public int UniversityId { get; set; }
         public string Name { get; set; }
-        
-        public ICollection<Department> Departments { get; set; }
-        
-        public ICollection<UserInUniversity> UsersParticipations { get; set; }
+
+        public virtual ICollection<Department> Department { get; set; }
+        public virtual ICollection<UserInUniversity> UserInUniversity { get; set; }
     }
 }

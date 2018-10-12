@@ -1,48 +1,35 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace acaShare.BLL.Models
 {
-    public class User
+    public partial class User
     {
         public User()
         {
-            Comments = new HashSet<Comment>();
-            DeleteRequests = new HashSet<DeleteRequest>();
-            EditRequests = new HashSet<EditRequest>();
-            CreatedMaterials = new HashSet<Material>();
-            UpdatedMaterials = new HashSet<Material>();
-            ApprovedMaterials = new HashSet<Material>();
-            UniversityParticipations = new HashSet<UserInUniversity>();
+            Comment = new HashSet<Comment>();
+            DeleteRequest = new HashSet<DeleteRequest>();
+            EditRequest = new HashSet<EditRequest>();
+            Favorites = new HashSet<Favorites>();
+            MaterialApprover = new HashSet<Material>();
+            MaterialCreator = new HashSet<Material>();
+            MaterialUpdater = new HashSet<Material>();
+            UserInUniversity = new HashSet<UserInUniversity>();
         }
-        
+
         public int UserId { get; set; }
-
-        [Required]
-        [StringLength(100)]
         public string Username { get; set; }
-
-        [Required]
-        [StringLength(254)]
         public string Email { get; set; }
-
-        [Required]
-        [StringLength(100)]
         public string Password { get; set; }
-
         public DateTime RegisterDate { get; set; }
-        
-        public ICollection<Comment> Comments { get; set; }
-        
-        public ICollection<DeleteRequest> DeleteRequests { get; set; }
-        public ICollection<EditRequest> EditRequests { get; set; }
-        
-        public ICollection<Material> CreatedMaterials { get; set; }
-        public ICollection<Material> UpdatedMaterials { get; set; }
-        public ICollection<Material> ApprovedMaterials { get; set; }
-        
-        public ICollection<UserInUniversity> UniversityParticipations { get; set; }
+
+        public virtual ICollection<Comment> Comment { get; set; }
+        public virtual ICollection<DeleteRequest> DeleteRequest { get; set; }
+        public virtual ICollection<EditRequest> EditRequest { get; set; }
+        public virtual ICollection<Favorites> Favorites { get; set; }
+        public virtual ICollection<Material> MaterialApprover { get; set; }
+        public virtual ICollection<Material> MaterialCreator { get; set; }
+        public virtual ICollection<Material> MaterialUpdater { get; set; }
+        public virtual ICollection<UserInUniversity> UserInUniversity { get; set; }
     }
 }

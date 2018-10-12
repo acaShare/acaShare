@@ -1,7 +1,7 @@
 ﻿using acaShare.DAL.Configuration;
 using acaShare.DAL.Core;
 using acaShare.DAL.Core.Repositories;
-using acaShare.DAL.Persistence.Repositories;
+using acaShare.DAL.DapperPersistence.Repositories;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -9,9 +9,9 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 
-namespace acaShare.DAL.Persistence
+namespace acaShare.DAL.DapperPersistence
 {
-    public class UnitOfWork : IUnitOfWork
+    public class DapperUnitOfWork : IUnitOfWork
     {
         // Connectables
         private IDbConnection _con;
@@ -21,7 +21,7 @@ namespace acaShare.DAL.Persistence
         private ILessonRepository _lessons;
         public ILessonRepository Lessons => _lessons ?? new LessonRepository(_transaction);
 
-        public UnitOfWork(IOptions<AcaShareConfiguration> options)
+        public DapperUnitOfWork(IOptions<AcaShareConfiguration> options)
         {
             AcaShareConfiguration configuration = options.Value;
             var connStr = configuration.ConnectionString;

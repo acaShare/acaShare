@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using Dapper;
+using System.Linq;
 
-namespace acaShare.DAL.Persistence
+namespace acaShare.DAL.DapperPersistence
 {
     public class DapperRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {
@@ -44,9 +45,9 @@ namespace acaShare.DAL.Persistence
             return _con.QuerySingle<TEntity>($"SELECT * FROM {TEntityClassName} WHERE {TEntityClassName}Id = {entityId}", transaction: _transaction);
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public List<TEntity> GetAll()
         {
-            return _con.Query<TEntity>($"SELECT * FROM {TEntityClassName}", transaction: _transaction);
+            return _con.Query<TEntity>($"SELECT * FROM {TEntityClassName}", transaction: _transaction).ToList();
         }
     }
 }

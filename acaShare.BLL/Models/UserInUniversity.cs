@@ -1,21 +1,17 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace acaShare.BLL.Models
 {
-    public class UserInUniversity
+    public partial class UserInUniversity
     {
         public DateTime JoinDate { get; set; }
-        
         public int UserId { get; set; }
-        public User User { get; set; }
-        
-        public University University { get; set; }
         public int UniversityId { get; set; }
-        
         public int TypeId { get; set; }
-        public UserType UserType { get; set; }
+
+        public virtual UserType Type { get; set; }
+        public virtual University University { get; set; }
+        public virtual User User { get; set; }
     }
 }

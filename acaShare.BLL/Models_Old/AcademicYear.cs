@@ -1,19 +1,18 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
-namespace acaShare.BLL.Models
+namespace acaShare.BLL.Models_Old
 {
-    public partial class AcademicYear
+    public class AcademicYear
     {
         public AcademicYear()
         {
-            Semester = new HashSet<Semester>();
+            Semesters = new HashSet<Semester>();
         }
-
+        
         public int AcademicYearId { get; set; }
         public DateTime YearFrom { get; set; }
         public DateTime YearTo { get; set; }
-
-        public virtual ICollection<Semester> Semester { get; set; }
+        public ICollection<Semester> Semesters { get; set; }
     }
 }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using acaShare.BLL.Models;
+using acaShare.DAL.Core;
 using Microsoft.AspNetCore.Mvc;
 
 namespace acaShare.WebAPI.Controllers
@@ -10,18 +12,33 @@ namespace acaShare.WebAPI.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        private readonly IUnitOfWork uow;
+
+        public ValuesController(IUnitOfWork uow)
+        {
+            this.uow = uow;
+        }
+
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult<IEnumerable<dynamic>> Get()
         {
-            return new string[] { "value1", "value2", "value3" };
+            return uow.Lessons.GetAll().Select(l => new {
+                SemesterNumber = l.Semester.SemesterNumber.Number,
+                YearFrom = l.Semester.AcademicYear.YearFrom.Year,
+                YearTo = l.Semester.AcademicYear.YearTo.Year,
+                LecturerName = l.Lecturer.Name,
+                Department = l.Department.Name,
+                University = l.Department.University.Name
+            }).ToList();
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
-            return "value";
+            var lesson = uow.Lessons.FindById(id);
+            return lesson == null ? "Nie ma takiego lesson" : lesson.SectionOfSubject.Subject.Name;
         }
 
         // POST api/values
