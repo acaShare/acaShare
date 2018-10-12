@@ -7,12 +7,12 @@ namespace acaShare.BLL.Models
     {
         public MaterialState()
         {
-            Material = new HashSet<Material>();
+            Materials = new HashSet<Material>();
         }
 
         public int StateId { get; set; }
         public string Name { get; set; }
 
-        public virtual ICollection<Material> Material { get; set; }
+        public virtual ICollection<Material> Materials { get; set; }
     }
 }

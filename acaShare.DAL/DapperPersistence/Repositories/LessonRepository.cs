@@ -54,25 +54,25 @@ namespace acaShare.DAL.DapperPersistence.Repositories
                 transaction: _transaction);
 
             // section of subject, subject
-            subject.SectionOfSubject.Add(sectionOfSubject);
+            subject.SectionsOfSubject.Add(sectionOfSubject);
             sectionOfSubject.Subject = subject;
-            sectionOfSubject.Lesson.Add(lesson);
+            sectionOfSubject.Lessons.Add(lesson);
             lesson.SectionOfSubject = sectionOfSubject;
 
             // lecturer
-            lecturer.Lesson.Add(lesson);
+            lecturer.Lessons.Add(lesson);
             lesson.Lecturer = lecturer;
 
             // semester, academic year, semester number
-            academicYear.Semester.Add(semester);
+            academicYear.Semesters.Add(semester);
             semester.AcademicYear = academicYear;
-            semesterNumber.Semester.Add(semester);
+            semesterNumber.Semesters.Add(semester);
             semester.SemesterNumber = semesterNumber;
-            semester.Lesson.Add(lesson);
+            semester.Lessons.Add(lesson);
             lesson.Semester = semester;
 
             // department, university
-            university.Department.Add(department);
+            university.Departments.Add(department);
             department.University = university;
             lesson.Department = department;
 

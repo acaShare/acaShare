@@ -7,11 +7,11 @@ namespace acaShare.BLL.Models
     {
         public Material()
         {
-            Comment = new HashSet<Comment>();
-            DeleteRequest = new HashSet<DeleteRequest>();
-            EditRequest = new HashSet<EditRequest>();
+            Comments = new HashSet<Comment>();
+            DeleteRequests = new HashSet<DeleteRequest>();
+            EditRequests = new HashSet<EditRequest>();
             Favorites = new HashSet<Favorites>();
-            File = new HashSet<File>();
+            Files = new HashSet<File>();
         }
 
         public int MaterialId { get; set; }
@@ -30,10 +30,10 @@ namespace acaShare.BLL.Models
         public virtual Lesson Lesson { get; set; }
         public virtual MaterialState State { get; set; }
         public virtual User Updater { get; set; }
-        public virtual ICollection<Comment> Comment { get; set; }
-        public virtual ICollection<DeleteRequest> DeleteRequest { get; set; }
-        public virtual ICollection<EditRequest> EditRequest { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<DeleteRequest> DeleteRequests { get; set; }
+        public virtual ICollection<EditRequest> EditRequests { get; set; }
         public virtual ICollection<Favorites> Favorites { get; set; }
-        public virtual ICollection<File> File { get; set; }
+        public virtual ICollection<File> Files { get; set; }
     }
 }

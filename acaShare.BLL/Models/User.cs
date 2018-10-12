@@ -7,14 +7,14 @@ namespace acaShare.BLL.Models
     {
         public User()
         {
-            Comment = new HashSet<Comment>();
-            DeleteRequest = new HashSet<DeleteRequest>();
-            EditRequest = new HashSet<EditRequest>();
+            Comments = new HashSet<Comment>();
+            DeleteRequests = new HashSet<DeleteRequest>();
+            EditRequests = new HashSet<EditRequest>();
             Favorites = new HashSet<Favorites>();
-            MaterialApprover = new HashSet<Material>();
-            MaterialCreator = new HashSet<Material>();
-            MaterialUpdater = new HashSet<Material>();
-            UserInUniversity = new HashSet<UserInUniversity>();
+            ApprovedMaterials = new HashSet<Material>();
+            CreatedMaterials = new HashSet<Material>();
+            UpdatedMaterials = new HashSet<Material>();
+            UsersInUniversity = new HashSet<UserInUniversity>();
         }
 
         public int UserId { get; set; }
@@ -23,13 +23,13 @@ namespace acaShare.BLL.Models
         public string Password { get; set; }
         public DateTime RegisterDate { get; set; }
 
-        public virtual ICollection<Comment> Comment { get; set; }
-        public virtual ICollection<DeleteRequest> DeleteRequest { get; set; }
-        public virtual ICollection<EditRequest> EditRequest { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<DeleteRequest> DeleteRequests { get; set; }
+        public virtual ICollection<EditRequest> EditRequests { get; set; }
         public virtual ICollection<Favorites> Favorites { get; set; }
-        public virtual ICollection<Material> MaterialApprover { get; set; }
-        public virtual ICollection<Material> MaterialCreator { get; set; }
-        public virtual ICollection<Material> MaterialUpdater { get; set; }
-        public virtual ICollection<UserInUniversity> UserInUniversity { get; set; }
+        public virtual ICollection<Material> ApprovedMaterials { get; set; }
+        public virtual ICollection<Material> CreatedMaterials { get; set; }
+        public virtual ICollection<Material> UpdatedMaterials { get; set; }
+        public virtual ICollection<UserInUniversity> UsersInUniversity { get; set; }
     }
 }

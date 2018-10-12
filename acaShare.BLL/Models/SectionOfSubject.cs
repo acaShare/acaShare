@@ -7,7 +7,7 @@ namespace acaShare.BLL.Models
     {
         public SectionOfSubject()
         {
-            Lesson = new HashSet<Lesson>();
+            Lessons = new HashSet<Lesson>();
         }
 
         public int SectionOfSubjectId { get; set; }
@@ -15,6 +15,6 @@ namespace acaShare.BLL.Models
         public int SubjectId { get; set; }
 
         public virtual Subject Subject { get; set; }
-        public virtual ICollection<Lesson> Lesson { get; set; }
+        public virtual ICollection<Lesson> Lessons { get; set; }
     }
 }

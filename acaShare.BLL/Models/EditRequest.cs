@@ -7,7 +7,7 @@ namespace acaShare.BLL.Models
     {
         public EditRequest()
         {
-            File = new HashSet<File>();
+            Files = new HashSet<File>();
         }
 
         public int EditRequestId { get; set; }
@@ -20,6 +20,6 @@ namespace acaShare.BLL.Models
 
         public virtual Material MaterialToUpdate { get; set; }
         public virtual User Updater { get; set; }
-        public virtual ICollection<File> File { get; set; }
+        public virtual ICollection<File> Files { get; set; }
     }
 }

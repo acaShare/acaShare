@@ -7,7 +7,7 @@ namespace acaShare.BLL.Models
     {
         public Semester()
         {
-            Lesson = new HashSet<Lesson>();
+            Lessons = new HashSet<Lesson>();
         }
 
         public int SemesterId { get; set; }
@@ -16,6 +16,6 @@ namespace acaShare.BLL.Models
 
         public virtual AcademicYear AcademicYear { get; set; }
         public virtual SemesterNumber SemesterNumber { get; set; }
-        public virtual ICollection<Lesson> Lesson { get; set; }
+        public virtual ICollection<Lesson> Lessons { get; set; }
     }
 }

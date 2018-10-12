@@ -7,12 +7,12 @@ namespace acaShare.BLL.Models
     {
         public UserType()
         {
-            UserInUniversity = new HashSet<UserInUniversity>();
+            UsersInUniversity = new HashSet<UserInUniversity>();
         }
 
         public int TypeId { get; set; }
         public string Name { get; set; }
 
-        public virtual ICollection<UserInUniversity> UserInUniversity { get; set; }
+        public virtual ICollection<UserInUniversity> UsersInUniversity { get; set; }
     }
 }

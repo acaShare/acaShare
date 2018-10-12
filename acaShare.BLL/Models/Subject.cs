@@ -7,12 +7,12 @@ namespace acaShare.BLL.Models
     {
         public Subject()
         {
-            SectionOfSubject = new HashSet<SectionOfSubject>();
+            SectionsOfSubject = new HashSet<SectionOfSubject>();
         }
 
         public int SubjectId { get; set; }
         public string Name { get; set; }
 
-        public virtual ICollection<SectionOfSubject> SectionOfSubject { get; set; }
+        public virtual ICollection<SectionOfSubject> SectionsOfSubject { get; set; }
     }
 }

@@ -7,12 +7,12 @@ namespace acaShare.BLL.Models
     {
         public SemesterNumber()
         {
-            Semester = new HashSet<Semester>();
+            Semesters = new HashSet<Semester>();
         }
 
         public int SemesterNumberId { get; set; }
         public string Number { get; set; }
 
-        public virtual ICollection<Semester> Semester { get; set; }
+        public virtual ICollection<Semester> Semesters { get; set; }
     }
 }

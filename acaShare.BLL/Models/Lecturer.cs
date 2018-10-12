@@ -7,12 +7,12 @@ namespace acaShare.BLL.Models
     {
         public Lecturer()
         {
-            Lesson = new HashSet<Lesson>();
+            Lessons = new HashSet<Lesson>();
         }
 
         public int LecturerId { get; set; }
         public string Name { get; set; }
 
-        public virtual ICollection<Lesson> Lesson { get; set; }
+        public virtual ICollection<Lesson> Lessons { get; set; }
     }
 }

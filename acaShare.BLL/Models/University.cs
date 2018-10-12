@@ -7,14 +7,14 @@ namespace acaShare.BLL.Models
     {
         public University()
         {
-            Department = new HashSet<Department>();
-            UserInUniversity = new HashSet<UserInUniversity>();
+            Departments = new HashSet<Department>();
+            UsersInUniversity = new HashSet<UserInUniversity>();
         }
 
         public int UniversityId { get; set; }
         public string Name { get; set; }
 
-        public virtual ICollection<Department> Department { get; set; }
-        public virtual ICollection<UserInUniversity> UserInUniversity { get; set; }
+        public virtual ICollection<Department> Departments { get; set; }
+        public virtual ICollection<UserInUniversity> UsersInUniversity { get; set; }
     }
 }
