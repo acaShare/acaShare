@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace acaShare.DAL.Core.Repositories
+namespace acaShare.DAL.Core.Repositories.UniversityRelated
 {
     public interface IUniversityRepository : IRepository<University>
     {

@@ -9,6 +9,7 @@ namespace acaShare.DAL.Core
         List<TEntity> GetAll();
         TEntity FindById(int entityId);
         void Add(TEntity entity);
+        void Update(TEntity entity);
         void Delete(TEntity entity);
     }
 }

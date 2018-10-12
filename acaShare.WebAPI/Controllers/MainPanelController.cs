@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace acaShare.WebAPI.Controllers
 {
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     [ApiController]
-    public class MainPanelController : Controller
+    public class MainPanelController : ControllerBase
     {
         private readonly IMainPanelService _mainPanelService;
 

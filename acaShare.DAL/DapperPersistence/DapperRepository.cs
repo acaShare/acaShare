@@ -49,5 +49,10 @@ namespace acaShare.DAL.DapperPersistence
         {
             return _con.Query<TEntity>($"SELECT * FROM {TEntityClassName}", transaction: _transaction).ToList();
         }
+
+        public void Update(TEntity entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

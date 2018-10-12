@@ -8,9 +8,9 @@ using System.Text;
 
 namespace acaShare.DAL.EFPersistence.Repositories
 {
-    public class UniversityRepository : EFRepository<University>, IUniversityRepository
+    public sealed class SectionOfSubjectRepository : EFRepository<SectionOfSubject>, ISectionOfSubjectRepository
     {
-        public UniversityRepository(DbSet<University> dbSet) : base(dbSet)
+        public SectionOfSubjectRepository(DbSet<SectionOfSubject> dbSet) : base(dbSet)
         {
         }
     }

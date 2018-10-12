@@ -22,6 +22,11 @@ namespace acaShare.DAL.EFPersistence
             _dbSet.Add(entity);
         }
 
+        public void Update(TEntity entity)
+        {
+            _dbSet.Update(entity);
+        }
+
         public void Delete(TEntity entity)
         {
             _dbSet.Remove(entity);
