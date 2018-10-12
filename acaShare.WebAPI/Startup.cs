@@ -35,6 +35,7 @@ namespace acaShare.WebAPI
             //services.Configure<AcaShareConfiguration>(Configuration.GetSection("AcaShareConfiguration"));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IMainPanelService, MainPanelService>();
+            services.AddScoped<IModeratorPanelService, ModeratorPanelService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
