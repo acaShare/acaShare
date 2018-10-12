@@ -11,7 +11,7 @@ using System.Text;
 
 namespace acaShare.DAL.DapperPersistence
 {
-    public class DapperUnitOfWork : IUnitOfWork
+    public class DapperUnitOfWork// : IUnitOfWork
     {
         // Connectables
         private IDbConnection _con;

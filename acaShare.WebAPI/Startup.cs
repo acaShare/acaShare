@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using acaShare.DAL.Configuration;
 using acaShare.DAL.Core;
 using acaShare.DAL.EFPersistence;
+using acaShare.ServiceLayer.Interfaces;
+using acaShare.ServiceLayer.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,6 +34,7 @@ namespace acaShare.WebAPI
         {
             //services.Configure<AcaShareConfiguration>(Configuration.GetSection("AcaShareConfiguration"));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IMainPanelService, MainPanelService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 

@@ -6,16 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModels\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\acaShare.DAL\acaShare.DAL.csproj" />
+    <ProjectReference Include="..\acaShare.ServiceLayer\acaShare.ServiceLayer.csproj" />
   </ItemGroup>
 
 </Project>
