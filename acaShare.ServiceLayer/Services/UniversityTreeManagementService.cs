@@ -95,6 +95,66 @@ namespace acaShare.ServiceLayer.Services
             _uow.SaveChanges();
         }
 
+        public Department GetDepartment(int id)
+        {
+            return _uow.Departments.FindById(id);
+        }
+
+        public List<Department> GetDepartments()
+        {
+            return _uow.Departments.GetAll();
+        }
+
+        public Lecturer GetLecturer(int id)
+        {
+            return _uow.Lecturers.FindById(id);
+        }
+
+        public List<Lecturer> GetLecturers()
+        {
+            return _uow.Lecturers.GetAll();
+        }
+
+        public Lesson GetLesson(int id)
+        {
+            return _uow.Lessons.FindById(id);
+        }
+
+        public List<Lesson> GetLessons()
+        {
+            return _uow.Lessons.GetAll();
+        }
+
+        public SectionOfSubject GetSectionOfSubject(int id)
+        {
+            return _uow.SectionsOfSubject.FindById(id);
+        }
+
+        public List<SectionOfSubject> GetSectionsOfSubject()
+        {
+            return _uow.SectionsOfSubject.GetAll();
+        }
+
+        public Subject GetSubject(int id)
+        {
+            return _uow.Subjects.FindById(id);
+        }
+
+        public List<Subject> GetSubjects()
+        {
+            return _uow.Subjects.GetAll();
+        }
+
+        public List<University> GetUniversities()
+        {
+            return _uow.Universities.GetAll();
+        }
+
+        public University GetUniversity(int id)
+        {
+            return _uow.Universities.FindById(id);
+        }
+
         public void UpdateDepartment(Department department)
         {
             _uow.Departments.Update(department);

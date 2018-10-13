@@ -17,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace acaShare.WebAPI
 {
@@ -37,7 +38,9 @@ namespace acaShare.WebAPI
             services.AddScoped<IMainPanelService, MainPanelService>();
             services.AddScoped<IUniversityTreeManagementService, UniversityTreeManagementService>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+                .AddJsonOptions(options =>  options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddDbContext<acaShareGenerateContext>(options =>
             {
