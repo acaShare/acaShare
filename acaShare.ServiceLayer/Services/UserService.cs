@@ -19,6 +19,7 @@ namespace acaShare.ServiceLayer.Services
         public void RegisterNewUser(User newUser)
         {
             _uow.Users.Add(newUser);
+            _uow.SaveChanges();
         }
     }
 }
