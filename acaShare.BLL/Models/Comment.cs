@@ -7,10 +7,11 @@ namespace acaShare.BLL.Models
     {
         public int CommentId { get; set; }
         public string Content { get; set; }
-        public int UserId { get; set; }
-        public int MaterialId { get; set; }
 
+        public int MaterialId { get; set; }
         public virtual Material Material { get; set; }
+
+        public int UserId { get; set; }
         public virtual User User { get; set; }
     }
 }

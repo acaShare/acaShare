@@ -13,7 +13,7 @@ namespace acaShare.DAL.EFPersistence
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly acaShareGenerateContext _db;
+        private readonly AcaShareDbContext _db;
 
         public ILessonRepository Lessons { get; }
         public IUniversityRepository Universities { get; }
@@ -22,7 +22,7 @@ namespace acaShare.DAL.EFPersistence
         public ISectionOfSubjectRepository SectionsOfSubject { get; }
         public ISubjectRepository Subjects { get; }
 
-        public UnitOfWork(acaShareGenerateContext dbContext)
+        public UnitOfWork(AcaShareDbContext dbContext)
         {
             _db = dbContext;
             Lessons = new LessonRepository(_db.Lesson);

@@ -37,12 +37,12 @@ namespace acaShare.WebAPI
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IMainPanelService, MainPanelService>();
             services.AddScoped<IUniversityTreeManagementService, UniversityTreeManagementService>();
-
+            services.AddCors();
             services.AddMvc()
                 .AddJsonOptions(options =>  options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore)
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddDbContext<acaShareGenerateContext>(options =>
+            services.AddDbContext<AcaShareDbContext>(options =>
             {
                 options.UseLazyLoadingProxies();
                 options.UseSqlServer(Configuration["AcaShareConfiguration:ConnectionString"]);
@@ -62,6 +62,11 @@ namespace acaShare.WebAPI
             }
 
             app.UseHttpsRedirection();
+            app.UseCors(builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
             app.UseMvc();
         }
     }

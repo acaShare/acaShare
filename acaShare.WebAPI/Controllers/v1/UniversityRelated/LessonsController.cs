@@ -10,6 +10,30 @@ namespace acaShare.WebAPI.Controllers.v1.UniversityRelated
 {
     [Route("api/v1/[controller]")]
     [ApiController]
+    public class LessonsFromDepartmentController : ControllerBase
+    {
+        private readonly IUniversityTreeManagementService _service;
+
+        public LessonsFromDepartmentController(IUniversityTreeManagementService service)
+        {
+            _service = service;
+        }
+        
+        [HttpGet("{id}")]
+        public ActionResult<IEnumerable<Lesson>> Get(int id)
+        {
+            return _service.GetDepartment(id).Lessons.ToList();
+        }
+
+        [HttpGet("{id}/ooo/{pp}")]
+        public ActionResult<string> xd(int id, int pp)
+        {
+            return (id+" "+pp);
+        }
+    }
+
+    [Route("api/v1/[controller]")]
+    [ApiController]
     public class LessonsController : ControllerBase
     {
         private readonly IUniversityTreeManagementService _service;

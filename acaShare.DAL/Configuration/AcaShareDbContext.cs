@@ -1,16 +1,18 @@
 ﻿using System;
 using acaShare.BLL.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace acaShare.DAL.Configuration
 {
-    public partial class acaShareGenerateContext : DbContext
+    public partial class AcaShareDbContext : IdentityDbContext<IdentityUser>
     {
-        public acaShareGenerateContext()
+        public AcaShareDbContext()
         {
         }
 
-        public acaShareGenerateContext(DbContextOptions<acaShareGenerateContext> options)
+        public AcaShareDbContext(DbContextOptions<AcaShareDbContext> options)
             : base(options)
         {
         }
@@ -38,6 +40,8 @@ namespace acaShare.DAL.Configuration
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<AcademicYear>(entity =>
             {
                 entity.Property(e => e.YearFrom).HasColumnType("date");
@@ -294,22 +298,14 @@ namespace acaShare.DAL.Configuration
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.Property(e => e.Email)
-                    .IsRequired()
-                    .HasMaxLength(254)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Password)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.RegisterDate).HasColumnType("datetime");
 
-                entity.Property(e => e.Username)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
+                entity.Property(e => e.IdentityUserId)
+                    .IsRequired();
+
+                entity.HasIndex(e => new { e.IdentityUserId })
+                    .HasName("IdentityUserId_Uniq_Idx")
+                    .IsUnique();
             });
 
             modelBuilder.Entity<UserInUniversity>(entity =>

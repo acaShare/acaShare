@@ -15,7 +15,7 @@ namespace acaShare.ServiceLayer.Services
         {
             _uow = uow;
         }
-
+        
         public IEnumerable<University> GetAvailableUniversities()
         {
             return _uow.Universities.GetAll();
