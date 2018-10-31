@@ -1,0 +1,50 @@
+﻿@using acaShare.MVC.Areas.Universities.Models.Sidebar
+@model SidebarViewModel
+
+<div class="col s12 m4 l3 right-side-bar">
+    <ul id="tabs-swipe-demo" class="tabs tabs-fixed-width">
+        <li class="tab"><a href="#test-swipe-1">Ulubione</a></li>
+        <li class="tab"><a class="active" href="#test-swipe-2">Ostatnia aktywność</a></li>
+    </ul>
+
+    <div id="test-swipe-1" class="favourites-wrapper">
+        @foreach (var favouriteMaterial in Model.Favourites)
+        {
+            <a class="favourites-link" href="@favouriteMaterial.Link">
+                <div class="last-activity-wrapper">
+                    <div class="last-activities-date">@favouriteMaterial.When</div>
+                    <div class="last-activities-content">
+                        <i class="medium material-icons">description</i>
+                        <span class="last-activities-material-type">@favouriteMaterial.Breadcrumbs</span>
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+
+    <div id="test-swipe-2" class="last-activities-wrapper">
+        @{
+            var activityIcon = string.Empty;
+
+            foreach (var lastActivity in Model.LastActivities)
+            {
+                if (lastActivity.Type == LastActivityType.MATERIAL_ADD)
+                {
+                    activityIcon = "note_add";
+                }
+                else
+                {
+                    activityIcon = "comment";
+                }
+
+                <a class="last-activity-wrapper" href="@lastActivity.Link">
+                    <div class="last-activities-date">@lastActivity.When</div>
+                    <div class="last-activities-content">
+                        <i class="medium material-icons">@activityIcon</i>
+                        <span class="last-activities-material-type">@lastActivity.Name</span>
+                    </div>
+                </a>
+            }
+        }
+    </div>
+</div>

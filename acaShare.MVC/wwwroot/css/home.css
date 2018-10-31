@@ -1,0 +1,149 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    max-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+.nav-wrapper {
+    background-color: #4db6ac;
+}
+
+.brand-logo {
+    margin-left: .5em;
+}
+
+.home-container {
+    height: 89%;
+}
+
+.home-part {
+    height: 100%;
+}
+
+.right-side-bar {
+    height: 100%;
+    margin-top: .2%;
+    border-left: 1px solid lightgrey;
+}
+
+.data-container {
+    width: 95%;
+    margin: 4% auto;
+
+    border-radius: 10px;
+    -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    box-sizing: border-box;
+}
+
+.colornav {
+    box-sizing: border-box;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    height: 50px;
+}
+
+.path-header-wrapper {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    position: relative;
+}
+
+.tree-path {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.home-content {
+    padding: 1.5em;
+}
+
+.path-list-item:hover {
+    background-color: #eeeeee;
+    transition: .2s;
+}
+
+
+.last-activities-wrapper {
+    margin: 1em;
+    color: #757575;
+    overflow: auto;
+}
+
+.favourites-item-wrapper:hover {
+    background-color: #e0f2f1;
+    border-radius: 10px;
+    transition: .5s;
+    cursor: pointer;
+}
+
+.favourites-wrapper {
+    margin: 1em;
+    color: #757575;
+    overflow: auto;
+    cursor: pointer;
+}
+
+.favourites-link {
+    color: #757575;
+}
+
+.last-activities-date {
+    margin-left: .6em;
+    margin-bottom: .5em;
+}
+
+.last-activities-content {
+    position: relative;
+}
+
+.last-activities-content i {
+    color: #212121;
+}
+
+.last-activities-material-type {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-55%);
+    padding: .7em;
+    font-size: .90em;
+}
+
+.last-activity-wrapper {
+    margin-bottom: 1.3em;
+    padding-bottom: 1.3em;
+    border-bottom-width: thin;
+    border-bottom: .5px solid #e0e0e0;
+    cursor: pointer;
+    color: #757575;
+}
+
+.path-list-item-title {
+    font-weight: 700;
+    color: #757575;
+}
+
+.path-list-item-subtitle {
+    font-size: .7em;
+    color: #757575;
+    box-sizing: border-box;
+    width: 80%;
+}
+
+.bloczek {
+    display: block;
+}
+
+#reason {
+    margin-left: 2em;
+}
+
+#bigger {
+    padding-bottom: 1.7em;
+}
