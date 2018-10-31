@@ -3,6 +3,7 @@ using acaShare.DAL.Configuration;
 using acaShare.DAL.Core;
 using acaShare.DAL.Core.Repositories;
 using acaShare.DAL.Core.Repositories.UniversityRelated;
+using acaShare.DAL.Core.Repositories.UserRelated;
 using acaShare.DAL.EFPersistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -21,6 +22,7 @@ namespace acaShare.DAL.EFPersistence
         public ILecturerRepository Lecturers { get; }
         public ISectionOfSubjectRepository SectionsOfSubject { get; }
         public ISubjectRepository Subjects { get; }
+        public IUserRepository Users { get; set; }
 
         public UnitOfWork(AcaShareDbContext dbContext)
         {
@@ -31,6 +33,7 @@ namespace acaShare.DAL.EFPersistence
             Lecturers = new LecturerRepository(_db.Lecturer);
             SectionsOfSubject = new SectionOfSubjectRepository(_db.SectionOfSubject);
             Subjects = new SubjectRepository(_db.Subject);
+            Users = new UserRepository(_db.User);
         }
 
         public void SaveChanges()
