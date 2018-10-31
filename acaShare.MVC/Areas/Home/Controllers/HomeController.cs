@@ -4,12 +4,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using acaShare.MVC.Models;
+using acaShare.MVC.Areas.Home.Models;
 using Microsoft.AspNetCore.Authorization;
 
-namespace acaShare.MVC.Controllers
+namespace acaShare.MVC.Areas.Home.Controllers
 {
     [Authorize]
+    [Area("Home")]
     public class HomeController : Controller
     {
         [AllowAnonymous]

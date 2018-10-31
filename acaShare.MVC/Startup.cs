@@ -75,8 +75,13 @@ namespace acaShare.MVC
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    name: "areaRoute",
+                    template: "{area=Home}/{controller=Home}/{action=Index}/{id?}");
+
+                //routes.MapAreaRoute(
+                //    name: "default",
+                //    areaName: "Home",
+                //    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
