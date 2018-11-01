@@ -16,7 +16,7 @@ namespace acaShare.BLL.Models
             UpdatedMaterials = new HashSet<Material>();
             UsersInUniversity = new HashSet<UserInUniversity>();
         }
-
+        
         public int UserId { get; set; }
         public DateTime RegisterDate { get; set; }
         public string IdentityUserId { get; set; }
