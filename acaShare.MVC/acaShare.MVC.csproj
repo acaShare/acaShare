@@ -16,6 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Areas\Moderator\Views\_ViewStart.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Areas\_ViewImports.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
