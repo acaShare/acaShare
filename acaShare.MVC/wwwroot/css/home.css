@@ -26,7 +26,7 @@ html, body {
 }
 
 .right-side-bar {
-    height: 100%;
+    height: 100vh;
     margin-top: .2%;
     border-left: 1px solid lightgrey;
 }
@@ -146,4 +146,12 @@ html, body {
 
 #bigger {
     padding-bottom: 1.7em;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+#test-swipe-1, #test-swipe-2 {
+    height: 100vh;
 }

@@ -38,11 +38,13 @@
                     activityIcon = "comment";
                 }
 
-                <a class="last-activity-wrapper" href="@lastActivity.Link">
-                    <div class="last-activities-date">@lastActivity.When</div>
-                    <div class="last-activities-content">
-                        <i class="medium material-icons">@activityIcon</i>
-                        <span class="last-activities-material-type">@lastActivity.Name</span>
+                <a href="@lastActivity.Link">
+                    <div class="last-activity-wrapper">
+                        <div class="last-activities-date">@lastActivity.When</div>
+                        <div class="last-activities-content">
+                            <i class="medium material-icons">@activityIcon</i>
+                            <span class="last-activities-material-type">@lastActivity.Name</span>
+                        </div>
                     </div>
                 </a>
             }

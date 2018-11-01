@@ -32,7 +32,7 @@ namespace acaShare.MVC.Areas.Universities.ViewComponents
                         Link = "",
                         When = DateTime.Today.AddDays(-10).ToShortDateString(),
                         Breadcrumbs = "tt -> qq"
-                    },
+                    }
                 },
                 LastActivities = new List<LastActivityVM>
                 {
