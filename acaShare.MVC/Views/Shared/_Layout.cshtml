@@ -11,11 +11,21 @@
 <body>
     <nav>
         <div class="nav-wrapper">
-            <a href="home.html" class="brand-logo">acaShare</a>
+            <a asp-area="Universities" asp-controller="List" asp-action="AvailableUniversities" class="brand-logo">acaShare</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li><a href="panel_administratora.html">Panel administratora</a></li>
                 <li><a href="panel_moderatora.html">Panel moderatora</a></li>
-                <li><a href="login.html">Wyloguj</a></li>
+                <li>
+                    <form 
+                        id="logout-form"
+                        asp-area="Identity" 
+                        asp-page="/Account/Logout" 
+                        asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" 
+                        method="post">
+
+                        <a href="javascript:{}" onclick="document.getElementById('logout-form').submit()">Wyloguj</a>  
+                    </form>
+                </li>
             </ul>
         </div>
     </nav>
