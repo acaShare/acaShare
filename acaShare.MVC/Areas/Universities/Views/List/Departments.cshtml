@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@using acaShare.MVC.Areas.Universities.Models.List;
+@model ListViewModel<ListItemViewModel>
+
+<ul class="collection">
+    @foreach (var department in @Model.Items)
+    {
+        <li class="collection-item path-list-item">
+            <div>
+                @department.Title
+                <a asp-action="Subjects" asp-route-departmentId="@department.Id" class="secondary-content">
+                    <i class="material-icons">send</i>
+                </a>
+            </div>
+        </li>
+    }
+</ul>

@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace acaShare.MVC.Areas.Universities.Models.List
 {
-    public class ListViewModel
+    public class ListViewModel<IListItemViewModel>
     {
+        public ICollection<IListItemViewModel> Items { get; set; }
     }
 }

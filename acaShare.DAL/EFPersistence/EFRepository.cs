@@ -10,7 +10,7 @@ namespace acaShare.DAL.EFPersistence
 {
     public class EFRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        private readonly DbSet<TEntity> _dbSet;
+        protected readonly DbSet<TEntity> _dbSet;
 
         public EFRepository(DbSet<TEntity> dbSet)
         {

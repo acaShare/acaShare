@@ -8,6 +8,7 @@ using acaShare.MVC.Areas.Universities.Models;
 using Microsoft.AspNetCore.Authorization;
 using acaShare.MVC.Areas.Universities.Models.Sidebar;
 using acaShare.MVC.Areas.Universities.Models.List;
+using acaShare.ServiceLayer.Interfaces;
 
 namespace acaShare.MVC.Areas.Universities.Controllers
 {
@@ -15,30 +16,54 @@ namespace acaShare.MVC.Areas.Universities.Controllers
     [Area("Universities")]
     public class ListController : Controller
     {
-        [AllowAnonymous]
-        public IActionResult Index()
+        private readonly IUniversityTreeTraversalService _service;
+
+        public ListController(IUniversityTreeTraversalService service)
         {
-            return View(new ListViewModel());
+            _service = service;
         }
 
-        public IActionResult About()
+        public IActionResult AvailableUniversities()
         {
-            ViewData["Message"] = "Your application description page.";
+            var universities = _service.GetUniversities();
 
-            return View();
+            var universityViewModels = universities.Select(u =>
+                new ListItemViewModel
+                {
+                    Id = u.UniversityId,
+                    Title = u.Name
+                }
+            ).ToList();
+
+            var vm = new ListViewModel<ListItemViewModel>
+            {
+                Items = universityViewModels
+            };
+
+            return View(vm);
         }
 
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
 
-            return View();
+        public IActionResult Departments(int universityId)
+        {
+            var departments = _service.GetDepartmentsFromUniversity(universityId);
+
+            var departmentViewModels = departments.Select(u =>
+                new ListItemViewModel
+                {
+                    Id = u.UniversityId,
+                    Title = u.Name
+                }
+            ).ToList();
+
+            var vm = new ListViewModel<ListItemViewModel>
+            {
+                Items = departmentViewModels
+            };
+
+            return View(vm);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

@@ -34,6 +34,7 @@ namespace acaShare.MVC
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IMainPanelService, MainPanelService>();
             services.AddScoped<IUniversityTreeManagementService, UniversityTreeManagementService>();
+            services.AddScoped<IUniversityTreeTraversalService, UniversityTreeTraversalService>();
             services.AddScoped<IUserService, UserService>();
 
             services.Configure<CookiePolicyOptions>(options =>
@@ -77,7 +78,7 @@ namespace acaShare.MVC
             {
                 routes.MapRoute(
                     name: "areaRoute",
-                    template: "{area=Universities}/{controller=List}/{action=Index}/{id?}");
+                    template: "{area=Universities}/{controller=List}/{action=AvailableUniversities}/{id?}");
 
                 //routes.MapAreaRoute(
                 //    name: "default",
