@@ -25,7 +25,6 @@ namespace acaShare.MVC.Areas.Universities.Controllers
 
         public IActionResult AvailableUniversities()
         {
-            ViewBag.IsList = true;
             var universities = _service.GetUniversities();
 
             var universityViewModels = universities.Select(u =>

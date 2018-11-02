@@ -1,1 +1,17 @@
-﻿Wybierz uczelnie
+﻿@using acaShare.MVC.Areas.Moderator.Models.StructureManagement
+@model ListViewModel<ListItemViewModel>
+
+<ul class="collection">
+    @foreach (var university in @Model.Items)
+    {
+        <li class="collection-item path-list-item">
+            <div>
+                @university.Title
+                <a asp-action="Departments" asp-route-universityId="@university.Id" class="secondary-content">
+                    <i class="material-icons">delete</i>
+                    <i class="material-icons">send</i>
+                </a>
+            </div>
+        </li>
+    }
+</ul>

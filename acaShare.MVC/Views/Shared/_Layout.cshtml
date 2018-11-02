@@ -30,32 +30,7 @@
         </div>
     </nav>
 
-    @if (ViewBag.IsList != null && ViewBag.IsList == true)
-    {
-        <div class="row home-container">
-            <div class="col s12 m8 l9 home-part">
-                <div class="data-container">
-                    <nav class="colornav">
-                        <div class="nav-wrapper path-header-wrapper">
-                            <div class="col s12 tree-path">
-                                <a href="home.html" class="breadcrumb">Uczelnie</a>
-                            </div>
-                        </div>
-                    </nav>
-
-                    <div class="home-content">
-                        @RenderBody()
-                    </div>
-                </div>
-            </div>
-
-            @await Component.InvokeAsync("Sidebar")
-        </div>
-    }
-    else
-    {
-        @RenderBody()
-    }
+    @RenderBody()
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
