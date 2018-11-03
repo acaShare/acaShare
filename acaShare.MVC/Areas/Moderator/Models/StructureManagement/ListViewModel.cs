@@ -9,5 +9,6 @@ namespace acaShare.MVC.Areas.Moderator.Models.StructureManagement
     public class ListViewModel<IListItemViewModel>
     {
         public ICollection<IListItemViewModel> Items { get; set; }
+        public bool IsWithSubtitles { get; set; }
     }
 }

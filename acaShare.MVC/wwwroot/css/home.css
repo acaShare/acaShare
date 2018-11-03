@@ -155,3 +155,17 @@ html, body {
 #test-swipe-1, #test-swipe-2 {
     height: 100vh;
 }
+
+.text-danger {
+    color: #ff5656;
+}
+
+.input-error-small {
+    font-size: .8em;
+    margin-top: 0;
+    margin-bottom: 1em;
+}
+
+.validation-summary-errors {
+    margin-bottom: 2em;
+}

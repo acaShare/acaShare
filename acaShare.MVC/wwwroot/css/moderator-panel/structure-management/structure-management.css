@@ -1,0 +1,87 @@
+﻿.structure-management-container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.add-button {
+    height: 2em;
+    width: 12em;
+    display: block;
+    text-align: center;
+    background-color: #4db6ac; /*#4db69f;*/
+    padding: .15em;
+    color: white;
+    margin: 0 auto;
+
+    border-radius: 3px;
+    /*
+    position: absolute;
+    bottom: -1.5em;
+    left: 50%;
+    transform: translateX(-50%);
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    */
+}
+
+.structure-management-list-container {
+    display: flex;
+    margin-bottom: 1em;
+}
+
+.collection {
+    flex-grow: 2;
+}
+
+.collection-item.path-list-item {
+    padding: 0;
+}
+
+.item-link {
+    padding: 10px 20px;
+    color: black;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.icons-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: .5rem;
+}
+
+.icons-row-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.icons-row-container-small {
+    margin: .66rem 0 0.66rem 0;
+}
+
+.icons-row-container-big {
+    margin: 1.5rem 0 1.4rem 0;
+}
+
+.icon-edit, .icon-delete {
+    display: flex;
+    margin-left: .8em;
+    color: #444444;
+    transition: .3s ease-in-out;
+}
+
+.icon-edit:hover {
+    color: #1c66ea;
+    transition: .2s ease-in-out;
+}
+
+.icon-delete:hover {
+    color: red;
+    transition: .2s ease-in-out;
+}
+
+
+

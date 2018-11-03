@@ -1,0 +1,24 @@
+﻿@using acaShare.MVC.Areas.Moderator.Models.StructureManagement
+@model UniversityViewModel
+
+<div class="row">
+    <form method="post" class="col s12">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div>
+            <div class="input-field">
+                <label asp-for="FullName"></label>
+                <input asp-for="FullName" class="validate" />
+                <span asp-validation-for="FullName" class="text-danger input-error-small"></span>
+            </div>
+        </div>
+        <div>
+            <div class="input-field">
+                <label asp-for="Abbreviation"></label>
+                <input asp-for="Abbreviation" />
+                <span asp-validation-for="Abbreviation" class="text-danger input-error-small"></span>
+            </div>
+        </div>
+        <button type="submit">Dodaj</button>
+        <a asp-action="Universities">Wróć do listy uczelni</a>
+    </form>
+</div>

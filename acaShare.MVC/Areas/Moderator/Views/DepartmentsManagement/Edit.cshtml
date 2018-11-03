@@ -1,0 +1,17 @@
+﻿@using acaShare.MVC.Areas.Moderator.Models.StructureManagement
+@model DepartmentViewModel
+
+<div class="row">
+    <form method="post" class="col s12">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div>
+            <div class="input-field">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="validate" />
+                <span asp-validation-for="Name" class="text-danger input-error-small"></span>
+            </div>
+        </div>
+        <button type="submit">Dodaj</button>
+        <a asp-action="Departments">Wróć do listy wydziałów</a>
+    </form>
+</div>

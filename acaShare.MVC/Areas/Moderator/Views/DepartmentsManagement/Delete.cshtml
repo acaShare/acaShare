@@ -1,0 +1,22 @@
+﻿@using acaShare.MVC.Areas.Moderator.Models.StructureManagement
+@model DepartmentViewModel
+
+@{
+    var parms = new Dictionary<string, string>
+    {
+        { "departmentId", Model.DepartmentId.ToString() },
+        { "confirmation", "true" }
+    };
+}
+
+<span class="text-danger">
+    UWAGA! Czy na pewno chcesz usunąć wydział "@Model.Name"? 
+    Wiąże się to z usunięciem całej jego dalszej struktury oraz wszystkich materiałów z nim związanych.
+</span>
+<br /><br />
+<div>
+    <a asp-action="Delete" asp-all-route-data="parms">Usuń wszystkie dane wydziału</a>
+</div>
+<div>
+    <a asp-action="Universities">Anuluj</a>
+</div>

@@ -1,0 +1,38 @@
+﻿@using acaShare.MVC.Areas.Moderator.Models.StructureManagement;
+@model ListViewModel<ListItemViewModel>
+
+<div class="structure-management-container">
+    <div class="structure-management-list-container">
+        <ul class="collection">
+            @foreach (var university in @Model.Items)
+            {
+                <li class="collection-item path-list-item">
+                    <a asp-controller="DepartmentsManagement" asp-action="Departments" asp-route-universityId="@university.Id" class="item-link">
+                        <span class="path-list-item-title">@university.Title</span>
+                        <br>
+                        <span class="path-list-item-subtitle">@university.Subtitle</span>
+                    </a>
+                </li>
+            }
+        </ul>
+        <div class="icons-container">
+            @{var rowClass = Model.IsWithSubtitles ? "icons-row-container-big" : "icons-row-container-small";}
+
+            @foreach (var university in @Model.Items)
+            {
+                <div class="icons-row-container @rowClass">
+                    <a asp-action="Edit" asp-route-universityId="@university.Id">
+                        <i class="material-icons icon-edit">edit</i>
+                    </a>
+                    <a asp-action="Delete" asp-route-universityId="@university.Id">
+                        <i class="material-icons icon-delete">delete</i>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+    
+    <a asp-action="Add" class="add-button">
+        Dodaj
+    </a>
+</div>

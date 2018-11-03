@@ -27,12 +27,17 @@ namespace acaShare.ServiceLayer.Services
         }
 
 
-
+        public University GetUniversity(int id)
+        {
+            return _uow.Universities.FindById(id);
+        }
 
         public Department GetDepartment(int id)
         {
-            throw new NotImplementedException();
+            return _uow.Departments.FindById(id);
         }
+
+
 
         public Lecturer GetLecturer(int id)
         {
@@ -70,11 +75,6 @@ namespace acaShare.ServiceLayer.Services
         }
 
         public List<Subject> GetSubjects()
-        {
-            throw new NotImplementedException();
-        }
-
-        public University GetUniversity(int id)
         {
             throw new NotImplementedException();
         }
