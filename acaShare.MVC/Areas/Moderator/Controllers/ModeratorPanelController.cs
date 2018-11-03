@@ -22,7 +22,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers
 
         public IActionResult Home()
         {
-            ViewBag.IsModeratorPanel = true;
+            ViewBag.IsRoot = true;
             return View();
         }
     }

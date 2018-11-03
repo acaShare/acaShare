@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using acaShare.MVC.Areas.Moderator.Models.StructureManagement;
+using acaShare.MVC.Models;
 using acaShare.ServiceLayer.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,8 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
 
         public IActionResult Departments(int universityId)
         {
+            ConfigureBreadcrumbs(universityId);
+
             var departments = _traversalService.GetDepartmentsFromUniversity(universityId);
 
             var departmentViewModels = departments.Select(d =>
@@ -41,6 +44,33 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
             };
 
             return View(vm);
+        }
+
+        private void ConfigureBreadcrumbs(int universityId)
+        {
+            var university = _traversalService.GetUniversity(universityId);
+
+            var parms = new Dictionary<string, string>
+            {
+                { "universityId", universityId.ToString() }
+            };
+
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "UniversitiesManagement",
+                    Action = "Universities",
+                    Title = "Uczelnie"
+                },
+                new Breadcrumb
+                {
+                    Controller = "DepartmentsManagement",
+                    Action = "Departments",
+                    Title = university.Name,
+                    Params = parms
+                }
+            };
         }
 
 
