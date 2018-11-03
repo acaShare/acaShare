@@ -23,21 +23,9 @@ namespace acaShare.ServiceLayer.Services
             _uow.SaveChanges();
         }
 
-        public void AddLecturer(Lecturer lecturer)
-        {
-            _uow.Lecturers.Add(lecturer);
-            _uow.SaveChanges();
-        }
-
         public void AddLesson(Lesson lesson)
         {
             _uow.Lessons.Add(lesson);
-            _uow.SaveChanges();
-        }
-
-        public void AddSectionOfSubject(SectionOfSubject sectionOfSubject)
-        {
-            _uow.SectionsOfSubject.Add(sectionOfSubject);
             _uow.SaveChanges();
         }
 
@@ -58,25 +46,11 @@ namespace acaShare.ServiceLayer.Services
             _uow.Departments.Delete(departmentToDelete);
             _uow.SaveChanges();
         }
-
-        public void DeleteLecturer(int lecturerId)
-        {
-            var lecturerToDelete = _uow.Lecturers.FindById(lecturerId);
-            _uow.Lecturers.Delete(lecturerToDelete);
-            _uow.SaveChanges();
-        }
-
+        
         public void DeleteLesson(int lessonId)
         {
             var lessonToDelete = _uow.Lessons.FindById(lessonId);
             _uow.Lessons.Delete(lessonToDelete);
-            _uow.SaveChanges();
-        }
-
-        public void DeleteSectionOfSubject(int sectionOfSubjectId)
-        {
-            var sectionOfSubjectToDelete = _uow.SectionsOfSubject.FindById(sectionOfSubjectId);
-            _uow.SectionsOfSubject.Delete(sectionOfSubjectToDelete);
             _uow.SaveChanges();
         }
 
@@ -93,65 +67,6 @@ namespace acaShare.ServiceLayer.Services
             _uow.SaveChanges();
         }
 
-        public Department GetDepartment(int id)
-        {
-            return _uow.Departments.FindById(id);
-        }
-
-        public List<Department> GetDepartments()
-        {
-            return _uow.Departments.GetAll();
-        }
-
-        public Lecturer GetLecturer(int id)
-        {
-            return _uow.Lecturers.FindById(id);
-        }
-
-        public List<Lecturer> GetLecturers()
-        {
-            return _uow.Lecturers.GetAll();
-        }
-
-        public Lesson GetLesson(int id)
-        {
-            return _uow.Lessons.FindById(id);
-        }
-
-        public List<Lesson> GetLessons()
-        {
-            return _uow.Lessons.GetAll();
-        }
-
-        public SectionOfSubject GetSectionOfSubject(int id)
-        {
-            return _uow.SectionsOfSubject.FindById(id);
-        }
-
-        public List<SectionOfSubject> GetSectionsOfSubject()
-        {
-            return _uow.SectionsOfSubject.GetAll();
-        }
-
-        public Subject GetSubject(int id)
-        {
-            return _uow.Subjects.FindById(id);
-        }
-
-        public List<Subject> GetSubjects()
-        {
-            return _uow.Subjects.GetAll();
-        }
-
-        public List<University> GetUniversities()
-        {
-            return _uow.Universities.GetAll();
-        }
-
-        public University GetUniversity(int id)
-        {
-            return _uow.Universities.FindById(id);
-        }
 
         public void UpdateDepartment(Department department)
         {
@@ -159,21 +74,9 @@ namespace acaShare.ServiceLayer.Services
             _uow.SaveChanges();
         }
 
-        public void UpdateLecturer(Lecturer lecturer)
-        {
-            _uow.Lecturers.Update(lecturer);
-            _uow.SaveChanges();
-        }
-
         public void UpdateLesson(Lesson lesson)
         {
             _uow.Lessons.Update(lesson);
-            _uow.SaveChanges();
-        }
-
-        public void UpdateSectionOfSubject(SectionOfSubject sectionOfSubject)
-        {
-            _uow.SectionsOfSubject.Update(sectionOfSubject);
             _uow.SaveChanges();
         }
 

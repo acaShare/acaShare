@@ -34,13 +34,16 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
                 {
                     Id = d.DepartmentId,
                     TitleOrFullName = d.Name,
+                    SubtitleOrAbbreviation = d.Abbreviation,
                     UniversityId = universityId
                 }
             ).ToList();
 
             var vm = new ListViewModel<DepartmentViewModel>
             {
-                Items = departmentViewModels
+                Items = departmentViewModels,
+                IsWithSubtitles = true,
+                HelperId = universityId
             };
 
             return View(vm);
@@ -67,7 +70,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
                 {
                     Controller = "DepartmentsManagement",
                     Action = "Departments",
-                    Title = university.Name,
+                    Title = university.Abbreviation,
                     Params = parms
                 }
             };
@@ -88,9 +91,9 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
         public IActionResult Add(DepartmentViewModel vm)
         {
             var university = _traversalService.GetUniversity(vm.UniversityId);
-
-            var departmentToAdd = new BLL.Models.Department(vm.TitleOrFullName, university);
-
+            
+            var departmentToAdd = new BLL.Models.Department(vm.TitleOrFullName, vm.SubtitleOrAbbreviation, university);
+            
             _managementService.AddDepartment(departmentToAdd);
 
             return RedirectToAction("Departments", new { universityId = vm.UniversityId });
@@ -105,6 +108,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
             {
                 Id = departmentToEdit.DepartmentId,
                 TitleOrFullName = departmentToEdit.Name,
+                SubtitleOrAbbreviation = departmentToEdit.Abbreviation,
                 UniversityId = departmentToEdit.UniversityId
             };
 
@@ -117,7 +121,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
             var university = _traversalService.GetUniversity(vm.UniversityId);
 
             var departmentToEdit = _traversalService.GetDepartment(vm.Id);
-            departmentToEdit.Update(vm.TitleOrFullName, university);
+            departmentToEdit.Update(vm.TitleOrFullName, vm.SubtitleOrAbbreviation, university);
 
             _managementService.UpdateDepartment(departmentToEdit);
 

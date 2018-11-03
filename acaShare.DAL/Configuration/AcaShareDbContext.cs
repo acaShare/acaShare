@@ -16,21 +16,17 @@ namespace acaShare.DAL.Configuration
             : base(options)
         {
         }
-
-        public virtual DbSet<AcademicYear> AcademicYear { get; set; }
+        
         public virtual DbSet<Comment> Comment { get; set; }
         public virtual DbSet<DeleteRequest> DeleteRequest { get; set; }
         public virtual DbSet<Department> Department { get; set; }
         public virtual DbSet<EditRequest> EditRequest { get; set; }
         public virtual DbSet<Favorites> Favorites { get; set; }
         public virtual DbSet<File> File { get; set; }
-        public virtual DbSet<Lecturer> Lecturer { get; set; }
         public virtual DbSet<Lesson> Lesson { get; set; }
         public virtual DbSet<Material> Material { get; set; }
         public virtual DbSet<MaterialState> MaterialState { get; set; }
-        public virtual DbSet<SectionOfSubject> SectionOfSubject { get; set; }
         public virtual DbSet<Semester> Semester { get; set; }
-        public virtual DbSet<SemesterNumber> SemesterNumber { get; set; }
         public virtual DbSet<Subject> Subject { get; set; }
         public virtual DbSet<University> University { get; set; }
         public virtual DbSet<User> User { get; set; }
@@ -41,13 +37,6 @@ namespace acaShare.DAL.Configuration
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<AcademicYear>(entity =>
-            {
-                entity.Property(e => e.YearFrom).HasColumnType("date");
-
-                entity.Property(e => e.YearTo).HasColumnType("date");
-            });
 
             modelBuilder.Entity<Comment>(entity =>
             {
@@ -85,9 +74,17 @@ namespace acaShare.DAL.Configuration
 
             modelBuilder.Entity<Department>(entity =>
             {
+                entity.HasIndex(e => e.Name)
+                    .HasName("UQ_Department_Name")
+                    .IsUnique();
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(100);
+
+                entity.Property(e => e.Abbreviation)
+                    .IsRequired()
+                    .HasMaxLength(15);
 
                 entity.HasOne(d => d.University)
                     .WithMany(p => p.Departments)
@@ -153,42 +150,23 @@ namespace acaShare.DAL.Configuration
                     .HasConstraintName("File_Material");
             });
 
-            modelBuilder.Entity<Lecturer>(entity =>
-            {
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(250);
-            });
-
             modelBuilder.Entity<Lesson>(entity =>
             {
-                entity.HasIndex(e => new { e.SemesterId, e.LecturerId, e.DepartmentId, e.SectionOfSubjectId })
-                    .HasName("Lesson_Uniq_Idx")
+                entity.HasIndex(e => new { e.SemesterId, e.SubjectDepartmentId })
+                    .HasName("UQ_Lesson")
                     .IsUnique();
-
-                entity.HasOne(d => d.Department)
-                    .WithMany(p => p.Lessons)
-                    .HasForeignKey(d => d.DepartmentId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Lesson_Department");
-
-                entity.HasOne(d => d.Lecturer)
-                    .WithMany(p => p.Lessons)
-                    .HasForeignKey(d => d.LecturerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Subject_Lecturer");
-
-                entity.HasOne(d => d.SectionOfSubject)
-                    .WithMany(p => p.Lessons)
-                    .HasForeignKey(d => d.SectionOfSubjectId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Lesson_SectionOfSubject");
 
                 entity.HasOne(d => d.Semester)
                     .WithMany(p => p.Lessons)
                     .HasForeignKey(d => d.SemesterId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Subject_Semester");
+
+                entity.HasOne(d => d.SubjectDepartment)
+                    .WithMany(p => p.Lessons)
+                    .HasForeignKey(d => d.SubjectDepartmentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Lesson_SubjectDepartment");
             });
 
             modelBuilder.Entity<Material>(entity =>
@@ -236,46 +214,22 @@ namespace acaShare.DAL.Configuration
             {
                 entity.HasKey(e => e.StateId);
 
+                entity.HasIndex(e => e.Name)
+                    .HasName("UQ_MaterialState_Name")
+                    .IsUnique();
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<SectionOfSubject>(entity =>
-            {
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.HasOne(d => d.Subject)
-                    .WithMany(p => p.SectionsOfSubject)
-                    .HasForeignKey(d => d.SubjectId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("SectionOfSubject_Subject");
-            });
-
             modelBuilder.Entity<Semester>(entity =>
             {
-                entity.HasIndex(e => new { e.AcademicYearId, e.SemesterNumberId })
-                    .HasName("Semester_Uniq_Idx")
+                entity.HasIndex(e => e.Number)
+                    .HasName("UQ_Semester_Number")
                     .IsUnique();
 
-                entity.HasOne(d => d.AcademicYear)
-                    .WithMany(p => p.Semesters)
-                    .HasForeignKey(d => d.AcademicYearId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Semester_AcademicYear");
-
-                entity.HasOne(d => d.SemesterNumber)
-                    .WithMany(p => p.Semesters)
-                    .HasForeignKey(d => d.SemesterNumberId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Semester_SemesterNumber");
-            });
-
-            modelBuilder.Entity<SemesterNumber>(entity =>
-            {
                 entity.Property(e => e.Number)
                     .IsRequired()
                     .HasMaxLength(2)
@@ -284,16 +238,49 @@ namespace acaShare.DAL.Configuration
 
             modelBuilder.Entity<Subject>(entity =>
             {
+                entity.HasIndex(e => e.Name)
+                    .HasName("UQ_Subject_Name")
+                    .IsUnique();
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(200);
             });
 
+            modelBuilder.Entity<SubjectDepartment>(entity =>
+            {
+                entity.HasIndex(e => new { e.SubjectId, e.DepartmentId })
+                    .HasName("UQ_SubjectDepartment")
+                    .IsUnique();
+
+                entity.Property(e => e.SubjectDepartmentId).ValueGeneratedNever();
+
+                entity.HasOne(d => d.Department)
+                    .WithMany(p => p.SubjectDepartment)
+                    .HasForeignKey(d => d.DepartmentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("SubjectDepartment_Department");
+
+                entity.HasOne(d => d.Subject)
+                    .WithMany(p => p.SubjectDepartment)
+                    .HasForeignKey(d => d.SubjectId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("SubjectDepartment_Subject");
+            });
+
             modelBuilder.Entity<University>(entity =>
             {
+                entity.HasIndex(e => e.Name)
+                    .HasName("UQ_University_Name")
+                    .IsUnique();
+
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(126);
+
+                entity.Property(e => e.Abbreviation)
+                    .IsRequired()
+                    .HasMaxLength(15);
             });
 
             modelBuilder.Entity<User>(entity =>
@@ -304,13 +291,17 @@ namespace acaShare.DAL.Configuration
                     .IsRequired();
 
                 entity.HasIndex(e => new { e.IdentityUserId })
-                    .HasName("IdentityUserId_Uniq_Idx")
+                    .HasName("UQ_AspNetUsers_IdentityUserId")
                     .IsUnique();
             });
 
             modelBuilder.Entity<UserInUniversity>(entity =>
             {
                 entity.HasKey(e => new { e.UserId, e.UniversityId });
+
+                entity.HasIndex(e => new { e.UserId, e.UniversityId })
+                    .HasName("UQ_UserInUniversity")
+                    .IsUnique();
 
                 entity.Property(e => e.JoinDate).HasColumnType("datetime");
 
@@ -336,6 +327,10 @@ namespace acaShare.DAL.Configuration
             modelBuilder.Entity<UserType>(entity =>
             {
                 entity.HasKey(e => e.TypeId);
+
+                entity.HasIndex(e => e.Name)
+                    .HasName("UQ_UserType_Name")
+                    .IsUnique();
 
                 entity.Property(e => e.Name)
                     .IsRequired()

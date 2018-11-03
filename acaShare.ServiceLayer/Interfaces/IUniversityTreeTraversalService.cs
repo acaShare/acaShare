@@ -9,10 +9,6 @@ namespace acaShare.ServiceLayer.Interfaces
     {
         Lesson GetLesson(int id);
         IEnumerable<Lesson> GetLessons();
-        Lecturer GetLecturer(int id);
-        IEnumerable<Lecturer> GetLecturers();
-        SectionOfSubject GetSectionOfSubject(int id);
-        IEnumerable<SectionOfSubject> GetSectionsOfSubject();
         Subject GetSubject(int id);
         List<Subject> GetSubjects();
 

@@ -19,8 +19,6 @@ namespace acaShare.DAL.EFPersistence
         public ILessonRepository Lessons { get; }
         public IUniversityRepository Universities { get; }
         public IDepartmentRepository Departments { get; }
-        public ILecturerRepository Lecturers { get; }
-        public ISectionOfSubjectRepository SectionsOfSubject { get; }
         public ISubjectRepository Subjects { get; }
         public IUserRepository Users { get; set; }
 
@@ -30,8 +28,6 @@ namespace acaShare.DAL.EFPersistence
             Lessons = new LessonRepository(_db.Lesson);
             Universities = new UniversityRepository(_db.University);
             Departments = new DepartmentRepository(_db.Department);
-            Lecturers = new LecturerRepository(_db.Lecturer);
-            SectionsOfSubject = new SectionOfSubjectRepository(_db.SectionOfSubject);
             Subjects = new SubjectRepository(_db.Subject);
             Users = new UserRepository(_db.User);
         }

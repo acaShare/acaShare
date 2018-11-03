@@ -34,13 +34,14 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
                 {
                     Id = u.UniversityId,
                     TitleOrFullName = u.Name,
+                    SubtitleOrAbbreviation = u.Abbreviation,
                 }
             ).ToList();
             
             var vm = new ListViewModel<UniversityViewModel>
             {
                 Items = universityViewModels,
-                IsWithSubtitles = false
+                IsWithSubtitles = true
             };
 
             return View(vm);
@@ -84,7 +85,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
             {
                 Id = universityToEdit.UniversityId,
                 TitleOrFullName = universityToEdit.Name,
-                SubtitleOrAbbreviation = universityToEdit.Name
+                SubtitleOrAbbreviation = universityToEdit.Abbreviation
             };
 
             return View(vm);

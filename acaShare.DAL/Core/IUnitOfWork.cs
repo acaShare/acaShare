@@ -11,8 +11,6 @@ namespace acaShare.DAL.Core
     {
         ILessonRepository Lessons { get; }
         IDepartmentRepository Departments { get; }
-        ILecturerRepository Lecturers { get; }
-        ISectionOfSubjectRepository SectionsOfSubject { get; }
         ISubjectRepository Subjects { get; }
         IUniversityRepository Universities { get; }
         IUserRepository Users { get; set; }

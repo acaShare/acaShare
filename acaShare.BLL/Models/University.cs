@@ -19,7 +19,7 @@ namespace acaShare.BLL.Models
 
         public int UniversityId { get; private set; }
         public string Name { get; private set; }
-        //public string Abbreviation { get; private set; }
+        public string Abbreviation { get; private set; }
 
         public virtual ICollection<Department> Departments { get; private set; }
         public virtual ICollection<UserInUniversity> UsersInUniversity { get; private set; }
@@ -27,7 +27,7 @@ namespace acaShare.BLL.Models
         public void Update(string name, string abbreviation)
         {
             Name = name;
-            //Abbreviation = abbreviation;
+            Abbreviation = abbreviation;
         }
     }
 }

@@ -12,41 +12,44 @@ namespace acaShare.WebAPI.Controllers.v1.UniversityRelated
     [ApiController]
     public class UniversitiesController : ControllerBase
     {
-        private readonly IUniversityTreeManagementService _service;
+        private readonly IUniversityTreeTraversalService _traversalService;
+        private readonly IUniversityTreeManagementService _managementService;
 
-        public UniversitiesController(IUniversityTreeManagementService moderatorPanelService)
+        public UniversitiesController(IUniversityTreeManagementService managementService, IUniversityTreeTraversalService traversalService)
         {
-            _service = moderatorPanelService;
+            _managementService = managementService;
+            _traversalService = traversalService;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<University>> Get()
         {
-            return _service.GetUniversities();
+            return _traversalService.GetUniversities().ToList();
         }
 
         [HttpGet("{id}")]
         public University Get(int id)
         {
-            return _service.GetUniversity(id);
+            return _traversalService.GetUniversity(id);
         }
 
         [HttpPost]
         public void Add(University university)
         {
-            _service.AddUniversity(university);
+            _managementService.AddUniversity(university);
         }
         
         [HttpDelete]
         public void Delete(int universityId)
         {
-            _service.DeleteUniversity(universityId);
+            var universityToDelete = _traversalService.GetUniversity(universityId);
+            _managementService.DeleteUniversity(universityToDelete);
         }
 
         [HttpPut]
         public void Update(University university)
         {
-            _service.UpdateUniversity(university);
+            _managementService.UpdateUniversity(university);
         }
     }
 }

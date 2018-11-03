@@ -19,34 +19,34 @@ namespace acaShare.WebAPI.Controllers.v1.UniversityRelated
             _service = service;
         }
 
-        [HttpGet]
-        public ActionResult<IEnumerable<SectionOfSubject>> Get()
-        {
-            return _service.GetSectionsOfSubject();
-        }
+        //[HttpGet]
+        //public ActionResult<IEnumerable<SectionOfSubject>> Get()
+        //{
+        //    return _service.GetSectionsOfSubject();
+        //}
 
-        [HttpGet("{id}")]
-        public ActionResult<SectionOfSubject> Get(int id)
-        {
-            return _service.GetSectionOfSubject(id);
-        }
+        //[HttpGet("{id}")]
+        //public ActionResult<SectionOfSubject> Get(int id)
+        //{
+        //    return _service.GetSectionOfSubject(id);
+        //}
 
-        [HttpPost]
-        public void Post(SectionOfSubject sectionOfSubject)
-        {
-            _service.AddSectionOfSubject(sectionOfSubject);
-        }
+        //[HttpPost]
+        //public void Post(SectionOfSubject sectionOfSubject)
+        //{
+        //    _service.AddSectionOfSubject(sectionOfSubject);
+        //}
 
-        [HttpDelete]
-        public void Delete(int id)
-        {
-            _service.DeleteSectionOfSubject(id);
-        }
+        //[HttpDelete]
+        //public void Delete(int id)
+        //{
+        //    _service.DeleteSectionOfSubject(id);
+        //}
 
-        [HttpPut]
-        public void Update(SectionOfSubject sectionOfSubject)
-        {
-            _service.UpdateSectionOfSubject(sectionOfSubject);
-        }
+        //[HttpPut]
+        //public void Update(SectionOfSubject sectionOfSubject)
+        //{
+        //    _service.UpdateSectionOfSubject(sectionOfSubject);
+        //}
     }
 }

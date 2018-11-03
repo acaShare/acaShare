@@ -10,5 +10,6 @@ namespace acaShare.MVC.Areas.Moderator.Models.StructureManagement
     {
         public ICollection<TListItemViewModel> Items { get; set; }
         public bool IsWithSubtitles { get; set; }
+        public int HelperId { get; set; }
     }
 }

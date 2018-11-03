@@ -10,7 +10,10 @@
                     <a asp-controller="DepartmentsManagement" asp-action="Departments" asp-route-universityId="@university.Id" class="item-link">
                         <span class="path-list-item-title">@university.TitleOrFullName</span>
                         <br>
-                        <span class="path-list-item-subtitle">@university.SubtitleOrAbbreviation</span>
+                        @if (Model.IsWithSubtitles)
+                        {
+                            <span class="path-list-item-subtitle">@university.SubtitleOrAbbreviation</span>
+                        }
                     </a>
                 </li>
             }

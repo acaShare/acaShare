@@ -12,41 +12,43 @@ namespace acaShare.WebAPI.Controllers.v1.UniversityRelated
     [ApiController]
     public class SubjectsController : ControllerBase
     {
-        private readonly IUniversityTreeManagementService _service;
+        private readonly IUniversityTreeTraversalService _traversalService;
+        private readonly IUniversityTreeManagementService _managementService;
 
-        public SubjectsController(IUniversityTreeManagementService service)
+        public SubjectsController(IUniversityTreeTraversalService traversalService, IUniversityTreeManagementService managementService)
         {
-            _service = service;
+            _traversalService = traversalService;
+            _managementService = managementService;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<Subject>> Get()
         {
-            return _service.GetSubjects();
+            return _traversalService.GetSubjects();
         }
 
         [HttpGet("{id}")]
         public ActionResult<Subject> Get(int id)
         {
-            return _service.GetSubject(id);
+            return _traversalService.GetSubject(id);
         }
 
         [HttpPost]
         public void Post(Subject subject)
         {
-            _service.AddSubject(subject);
+            _managementService.AddSubject(subject);
         }
 
         [HttpDelete]
         public void Delete(int id)
         {
-            _service.DeleteSubject(id);
+            _managementService.DeleteSubject(id);
         }
 
         [HttpPut]
         public void Update(Subject subject)
         {
-            _service.UpdateSubject(subject);
+            _managementService.UpdateSubject(subject);
         }
     }
 }

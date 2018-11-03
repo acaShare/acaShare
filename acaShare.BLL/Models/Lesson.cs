@@ -5,21 +5,17 @@ namespace acaShare.BLL.Models
 {
     public class Lesson
     {
-        public Lesson()
+        protected Lesson()
         {
             Materials = new HashSet<Material>();
         }
 
-        public int LessonId { get; set; }
-        public int SemesterId { get; set; }
-        public int LecturerId { get; set; }
-        public int DepartmentId { get; set; }
-        public int SectionOfSubjectId { get; set; }
+        public int LessonId { get; private set; }
+        public int SemesterId { get; private set; }
+        public int SubjectDepartmentId { get; private set; }
 
-        public virtual Department Department { get; set; }
-        public virtual Lecturer Lecturer { get; set; }
-        public virtual SectionOfSubject SectionOfSubject { get; set; }
-        public virtual Semester Semester { get; set; }
-        public virtual ICollection<Material> Materials { get; set; }
+        public virtual Semester Semester { get; private set; }
+        public virtual SubjectDepartment SubjectDepartment { get; private set; }
+        public virtual ICollection<Material> Materials { get; private set; }
     }
 }

@@ -12,9 +12,9 @@ namespace acaShare.WebAPI.Controllers.v1.UniversityRelated
     [ApiController]
     public class LessonsFromDepartmentController : ControllerBase
     {
-        private readonly IUniversityTreeManagementService _service;
+        private readonly IUniversityTreeTraversalService _service;
 
-        public LessonsFromDepartmentController(IUniversityTreeManagementService service)
+        public LessonsFromDepartmentController(IUniversityTreeTraversalService service)
         {
             _service = service;
         }
@@ -22,7 +22,7 @@ namespace acaShare.WebAPI.Controllers.v1.UniversityRelated
         [HttpGet("{id}")]
         public ActionResult<IEnumerable<Lesson>> Get(int id)
         {
-            return _service.GetDepartment(id).Lessons.ToList();
+            return null;// _service.GetDepartment(id).Lessons.ToList();
         }
 
         [HttpGet("{id}/ooo/{pp}")]
@@ -36,41 +36,43 @@ namespace acaShare.WebAPI.Controllers.v1.UniversityRelated
     [ApiController]
     public class LessonsController : ControllerBase
     {
-        private readonly IUniversityTreeManagementService _service;
+        private readonly IUniversityTreeTraversalService _traversalService;
+        private readonly IUniversityTreeManagementService _managementService;
 
-        public LessonsController(IUniversityTreeManagementService service)
+        public LessonsController(IUniversityTreeTraversalService traversalService, IUniversityTreeManagementService managementService)
         {
-            _service = service;
+            _traversalService = traversalService;
+            _managementService = managementService;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<Lesson>> Get()
         {
-            return _service.GetLessons();
+            return _traversalService.GetLessons().ToList();
         }
 
         [HttpGet("{id}")]
         public ActionResult<Lesson> Get(int id)
         {
-            return _service.GetLesson(id);
+            return _traversalService.GetLesson(id);
         }
 
         [HttpPost]
         public void Post(Lesson lesson)
         {
-            _service.AddLesson(lesson);
+            _managementService.AddLesson(lesson);
         }
 
         [HttpDelete]
         public void Delete(int id)
         {
-            _service.DeleteLesson(id);
+            _managementService.DeleteLesson(id);
         }
 
         [HttpPut]
         public void Update(Lesson lesson)
         {
-            _service.UpdateLesson(lesson);
+            _managementService.UpdateLesson(lesson);
         }
     }
 }
