@@ -13,14 +13,14 @@ namespace acaShare.ServiceLayer.Interfaces
         List<University> GetUniversities();
         void AddUniversity(University university);
         void UpdateUniversity(University university);
-        void DeleteUniversity(int universityId);
+        void DeleteUniversity(University university);
 
         // Department
         Department GetDepartment(int id);
         List<Department> GetDepartments();
         void AddDepartment(Department department);
         void UpdateDepartment(Department department);
-        void DeleteDepartment(int departmentId);
+        void DeleteDepartment(Department department);
 
         // Subject
         Subject GetSubject(int id);

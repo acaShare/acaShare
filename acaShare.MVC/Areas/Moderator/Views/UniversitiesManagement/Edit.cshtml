@@ -18,7 +18,9 @@
                 <span asp-validation-for="SubtitleOrAbbreviation" class="text-danger input-error-small"></span>
             </div>
         </div>
-        <button type="submit">Dodaj</button>
+        <input asp-for="Id" type="hidden" />
+
+        <button type="submit">Aktualizuj</button>
         <a asp-action="Universities">Wróć do listy uczelni</a>
     </form>
 </div>

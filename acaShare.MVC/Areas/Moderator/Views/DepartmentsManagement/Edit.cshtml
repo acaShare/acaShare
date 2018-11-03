@@ -11,9 +11,10 @@
                 <span asp-validation-for="TitleOrFullName" class="text-danger input-error-small"></span>
             </div>
         </div>
+        @*<input asp-for="Id" type="hidden" />*@
         <input asp-for="UniversityId" type="hidden" />
 
-        <button type="submit">Dodaj</button>
+        <button type="submit">Aktualizuj</button>
         <a asp-action="Departments" asp-route-universityId="@Model.UniversityId">Wróć do listy wydziałów</a>
     </form>
 </div>

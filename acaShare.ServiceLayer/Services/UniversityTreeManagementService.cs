@@ -53,9 +53,8 @@ namespace acaShare.ServiceLayer.Services
             _uow.SaveChanges();
         }
 
-        public void DeleteDepartment(int departmentId)
+        public void DeleteDepartment(Department departmentToDelete)
         {
-            var departmentToDelete = _uow.Departments.FindById(departmentId);
             _uow.Departments.Delete(departmentToDelete);
             _uow.SaveChanges();
         }
@@ -88,9 +87,8 @@ namespace acaShare.ServiceLayer.Services
             _uow.SaveChanges();
         }
 
-        public void DeleteUniversity(int universityId)
+        public void DeleteUniversity(University universityToDelete)
         {
-            var universityToDelete = _uow.Universities.FindById(universityId);
             _uow.Universities.Delete(universityToDelete);
             _uow.SaveChanges();
         }
