@@ -6,12 +6,14 @@
         <div asp-validation-summary="All" class="text-danger"></div>
         <div>
             <div class="input-field">
-                <label asp-for="Name"></label>
-                <input asp-for="Name" class="validate" />
-                <span asp-validation-for="Name" class="text-danger input-error-small"></span>
+                <label asp-for="TitleOrFullName"></label>
+                <input asp-for="TitleOrFullName" class="validate" />
+                <span asp-validation-for="TitleOrFullName" class="text-danger input-error-small"></span>
             </div>
         </div>
+        <input asp-for="UniversityId" type="hidden" />
+
         <button type="submit">Dodaj</button>
-        <a asp-action="Departments">Wróć do listy wydziałów</a>
+        <a asp-action="Departments" asp-route-universityId="@Model.UniversityId">Wróć do listy wydziałów</a>
     </form>
 </div>

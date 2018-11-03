@@ -1,5 +1,5 @@
 ﻿@using acaShare.MVC.Areas.Moderator.Models.StructureManagement;
-@model ListViewModel<ListItemViewModel>
+@model ListViewModel<DepartmentViewModel>
 
 <div class="structure-management-container">
     <div class="structure-management-list-container">
@@ -8,9 +8,9 @@
             {
                 <li class="collection-item path-list-item">
                     <a asp-controller="SomethingNextManagement" asp-action="SomethingNext" asp-route-departmentId="@department.Id" class="item-link">
-                        <span class="path-list-item-title">@department.Title</span>
+                        <span class="path-list-item-title">@department.TitleOrFullName</span>
                         <br>
-                        <span class="path-list-item-subtitle">@department.Subtitle</span>
+                        <span class="path-list-item-subtitle">@department.SubtitleOrAbbreviation</span>
                     </a>
                 </li>
             }
@@ -32,7 +32,7 @@
         </div>
     </div>
     
-    <a asp-action="Add" asp-route-universityId="" class="add-button">
+    <a asp-action="Add" asp-route-universityId="@Model.Items.ToList()[0].UniversityId" class="add-button">
         Dodaj
     </a>
 </div>

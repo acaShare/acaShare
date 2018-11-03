@@ -25,14 +25,15 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
             var departments = _service.GetDepartmentsFromUniversity(universityId);
 
             var departmentViewModels = departments.Select(d =>
-                new ListItemViewModel
+                new DepartmentViewModel
                 {
                     Id = d.DepartmentId,
-                    Title = d.Name
+                    TitleOrFullName = d.Name,
+                    UniversityId = universityId
                 }
             ).ToList();
 
-            var vm = new ListViewModel<ListItemViewModel>
+            var vm = new ListViewModel<DepartmentViewModel>
             {
                 Items = departmentViewModels
             };
@@ -42,7 +43,8 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
 
         public IActionResult Add(int universityId)
         {
-            var vm = new DepartmentViewModel {
+            var vm = new DepartmentViewModel
+            {
                 UniversityId = universityId
             };
 
@@ -50,9 +52,9 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
         }
 
         [HttpPost]
-        public IActionResult Add(DepartmentViewModel department)
+        public IActionResult Add(DepartmentViewModel departmentToAdd)
         {
-            return RedirectToAction("Departments", new { universityId = department.UniversityId });
+            return RedirectToAction("Departments", new { universityId = departmentToAdd.UniversityId });
         }
 
         public IActionResult Edit(int departmentId)
@@ -61,39 +63,39 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
 
             var vm = new DepartmentViewModel
             {
-                Name = departmentToEdit.Name
+                TitleOrFullName = departmentToEdit.Name,
+                UniversityId = departmentToEdit.UniversityId
             };
 
             return View(vm);
         }
 
         [HttpPost]
-        public IActionResult Edit()
+        public IActionResult Edit(DepartmentViewModel departmentToUpdate)
         {
-            return RedirectToAction("Departments");
+            return RedirectToAction("Departments", new { universityId = departmentToUpdate.UniversityId });
         }
 
-        public IActionResult Delete(int departmentId, bool? confirmation)
+        public IActionResult Delete(int departmentId, bool confirmation = false)
         {
-            if (!confirmation.HasValue)
-            {
-                var departmentToDelete = _service.GetDepartment(departmentId);
+            var departmentToDelete = _service.GetDepartment(departmentId);
 
+            if (!confirmation)
+            {
                 var vm = new DepartmentViewModel
                 {
-                    DepartmentId = departmentId,
-                    Name = departmentToDelete.Name
+                    Id = departmentId,
+                    TitleOrFullName = departmentToDelete.Name,
+                    UniversityId = departmentToDelete.UniversityId
                 };
 
                 return View(vm);
             }
-            else if (confirmation.Value == true)
+            else
             {
                 // actually delete
-                return RedirectToAction("Departments");
+                return RedirectToAction("Departments", new { universityId = departmentToDelete.UniversityId });
             }
-
-            return RedirectToAction("Departments");
         }
     }
 }

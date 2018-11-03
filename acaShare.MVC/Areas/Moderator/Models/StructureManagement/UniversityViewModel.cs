@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace acaShare.MVC.Areas.Moderator.Models.StructureManagement
 {
-    public class UniversityViewModel
+    public class UniversityViewModel : IListItemViewModel
     {
-        public int UniversityId { get; set; }
+        public int Id { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane")]
         [Display(Name = "Pełna nazwa uczelni")]
-        public string FullName { get; set; }
+        public string TitleOrFullName { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane")]
         [Display(Name = "Skrót")]
-        public string Abbreviation { get; set; }
+        public string SubtitleOrAbbreviation { get; set; }
     }
 }

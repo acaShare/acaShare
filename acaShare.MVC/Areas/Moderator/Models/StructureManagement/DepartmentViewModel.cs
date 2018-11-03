@@ -6,13 +6,18 @@ using System.Threading.Tasks;
 
 namespace acaShare.MVC.Areas.Moderator.Models.StructureManagement
 {
-    public class DepartmentViewModel
+    public class DepartmentViewModel : IListItemViewModel
     {
-        public int DepartmentId { get; set; }
-        public int UniversityId { get; set; }
-
+        public int Id { get; set; }
+        
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane")]
         [Display(Name = "Nazwa wydziału")]
-        public string Name { get; set; }
+        public string TitleOrFullName { get; set; }
+
+        // Not used
+        public string SubtitleOrAbbreviation { get; set; }
+
+        // helper variable
+        public int UniversityId { get; set; }
     }
 }

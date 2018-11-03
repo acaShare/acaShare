@@ -4,13 +4,13 @@
 @{
     var parms = new Dictionary<string, string>
     {
-        { "departmentId", Model.DepartmentId.ToString() },
+        { "departmentId", Model.Id.ToString() },
         { "confirmation", "true" }
     };
 }
 
 <span class="text-danger">
-    UWAGA! Czy na pewno chcesz usunąć wydział "@Model.Name"? 
+    UWAGA! Czy na pewno chcesz usunąć wydział "@Model.TitleOrFullName"? 
     Wiąże się to z usunięciem całej jego dalszej struktury oraz wszystkich materiałów z nim związanych.
 </span>
 <br /><br />
@@ -18,5 +18,5 @@
     <a asp-action="Delete" asp-all-route-data="parms">Usuń wszystkie dane wydziału</a>
 </div>
 <div>
-    <a asp-action="Universities">Anuluj</a>
+    <a asp-action="Departments" asp-route-universityId="@Model.UniversityId">Anuluj</a>
 </div>

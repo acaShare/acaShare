@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace acaShare.MVC.Areas.Moderator.Models.StructureManagement
 {
-    public class ListViewModel<IListItemViewModel>
+    public class ListViewModel<TListItemViewModel>
     {
-        public ICollection<IListItemViewModel> Items { get; set; }
+        public ICollection<TListItemViewModel> Items { get; set; }
         public bool IsWithSubtitles { get; set; }
     }
 }

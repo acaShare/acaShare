@@ -4,12 +4,12 @@
 @{
     var parms = new Dictionary<string, string>
     {
-        { "universityId", Model.UniversityId.ToString() },
+        { "universityId", Model.Id.ToString() },
         { "confirmation", "true" }
     };
 }
 
-<span class="text-danger">UWAGA! Czy na pewno chcesz usunąć uczelnię "@Model.FullName"? Wiąże się to z usunięciem całej jej struktury.</span>
+<span class="text-danger">UWAGA! Czy na pewno chcesz usunąć uczelnię "@Model.TitleOrFullName"? Wiąże się to z usunięciem całej jej struktury.</span>
 <br /><br />
 <div>
     <a asp-action="Delete" asp-all-route-data="parms">Usuń wszystkie dane uczelni</a>

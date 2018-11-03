@@ -25,14 +25,14 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
             var universities = _service.GetUniversities();
 
             var universityViewModels = universities.Select(u =>
-                new ListItemViewModel
+                new UniversityViewModel
                 {
                     Id = u.UniversityId,
-                    Title = u.Name
+                    TitleOrFullName = u.Name,
                 }
             ).ToList();
-
-            var vm = new ListViewModel<ListItemViewModel>
+            
+            var vm = new ListViewModel<UniversityViewModel>
             {
                 Items = universityViewModels,
                 IsWithSubtitles = false
@@ -58,8 +58,8 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
 
             var vm = new UniversityViewModel
             {
-                FullName = universityToEdit.Name,
-                Abbreviation = universityToEdit.Name
+                TitleOrFullName = universityToEdit.Name,
+                SubtitleOrAbbreviation = universityToEdit.Name
             };
 
             return View(vm);
@@ -79,8 +79,8 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
 
                 var vm = new UniversityViewModel
                 {
-                    UniversityId = universityId,
-                    FullName = universityToDelete.Name
+                    Id = universityId,
+                    TitleOrFullName = universityToDelete.Name
                 };
 
                 return View(vm);

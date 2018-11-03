@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace acaShare.MVC.Areas.Moderator.Models.StructureManagement
 {
-    public class ListItemViewModel
+    public interface IListItemViewModel
     {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public string Subtitle { get; set; }
+        int Id { get; set; }
+        string TitleOrFullName { get; set; }
+        string SubtitleOrAbbreviation { get; set; }
     }
 }
