@@ -7,8 +7,7 @@ namespace acaShare.BLL.Models
     {
         public University(string name, string abbreviation)
         {
-            Name = name;
-            //Abbreviation = abbreviation;
+            Update(name, abbreviation);
         }
 
         // Private constructor for EF only
@@ -25,10 +24,10 @@ namespace acaShare.BLL.Models
         public virtual ICollection<Department> Departments { get; private set; }
         public virtual ICollection<UserInUniversity> UsersInUniversity { get; private set; }
 
-        public void Update(string titleOrFullName, string subtitleOrAbbreviation)
+        public void Update(string name, string abbreviation)
         {
-            Name = titleOrFullName;
-            //Abbreviation = subtitleOrAbbreviation;
+            Name = name;
+            //Abbreviation = abbreviation;
         }
     }
 }

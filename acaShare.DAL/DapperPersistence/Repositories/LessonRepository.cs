@@ -73,7 +73,7 @@ namespace acaShare.DAL.DapperPersistence.Repositories
 
             // department, university
             university.Departments.Add(department);
-            department.University = university;
+            //department.University = university;
             lesson.Department = department;
 
             return lesson;

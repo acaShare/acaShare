@@ -13,16 +13,18 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
     [Area("Moderator")]
     public class DepartmentsManagementController : Controller
     {
-        private readonly IUniversityTreeTraversalService _service;
+        private readonly IUniversityTreeTraversalService _traversalService;
+        private readonly IUniversityTreeManagementService _managementService;
 
-        public DepartmentsManagementController(IUniversityTreeTraversalService service)
+        public DepartmentsManagementController(IUniversityTreeTraversalService traversalService, IUniversityTreeManagementService managementService)
         {
-            _service = service;
+            _traversalService = traversalService;
+            _managementService = managementService;
         }
 
         public IActionResult Departments(int universityId)
         {
-            var departments = _service.GetDepartmentsFromUniversity(universityId);
+            var departments = _traversalService.GetDepartmentsFromUniversity(universityId);
 
             var departmentViewModels = departments.Select(d =>
                 new DepartmentViewModel
@@ -41,6 +43,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
             return View(vm);
         }
 
+
         public IActionResult Add(int universityId)
         {
             var vm = new DepartmentViewModel
@@ -52,17 +55,25 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
         }
 
         [HttpPost]
-        public IActionResult Add(DepartmentViewModel departmentToAdd)
+        public IActionResult Add(DepartmentViewModel vm)
         {
-            return RedirectToAction("Departments", new { universityId = departmentToAdd.UniversityId });
+            var university = _traversalService.GetUniversity(vm.UniversityId);
+
+            var departmentToAdd = new BLL.Models.Department(vm.TitleOrFullName, university);
+
+            _managementService.AddDepartment(departmentToAdd);
+
+            return RedirectToAction("Departments", new { universityId = vm.UniversityId });
         }
+
 
         public IActionResult Edit(int departmentId)
         {
-            var departmentToEdit = _service.GetDepartment(departmentId);
+            var departmentToEdit = _traversalService.GetDepartment(departmentId);
 
             var vm = new DepartmentViewModel
             {
+                Id = departmentToEdit.DepartmentId,
                 TitleOrFullName = departmentToEdit.Name,
                 UniversityId = departmentToEdit.UniversityId
             };
@@ -71,14 +82,22 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
         }
 
         [HttpPost]
-        public IActionResult Edit(DepartmentViewModel departmentToUpdate)
+        public IActionResult Edit(DepartmentViewModel vm)
         {
-            return RedirectToAction("Departments", new { universityId = departmentToUpdate.UniversityId });
+            var university = _traversalService.GetUniversity(vm.UniversityId);
+
+            var departmentToEdit = _traversalService.GetDepartment(vm.Id);
+            departmentToEdit.Update(vm.TitleOrFullName, university);
+
+            _managementService.UpdateDepartment(departmentToEdit);
+
+            return RedirectToAction("Departments", new { universityId = vm.UniversityId });
         }
+
 
         public IActionResult Delete(int departmentId, bool confirmation = false)
         {
-            var departmentToDelete = _service.GetDepartment(departmentId);
+            var departmentToDelete = _traversalService.GetDepartment(departmentId);
 
             if (!confirmation)
             {
@@ -94,6 +113,8 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
             else
             {
                 // actually delete
+                _managementService.DeleteDepartment(departmentToDelete);
+
                 return RedirectToAction("Departments", new { universityId = departmentToDelete.UniversityId });
             }
         }
