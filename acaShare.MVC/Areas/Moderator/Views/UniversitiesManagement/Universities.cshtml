@@ -3,11 +3,13 @@
 
 <div class="structure-management-container">
     <div class="structure-management-list-container">
-        <ul class="collection">
+        <ul class="aca-collection">
+            @{var rowClass = Model.IsWithSubtitles ? "" : "item-small";}
+
             @foreach (var university in @Model.Items)
             {
-                <li class="collection-item path-list-item">
-                    <a asp-controller="DepartmentsManagement" asp-action="Departments" asp-route-universityId="@university.Id" class="item-link">
+                <li class="aca-collection-item path-list-item">
+                    <a asp-controller="DepartmentsManagement" asp-action="Departments" asp-route-universityId="@university.Id" class="item-link @rowClass">
                         <span class="path-list-item-title">@university.TitleOrFullName</span>
                         <br>
                         @if (Model.IsWithSubtitles)
@@ -15,26 +17,19 @@
                             <span class="path-list-item-subtitle">@university.SubtitleOrAbbreviation</span>
                         }
                     </a>
+
+                    <div class="icons-row-container">
+                        <a asp-action="Edit" asp-route-universityId="@university.Id"> @*class="tooltipped" data-position="top" data-tooltip="Edytuj">*@
+                            <i class="material-icons icon-edit">edit</i>
+                        </a>
+                        <a asp-action="Delete" asp-route-universityId="@university.Id"> @*class="tooltipped" data-position="top" data-tooltip="Usuń">*@
+                            <i class="material-icons icon-delete">delete</i>
+                        </a>
+                    </div>
                 </li>
             }
         </ul>
-        <div class="icons-container">
-            @{var rowClass = Model.IsWithSubtitles ? "icons-row-container-big" : "icons-row-container-small";}
-
-            @foreach (var university in @Model.Items)
-            {
-                <div class="icons-row-container @rowClass">
-                    <a asp-action="Edit" asp-route-universityId="@university.Id">
-                        <i class="material-icons icon-edit">edit</i>
-                    </a>
-                    <a asp-action="Delete" asp-route-universityId="@university.Id">
-                        <i class="material-icons icon-delete">delete</i>
-                    </a>
-                </div>
-            }
-        </div>
     </div>
-    
     <a asp-action="Add" class="add-button">
         Dodaj
     </a>

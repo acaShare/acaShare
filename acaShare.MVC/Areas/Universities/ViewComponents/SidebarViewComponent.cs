@@ -9,7 +9,7 @@ namespace acaShare.MVC.Areas.Universities.ViewComponents
 {
     public class SidebarViewComponent : ViewComponent
     {
-        public async Task<IViewComponentResult> InvokeAsync()
+        public IViewComponentResult Invoke()
         {
             SidebarViewModel vm = new SidebarViewModel
             {

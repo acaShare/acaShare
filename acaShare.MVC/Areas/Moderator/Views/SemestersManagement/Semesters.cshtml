@@ -1,0 +1,17 @@
+﻿@using acaShare.MVC.Areas.Moderator.Models.StructureManagement;
+@model ListViewModel<SemesterViewModel>
+
+<div class="structure-management-container">
+    <div class="structure-management-list-container">
+        <ul class="aca-collection">
+            @foreach (var semester in @Model.Items)
+            {
+                <li class="aca-collection-item path-list-item">
+                    <a asp-controller="SomethingNextManagement" asp-action="SomethingNext" asp-route-semesterId="@semester.Id" class="item-link item-small">
+                        <span class="path-list-item-title">@semester.TitleOrFullName</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

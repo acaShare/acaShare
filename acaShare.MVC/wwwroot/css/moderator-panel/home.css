@@ -1,9 +1,10 @@
 .home-container {
   width: 93%;
+  max-height: 100vh;
 }
 
 .data-container {
-  margin: 3em auto;
+  margin: 2.5em auto;
   width: 98%;
 }
 

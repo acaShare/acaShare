@@ -16,19 +16,21 @@ namespace acaShare.DAL.EFPersistence
     {
         private readonly AcaShareDbContext _db;
 
-        public ILessonRepository Lessons { get; }
         public IUniversityRepository Universities { get; }
         public IDepartmentRepository Departments { get; }
+        public ISemesterRepository Semesters { get; }
         public ISubjectRepository Subjects { get; }
+        public ILessonRepository Lessons { get; }
         public IUserRepository Users { get; set; }
 
         public UnitOfWork(AcaShareDbContext dbContext)
         {
             _db = dbContext;
-            Lessons = new LessonRepository(_db.Lesson);
             Universities = new UniversityRepository(_db.University);
             Departments = new DepartmentRepository(_db.Department);
+            Semesters = new SemesterRepository(_db.Semester);
             Subjects = new SubjectRepository(_db.Subject);
+            Lessons = new LessonRepository(_db.Lesson);
             Users = new UserRepository(_db.User);
         }
 

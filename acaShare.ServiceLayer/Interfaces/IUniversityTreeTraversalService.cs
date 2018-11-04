@@ -17,5 +17,6 @@ namespace acaShare.ServiceLayer.Interfaces
 
         University GetUniversity(int id);
         IEnumerable<University> GetUniversities();
+        IEnumerable<Semester> GetSemesters();
     }
 }

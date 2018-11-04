@@ -232,7 +232,7 @@ namespace acaShare.DAL.Configuration
 
                 entity.Property(e => e.Number)
                     .IsRequired()
-                    .HasMaxLength(2)
+                    .HasMaxLength(3)
                     .IsUnicode(false);
             });
 

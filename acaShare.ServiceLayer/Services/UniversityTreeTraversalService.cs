@@ -39,8 +39,12 @@ namespace acaShare.ServiceLayer.Services
         }
 
 
+        public IEnumerable<Semester> GetSemesters()
+        {
+            return _uow.Semesters.GetAll();
+        }
 
-       
+
         public Lesson GetLesson(int id)
         {
             throw new NotImplementedException();

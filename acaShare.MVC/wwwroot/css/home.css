@@ -27,7 +27,7 @@ html, body {
 
 .right-side-bar {
     height: 100vh;
-    margin-top: .2%;
+    margin-top: 4px;
     border-left: 1px solid lightgrey;
 }
 

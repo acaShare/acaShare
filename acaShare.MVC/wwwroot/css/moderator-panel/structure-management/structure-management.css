@@ -30,12 +30,19 @@
     margin-bottom: 1em;
 }
 
-.collection {
-    flex-grow: 2;
+.aca-collection {
+    max-height: 62vh;
+    overflow: auto;
+    width: 100%;
+    margin: .5em 0 .5em 0;
+    border-radius: 2px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    /*border-top: 1px solid rgba(0, 0, 0, 0.1);*/ /*Border staus only on the top and bottom. Needs to add hr on the bottom of the 'table'*/
 }
 
-.collection-item.path-list-item {
-    padding: 0;
+.aca-collection-item {
+    display: flex;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .item-link {
@@ -46,24 +53,19 @@
     height: 100%;
 }
 
-.icons-container {
-    display: flex;
-    flex-direction: column;
-    margin-top: .5rem;
+.item-small {
+    padding: 13px 20px;
+}
+
+.item-big {
+    margin: 1.5rem 0 1.4rem 0;
 }
 
 .icons-row-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.icons-row-container-small {
-    margin: .66rem 0 0.66rem 0;
-}
-
-.icons-row-container-big {
-    margin: 1.5rem 0 1.4rem 0;
+    padding-right: 20px; /*usunac przy zmianie wygladu listy*/
 }
 
 .icon-edit, .icon-delete {
@@ -83,5 +85,22 @@
     transition: .2s ease-in-out;
 }
 
+/*
+    .aca-collection {
+        width: 100%;
+        margin: .5em 0 1em 0;
+    }
 
+    .aca-collection-item {
+        display: flex;
+    }
 
+    .aca-collection hr {
+        border: 0;
+        height: 1px;
+        color: #c2c2c2;
+        background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #c2c2c2, rgba(0, 0, 0, 0));
+    
+        margin: 0 2em 0px 2em;
+    }
+*/
