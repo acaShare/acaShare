@@ -18,5 +18,8 @@ namespace acaShare.ServiceLayer.Interfaces
         University GetUniversity(int id);
         IEnumerable<University> GetUniversities();
         IEnumerable<Semester> GetSemesters();
+        IEnumerable<SubjectDepartment> GetSubjectDepartmentAssociationResultsForDepartment(int departmentId);
+        Semester GetSemester(int semesterId);
+        IEnumerable<Lesson> GetLessons(int semesterId, IEnumerable<SubjectDepartment> subjectDepartmentAssociationResults);
     }
 }

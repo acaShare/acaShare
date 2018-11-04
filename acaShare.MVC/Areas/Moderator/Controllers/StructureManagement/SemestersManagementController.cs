@@ -39,7 +39,8 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
 
             var vm = new ListViewModel<SemesterViewModel>
             {
-                Items = semesterViewModels
+                Items = semesterViewModels,
+                HelperId = departmentId
             };
 
             return View(vm);

@@ -12,49 +12,62 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
 {
     [Authorize]
     [Area("Moderator")]
-    public class DepartmentsManagementController : Controller
+    public class LessonsManagementController : Controller
     {
+        /// <summary>
+        /// The controller's CUD methods manage subjects in department, but show Lessons. It is a side effect of out db archritecture.
+        /// In fact, Lesson IS SubjectDepartment in a given semester
+        /// </summary>
         private readonly IUniversityTreeTraversalService _traversalService;
         private readonly IUniversityTreeManagementService _managementService;
 
-        public DepartmentsManagementController(IUniversityTreeTraversalService traversalService, IUniversityTreeManagementService managementService)
+        public LessonsManagementController(IUniversityTreeTraversalService traversalService, IUniversityTreeManagementService managementService)
         {
             _traversalService = traversalService;
             _managementService = managementService;
         }
 
-        public IActionResult Departments(int universityId)
+        public IActionResult Lessons(int semesterId, int departmentId)
         {
-            ConfigureBreadcrumbs(universityId);
+            ConfigureBreadcrumbs(semesterId, departmentId);
 
-            var departments = _traversalService.GetDepartmentsFromUniversity(universityId);
+            var subjectDepartmentAssociationResults = _traversalService.GetSubjectDepartmentAssociationResultsForDepartment(departmentId);
 
-            var departmentViewModels = departments.Select(d =>
-                new DepartmentViewModel
+            var lessons = _traversalService.GetLessons(semesterId, subjectDepartmentAssociationResults);
+
+            var viewModels = lessons.Select(l =>
+                new LessonViewModel
                 {
-                    Id = d.DepartmentId,
-                    TitleOrFullName = d.Name,
-                    SubtitleOrAbbreviation = d.Abbreviation
+                    Id = l.LessonId,
+                    TitleOrFullName = l.SubjectDepartment.Subject.Name,
+                    SubtitleOrAbbreviation = l.SubjectDepartment.Subject.Abbreviation,
+                    //SemesterId = l.Semester.SemesterId,
+                    //SubjectDepartmentId = l.SubjectDepartment.SubjectDepartmentId
                 }
             ).ToList();
 
-            var vm = new ListViewModel<DepartmentViewModel>
+            var vm = new LessonsListViewModel
             {
-                Items = departmentViewModels,
+                Items = viewModels,
                 IsWithSubtitles = true,
-                HelperId = universityId
+                DepartmentId = departmentId,
+                SemesterId = semesterId
             };
 
             return View(vm);
         }
 
-        private void ConfigureBreadcrumbs(int universityId)
+        private void ConfigureBreadcrumbs(int semesterId, int departmentId)
         {
-            var university = _traversalService.GetUniversity(universityId);
+            var department = _traversalService.GetDepartment(departmentId);
+            var university = _traversalService.GetUniversity(department.University.UniversityId);
+            var semester = _traversalService.GetSemester(semesterId);
 
             var parms = new Dictionary<string, string>
             {
-                { "universityId", universityId.ToString() }
+                { "universityId", university.UniversityId.ToString() },
+                { "departmentId", department.DepartmentId.ToString() },
+                { "semesterId", semester.SemesterId.ToString() },
             };
 
             ViewBag.Breadcrumbs = new List<Breadcrumb>
@@ -71,31 +84,53 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
                     Action = "Departments",
                     Title = university.Abbreviation,
                     Params = parms
+                },
+                new Breadcrumb
+                {
+                    Controller = "SemestersManagement",
+                    Action = "Semesters",
+                    Title = department.Abbreviation,
+                    Params = parms
+                },
+                new Breadcrumb
+                {
+                    Controller = "SubjectsManagement",
+                    Action = "Subjects",
+                    Title = semester.Number,
+                    Params = parms
                 }
             };
         }
 
 
-        public IActionResult Add(int universityId)
+        // Create new subject and add it to the department
+        public IActionResult Add(int semesterId, int departmentId)
         {
-            var vm = new DepartmentViewModel
+            var vm = new SubjectDepartmentViewModel // treat this as subject view model
             {
-                UniversityId = universityId
+                SemesterId = semesterId,
+                DepartmentId = departmentId
             };
 
             return View(vm);
         }
 
         [HttpPost]
-        public IActionResult Add(DepartmentViewModel vm)
+        public IActionResult Add(SubjectDepartmentViewModel vm)
         {
-            var university = _traversalService.GetUniversity(vm.UniversityId);
-            
-            var departmentToAdd = new BLL.Models.Department(vm.TitleOrFullName, vm.SubtitleOrAbbreviation, university);
-            
-            _managementService.AddDepartment(departmentToAdd);
+            var department = _traversalService.GetDepartment(vm.DepartmentId);
 
-            return RedirectToAction("Departments", new { universityId = vm.UniversityId });
+            var subjectToAdd = new BLL.Models.Subject(vm.TitleOrFullName, vm.SubtitleOrAbbreviation, department);
+
+            var addedSubject = _managementService.AddSubject(subjectToAdd);
+
+            var subjectDepartmentId = addedSubject.SubjectDepartment.Max(s => s.SubjectDepartmentId);
+
+            var lesson = new BLL.Models.Lesson(vm.SemesterId, subjectDepartmentId);
+
+            _managementService.AddLesson(lesson);
+
+            return RedirectToAction("Lessons", new { semesterId = vm.SemesterId, departmentId = department.DepartmentId });
         }
 
 

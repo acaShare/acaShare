@@ -3,6 +3,7 @@ using acaShare.DAL.Core;
 using acaShare.ServiceLayer.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace acaShare.ServiceLayer.Services
@@ -39,9 +40,27 @@ namespace acaShare.ServiceLayer.Services
         }
 
 
+        public Semester GetSemester(int semesterId)
+        {
+            return _uow.Semesters.FindById(semesterId);
+        }
+
         public IEnumerable<Semester> GetSemesters()
         {
             return _uow.Semesters.GetAll();
+        }
+
+
+
+        public IEnumerable<SubjectDepartment> GetSubjectDepartmentAssociationResultsForDepartment(int departmentId)
+        {
+            return _uow.Departments.FindSubjectDepartmentAssociations(departmentId);
+        }
+
+
+        public IEnumerable<Lesson> GetLessons(int semesterId, IEnumerable<SubjectDepartment> subjectDepartmentAssociationResults)
+        {
+            return _uow.Lessons.GetAll().Where(l => l.SemesterId == semesterId && subjectDepartmentAssociationResults.Contains(l.SubjectDepartment));
         }
 
 

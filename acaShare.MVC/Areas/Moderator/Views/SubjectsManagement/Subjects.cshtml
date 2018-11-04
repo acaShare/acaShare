@@ -1,0 +1,43 @@
+﻿@using acaShare.MVC.Areas.Moderator.Models.StructureManagement;
+@model ListViewModel<SubjectDepartmentViewModel>
+
+
+<div class="structure-management-container">
+    <div class="structure-management-list-container">
+        <ul class="aca-collection">
+            @{var rowClass = Model.IsWithSubtitles ? "" : "item-small";}
+
+            @foreach (var subjectDepartment in @Model.Items)
+            {
+                var parms = new Dictionary<string, string>
+                {
+                    { "semesterId", subjectDepartment.SemesterId.ToString() },
+                    { "subjectDepartmentId", subjectDepartment.Id.ToString() }
+                };
+
+                <li class="aca-collection-item path-list-item">
+                    <a asp-controller="LessonsManagement" asp-action="Lessons" asp-all-route-data="@parms" class="item-link @rowClass">
+                        <span class="path-list-item-title">@subjectDepartment.TitleOrFullName</span>
+                        <br>
+                        @if (Model.IsWithSubtitles)
+                        {
+                            <span class="path-list-item-subtitle">@subjectDepartment.SubtitleOrAbbreviation</span>
+                        }
+                    </a>
+
+                    <div class="icons-row-container">
+                        <a asp-action="Edit" asp-route-subjectId="@subjectDepartment.Id">
+                            <i class="material-icons icon-edit">edit</i>
+                        </a>
+                        <a asp-action="Delete" asp-route-subjectId="@subjectDepartment.Id">
+                            <i class="material-icons icon-delete">delete</i>
+                        </a>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+    <a asp-action="Add" asp-route-departmentId="@Model.HelperId" class="add-button">
+        Dodaj
+    </a>
+</div>

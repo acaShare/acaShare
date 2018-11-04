@@ -19,7 +19,8 @@ namespace acaShare.ServiceLayer.Interfaces
         void DeleteDepartment(Department department);
 
         // Subject
-        void AddSubject(Subject subject);
+        Subject AddSubject(Subject subject);
+        int AddSubjectWithResult(Subject subject);
         void UpdateSubject(Subject subject);
         void DeleteSubject(int subjectId);
 
