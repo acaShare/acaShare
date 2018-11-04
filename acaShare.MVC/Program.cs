@@ -20,5 +20,5 @@ namespace acaShare.MVC
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>();
-    }//abc
+    }
 }

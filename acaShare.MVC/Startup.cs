@@ -74,6 +74,17 @@ namespace acaShare.MVC
             app.UseAuthentication();
             app.UseCookiePolicy();
 
+            app.Use(async (ctx, next) =>
+            {
+                await next();
+
+                if (ctx.Response.StatusCode == 404 && !ctx.Response.HasStarted)
+                {
+                    ctx.Request.Path = "/error/404";
+                    await next();
+                }
+            });
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
