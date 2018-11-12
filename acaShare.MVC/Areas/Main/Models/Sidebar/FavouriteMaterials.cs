@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace acaShare.MVC.Areas.Universities.Models.Sidebar
+namespace acaShare.MVC.Areas.Main.Models.Sidebar
 {
     public class FavouriteMaterialsVM
     {

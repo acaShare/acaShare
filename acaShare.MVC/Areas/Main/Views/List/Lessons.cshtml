@@ -15,7 +15,7 @@
         @foreach (var lesson in @Model.Items)
         {
             <li class="aca-collection-item path-list-item">
-                <a class="item-link @rowClass">
+                <a asp-controller="MaterialsController" asp-action="Semesters" asp-route-lessonId="@lesson.Id" class="item-link @rowClass">
                     <span class="path-list-item-title">@lesson.TitleOrFullName</span>
                     <br>
                     @if (Model.IsWithSubtitles)

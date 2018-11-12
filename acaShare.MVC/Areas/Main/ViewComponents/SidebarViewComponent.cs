@@ -1,11 +1,11 @@
-﻿using acaShare.MVC.Areas.Universities.Models.Sidebar;
+﻿using acaShare.MVC.Areas.Main.Models.Sidebar;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace acaShare.MVC.Areas.Universities.ViewComponents
+namespace acaShare.MVC.Areas.Main.ViewComponents
 {
     public class SidebarViewComponent : ViewComponent
     {

@@ -89,7 +89,7 @@ namespace acaShare.MVC
             {
                 routes.MapRoute(
                     name: "areaRoute",
-                    template: "{area=Universities}/{controller=List}/{action=AvailableUniversities}/{id?}");
+                    template: "{area=Main}/{controller=List}/{action=AvailableUniversities}/{id?}");
 
                 //routes.MapAreaRoute(
                 //    name: "default",

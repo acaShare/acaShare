@@ -1,6 +1,6 @@
 using System;
 
-namespace acaShare.MVC.Areas.Universities.Models
+namespace acaShare.MVC.Models
 {
     public class ErrorViewModel
     {

@@ -4,16 +4,16 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using acaShare.MVC.Areas.Universities.Models;
+using acaShare.MVC.Areas.Main.Models;
 using Microsoft.AspNetCore.Authorization;
 using acaShare.ServiceLayer.Interfaces;
 using acaShare.MVC.Models.StructureTraversal;
 using acaShare.MVC.Models;
 
-namespace acaShare.MVC.Areas.Universities.Controllers
+namespace acaShare.MVC.Areas.Main.Controllers
 {
     [Authorize]
-    [Area("Universities")]
+    [Area("Main")]
     public class ListController : Controller
     {
         private readonly IUniversityTreeTraversalService _service;
