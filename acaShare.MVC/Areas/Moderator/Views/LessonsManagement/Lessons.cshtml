@@ -1,5 +1,4 @@
-﻿@using acaShare.MVC.Areas.Moderator.Models.StructureManagement;
-@model LessonsListViewModel
+﻿@model LessonsListViewModel
 
 @{ 
     var parms = new Dictionary<string, string>
@@ -10,7 +9,7 @@
 }
 
 <div class="structure-management-container">
-    <div class="structure-management-list-container">
+    <div class="list-container">
         <ul class="aca-collection">
             @{var rowClass = Model.IsWithSubtitles ? "" : "item-small";}
 
@@ -28,10 +27,10 @@
 
                     <div class="icons-row-container">
                         <a asp-action="Edit" asp-route-subjectId="@lesson.Id">
-                            <i class="material-icons icon-edit">edit</i>
+                            <i class="material-icons list-icon icon-edit">edit</i>
                         </a>
                         <a asp-action="Delete" asp-route-subjectId="@lesson.Id">
-                            <i class="material-icons icon-delete">delete</i>
+                            <i class="material-icons list-icon icon-delete">delete</i>
                         </a>
                     </div>
                 </li>

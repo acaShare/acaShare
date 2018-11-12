@@ -1,19 +1,25 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
-@using acaShare.MVC.Areas.Universities.Models.List;
-@model ListViewModel<ListItemViewModel>
+﻿@model ListViewModel<DepartmentViewModel>
 
-<ul class="collection">
-    @foreach (var department in @Model.Items)
-    {
-        <li class="collection-item path-list-item">
-            <div>
-                @department.Title
-                <a asp-action="Subjects" asp-route-departmentId="@department.Id" class="secondary-content">
-                    <i class="material-icons">send</i>
+<div class="list-container">
+    <ul class="aca-collection">
+        @{var rowClass = Model.IsWithSubtitles ? "" : "item-small";}
+
+        @foreach (var department in @Model.Items)
+        {
+            <li class="aca-collection-item path-list-item">
+                <a asp-action="Semesters" asp-route-departmentId="@department.Id" class="item-link @rowClass">
+                    <span class="path-list-item-title">@department.TitleOrFullName</span>
+                    <br>
+                    @if (Model.IsWithSubtitles)
+                    {
+                        <span class="path-list-item-subtitle">@department.SubtitleOrAbbreviation</span>
+                    }
                 </a>
-            </div>
-        </li>
-    }
-</ul>
+
+                <div class="icons-row-container list-icon">
+                    <i class="material-icons list-icon">send</i>
+                </div>
+            </li>
+        }
+    </ul>
+</div>

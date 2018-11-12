@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using acaShare.MVC.Areas.Moderator.Models.StructureManagement;
 using acaShare.MVC.Models;
+using acaShare.MVC.Models.StructureTraversal;
 using acaShare.ServiceLayer.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +15,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
     public class LessonsManagementController : Controller
     {
         /// <summary>
-        /// The controller's CUD methods manage subjects in department, but show Lessons. It is a side effect of out db archritecture.
+        /// The controller's CUD methods manage subjects in department, but show Lessons. It is a side effect of our db archritecture.
         /// In fact, Lesson IS SubjectDepartment in a given semester
         /// </summary>
         private readonly IUniversityTreeTraversalService _traversalService;
@@ -94,8 +94,8 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
                 },
                 new Breadcrumb
                 {
-                    Controller = "SubjectsManagement",
-                    Action = "Subjects",
+                    Controller = "LessonsManagement",
+                    Action = "Lessons",
                     Title = semester.Number,
                     Params = parms
                 }

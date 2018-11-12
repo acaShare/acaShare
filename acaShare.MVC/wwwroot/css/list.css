@@ -1,0 +1,47 @@
+﻿.list-container {
+    display: flex;
+    margin-bottom: 1em;
+}
+
+.aca-collection {
+    max-height: 62vh;
+    overflow: auto;
+    width: 100%;
+    margin: .5em 0 .5em 0;
+    border-radius: 2px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    /*border-top: 1px solid rgba(0, 0, 0, 0.1);*/ /*Border staus only on the top and bottom. Needs to add hr on the bottom of the 'table'*/
+}
+
+.aca-collection-item {
+    display: flex;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.item-link {
+    padding: 10px 20px;
+    color: black;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.item-small {
+    padding: 13px 20px;
+}
+
+.item-big {
+    margin: 1.5rem 0 1.4rem 0;
+}
+
+.icons-row-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 20px; /*usunac przy zmianie wygladu listy*/
+}
+
+.list-icon {
+    color: #444444;
+    cursor: pointer;
+}

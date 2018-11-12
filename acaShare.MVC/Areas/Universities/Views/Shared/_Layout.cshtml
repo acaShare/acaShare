@@ -8,7 +8,23 @@
             <nav class="colornav">
                 <div class="nav-wrapper path-header-wrapper">
                     <div class="col s12 tree-path">
-                        <a href="home.html" class="breadcrumb">Uczelnie</a>
+                        @if (ViewBag.IsRoot != null && ViewBag.IsRoot == true)
+                        {
+                            <a asp-controller="List" asp-action="AvailableUniversities" class="breadcrumb">Uczelnie</a>
+                        }
+
+                        @if (ViewBag.Breadcrumbs != null)
+                        {
+                            @foreach (var breadcrumb in ViewBag.Breadcrumbs)
+                            {
+                                <a asp-controller="@(breadcrumb.Controller)"
+                                   asp-action="@breadcrumb.Action"
+                                   asp-all-route-data="@breadcrumb.Params"
+                                   class="breadcrumb">
+                                    @breadcrumb.Title
+                                </a>
+                            }
+                        }
                     </div>
                 </div>
             </nav>

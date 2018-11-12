@@ -1,0 +1,24 @@
+﻿@model ListViewModel<SemesterViewModel>
+
+<div class="list-container">
+    <ul class="aca-collection">
+        @foreach (var semester in @Model.Items)
+        {
+            var parms = new Dictionary<string, string>
+            {
+                { "semesterId", @semester.Id.ToString() },
+                { "departmentId", Model.HelperId.ToString() }
+            };
+
+            <li class="aca-collection-item path-list-item">
+                <a asp-action="Lessons" asp-all-route-data="@parms" class="item-link item-small">
+                    <span class="path-list-item-title">@semester.TitleOrFullName</span>
+                </a>
+
+                <div class="icons-row-container">
+                    <i class="material-icons list-icon">send</i>
+                </div>
+            </li>
+        }
+    </ul>
+</div>

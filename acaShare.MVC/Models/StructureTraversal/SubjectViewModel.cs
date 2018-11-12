@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace acaShare.MVC.Areas.Moderator.Models.StructureManagement
+namespace acaShare.MVC.Models.StructureTraversal
 {
     public class SubjectDepartmentViewModel : IListItemViewModel
     {

@@ -1,9 +1,7 @@
-﻿@using acaShare.MVC.Areas.Moderator.Models.StructureManagement;
-@model ListViewModel<SemesterViewModel>
-
+﻿@model ListViewModel<SemesterViewModel>
 
 <div class="structure-management-container">
-    <div class="structure-management-list-container">
+    <div class="list-container">
         <ul class="aca-collection">
             @foreach (var semester in @Model.Items)
             {
@@ -26,7 +24,7 @@
 
 
 @*<div class="structure-management-container">
-    <div class="structure-management-list-container">
+    <div class="list-container">
         <ul class="aca-collection">
             @foreach (var semester in @Model.Items)
             {

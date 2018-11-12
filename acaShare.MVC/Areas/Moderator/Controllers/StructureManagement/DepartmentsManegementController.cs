@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using acaShare.MVC.Areas.Moderator.Models.StructureManagement;
 using acaShare.MVC.Models;
+using acaShare.MVC.Models.StructureTraversal;
 using acaShare.ServiceLayer.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
