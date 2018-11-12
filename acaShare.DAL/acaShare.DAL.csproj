@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="EFPersistence\Migrations\20181104204247_IntroducedIdentityForSubjectDepartmentTable.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Dapper" Version="1.50.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.1.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.1.4" />

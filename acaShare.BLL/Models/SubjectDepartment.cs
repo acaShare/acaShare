@@ -5,6 +5,12 @@ namespace acaShare.BLL.Models
 {
     public partial class SubjectDepartment
     {
+        public SubjectDepartment(Subject subject, Department department)
+        {
+            Subject = subject;
+            Department = department;
+        }
+
         protected SubjectDepartment()
         {
             Lessons = new HashSet<Lesson>();

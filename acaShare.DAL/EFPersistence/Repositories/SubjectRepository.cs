@@ -13,5 +13,10 @@ namespace acaShare.DAL.EFPersistence.Repositories
         public SubjectRepository(DbSet<Subject> dbSet) : base(dbSet)
         {
         }
+
+        public Subject AddSubjectWithResult(Subject subject)
+        {
+            return _dbSet.Add(subject).Entity;
+        }
     }
 }

@@ -1,0 +1,29 @@
+﻿@model LessonsListViewModel
+
+@{ 
+    var parms = new Dictionary<string, string>
+    {
+        { "semesterId", Model.SemesterId.ToString() },
+        { "departmentId", Model.DepartmentId.ToString() }
+    };
+}
+
+<div class="list-container">
+    <ul class="aca-collection">
+        @{var rowClass = Model.IsWithSubtitles ? "" : "item-small";}
+
+        @foreach (var lesson in @Model.Items)
+        {
+            <li class="aca-collection-item path-list-item">
+                <a class="item-link @rowClass">
+                    <span class="path-list-item-title">@lesson.TitleOrFullName</span>
+                    <br>
+                    @if (Model.IsWithSubtitles)
+                    {
+                        <span class="path-list-item-subtitle">@lesson.SubtitleOrAbbreviation</span>
+                    }
+                </a>
+            </li>
+        }
+    </ul>
+</div>

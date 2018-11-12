@@ -1,13 +1,18 @@
-﻿@using acaShare.MVC.Areas.Moderator.Models.StructureManagement;
-@model ListViewModel<SemesterViewModel>
+﻿@model ListViewModel<SemesterViewModel>
 
 <div class="structure-management-container">
-    <div class="structure-management-list-container">
+    <div class="list-container">
         <ul class="aca-collection">
             @foreach (var semester in @Model.Items)
             {
+                var parms = new Dictionary<string, string>
+                {
+                    { "semesterId", @semester.Id.ToString() },
+                    { "departmentId", Model.HelperId.ToString() }
+                };
+
                 <li class="aca-collection-item path-list-item">
-                    <a asp-controller="SomethingNextManagement" asp-action="SomethingNext" asp-route-semesterId="@semester.Id" class="item-link item-small">
+                    <a asp-controller="LessonsManagement" asp-action="Lessons" asp-all-route-data="@parms" class="item-link item-small">
                         <span class="path-list-item-title">@semester.TitleOrFullName</span>
                     </a>
                 </li>
@@ -15,3 +20,37 @@
         </ul>
     </div>
 </div>
+
+
+
+@*<div class="structure-management-container">
+    <div class="list-container">
+        <ul class="aca-collection">
+            @foreach (var semester in @Model.Items)
+            {
+                var parms = new Dictionary<string, string>
+                {
+                    { "semesterId", @semester.Id.ToString() },
+                    { "departmentId", Model.HelperId.ToString() }
+                };
+
+                <li class="aca-collection-item path-list-item">
+                    <a asp-controller="SubjectsManagement" asp-action="Subjects" asp-all-route-data="@parms" class="item-link item-small">
+                        <span class="path-list-item-title">@semester.TitleOrFullName</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>*@
+
+
+@*<li class="aca-collection-item path-list-item">
+    <form id="go-to-subjects-@semester.Id" method="post" asp-controller="SubjectsManagement" asp-action="Subjects">
+        <input type="hidden" id="SemesterId" name="SemesterId" value="@semester.Id" />
+        <input type="hidden" id="DepartmentId" name="DepartmentId" value="@Model.HelperId" />
+    </form>
+    <a href="javascript:{}" onclick="document.getElementById('go-to-subjects-@semester.Id').submit()" class="item-link item-small">
+        <span class="path-list-item-title">@semester.TitleOrFullName</span>
+    </a>
+</li>*@

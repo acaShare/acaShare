@@ -5,7 +5,7 @@ namespace acaShare.BLL.Models
 {
     public partial class University
     {
-        public University(string name, string abbreviation)
+        public University(string name, string abbreviation) : this()
         {
             Update(name, abbreviation);
         }
