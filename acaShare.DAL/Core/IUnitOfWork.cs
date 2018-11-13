@@ -14,8 +14,9 @@ namespace acaShare.DAL.Core
         ISemesterRepository Semesters { get; }
         ISubjectRepository Subjects { get; }
         ILessonRepository Lessons { get; }
-        IUserRepository Users { get; set; }
-        IMaterialRepository Materials { get; set; }
+        IUserRepository Users { get; }
+        IMaterialRepository Materials { get; }
+        IMaterialStateRepository MaterialStates { get; }
         void SaveChanges();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using acaShare.MVC.Areas.Main.Models.Materials;
 using acaShare.MVC.Models;
@@ -16,11 +17,13 @@ namespace acaShare.MVC.Areas.Main.Controllers
     {
         private readonly IMaterialsService _service;
         private readonly IUniversityTreeTraversalService _traversalService;
+        private readonly IUserService _userService;
 
-        public MaterialsController(IMaterialsService service, IUniversityTreeTraversalService traversalService)
+        public MaterialsController(IMaterialsService service, IUniversityTreeTraversalService traversalService, IUserService userService)
         {
             _service = service;
             _traversalService = traversalService;
+            _userService = userService;
         }
 
         public IActionResult Materials(int lessonId)
@@ -43,14 +46,15 @@ namespace acaShare.MVC.Areas.Main.Controllers
                     Description = m.Description,
                     UploadDate = m.UploadDate,
                     ModificationDate = m.ModificationDate,
-                    State = m.State
+                    State = m.State.Name
                 }
             ).ToList();
 
             var vms = new MaterialsViewModel
             {
                 Materials = materialViewModels,
-                IsWithSubtitles = true
+                IsWithSubtitles = true,
+                LessonId = lessonId
             };
 
             return View(vms);
@@ -112,7 +116,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
         }
 
 
-        public IActionResult Material(int lessonId, int materialId)
+        public IActionResult Material(int materialId)
         {
             var material = _service.GetMaterial(materialId);
 
@@ -132,7 +136,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 Description = material.Description,
                 UploadDate = material.UploadDate,
                 ModificationDate = material.ModificationDate,
-                State = material.State
+                State = material.State.Name
             };
 
             return View(vm);
@@ -197,6 +201,105 @@ namespace acaShare.MVC.Areas.Main.Controllers
                     Controller = "Materials",
                     Action = "Material",
                     Title = material.Name,
+                    Params = parms
+                }
+            };
+        }
+
+
+        public IActionResult Add(int lessonId)
+        {
+            ConfigureAddMaterialBreadcrumbs(lessonId);
+
+            var vm = new AddMaterialViewModel
+            {
+                LessonId = lessonId
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public IActionResult Add(AddMaterialViewModel vm)
+        {
+            var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var lesson = _traversalService.GetLesson(vm.LessonId);
+            var creator = _userService.FindByIdentityUserId(identityUserId);
+            var state = _service.GetState(MaterialStateEnum.PENDING);
+
+            var materialToAdd = new BLL.Models.Material(vm.Name, vm.Description, lesson, creator, state);
+
+            if (vm.Files != null && vm.Files.ToList().Count != 0)
+            {
+                foreach (var fileData in vm.Files)
+                {
+                    var file = new BLL.Models.File(fileData);
+                    materialToAdd.AddFile(file);
+                }
+            }
+
+            _service.AddMaterial(materialToAdd);
+
+            return RedirectToAction("Materials", new { LessonId = lesson.LessonId });
+        }
+
+        private void ConfigureAddMaterialBreadcrumbs(int lessonId)
+        {
+            var lesson = _traversalService.GetLesson(lessonId);
+            var subjectDepartment = lesson.SubjectDepartment;
+            var department = subjectDepartment.Department;
+            var university = department.University;
+            var semester = lesson.Semester;
+
+            var parms = new Dictionary<string, string>
+            {
+                { "universityId", university.UniversityId.ToString() },
+                { "departmentId", department.DepartmentId.ToString() },
+                { "semesterId", semester.SemesterId.ToString() },
+                { "lessonId", lesson.LessonId.ToString() }
+            };
+
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "List",
+                    Action = "AvailableUniversities",
+                    Title = "Uczelnie"
+                },
+                new Breadcrumb
+                {
+                    Controller = "List",
+                    Action = "Departments",
+                    Title = university.Abbreviation,
+                    Params = parms
+                },
+                new Breadcrumb
+                {
+                    Controller = "List",
+                    Action = "Semesters",
+                    Title = department.Abbreviation,
+                    Params = parms
+                },
+                new Breadcrumb
+                {
+                    Controller = "List",
+                    Action = "Lessons",
+                    Title = semester.Number,
+                    Params = parms
+                },
+                new Breadcrumb
+                {
+                    Controller = "Materials",
+                    Action = "Materials",
+                    Title = subjectDepartment.Subject.Abbreviation,
+                    Params = parms
+                },
+                new Breadcrumb
+                {
+                    Controller = "Materials",
+                    Action = "Add",
+                    Title = "Dodawanie materiału",
                     Params = parms
                 }
             };

@@ -1,7 +1,7 @@
 ﻿@using acaShare.MVC.Areas.Main.Models.Materials
 @model MaterialsViewModel
 
-<div class="structure-management-container">
+<div class="materials-container">
     <div class="list-container">
         <ul class="aca-collection">
             @{var rowClass = Model.IsWithSubtitles ? "" : "item-small";}
@@ -9,12 +9,12 @@
             @foreach (var material in @Model.Materials)
             {
                 <li class="aca-collection-item path-list-item">
-                    <a asp-action="Material" asp-route-lessonId="@material.MaterialId" class="item-link @rowClass">
+                    <a asp-action="Material" asp-route-materialId="@material.MaterialId" class="item-link @rowClass">
                         <span class="path-list-item-title">@material.Name</span>
                         <br>
                         @if (Model.IsWithSubtitles)
                         {
-                            <span class="path-list-item-subtitle">@material.Description.Take(100)</span>
+                            <span class="path-list-item-subtitle">@material.Description.Substring(0, 100) [...]</span>
                         }
                     </a>
 
@@ -25,7 +25,7 @@
             }
         </ul>
     </div>
-    <a asp-action="Add" asp-route-lessonId="@Model.LessonId" class="add-button">
+    <a asp-action="Add" asp-route-lessonId="@Model.LessonId" class="add-material-button">
         Dodaj
     </a>
 </div>

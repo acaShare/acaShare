@@ -3,6 +3,7 @@ using acaShare.DAL.Core;
 using acaShare.ServiceLayer.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace acaShare.ServiceLayer.Services
@@ -44,6 +45,11 @@ namespace acaShare.ServiceLayer.Services
         public void CreateUpdateRequest(Material material)
         {
             throw new NotImplementedException();
+        }
+
+        public MaterialState GetState(MaterialStateEnum materialStateEnum)
+        {
+            return _uow.MaterialStates.GetAll().First(ms => ms.Name == materialStateEnum.ToString());
         }
     }
 }

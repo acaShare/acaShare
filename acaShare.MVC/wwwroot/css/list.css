@@ -45,3 +45,21 @@
     color: #444444;
     cursor: pointer;
 }
+
+.materials-container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.add-material-button {
+    height: 2em;
+    width: 12em;
+    display: block;
+    text-align: center;
+    background-color: #4db6ac;
+    padding: .15em;
+    color: white;
+    margin: 0 auto;
+    border-radius: 3px;
+}

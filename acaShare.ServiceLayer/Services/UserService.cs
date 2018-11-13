@@ -21,5 +21,10 @@ namespace acaShare.ServiceLayer.Services
             _uow.Users.Add(newUser);
             _uow.SaveChanges();
         }
+
+        public User FindByIdentityUserId(string identityUserId)
+        {
+            return _uow.Users.FindByIdentityUserId(identityUserId);
+        }
     }
 }

@@ -1,11 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace acaShare.BLL.Models
 {
     public partial class Material
     {
-        public Material()
+        public Material(string name, string description, Lesson lesson, User creator, MaterialState state) : this()
+        {
+            Name = name;
+            Description = description;
+            Lesson = lesson;
+            Creator = creator;
+            State = state;
+            UploadDate = DateTime.Now;
+        }
+
+        protected Material()
         {
             Comments = new HashSet<Comment>();
             DeleteRequests = new HashSet<DeleteRequest>();
@@ -14,26 +25,40 @@ namespace acaShare.BLL.Models
             Files = new HashSet<File>();
         }
 
-        public int MaterialId { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public DateTime UploadDate { get; set; }
-        public DateTime? ModificationDate { get; set; }
-        public int LessonId { get; set; }
-        public int StateId { get; set; }
-        public int CreatorId { get; set; }
-        public int? ApproverId { get; set; }
-        public int? UpdaterId { get; set; }
+        public bool ContainsFile(File file)
+        {
+            return Files.Any(f => f == file);
+        }
 
-        public virtual User Approver { get; set; }
-        public virtual User Creator { get; set; }
-        public virtual Lesson Lesson { get; set; }
-        public virtual MaterialState State { get; set; }
-        public virtual User Updater { get; set; }
-        public virtual ICollection<Comment> Comments { get; set; }
-        public virtual ICollection<DeleteRequest> DeleteRequests { get; set; }
-        public virtual ICollection<EditRequest> EditRequests { get; set; }
-        public virtual ICollection<Favorites> Favorites { get; set; }
-        public virtual ICollection<File> Files { get; set; }
+        public void AddFile(File file)
+        {
+            if (!ContainsFile(file))
+            {
+                Files.Add(file);
+                file.AddToMaterial(this);
+            }
+        }
+
+        public int MaterialId { get; private set; }
+        public string Name { get; private set; }
+        public string Description { get; private set; }
+        public DateTime UploadDate { get; private set; }
+        public DateTime? ModificationDate { get; private set; }
+        public int LessonId { get; private set; }
+        public int StateId { get; private set; }
+        public int CreatorId { get; private set; }
+        public int? ApproverId { get; private set; }
+        public int? UpdaterId { get; private set; }
+
+        public virtual User Approver { get; private set; }
+        public virtual User Creator { get; private set; }
+        public virtual Lesson Lesson { get; private set; }
+        public virtual MaterialState State { get; private set; }
+        public virtual User Updater { get; private set; }
+        public virtual ICollection<Comment> Comments { get; private set; }
+        public virtual ICollection<DeleteRequest> DeleteRequests { get; private set; }
+        public virtual ICollection<EditRequest> EditRequests { get; private set; }
+        public virtual ICollection<Favorites> Favorites { get; private set; }
+        public virtual ICollection<File> Files { get; private set; }
     }
 }

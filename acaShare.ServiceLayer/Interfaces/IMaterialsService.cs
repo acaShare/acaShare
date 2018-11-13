@@ -12,5 +12,11 @@ namespace acaShare.ServiceLayer.Interfaces
         void CreateDeleteRequest(int deleterId, int materialToDeleteId);
         void CreateUpdateRequest(Material material);
         Material GetMaterial(int materialId);
+        MaterialState GetState(MaterialStateEnum materialStateEnum);
+    }
+
+    public enum MaterialStateEnum
+    {
+        PENDING, APPROVED, REJECTED
     }
 }
