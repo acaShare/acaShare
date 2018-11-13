@@ -22,6 +22,7 @@ namespace acaShare.DAL.EFPersistence
         public ISubjectRepository Subjects { get; }
         public ILessonRepository Lessons { get; }
         public IUserRepository Users { get; set; }
+        public IMaterialRepository Materials { get; set; }
 
         public UnitOfWork(AcaShareDbContext dbContext)
         {
@@ -32,6 +33,7 @@ namespace acaShare.DAL.EFPersistence
             Subjects = new SubjectRepository(_db.Subject);
             Lessons = new LessonRepository(_db.Lesson);
             Users = new UserRepository(_db.User);
+            Materials = new MaterialRepository(_db.Material);
         }
 
         public void SaveChanges()

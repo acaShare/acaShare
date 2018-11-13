@@ -5,12 +5,23 @@ namespace acaShare.BLL.Models
 {
     public partial class DeleteRequest
     {
-        public int DeleteRequestId { get; set; }
-        public int DeleterId { get; set; }
-        public int MaterialToDeleteId { get; set; }
-        public int Reason { get; set; }
+        public DeleteRequest(User deleter, Material materialToDelete) : this()
+        {
+            Deleter = deleter;
+            MaterialToDelete = materialToDelete;
+            materialToDelete.DeleteRequests.Add(this);
+        }
 
-        public virtual User Deleter { get; set; }
-        public virtual Material MaterialToDelete { get; set; }
+        protected DeleteRequest()
+        {
+        }
+
+        public int DeleteRequestId { get; private set; }
+        public int DeleterId { get; private set; }
+        public int MaterialToDeleteId { get; private set; }
+        public int Reason { get; private set; }
+
+        public virtual User Deleter { get; private set; }
+        public virtual Material MaterialToDelete { get; private set; }
     }
 }

@@ -1,13 +1,5 @@
 ﻿@model LessonsListViewModel
 
-@{ 
-    var parms = new Dictionary<string, string>
-    {
-        { "semesterId", Model.SemesterId.ToString() },
-        { "departmentId", Model.DepartmentId.ToString() }
-    };
-}
-
 <div class="list-container">
     <ul class="aca-collection">
         @{var rowClass = Model.IsWithSubtitles ? "" : "item-small";}
@@ -15,7 +7,7 @@
         @foreach (var lesson in @Model.Items)
         {
             <li class="aca-collection-item path-list-item">
-                <a asp-controller="MaterialsController" asp-action="Semesters" asp-route-lessonId="@lesson.Id" class="item-link @rowClass">
+                <a asp-controller="Materials" asp-action="Materials" asp-route-lessonId="@lesson.Id" class="item-link @rowClass">
                     <span class="path-list-item-title">@lesson.TitleOrFullName</span>
                     <br>
                     @if (Model.IsWithSubtitles)
@@ -23,6 +15,10 @@
                         <span class="path-list-item-subtitle">@lesson.SubtitleOrAbbreviation</span>
                     }
                 </a>
+
+                <div class="icons-row-container list-icon">
+                    <i class="material-icons list-icon">send</i>
+                </div>
             </li>
         }
     </ul>

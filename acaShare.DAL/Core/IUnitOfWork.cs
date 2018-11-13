@@ -9,13 +9,13 @@ namespace acaShare.DAL.Core
 {
     public interface IUnitOfWork : IDisposable
     {
-        
         IUniversityRepository Universities { get; }
         IDepartmentRepository Departments { get; }
         ISemesterRepository Semesters { get; }
         ISubjectRepository Subjects { get; }
         ILessonRepository Lessons { get; }
         IUserRepository Users { get; set; }
+        IMaterialRepository Materials { get; set; }
         void SaveChanges();
     }
 }
