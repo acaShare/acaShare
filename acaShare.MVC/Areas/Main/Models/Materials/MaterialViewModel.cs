@@ -17,10 +17,10 @@ namespace acaShare.MVC.Areas.Main.Models.Materials
         [Display(Name = "Opis")]
         public string Description { get; set; }
 
-        [Display(Name = "Data dodania")]
+        [Display(Name = "Dodano")]
         public DateTime UploadDate { get; set; }
 
-        [Display(Name = "Data ostatniej modyfikacji")]
+        [Display(Name = "Zmodyfikowano")]
         public DateTime? ModificationDate { get; set; }
 
         [Display(Name = "Status")]

@@ -118,6 +118,8 @@ namespace acaShare.MVC.Areas.Main.Controllers
 
         public IActionResult Material(int materialId)
         {
+            ConfigureMaterialBreadcrumbs(materialId);
+
             var material = _service.GetMaterial(materialId);
 
             var vm = new MaterialViewModel
