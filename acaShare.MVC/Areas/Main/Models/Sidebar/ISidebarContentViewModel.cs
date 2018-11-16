@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace acaShare.MVC.Areas.Main.Models.Sidebar
 {
-    public class FavouriteMaterialViewModel : ISidebarContentViewModel
+    public interface ISidebarContentViewModel
     {
-        public string Content { get; set; }
-        public int RouteValue { get; set; }
+        string Content { get; set; }
+        int RouteValue { get; set; }
     }
 }

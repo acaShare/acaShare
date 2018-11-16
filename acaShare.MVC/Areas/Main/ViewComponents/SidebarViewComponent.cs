@@ -1,4 +1,6 @@
-﻿using acaShare.MVC.Areas.Main.Models.Sidebar;
+﻿using acaShare.BLL.Models;
+using acaShare.MVC.Areas.Main.Models.Sidebar;
+using acaShare.MVC.Models;
 using acaShare.ServiceLayer.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -17,51 +19,63 @@ namespace acaShare.MVC.Areas.Main.ViewComponents
             _sidebarService = sidebarService;
         }
 
-        public IViewComponentResult Invoke()
+        public IViewComponentResult Invoke(int? materialId)
         {
+            var comments = materialId.HasValue ? _sidebarService.GetComments(materialId.Value) : null;
+
+            var favourites = _sidebarService.GetFavorites();
+            var lastActivities = _sidebarService.GetLastActivities();
+
             SidebarViewModel vm = new SidebarViewModel
             {
-                Favourites = new List<FavouriteMaterialViewModel>
-                {
+                Favourites = favourites.Select(f =>
                     new FavouriteMaterialViewModel
                     {
-                        Link = "",
-                        When = DateTime.Today.ToShortDateString(),
-                        Breadcrumbs = "aa -> bb"
-                    },
-                    new FavouriteMaterialViewModel
-                    {
-                        Link = "",
-                        When = DateTime.Today.AddDays(-100).ToShortDateString(),
-                        Breadcrumbs = "ff -> ss"
-                    },
-                    new FavouriteMaterialViewModel
-                    {
-                        Link = "",
-                        When = DateTime.Today.AddDays(-10).ToShortDateString(),
-                        Breadcrumbs = "tt -> qq"
+                        Content = GetFavoriteMaterialBreadcrumbsPath(f.Material),
+                        RouteValue = f.MaterialId
                     }
-                },
-                LastActivities = new List<LastActivityViewModel>
-                {
+                ).ToList(),
+
+                LastActivities = lastActivities.Select(a =>
                     new LastActivityViewModel
                     {
-                        Name = "Użytkownik Maciej Sadoś dodał komentarz do materiału \"Jak zaliczyć PJATK\"",
-                        Link = "",
-                        Type = LastActivityType.COMMENT,
-                        When = DateTime.Today.AddDays(-10).ToShortDateString()
-                    },
-                    new LastActivityViewModel
-                    {
-                        Name = "Użytkownik Michał Skotnicki dodał materiał \"GRK - kompedium wiedzy\"",
-                        Link = "",
-                        Type = LastActivityType.MATERIAL_ADD,
-                        When = DateTime.Today.AddDays(-10).ToShortDateString()
+                        Content = a.Content,
+                        When = FormatCreatedDate(a.Date),
+                        RouteValue = a.Material.MaterialId,
+                        Type = a.ActivityType,
+                        Material = a.Material,
                     }
-                }
+                ).ToList(),
+
+                Comments = comments?.Select(c =>
+                    new CommentViewModel
+                    {
+                        Content = c.Content,
+                        When = FormatCreatedDate(c.CreatedDate),
+                        RouteValue = c.MaterialId,
+                        CommentId = c.CommentId
+                    }
+                ).ToList()
             };
 
             return View(vm);
+        }
+
+        private string FormatCreatedDate(DateTime createdDate)
+        {
+            return createdDate.ToShortDateString();
+        }
+
+        private string GetFavoriteMaterialBreadcrumbsPath(Material material)
+        {
+            var lesson = material.Lesson;
+            var subjectDepartment = lesson.SubjectDepartment;
+            var department = subjectDepartment.Department;
+            var university = department.University;
+            var semester = lesson.Semester;
+            
+            return $"{university.Abbreviation} -> {department.Abbreviation} -> {semester.Number} -> " +
+                   $"{ subjectDepartment.Subject.Abbreviation} -> {material.Name}";
         }
     }
 }

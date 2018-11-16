@@ -1,20 +1,18 @@
-﻿using System;
+﻿using acaShare.BLL.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace acaShare.MVC.Areas.Main.Models.Sidebar
 {
-    public class LastActivityViewModel
+    public class LastActivityViewModel : ISidebarContentViewModel
     {
-        public string Name { get; set; }
-        public string Link { get; set; }
+        public string Content { get; set; }
         public string When { get; set; }
-        public LastActivityType Type { get; set; }
-    }
+        public int RouteValue { get; set; }
 
-    public enum LastActivityType
-    {
-        MATERIAL_ADD, COMMENT
+        public LastActivityType Type { get; set; }
+        public Material Material { get; set; }
     }
 }

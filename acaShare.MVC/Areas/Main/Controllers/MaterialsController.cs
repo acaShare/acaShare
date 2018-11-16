@@ -38,9 +38,9 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 new MaterialViewModel
                 {
                     MaterialId = m.MaterialId,
-                    Creator = new UserViewModel { UserId = m.CreatorId, Username = "", IdentityUserId = m.Creator.IdentityUserId },
-                    Approver = new UserViewModel { UserId = m.ApproverId ?? -1, Username = "", IdentityUserId = m.Approver?.IdentityUserId },
-                    Updater = new UserViewModel { UserId = m.UpdaterId ?? -1, Username = "", IdentityUserId = m.Updater?.IdentityUserId },
+                    Creator = new UserViewModel { UserId = m.CreatorId, Username = m.Creator.Username, IdentityUserId = m.Creator.IdentityUserId },
+                    Approver = new UserViewModel { UserId = m.ApproverId ?? -1, Username = m.Approver.Username, IdentityUserId = m.Approver?.IdentityUserId },
+                    Updater = new UserViewModel { UserId = m.UpdaterId ?? -1, Username = m.Updater.Username, IdentityUserId = m.Updater?.IdentityUserId },
                     Lesson = new LessonViewModel { LessonId = lesson.LessonId, SemesterId = lesson.SemesterId, SubjectDepartmentId = lesson.SubjectDepartmentId },
                     Name = m.Name,
                     Description = m.Description,
@@ -125,9 +125,9 @@ namespace acaShare.MVC.Areas.Main.Controllers
             var vm = new MaterialViewModel
             {
                 MaterialId = material.MaterialId,
-                Creator = new UserViewModel { UserId = material.CreatorId, Username = "", IdentityUserId = material.Creator.IdentityUserId },
-                Approver = new UserViewModel { UserId = material.ApproverId ?? -1, Username = "", IdentityUserId = material.Approver?.IdentityUserId },
-                Updater = new UserViewModel { UserId = material.UpdaterId ?? -1, Username = "", IdentityUserId = material.Updater?.IdentityUserId },
+                Creator = new UserViewModel { UserId = material.CreatorId, Username = material.Creator.Username, IdentityUserId = material.Creator.IdentityUserId },
+                Approver = new UserViewModel { UserId = material.ApproverId ?? -1, Username = material.Approver?.Username, IdentityUserId = material.Approver?.IdentityUserId },
+                Updater = new UserViewModel { UserId = material.UpdaterId ?? -1, Username = material.Updater?.Username, IdentityUserId = material.Updater?.IdentityUserId },
                 Lesson = new LessonViewModel
                 {
                     LessonId = material.Lesson.LessonId,

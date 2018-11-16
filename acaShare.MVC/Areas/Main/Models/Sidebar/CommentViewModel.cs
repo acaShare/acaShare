@@ -5,9 +5,12 @@ using System.Threading.Tasks;
 
 namespace acaShare.MVC.Areas.Main.Models.Sidebar
 {
-    public class CommentViewModel
+    public class CommentViewModel : ISidebarContentViewModel
     {
-        public int CommentId { get; set; }
         public string Content { get; set; }
+        public string When { get; set; }
+        public int RouteValue { get; set; }
+
+        public int CommentId { get; set; }
     }
 }

@@ -5,6 +5,13 @@
     <link rel="stylesheet" href="~/css/material.css">
 }
 
+@section SidebarWithComments {
+    @{
+        int materialId = Model.MaterialId;
+    }
+    @await Component.InvokeAsync("Sidebar", new { @materialId = materialId })
+}
+
 <div class="material-container">
     <header class="material-header">
         <h1 class="material-header-title">
@@ -17,26 +24,26 @@
             <a href="delete.html" class="action-button"><i class="material-icons lh">delete</i></a> <!-- przekierowanie do pliku z wysłaniem sugestii usunięcia -->
         </div>
     </header>
-    
+
     <div class="material-content">
         <section class="material-content-files">
             <h2 class="material-content-files-header">Pliki</h2>
             file1, file2
             @*@foreach (var file in Files)
-            {
+                {
 
-            }*@
+                }*@
         </section>
 
         <section>
             <h2 class="material-content-description-header">
                 Opis
             </h2>
-            
+
             <div class="material-content-description">
                 @Html.DisplayFor(model => model.Description)
             </div>
-</section>
+        </section>
     </div>
 
     <footer class="material-footer">

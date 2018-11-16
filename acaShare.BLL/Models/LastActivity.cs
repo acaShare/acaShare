@@ -10,11 +10,11 @@ namespace acaShare.BLL.Models
         public string Content { get; set; }
         public Material Material { get; set; }
         public DateTime Date { get; set; }
-        public ActivityType ActivityType { get; set; }
+        public LastActivityType ActivityType { get; set; }
     }
 
-    public enum ActivityType
+    public enum LastActivityType
     {
-        COMMENT, MATERIAL
+        COMMENT, MATERIAL_ADD
     }
 }

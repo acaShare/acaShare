@@ -39,5 +39,12 @@
         </div>
     </div>
 
-    @await Component.InvokeAsync("Sidebar")
+    @if (IsSectionDefined("SidebarWithComments"))
+    {
+        @RenderSection("SidebarWithComments")
+    }
+    else
+    {
+        @await Component.InvokeAsync("Sidebar")
+    }
 </div>
