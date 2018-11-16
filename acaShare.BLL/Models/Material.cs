@@ -32,7 +32,7 @@ namespace acaShare.BLL.Models
 
         public void AddFile(File file)
         {
-            if (!ContainsFile(file))
+            if (file != null && !ContainsFile(file))
             {
                 Files.Add(file);
                 file.AddToMaterial(this);

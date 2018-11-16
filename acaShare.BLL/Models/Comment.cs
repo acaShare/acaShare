@@ -7,6 +7,7 @@ namespace acaShare.BLL.Models
     {
         public int CommentId { get; set; }
         public string Content { get; set; }
+        public DateTime CreatedDate { get; set; }
 
         public int MaterialId { get; set; }
         public virtual Material Material { get; set; }

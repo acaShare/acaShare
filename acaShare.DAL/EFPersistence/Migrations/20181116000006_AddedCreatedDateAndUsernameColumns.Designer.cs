@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using acaShare.DAL.Configuration;
 
 namespace acaShare.DAL.EFPersistence.Migrations
 {
     [DbContext(typeof(AcaShareDbContext))]
-    partial class AcaShareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181116000006_AddedCreatedDateAndUsernameColumns")]
+    partial class AddedCreatedDateAndUsernameColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -131,11 +133,11 @@ namespace acaShare.DAL.EFPersistence.Migrations
                 {
                     b.Property<int>("UserId");
 
-                    b.Property<int>("MaterialId");
+                    b.Property<int>("FileId");
 
-                    b.HasKey("UserId", "MaterialId");
+                    b.HasKey("UserId", "FileId");
 
-                    b.HasIndex("MaterialId");
+                    b.HasIndex("FileId");
 
                     b.ToTable("Favorites");
                 });
@@ -618,9 +620,9 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
             modelBuilder.Entity("acaShare.BLL.Models.Favorites", b =>
                 {
-                    b.HasOne("acaShare.BLL.Models.Material", "Material")
+                    b.HasOne("acaShare.BLL.Models.Material", "File")
                         .WithMany("Favorites")
-                        .HasForeignKey("MaterialId")
+                        .HasForeignKey("FileId")
                         .HasConstraintName("Favorites_Material");
 
                     b.HasOne("acaShare.BLL.Models.User", "User")

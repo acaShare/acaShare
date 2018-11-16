@@ -7,7 +7,8 @@ namespace acaShare.MVC.Areas.Main.Models.Sidebar
 {
     public class SidebarViewModel
     {
-        public ICollection<LastActivityVM> LastActivities { get; set; }
-        public ICollection<FavouriteMaterialsVM> Favourites { get; set; }
+        public ICollection<LastActivityViewModel> LastActivities { get; set; }
+        public ICollection<FavouriteMaterialViewModel> Favourites { get; set; }
+        public ICollection<CommentViewModel> Comment { get; set; }
     }
 }

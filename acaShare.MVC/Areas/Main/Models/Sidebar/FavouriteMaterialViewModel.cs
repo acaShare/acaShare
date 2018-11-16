@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace acaShare.MVC.Areas.Main.Models.Sidebar
 {
-    public class FavouriteMaterialsVM
+    public class FavouriteMaterialViewModel
     {
         public string Link { get; set; }
         public string When { get; set; }

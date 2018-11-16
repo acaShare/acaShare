@@ -20,6 +20,7 @@ namespace acaShare.BLL.Models
         public int UserId { get; set; }
         public DateTime RegisterDate { get; set; }
         public string IdentityUserId { get; set; }
+        public string Username { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<DeleteRequest> DeleteRequests { get; set; }

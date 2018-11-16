@@ -37,6 +37,7 @@ namespace acaShare.MVC
             services.AddScoped<IUniversityTreeTraversalService, UniversityTreeTraversalService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IMaterialsService, MaterialsService>();
+            services.AddScoped<ISidebarService, SidebarService>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {

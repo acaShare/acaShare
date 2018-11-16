@@ -16,7 +16,7 @@ namespace acaShare.BLL.Models
 
         public void AddToMaterial(Material material)
         {
-            if (Material == null)
+            if (Material == null && material != null)
             {
                 Material = material;
                 material.AddFile(this);

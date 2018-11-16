@@ -20,6 +20,7 @@ namespace acaShare.BLL.Models
         public int DeleterId { get; private set; }
         public int MaterialToDeleteId { get; private set; }
         public int Reason { get; private set; }
+        public DateTime RequestDate { get; set; }
 
         public virtual User Deleter { get; private set; }
         public virtual Material MaterialToDelete { get; private set; }

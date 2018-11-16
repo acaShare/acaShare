@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace acaShare.MVC.Areas.Main.Models.Sidebar
 {
-    public class LastActivityVM
+    public class LastActivityViewModel
     {
         public string Name { get; set; }
         public string Link { get; set; }

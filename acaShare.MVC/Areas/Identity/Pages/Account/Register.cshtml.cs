@@ -85,7 +85,8 @@ namespace acaShare.MVC.Areas.Identity.Pages.Account
                     var acaShareUser = new User
                     {
                         IdentityUserId = user.Id,
-                        RegisterDate = DateTime.Today,
+                        Username = Input.UserName,
+                        RegisterDate = DateTime.Today
                     };
 
                     _userService.RegisterNewUser(acaShareUser);

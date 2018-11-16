@@ -44,6 +44,10 @@ namespace acaShare.DAL.Configuration
                     .IsRequired()
                     .HasMaxLength(512);
 
+                entity.Property(e => e.CreatedDate)
+                    .IsRequired()
+                    .HasColumnType("datetime");
+
                 entity.HasOne(d => d.Material)
                     .WithMany(p => p.Comments)
                     .HasForeignKey(d => d.MaterialId)
@@ -59,6 +63,10 @@ namespace acaShare.DAL.Configuration
 
             modelBuilder.Entity<DeleteRequest>(entity =>
             {
+                entity.Property(e => e.RequestDate)
+                    .IsRequired()
+                    .HasColumnType("datetime");
+
                 entity.HasOne(d => d.Deleter)
                     .WithMany(p => p.DeleteRequests)
                     .HasForeignKey(d => d.DeleterId)
@@ -118,11 +126,11 @@ namespace acaShare.DAL.Configuration
 
             modelBuilder.Entity<Favorites>(entity =>
             {
-                entity.HasKey(e => new { e.UserId, e.FileId });
+                entity.HasKey(e => new { e.UserId, e.MaterialId });
 
-                entity.HasOne(d => d.File)
+                entity.HasOne(d => d.Material)
                     .WithMany(p => p.Favorites)
-                    .HasForeignKey(d => d.FileId)
+                    .HasForeignKey(d => d.MaterialId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Favorites_Material");
 
@@ -288,6 +296,10 @@ namespace acaShare.DAL.Configuration
             modelBuilder.Entity<User>(entity =>
             {
                 entity.Property(e => e.RegisterDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Username)
+                    .IsRequired()
+                    .HasMaxLength(100);
 
                 entity.Property(e => e.IdentityUserId)
                     .IsRequired();
