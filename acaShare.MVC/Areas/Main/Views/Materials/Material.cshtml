@@ -1,61 +1,95 @@
-﻿@model acaShare.MVC.Areas.Main.Models.Materials.MaterialViewModel
+﻿@using acaShare.ServiceLayer.Interfaces
+@model acaShare.MVC.Areas.Main.Models.Materials.MaterialViewModel
 
 @section MaterialViewCSS {
     <link rel="stylesheet" href="~/css/material.css">
 }
 
 <div class="material-container">
-    <header>
-        <h1 class="material-header">
-            @Html.DisplayFor(model => model.Name)
+    <header class="material-header">
+        <h1 class="material-header-title">
+            Notatki z wykładu
         </h1>
+
+        <div class="material-header-action-buttons">
+            <a href="edit.html" class="sep action-button"><i class="material-icons lh">star</i></a>
+            <a href="edit.html" class="sep action-button"><i class="material-icons lh">edit</i></a> <!-- przekierowanie do pliku z edycją i wysłaniem sugestii edycji -->
+            <a href="delete.html" class="action-button"><i class="material-icons lh">delete</i></a> <!-- przekierowanie do pliku z wysłaniem sugestii usunięcia -->
+        </div>
     </header>
     
-    <section class="material-files">
-        <h2 class="material-files-header">
-            Files
-        </h2>
+    <div class="material-content">
+        <section class="material-content-files">
+            <h2 class="material-content-files-header">Pliki</h2>
+            file1, file2
+            @*@foreach (var file in Files)
+            {
 
-        file1, file2...
-    </section>
+            }*@
+        </section>
 
-    <section class="material-description">
-        <h2 class="material-description-header">
-            @Html.DisplayNameFor(model => model.Description)
-        </h2>
-        
-        @Html.DisplayFor(model => model.Description)
-    </section>
-    
+        <section>
+            <h2 class="material-content-description-header">
+                Opis
+            </h2>
+            
+            <div class="material-content-description">
+                @Html.DisplayFor(model => model.Description)
+            </div>
+</section>
+    </div>
+
     <footer class="material-footer">
-        <dl class="material-footer-content">
-            <dt>
-                @Html.DisplayNameFor(model => model.UploadDate):
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.UploadDate)
-            </dd>
-             | 
-            <dt>
-                @Html.DisplayNameFor(model => model.ModificationDate):
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.ModificationDate)
-            </dd>
-             | 
-            <dt>
-                Zmodyfikowany przez:
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Updater.Username)
-            </dd>
-             | 
-            <dt>
-                @Html.DisplayNameFor(model => model.State)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.State)
-            </dd>
-        </dl>
+        <p class="material-footer-content">
+            <span class="test">
+                Autor: @Html.DisplayFor(model => model.Creator.Username)
+            </span>
+
+            <span class="test">
+                @{ var uploadDate = Model.UploadDate.ToString("d MMMM yyyy, HH:mm");}
+                Dodano: @Html.DisplayFor(model => uploadDate)
+            </span>
+
+            @{
+                var res = Enum.TryParse(Model.State, out MaterialStateEnum materialState);
+                var newClass = "test2";
+                @if (Model.ModificationDate != null)
+                {
+                    newClass = "test";
+                }
+            }
+            @switch (materialState)
+            {
+                case MaterialStateEnum.PENDING:
+                    <span class="@newClass">
+                        Status: Oczekujący na zatwierdzenie
+                    </span>
+                    break;
+                case MaterialStateEnum.APPROVED:
+                    <span class="@newClass">
+                        Zatwierdzony przez: @Html.DisplayFor(model => model.Approver.Username)
+                    </span>
+                    break;
+                case MaterialStateEnum.REJECTED:
+                    <span class="@newClass">
+                        Odrzucony przez: @Html.DisplayFor(model => model.Approver.Username)
+                    </span>
+                    break;
+            }
+
+            @if (Model.ModificationDate != null)
+            {
+                <span class="@newClass">
+                    @Html.DisplayNameFor(model => model.ModificationDate):
+
+                    @{var modificationDate = Model.ModificationDate.Value.ToString("d MMMM yyyy, HH:mm");}
+                    @Html.DisplayFor(model => modificationDate);
+                </span>
+
+                <span class="@newClass">
+                    Zmodyfikowany przez: @Html.DisplayFor(model => model.Updater.Username);
+                </span>
+            }
+        </p>
     </footer>
 </div>
