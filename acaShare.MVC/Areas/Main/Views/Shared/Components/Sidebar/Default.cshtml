@@ -53,7 +53,7 @@
                     {
                         activityIcon = "note_add";
                         lastActivity.Content =
-                            $"Użytkownik {lastActivity.Material.Creator.Username} dodał komentarz do materiału \"{lastActivity.Material.Name}\"";
+                            $"Użytkownik {lastActivity.Material.Creator.Username} dodał materiał \"{lastActivity.Material.Name}\"";
                     }
                     else
                     {
@@ -77,6 +77,16 @@
     @if (Model.Comments != null)
     {
         <div id="test-swipe-3" class="last-activities-wrapper">
+            <form id="new-comment-form" asp-action="AddComment" method="post">
+                <div class="add-comment-wrapper">
+                    <input asp-for="NewComment" placeholder="Dodaj komentarz" />
+                    <input asp-for="MaterialId" type="hidden" />
+                    <a href="javascript:{}" onclick="document.getElementById('new-comment-form').submit()" class="add-comment-button">
+                        <i class="material-icons">send</i>
+                    </a>
+                </div>
+            </form>
+            
             @if (Model.Comments.Count == 0)
             {
                 <div class="no-content">~ Brak komentarzy ~</div>
@@ -85,15 +95,13 @@
             {
                 @foreach (var comment in Model.Comments)
                 {
-                    <a asp-area="Main" asp-controller="Materials" asp-action="Material" asp-route-materialId="@comment.RouteValue">
-                        <div class="last-activity-wrapper">
-                            <div class="last-activities-date">@comment.When</div>
-                            <div class="last-activities-content">
-                                <i class="medium material-icons">face</i>
-                                <span class="last-activities-material-type">@comment.Content</span>
-                            </div>
+                    <div class="last-activity-wrapper comment-wrapper">
+                        <div class="last-activities-date">@comment.Author - @comment.When</div>
+                        <div class="last-activities-content">
+                            <i class="medium material-icons">face</i>
+                            <span class="last-activities-material-type">@comment.Content</span>
                         </div>
-                    </a>
+                    </div>
                 }
             }
         </div>

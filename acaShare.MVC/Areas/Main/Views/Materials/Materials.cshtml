@@ -14,7 +14,17 @@
                         <br>
                         @if (Model.IsWithSubtitles)
                         {
-                            <span class="path-list-item-subtitle">@material.Description.Substring(0, 100) [...]</span>
+                            <span class="path-list-item-subtitle">
+                                @if (material.Description.Length > 100)
+                                {
+                                    @material.Description.Substring(0, 100);
+                                    @:[...]
+                                }
+                                else
+                                {
+                                    @material.Description;
+                                }
+                            </span>
                         }
                     </a>
 

@@ -7,6 +7,7 @@ namespace acaShare.ServiceLayer.Interfaces
 {
     public interface IUserService
     {
+        User GetUser(int userId);
         void RegisterNewUser(User newUser);
         User FindByIdentityUserId(string identityUserId);
     }

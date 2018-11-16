@@ -51,5 +51,13 @@ namespace acaShare.ServiceLayer.Services
         {
             return _uow.MaterialStates.GetAll().First(ms => ms.Name == materialStateEnum.ToString());
         }
+
+        public void AddComment(string newComment, Material material, User commentAuthor)
+        {
+            Comment comment = new Comment(newComment, commentAuthor);
+            material.AddComment(comment);
+            _uow.Materials.Update(material);
+            _uow.SaveChanges();
+        }
     }
 }

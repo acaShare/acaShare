@@ -87,7 +87,6 @@ html, body {
     margin: 1em;
     color: #757575;
     overflow: auto;
-    cursor: pointer;
 }
 
 .favourites-link {

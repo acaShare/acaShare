@@ -52,10 +52,12 @@ namespace acaShare.MVC.Areas.Main.ViewComponents
                     {
                         Content = c.Content,
                         When = FormatCreatedDate(c.CreatedDate),
-                        RouteValue = c.MaterialId,
-                        CommentId = c.CommentId
+                        CommentId = c.CommentId,
+                        Author = c.User.Username
                     }
-                ).ToList()
+                ).ToList(),
+
+                MaterialId = materialId ?? -1
             };
 
             return View(vm);

@@ -38,9 +38,9 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 new MaterialViewModel
                 {
                     MaterialId = m.MaterialId,
-                    Creator = new UserViewModel { UserId = m.CreatorId, Username = m.Creator.Username, IdentityUserId = m.Creator.IdentityUserId },
-                    Approver = new UserViewModel { UserId = m.ApproverId ?? -1, Username = m.Approver.Username, IdentityUserId = m.Approver?.IdentityUserId },
-                    Updater = new UserViewModel { UserId = m.UpdaterId ?? -1, Username = m.Updater.Username, IdentityUserId = m.Updater?.IdentityUserId },
+                    Creator = new UserViewModel { UserId = m.CreatorId, Username = m.Creator?.Username, IdentityUserId = m.Creator.IdentityUserId },
+                    Approver = new UserViewModel { UserId = m.ApproverId ?? -1, Username = m.Approver?.Username, IdentityUserId = m.Approver?.IdentityUserId },
+                    Updater = new UserViewModel { UserId = m.UpdaterId ?? -1, Username = m.Updater?.Username, IdentityUserId = m.Updater?.IdentityUserId },
                     Lesson = new LessonViewModel { LessonId = lesson.LessonId, SemesterId = lesson.SemesterId, SubjectDepartmentId = lesson.SubjectDepartmentId },
                     Name = m.Name,
                     Description = m.Description,
@@ -121,7 +121,9 @@ namespace acaShare.MVC.Areas.Main.Controllers
             ConfigureMaterialBreadcrumbs(materialId);
 
             var material = _service.GetMaterial(materialId);
-
+            var loggedUser = _userService.FindByIdentityUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var isFavorite = loggedUser.IsMaterialFavorite(material);
+            
             var vm = new MaterialViewModel
             {
                 MaterialId = material.MaterialId,
@@ -138,7 +140,8 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 Description = material.Description,
                 UploadDate = material.UploadDate,
                 ModificationDate = material.ModificationDate,
-                State = material.State.Name
+                State = material.State.Name,
+                IsFavorite = isFavorite
             };
 
             return View(vm);
@@ -305,6 +308,16 @@ namespace acaShare.MVC.Areas.Main.Controllers
                     Params = parms
                 }
             };
+        }
+
+        public IActionResult AddComment(string newComment, int materialId)
+        {
+            var commentAuthor = _userService.FindByIdentityUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var material = _service.GetMaterial(materialId);
+
+            _service.AddComment(newComment, material, commentAuthor);
+
+            return RedirectToAction("Material", new { @materialId = materialId });
         }
     }
 }

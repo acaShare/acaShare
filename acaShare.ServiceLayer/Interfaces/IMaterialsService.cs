@@ -13,6 +13,7 @@ namespace acaShare.ServiceLayer.Interfaces
         void CreateUpdateRequest(Material material);
         Material GetMaterial(int materialId);
         MaterialState GetState(MaterialStateEnum materialStateEnum);
+        void AddComment(string newComment, Material material, User commentAuthor);
     }
 
     public enum MaterialStateEnum

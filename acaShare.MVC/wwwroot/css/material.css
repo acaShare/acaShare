@@ -1,30 +1,4 @@
-﻿/*.material-container {
-    display: flex;
-    flex-direction: column;
-    height: 50vh;
-}
-
-.material-content {
-    flex: 1 1 auto;
-    overflow: auto;
-}
-
-.material-footer-content {
-    text-align: center;
-    font-size: .8rem;
-}
-
-.material-footer-content dt, .material-footer-content dd {
-    display: inline;
-}
-
-.material-footer-content-separator {
-    margin: 0 .3rem;
-    color: #b0b0b0;
-}*/
-
-
-h1, h2, h3, h4, h5, h6 {
+﻿h1, h2, h3, h4, h5, h6 {
     margin: 0;
     padding: 0;
     color: black;
@@ -118,4 +92,19 @@ h2 {
 .test2 {
     padding-left: 1em;
     padding-right: 1em;
+}
+
+.add-comment-wrapper {
+    display: flex;
+    margin-bottom: .8em;
+}
+
+.add-comment-button {
+    display: flex;
+    align-items: center;
+    color: #4db6ac;
+}
+
+.comment-wrapper {
+    cursor: default;
 }

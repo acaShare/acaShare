@@ -15,11 +15,16 @@
 <div class="material-container">
     <header class="material-header">
         <h1 class="material-header-title">
-            Notatki z wykładu
+            @Html.DisplayFor(model => model.Name)
         </h1>
 
         <div class="material-header-action-buttons">
-            <a href="edit.html" class="sep action-button"><i class="material-icons lh">star</i></a>
+            @{ var favoriteIcon = "star_border"; }
+            @if (Model.IsFavorite)
+            {
+                favoriteIcon = "star";
+            }
+            <a href="edit.html" class="sep action-button"><i class="material-icons lh">@favoriteIcon</i></a>
             <a href="edit.html" class="sep action-button"><i class="material-icons lh">edit</i></a> <!-- przekierowanie do pliku z edycją i wysłaniem sugestii edycji -->
             <a href="delete.html" class="action-button"><i class="material-icons lh">delete</i></a> <!-- przekierowanie do pliku z wysłaniem sugestii usunięcia -->
         </div>

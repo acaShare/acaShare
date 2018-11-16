@@ -26,6 +26,8 @@ namespace acaShare.MVC.Areas.Main.Models.Materials
         [Display(Name = "Status")]
         public string State { get; set; }
 
+        public bool IsFavorite { get; set; }
+
         public UserViewModel Creator { get; set; }
         public UserViewModel Approver { get; set; }
         public UserViewModel Updater { get; set; }

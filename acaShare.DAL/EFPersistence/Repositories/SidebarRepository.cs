@@ -56,7 +56,7 @@ namespace acaShare.DAL.EFPersistence.Repositories
 
             var lastActivities = commentsActivities
                 .Concat(materialsActivities)
-                .OrderBy(a => a.Date)
+                .OrderByDescending(a => a.Date)
                 .ToList();
 
             if (lastActivities.Count > 7)

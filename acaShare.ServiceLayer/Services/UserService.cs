@@ -16,6 +16,11 @@ namespace acaShare.ServiceLayer.Services
             _uow = uow;
         }
 
+        public User GetUser(int userId)
+        {
+            return _uow.Users.FindById(userId);
+        }
+
         public void RegisterNewUser(User newUser)
         {
             _uow.Users.Add(newUser);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace acaShare.BLL.Models
 {
@@ -30,5 +31,10 @@ namespace acaShare.BLL.Models
         public virtual ICollection<Material> CreatedMaterials { get; set; }
         public virtual ICollection<Material> UpdatedMaterials { get; set; }
         public virtual ICollection<UserInUniversity> UsersInUniversity { get; set; }
+
+        public bool IsMaterialFavorite(Material material)
+        {
+            return Favorites.Any(f => f.Material == material);
+        }
     }
 }

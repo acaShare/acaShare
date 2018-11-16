@@ -39,6 +39,11 @@ namespace acaShare.BLL.Models
             }
         }
 
+        public void AddComment(Comment comment)
+        {
+            Comments.Add(comment);
+        }
+
         public int MaterialId { get; private set; }
         public string Name { get; private set; }
         public string Description { get; private set; }
