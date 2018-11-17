@@ -21,11 +21,6 @@ namespace acaShare.ServiceLayer.Services
             return _uow.SidebarRepository.GetComments(materialId);
         }
 
-        public ICollection<Favorites> GetFavorites()
-        {
-            return _uow.SidebarRepository.GetFavorites();
-        }
-
         public ICollection<LastActivity> GetLastActivities()
         {
             return _uow.SidebarRepository.GetLastActivities();

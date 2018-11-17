@@ -14,6 +14,7 @@ namespace acaShare.ServiceLayer.Interfaces
         Material GetMaterial(int materialId);
         MaterialState GetState(MaterialStateEnum materialStateEnum);
         void AddComment(string newComment, Material material, User commentAuthor);
+        void ToggleFavorite(Material material, User loggedUser);
     }
 
     public enum MaterialStateEnum

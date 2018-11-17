@@ -38,13 +38,11 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 new MaterialViewModel
                 {
                     MaterialId = m.MaterialId,
-                    Creator = new UserViewModel { UserId = m.CreatorId, Username = m.Creator?.Username, IdentityUserId = m.Creator.IdentityUserId },
-                    Approver = new UserViewModel { UserId = m.ApproverId ?? -1, Username = m.Approver?.Username, IdentityUserId = m.Approver?.IdentityUserId },
-                    Updater = new UserViewModel { UserId = m.UpdaterId ?? -1, Username = m.Updater?.Username, IdentityUserId = m.Updater?.IdentityUserId },
-                    Lesson = new LessonViewModel { LessonId = lesson.LessonId, SemesterId = lesson.SemesterId, SubjectDepartmentId = lesson.SubjectDepartmentId },
                     Name = m.Name,
                     Description = m.Description,
+                    CreatorUsername = m.Creator.Username,
                     UploadDate = m.UploadDate,
+                    UpdaterUsername = m.Updater?.Username,
                     ModificationDate = m.ModificationDate,
                     State = m.State.Name
                 }
@@ -127,15 +125,9 @@ namespace acaShare.MVC.Areas.Main.Controllers
             var vm = new MaterialViewModel
             {
                 MaterialId = material.MaterialId,
-                Creator = new UserViewModel { UserId = material.CreatorId, Username = material.Creator.Username, IdentityUserId = material.Creator.IdentityUserId },
-                Approver = new UserViewModel { UserId = material.ApproverId ?? -1, Username = material.Approver?.Username, IdentityUserId = material.Approver?.IdentityUserId },
-                Updater = new UserViewModel { UserId = material.UpdaterId ?? -1, Username = material.Updater?.Username, IdentityUserId = material.Updater?.IdentityUserId },
-                Lesson = new LessonViewModel
-                {
-                    LessonId = material.Lesson.LessonId,
-                    SemesterId = material.Lesson.SemesterId,
-                    SubjectDepartmentId = material.Lesson.SubjectDepartmentId
-                },
+                CreatorUsername = material.Creator.Username,
+                ApproverUsername = material.Approver?.Username,
+                UpdaterUsername = material.Updater?.Username,
                 Name = material.Name,
                 Description = material.Description,
                 UploadDate = material.UploadDate,
@@ -309,7 +301,18 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 }
             };
         }
+        
+        public IActionResult ToggleFavorites(int materialId)
+        {
+            var loggedUser = _userService.FindByIdentityUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var material = _service.GetMaterial(materialId);
 
+            _service.ToggleFavorite(material, loggedUser);
+
+            return RedirectToAction("Material", new { @materialId = materialId });
+        }
+
+        [HttpPost]
         public IActionResult AddComment(string newComment, int materialId)
         {
             var commentAuthor = _userService.FindByIdentityUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));

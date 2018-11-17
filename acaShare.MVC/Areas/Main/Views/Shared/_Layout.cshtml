@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Security.Claims;
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -45,6 +46,6 @@
     }
     else
     {
-        @await Component.InvokeAsync("Sidebar")
+        @await Component.InvokeAsync("Sidebar", new { @loggedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier) })
     }
 </div>

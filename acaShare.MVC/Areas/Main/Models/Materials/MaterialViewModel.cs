@@ -26,11 +26,13 @@ namespace acaShare.MVC.Areas.Main.Models.Materials
         [Display(Name = "Status")]
         public string State { get; set; }
 
-        public bool IsFavorite { get; set; }
+        [Display(Name = "Autor")]
+        public string CreatorUsername { get; set; }
 
-        public UserViewModel Creator { get; set; }
-        public UserViewModel Approver { get; set; }
-        public UserViewModel Updater { get; set; }
-        public LessonViewModel Lesson { get; set; }        
+        [Display(Name = "Zmodyfikowany przez")]
+        public string UpdaterUsername { get; set; }
+
+        public string ApproverUsername { get; set; }
+        public bool IsFavorite { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿@using acaShare.ServiceLayer.Interfaces
+﻿@using acaShare.ServiceLayer.Interfaces;
+@using System.Security.Claims;
 @model acaShare.MVC.Areas.Main.Models.Materials.MaterialViewModel
 
 @section MaterialViewCSS {
@@ -9,7 +10,7 @@
     @{
         int materialId = Model.MaterialId;
     }
-    @await Component.InvokeAsync("Sidebar", new { @materialId = materialId })
+    @await Component.InvokeAsync("Sidebar", new { @materialId = materialId, @loggedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier) })
 }
 
 <div class="material-container">
@@ -19,12 +20,17 @@
         </h1>
 
         <div class="material-header-action-buttons">
-            @{ var favoriteIcon = "star_border"; }
-            @if (Model.IsFavorite)
-            {
-                favoriteIcon = "star";
+            @{
+                var favoriteIcon = "star_border";
+                if (Model.IsFavorite)
+                {
+                    favoriteIcon = "star";
+                }
             }
-            <a href="edit.html" class="sep action-button"><i class="material-icons lh">@favoriteIcon</i></a>
+
+            <a asp-action="ToggleFavorites" asp-route-materialId="@Model.MaterialId" class="sep action-button">
+                <i class="material-icons lh">@favoriteIcon</i>
+            </a>
             <a href="edit.html" class="sep action-button"><i class="material-icons lh">edit</i></a> <!-- przekierowanie do pliku z edycją i wysłaniem sugestii edycji -->
             <a href="delete.html" class="action-button"><i class="material-icons lh">delete</i></a> <!-- przekierowanie do pliku z wysłaniem sugestii usunięcia -->
         </div>
@@ -42,7 +48,7 @@
 
         <section>
             <h2 class="material-content-description-header">
-                Opis
+                @Html.DisplayNameFor(model => model.Description)
             </h2>
 
             <div class="material-content-description">
@@ -54,12 +60,12 @@
     <footer class="material-footer">
         <p class="material-footer-content">
             <span class="test">
-                Autor: @Html.DisplayFor(model => model.Creator.Username)
+                @Html.DisplayNameFor(model => model.CreatorUsername): @Html.DisplayFor(model => model.CreatorUsername)
             </span>
 
             <span class="test">
                 @{ var uploadDate = Model.UploadDate.ToString("d MMMM yyyy, HH:mm");}
-                Dodano: @Html.DisplayFor(model => uploadDate)
+                @Html.DisplayNameFor(model => model.UploadDate): @Html.DisplayFor(model => uploadDate)
             </span>
 
             @{
@@ -79,12 +85,12 @@
                     break;
                 case MaterialStateEnum.APPROVED:
                     <span class="@newClass">
-                        Zatwierdzony przez: @Html.DisplayFor(model => model.Approver.Username)
+                        Zatwierdzony przez: @Html.DisplayFor(model => model.ApproverUsername)
                     </span>
                     break;
                 case MaterialStateEnum.REJECTED:
                     <span class="@newClass">
-                        Odrzucony przez: @Html.DisplayFor(model => model.Approver.Username)
+                        Odrzucony przez: @Html.DisplayFor(model => model.ApproverUsername)
                     </span>
                     break;
             }
@@ -99,7 +105,7 @@
                 </span>
 
                 <span class="@newClass">
-                    Zmodyfikowany przez: @Html.DisplayFor(model => model.Updater.Username);
+                    @Html.DisplayNameFor(model => model.UpdaterUsername): @Html.DisplayFor(model => model.UpdaterUsername);
                 </span>
             }
         </p>

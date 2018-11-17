@@ -82,14 +82,10 @@ namespace acaShare.MVC.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    var acaShareUser = new User
-                    {
-                        IdentityUserId = user.Id,
-                        Username = Input.UserName,
-                        RegisterDate = DateTime.Today
-                    };
-
+                    // Create application user
+                    var acaShareUser = new User(user.Id, Input.UserName, DateTime.Today);
                     _userService.RegisterNewUser(acaShareUser);
+                    // End create application user
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Page(

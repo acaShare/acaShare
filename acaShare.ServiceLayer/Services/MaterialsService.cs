@@ -59,5 +59,12 @@ namespace acaShare.ServiceLayer.Services
             _uow.Materials.Update(material);
             _uow.SaveChanges();
         }
+
+        public void ToggleFavorite(Material material, User loggedUser)
+        {
+            loggedUser.ToggleFavorite(material);
+            _uow.Users.Update(loggedUser);
+            _uow.SaveChanges();
+        }
     }
 }

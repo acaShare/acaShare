@@ -13,25 +13,29 @@ namespace acaShare.MVC.Areas.Main.ViewComponents
     public class SidebarViewComponent : ViewComponent
     {
         private readonly ISidebarService _sidebarService;
+        private readonly IUserService _userService;
 
-        public SidebarViewComponent(ISidebarService sidebarService)
+        public SidebarViewComponent(ISidebarService sidebarService, IUserService userService)
         {
             _sidebarService = sidebarService;
+            _userService = userService;
         }
 
-        public IViewComponentResult Invoke(int? materialId)
+        public IViewComponentResult Invoke(int? materialId, string loggedUserId)
         {
             var comments = materialId.HasValue ? _sidebarService.GetComments(materialId.Value) : null;
 
-            var favourites = _sidebarService.GetFavorites();
+            var loggedUser = _userService.FindByIdentityUserId(loggedUserId);
+            var favoriteMaterials = loggedUser.GetFavoriteMaterials();
+
             var lastActivities = _sidebarService.GetLastActivities();
 
             SidebarViewModel vm = new SidebarViewModel
             {
-                Favourites = favourites.Select(f =>
+                Favourites = favoriteMaterials.Select(f =>
                     new FavouriteMaterialViewModel
                     {
-                        Content = GetFavoriteMaterialBreadcrumbsPath(f.Material),
+                        Content = GetFavoriteMaterialBreadcrumbsPath(f),
                         RouteValue = f.MaterialId
                     }
                 ).ToList(),
@@ -39,7 +43,7 @@ namespace acaShare.MVC.Areas.Main.ViewComponents
                 LastActivities = lastActivities.Select(a =>
                     new LastActivityViewModel
                     {
-                        Content = a.Content,
+                        //Content = a.Content,
                         When = FormatCreatedDate(a.Date),
                         RouteValue = a.Material.MaterialId,
                         Type = a.ActivityType,
@@ -50,7 +54,7 @@ namespace acaShare.MVC.Areas.Main.ViewComponents
                 Comments = comments?.Select(c =>
                     new CommentViewModel
                     {
-                        Content = c.Content,
+                        //Content = c.Content,
                         When = FormatCreatedDate(c.CreatedDate),
                         CommentId = c.CommentId,
                         Author = c.User.Username

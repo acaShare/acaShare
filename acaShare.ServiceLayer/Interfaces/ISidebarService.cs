@@ -7,7 +7,6 @@ namespace acaShare.ServiceLayer.Interfaces
 {
     public interface ISidebarService
     {
-        ICollection<Favorites> GetFavorites();
         ICollection<LastActivity> GetLastActivities();
         ICollection<Comment> GetComments(int materialId);
     }

@@ -45,20 +45,24 @@
             }
             else
             {
+                var activity = string.Empty;
                 var activityIcon = string.Empty;
 
                 foreach (var lastActivity in Model.LastActivities)
                 {
                     if (lastActivity.Type == LastActivityType.MATERIAL_ADD)
                     {
+                        activity = "dodał";
                         activityIcon = "note_add";
-                        lastActivity.Content =
-                            $"Użytkownik {lastActivity.Material.Creator.Username} dodał materiał \"{lastActivity.Material.Name}\"";
                     }
                     else
                     {
+                        activity = "skomentował";
                         activityIcon = "comment";
                     }
+
+                    lastActivity.Content =
+                            $"Użytkownik {lastActivity.Material.Creator.Username} {activity} materiał \"{lastActivity.Material.Name}\"";
 
                     <a asp-area="Main" asp-controller="Materials" asp-action="Material" asp-route-materialId="@lastActivity.RouteValue">
                         <div class="last-activity-wrapper">

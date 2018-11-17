@@ -23,11 +23,6 @@ namespace acaShare.DAL.EFPersistence.Repositories
             return _db.Comment.Where(c => c.MaterialId == materialId).ToList();
         }
 
-        public ICollection<Favorites> GetFavorites()
-        {
-            return _db.Favorites.ToList();
-        }
-
         public ICollection<LastActivity> GetLastActivities()
         {
             var comments = _db.Comment.ToList();
