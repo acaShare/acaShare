@@ -54,7 +54,7 @@ namespace acaShare.MVC.Areas.Main.ViewComponents
                 Comments = comments?.Select(c =>
                     new CommentViewModel
                     {
-                        //Content = c.Content,
+                        Content = c.Content,
                         When = FormatCreatedDate(c.CreatedDate),
                         CommentId = c.CommentId,
                         Author = c.User.Username
