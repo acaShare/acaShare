@@ -51,7 +51,7 @@ namespace acaShare.MVC.Areas.Main.ViewComponents
                     }
                 ).ToList(),
 
-                Comments = comments?.Select(c =>
+                Comments = comments?.OrderByDescending(c => c.CreatedDate).Select(c =>
                     new CommentViewModel
                     {
                         Content = c.Content,
@@ -69,7 +69,32 @@ namespace acaShare.MVC.Areas.Main.ViewComponents
 
         private string FormatCreatedDate(DateTime createdDate)
         {
-            return createdDate.ToShortDateString();
+            var now = DateTime.Now;
+            var diffBetweenNowAndCreatedDate = (now - createdDate);
+
+            var daysBetweenNowAndCreateDate = diffBetweenNowAndCreatedDate.Days;
+
+            string elapsedTime = string.Empty;
+
+            if (daysBetweenNowAndCreateDate == 0)
+            {
+                var hoursBetweenNowAndCreateDate = diffBetweenNowAndCreatedDate.Hours;
+                if (hoursBetweenNowAndCreateDate == 0)
+                {
+                    var minutesBetweenNowAndCreateDate = diffBetweenNowAndCreatedDate.Minutes;
+                    elapsedTime = $"{minutesBetweenNowAndCreateDate.ToString()} min.";
+                }
+                else
+                {
+                    elapsedTime = $"{hoursBetweenNowAndCreateDate.ToString()} godz.";
+                }
+            }
+            else
+            {
+                elapsedTime = createdDate.ToString("d.MM.yyyy, HH:mm");
+            }
+
+            return elapsedTime;
         }
 
         private string GetFavoriteMaterialBreadcrumbsPath(Material material)

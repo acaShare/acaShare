@@ -70,7 +70,8 @@ html, body {
 }
 
 
-.last-activities-wrapper {
+.sidebar-content-wrapper {
+    height: 90vh;
     margin: 1em;
     color: #757575;
     overflow: auto;
@@ -81,12 +82,6 @@ html, body {
     border-radius: 10px;
     transition: .5s;
     cursor: pointer;
-}
-
-.favourites-wrapper {
-    margin: 1em;
-    color: #757575;
-    overflow: auto;
 }
 
 .favourites-link {
@@ -155,10 +150,6 @@ html, body {
 
 ::-webkit-scrollbar {
     display: none;
-}
-
-#test-swipe-1, #test-swipe-2 {
-    height: 100vh;
 }
 
 .text-danger {

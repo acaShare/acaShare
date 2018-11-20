@@ -16,7 +16,7 @@
         }
     </ul>
 
-    <div id="test-swipe-1" class="favourites-wrapper">
+    <div id="test-swipe-1" class="sidebar-content-wrapper">
         @if (Model.Favourites.Count == 0)
         {
             <div class="no-content">~ Brak ulubionych ~</div>
@@ -37,7 +37,7 @@
         }
     </div>
 
-    <div id="test-swipe-2" class="last-activities-wrapper">
+    <div id="test-swipe-2" class="sidebar-content-wrapper">
         @{
             if (Model.LastActivities.Count == 0)
             {
@@ -80,7 +80,7 @@
 
     @if (Model.Comments != null)
     {
-        <div id="test-swipe-3" class="last-activities-wrapper">
+        <div id="test-swipe-3" class="sidebar-content-wrapper">
             <form id="new-comment-form" asp-action="AddComment" method="post">
                 <div class="add-comment-wrapper">
                     <input asp-for="NewComment" placeholder="Dodaj komentarz" />

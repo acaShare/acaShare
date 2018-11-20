@@ -6,14 +6,14 @@
         <div>
             <div class="input-field">
                 <label asp-for="Name"></label>
-                <input asp-for="Name" class="validate" />
+                <input asp-for="Name" class="validate" data-length="255" />
                 <span asp-validation-for="Name" class="text-danger input-error-small"></span>
             </div>
         </div>
         <div>
             <div class="input-field">
                 <label asp-for="Description"></label>
-                <input asp-for="Description" />
+                <textarea asp-for="Description" class="materialize-textarea" data-length="4000"></textarea>
                 <span asp-validation-for="Description" class="text-danger input-error-small"></span>
             </div>
         </div>
