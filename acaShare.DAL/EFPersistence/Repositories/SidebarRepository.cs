@@ -25,7 +25,7 @@ namespace acaShare.DAL.EFPersistence.Repositories
 
         public ICollection<LastActivity> GetLastActivities()
         {
-            var comments = _db.Comment.ToList();
+            var comments = _db.Comment.OrderByDescending(c => c.CommentId).Take(10).ToList();
             var lastAddedMaterials = _db.Material.OrderByDescending(m => m.MaterialId).Take(10).ToList();
 
             var commentsActivities = comments.Select(c =>
@@ -56,7 +56,7 @@ namespace acaShare.DAL.EFPersistence.Repositories
 
             if (lastActivities.Count > 10)
             {
-                lastActivities = lastActivities.TakeLast(10).ToList();
+                lastActivities = lastActivities.Take(10).ToList();
             }
 
             return lastActivities;

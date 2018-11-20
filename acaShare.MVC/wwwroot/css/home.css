@@ -71,7 +71,7 @@ html, body {
 
 
 .sidebar-content-wrapper {
-    height: 90vh;
+    height: 100%;
     margin: 1em;
     color: #757575;
     overflow: auto;
@@ -165,3 +165,56 @@ html, body {
 .validation-summary-errors {
     margin-bottom: 2em;
 }
+
+
+
+
+@media only screen and (max-width: 600px) {
+    .tabs .tab a {
+        padding: 0 24px;
+        font-size: 14px;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+    .tabs .tab a {
+        padding: 0 3px;
+        font-size: 65%;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .tabs .tab a {
+        padding: 0 5px;
+        font-size: 70%;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .tabs .tab a {
+        padding: 0 5px;
+        font-size: 65%;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    .tabs .tab a {
+        padding: 0 10px;
+        font-size: 70%;
+    }
+}
+
+@media only screen and (min-width: 1500px) {
+    .tabs .tab a {
+        padding: 0 15px;
+        font-size: 85%;
+    }
+}
+
+@media only screen and (min-width: 1800px) {
+    .tabs .tab a {
+        padding: 0 24px;
+        font-size: 14px;
+    }
+}
+
