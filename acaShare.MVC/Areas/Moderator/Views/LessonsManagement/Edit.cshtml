@@ -1,4 +1,4 @@
-﻿@model SubjectDepartmentViewModel
+﻿@model LessonViewModel
 
 @{
     var parms = new Dictionary<string, string>
@@ -25,10 +25,12 @@
                 <span asp-validation-for="SubtitleOrAbbreviation" class="text-danger input-error-small"></span>
             </div>
         </div>
+        <input asp-for="Id" type="hidden" />
+        @* For redirect to list *@
         <input asp-for="SemesterId" type="hidden" />
         <input asp-for="DepartmentId" type="hidden" />
 
-        <button type="submit">Dodaj</button>
+        <button type="submit">Zapisz</button>
         <a asp-action="Lessons" asp-all-route-data="@parms">Wróć do listy przedmiotów</a>
     </form>
 </div>
