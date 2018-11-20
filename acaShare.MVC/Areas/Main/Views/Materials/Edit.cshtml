@@ -1,0 +1,25 @@
+﻿@model EditMaterialViewModel
+
+<div class="row">
+    <form method="post" class="col s12">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div>
+            <div class="input-field">
+                <label asp-for="Name"></label>
+                <input type="text" asp-for="Name" class="validate" data-length="255" />
+                <span asp-validation-for="Name" class="text-danger input-error-small"></span>
+            </div>
+        </div>
+        <div>
+            <div class="input-field">
+                <label asp-for="Description"></label>
+                <textarea asp-for="Description" class="materialize-textarea" data-length="4000"></textarea>
+                <span asp-validation-for="Description" class="text-danger input-error-small"></span>
+            </div>
+        </div>
+        <input asp-for="MaterialId" type="hidden" />
+
+        <button type="submit">Zapisz</button>
+        <a asp-action="Material" asp-route-materialId="@Model.MaterialId">Wróć do widoku materiału</a>
+    </form>
+</div>

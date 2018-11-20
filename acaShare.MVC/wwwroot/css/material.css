@@ -81,6 +81,7 @@ h2 {
     color: #757575;
     margin-top: 2.5em;
     text-align: center;
+    cursor: default;
 }
 
 .test {

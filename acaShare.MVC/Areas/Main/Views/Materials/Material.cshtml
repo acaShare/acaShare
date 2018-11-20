@@ -31,8 +31,16 @@
             <a asp-action="ToggleFavorites" asp-route-materialId="@Model.MaterialId" class="sep action-button">
                 <i class="material-icons lh">@favoriteIcon</i>
             </a>
-            <a href="edit.html" class="sep action-button"><i class="material-icons lh">edit</i></a> <!-- przekierowanie do pliku z edycją i wysłaniem sugestii edycji -->
-            <a href="delete.html" class="action-button"><i class="material-icons lh">delete</i></a> <!-- przekierowanie do pliku z wysłaniem sugestii usunięcia -->
+
+            @if (Model.IsAllowedToEditOrDelete)
+            {
+                <a asp-action="Edit" asp-route-materialId="@Model.MaterialId" class="sep action-button">
+                    <i class="material-icons lh">edit</i>
+                </a> <!-- przekierowanie do pliku z edycją i wysłaniem sugestii edycji -->
+                <a asp-action="Delete" asp-route-materialId="@Model.MaterialId" class="sep action-button">
+                    <i class="material-icons lh">delete</i>
+                </a> <!-- przekierowanie do pliku z wysłaniem sugestii usunięcia -->
+            }
         </div>
     </header>
 

@@ -10,8 +10,11 @@ namespace acaShare.DAL.EFPersistence.Repositories
 {
     public sealed class MaterialRepository : EFRepository<Material>, IMaterialRepository
     {
-        public MaterialRepository(DbSet<Material> dbSet) : base(dbSet)
+        private readonly DbSet<File> _files;
+
+        public MaterialRepository(DbSet<Material> materials, DbSet<File> files) : base(materials)
         {
+            _files = files;
         }
 
         public void CreateDeleteRequest(Material material)
@@ -22,6 +25,14 @@ namespace acaShare.DAL.EFPersistence.Repositories
         public void CreateUpdateRequest(Material material)
         {
             throw new NotImplementedException();
+        }
+
+        public void RemoveFiles(ICollection<File> filesToRemove)
+        {
+            foreach (var fileToRemove in filesToRemove)
+            {
+                _files.Remove(fileToRemove);
+            }
         }
     }
 }

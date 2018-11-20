@@ -34,5 +34,7 @@ namespace acaShare.MVC.Areas.Main.Models.Materials
 
         public string ApproverUsername { get; set; }
         public bool IsFavorite { get; set; }
+        public bool IsAllowedToEditOrDelete { get; set; }
+        public ICollection<File> Files { get; set; }
     }
 }

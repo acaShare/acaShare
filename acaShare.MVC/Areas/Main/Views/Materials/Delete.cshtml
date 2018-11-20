@@ -1,0 +1,19 @@
+﻿@model DeleteMaterialViewModel
+
+<span class="text-danger">
+    <p>
+        UWAGA! Czy na pewno chcesz usunąć materiał "@Model.Name"? Wiąże się to z usunięciem wszystkich plików jakie się w nim znajdują.
+        Liczba plików w tym materiale to @Model.FilesCount
+    </p>
+</span>
+<br /><br />
+<div>
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="LessonId" />
+        <input type="hidden" asp-for="MaterialId" />
+        <button type="submit">Usuń materiał</button>
+    </form>
+</div>
+<div>
+    <a asp-action="Material" asp-route-materialId="@Model.MaterialId">Anuluj</a>
+</div>

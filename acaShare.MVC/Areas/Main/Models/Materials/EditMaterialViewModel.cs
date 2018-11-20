@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace acaShare.MVC.Areas.Main.Models.Materials
 {
-    public class AddMaterialViewModel
+    public class EditMaterialViewModel
     {
-        public int LessonId { get; set; }
+        public int MaterialId { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane")]
         [MaxLength(255, ErrorMessage = "{0} materiału nie może przekraczać {1} znaków")]

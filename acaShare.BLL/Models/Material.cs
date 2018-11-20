@@ -64,6 +64,51 @@ namespace acaShare.BLL.Models
         public virtual ICollection<DeleteRequest> DeleteRequests { get; private set; }
         public virtual ICollection<EditRequest> EditRequests { get; private set; }
         public virtual ICollection<Favorites> Favorites { get; private set; }
+
         public virtual ICollection<File> Files { get; private set; }
+
+        public int FilesCount => Files.Count;
+
+        public ICollection<File> Update(string name, string description, IEnumerable<byte[]> files)
+        {
+            Name = name;
+            Description = description;
+            var filesToRemove = ReplaceFiles(files);
+            return filesToRemove;
+        }
+
+        private ICollection<File> ReplaceFiles(IEnumerable<byte[]> newFiles)
+        {
+            ICollection<File> filesToRemove = new List<File>();
+
+            if (newFiles != null && newFiles.ToList().Count != 0)
+            {            
+                foreach (var existingFile in Files)
+                {
+                    if (!newFiles.Contains(existingFile.File1))
+                    {
+                        filesToRemove.Add(existingFile);
+                    }
+                }
+
+                foreach (var fileToRemove in filesToRemove)
+                {
+                    Files.Remove(fileToRemove);
+                }
+            
+                foreach (var fileData in newFiles)
+                {
+                    var file = new File(fileData);
+                    this.AddFile(file);
+                }
+            }
+
+            return filesToRemove;
+        }
+
+        public bool IsUserAllowedToEditOrDelete(User loggedUser)
+        {
+            return loggedUser.IdentityUserId == this.Creator.IdentityUserId;
+        }
     }
 }

@@ -9,5 +9,6 @@ namespace acaShare.DAL.Core.Repositories
     {
         void CreateDeleteRequest(Material material);
         void CreateUpdateRequest(Material material);
+        void RemoveFiles(ICollection<File> filesToRemove);
     }
 }
