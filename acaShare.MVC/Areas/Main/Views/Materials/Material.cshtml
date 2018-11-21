@@ -67,37 +67,32 @@
 
     <footer class="material-footer">
         <p class="material-footer-content">
-            <span class="test">
+            <span>
                 @Html.DisplayNameFor(model => model.CreatorUsername): @Html.DisplayFor(model => model.CreatorUsername)
             </span>
 
-            <span class="test">
+            <span>
                 @{ var uploadDate = Model.UploadDate.ToString("d MMMM yyyy, HH:mm");}
                 @Html.DisplayNameFor(model => model.UploadDate): @Html.DisplayFor(model => uploadDate)
             </span>
 
             @{
                 var res = Enum.TryParse(Model.State, out MaterialStateEnum materialState);
-                var newClass = "test2";
-                @if (Model.ModificationDate != null)
-                {
-                    newClass = "test";
-                }
             }
             @switch (materialState)
             {
                 case MaterialStateEnum.PENDING:
-                    <span class="@newClass">
+                    <span>
                         Status: Oczekujący na zatwierdzenie
                     </span>
                     break;
                 case MaterialStateEnum.APPROVED:
-                    <span class="@newClass">
+                    <span>
                         Zatwierdzony przez: @Html.DisplayFor(model => model.ApproverUsername)
                     </span>
                     break;
                 case MaterialStateEnum.REJECTED:
-                    <span class="@newClass">
+                    <span>
                         Odrzucony przez: @Html.DisplayFor(model => model.ApproverUsername)
                     </span>
                     break;
@@ -105,16 +100,14 @@
 
             @if (Model.ModificationDate != null)
             {
-                <span class="@newClass">
-                    @Html.DisplayNameFor(model => model.ModificationDate):
+                    <span>
+                        @Html.DisplayNameFor(model => model.ModificationDate):
 
-                    @{var modificationDate = Model.ModificationDate.Value.ToString("d MMMM yyyy, HH:mm");}
-                    @Html.DisplayFor(model => modificationDate);
-                </span>
+                        @{ var modificationDate = Model.ModificationDate.Value.ToString("d MMMM yyyy, HH:mm"); }
 
-                <span class="@newClass">
-                    @Html.DisplayNameFor(model => model.UpdaterUsername): @Html.DisplayFor(model => model.UpdaterUsername);
-                </span>
+                        @Html.DisplayFor(model => modificationDate) @Html.DisplayNameFor(model => model.UpdaterUsername)
+                        @Html.DisplayFor(model => model.UpdaterUsername)
+                    </span>
             }
         </p>
     </footer>

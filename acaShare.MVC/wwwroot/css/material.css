@@ -84,15 +84,14 @@ h2 {
     cursor: default;
 }
 
-.test {
+.material-footer-content span {
     padding-left: 1em;
     padding-right: 1em;
     border-right: #e0e0e0 solid 1px;
 }
 
-.test2 {
-    padding-left: 1em;
-    padding-right: 1em;
+.material-footer-content span:last-child {
+    border-right: none;
 }
 
 .add-comment-wrapper {

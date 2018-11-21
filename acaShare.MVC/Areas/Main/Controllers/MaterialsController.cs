@@ -158,7 +158,8 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 return NotFound("Nie masz uprawnień do tego działania"); // zrobić jakiś handler do tego
             }
 
-            var filesToRemove = materialToEdit.Update(vm.Name, vm.Description, vm.Files);
+            var loggedUser = _userService.FindByIdentityUserId(identityUserId);
+            var filesToRemove = materialToEdit.Update(vm.Name, vm.Description, vm.Files, loggedUser);
 
             _service.UpdateMaterial(materialToEdit, filesToRemove);
 

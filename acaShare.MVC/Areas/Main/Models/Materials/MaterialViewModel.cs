@@ -29,7 +29,7 @@ namespace acaShare.MVC.Areas.Main.Models.Materials
         [Display(Name = "Autor")]
         public string CreatorUsername { get; set; }
 
-        [Display(Name = "Zmodyfikowany przez")]
+        [Display(Name = "przez")]
         public string UpdaterUsername { get; set; }
 
         public string ApproverUsername { get; set; }

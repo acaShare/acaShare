@@ -69,10 +69,12 @@ namespace acaShare.BLL.Models
 
         public int FilesCount => Files.Count;
 
-        public ICollection<File> Update(string name, string description, IEnumerable<byte[]> files)
+        public ICollection<File> Update(string name, string description, IEnumerable<byte[]> files, User updater)
         {
             Name = name;
             Description = description;
+            ModificationDate = DateTime.Now;
+            Updater = updater;
             var filesToRemove = ReplaceFiles(files);
             return filesToRemove;
         }
@@ -109,6 +111,11 @@ namespace acaShare.BLL.Models
         public bool IsUserAllowedToEditOrDelete(User loggedUser)
         {
             return loggedUser.IdentityUserId == this.Creator.IdentityUserId;
+        }
+
+        public void UpdateState(int newStateId)
+        {
+            StateId = newStateId;
         }
     }
 }
