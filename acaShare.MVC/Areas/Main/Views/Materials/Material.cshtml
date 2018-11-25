@@ -4,6 +4,7 @@
 
 @section MaterialViewCSS {
     <link rel="stylesheet" href="~/css/material.css">
+    <link rel="stylesheet" href="~/css/material-images-modal.css">
 }
 
 @section SidebarWithComments {
@@ -47,11 +48,68 @@
     <div class="material-content">
         <section class="material-content-files">
             <h2 class="material-content-files-header">Pliki</h2>
-            file1, file2
-            @*@foreach (var file in Files)
-                {
 
-                }*@
+            <div class="files-wrapper">
+                <div class="material-file">
+                    <i class="material-icons">description</i>
+                </div>
+                <div class="material-file" onclick="openModal();currentSlide(1)">
+                    <img src="~/images/1.PNG" />
+                </div>
+                <div class="material-file" onclick="openModal();currentSlide(2)">
+                    <img src="~/images/2.jpg" />
+                </div>
+                <div class="material-file" onclick="openModal();currentSlide(3)">
+                    <img src="~/images/3.jpg" />
+                </div>
+                <div class="material-file" onclick="openModal();currentSlide(4)">
+                    <img src="~/images/4.jpg" />
+                </div>
+            </div>
+
+            <!-- The Modal/Lightbox -->
+            <div id="gallery-modal" class="gallery-modal" onclick="closeModalOnBackgroundClick(event)">
+                <div id="current-slide-info" class="current-slide-info"></div>
+                <span class="close" onclick="closeModal()">&times;</span>
+                <div class="modal-content">
+                    <div class="gallery-item">
+                        <img src="~/images/1.PNG" />
+                    </div>
+
+                    <div class="gallery-item">
+                        <img src="~/images/2.jpg" />
+                    </div>
+
+                    <div class="gallery-item">
+                        <img src="~/images/3.jpg" />
+                    </div>
+
+                    <div class="gallery-item">
+                        <img src="~/images/4.jpg" />
+                    </div>
+                </div>
+
+                <!-- Next/previous controls -->
+                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+            </div>
+            
+                <script src="~/js/material-images-modal.js"></script>
+            
+
+
+
+
+
+
+
+
+
+
+            @*@foreach (var file in Files)
+        {
+
+        }*@
         </section>
 
         <section>
@@ -100,14 +158,14 @@
 
             @if (Model.ModificationDate != null)
             {
-                    <span>
-                        @Html.DisplayNameFor(model => model.ModificationDate):
+                <span>
+                    @Html.DisplayNameFor(model => model.ModificationDate):
 
-                        @{ var modificationDate = Model.ModificationDate.Value.ToString("d MMMM yyyy, HH:mm"); }
+                    @{ var modificationDate = Model.ModificationDate.Value.ToString("d MMMM yyyy, HH:mm"); }
 
-                        @Html.DisplayFor(model => modificationDate) @Html.DisplayNameFor(model => model.UpdaterUsername)
-                        @Html.DisplayFor(model => model.UpdaterUsername)
-                    </span>
+                    @Html.DisplayFor(model => modificationDate) @Html.DisplayNameFor(model => model.UpdaterUsername)
+                    @Html.DisplayFor(model => model.UpdaterUsername)
+                </span>
             }
         </p>
     </footer>
