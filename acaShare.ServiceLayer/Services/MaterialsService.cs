@@ -66,10 +66,9 @@ namespace acaShare.ServiceLayer.Services
             _uow.Users.Update(loggedUser);
             _uow.SaveChanges();
         }
-
-        public void UpdateMaterial(Material material, ICollection<File> filesToRemove)
+        
+        public void UpdateMaterial(Material material)
         {
-            _uow.Materials.RemoveFiles(filesToRemove);
             _uow.Materials.Update(material);
             _uow.SaveChanges();
         }

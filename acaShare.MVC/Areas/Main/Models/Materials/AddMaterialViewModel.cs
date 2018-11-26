@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -21,6 +22,6 @@ namespace acaShare.MVC.Areas.Main.Models.Materials
         public string Description { get; set; }
 
         [Display(Name = "Pliki")]
-        public IEnumerable<byte[]> Files { get; set; }
+        public ICollection<IFormFile> Files { get; set; }
     }
 }

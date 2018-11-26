@@ -26,13 +26,5 @@ namespace acaShare.DAL.EFPersistence.Repositories
         {
             throw new NotImplementedException();
         }
-
-        public void RemoveFiles(ICollection<File> filesToRemove)
-        {
-            foreach (var fileToRemove in filesToRemove)
-            {
-                _files.Remove(fileToRemove);
-            }
-        }
     }
 }

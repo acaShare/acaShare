@@ -69,7 +69,7 @@ namespace acaShare.BLL.Models
 
         public int FilesCount => Files.Count;
 
-        public ICollection<File> Update(string name, string description, IEnumerable<byte[]> files, User updater)
+        public ICollection<File> Update(string name, string description, ICollection<File> files, User updater)
         {
             Name = name;
             Description = description;
@@ -79,15 +79,15 @@ namespace acaShare.BLL.Models
             return filesToRemove;
         }
 
-        private ICollection<File> ReplaceFiles(IEnumerable<byte[]> newFiles)
+        private ICollection<File> ReplaceFiles(ICollection<File> newFiles)
         {
             ICollection<File> filesToRemove = new List<File>();
 
-            if (newFiles != null && newFiles.ToList().Count != 0)
-            {            
+            if (newFiles != null && newFiles.Count > 0)
+            {
                 foreach (var existingFile in Files)
                 {
-                    if (!newFiles.Contains(existingFile.File1))
+                    if (!newFiles.Contains(existingFile))
                     {
                         filesToRemove.Add(existingFile);
                     }
@@ -98,10 +98,12 @@ namespace acaShare.BLL.Models
                     Files.Remove(fileToRemove);
                 }
             
-                foreach (var fileData in newFiles)
+                foreach (var file in newFiles)
                 {
-                    var file = new File(fileData);
-                    this.AddFile(file);
+                    if (!Files.Contains(file) && !filesToRemove.Contains(file))
+                    {
+                        this.AddFile(file);
+                    }
                 }
             }
 
@@ -116,6 +118,14 @@ namespace acaShare.BLL.Models
         public void UpdateState(int newStateId)
         {
             StateId = newStateId;
+        }
+
+        public void AddFiles(ICollection<File> filesToAdd)
+        {
+            foreach (var file in filesToAdd)
+            {
+                AddFile(file);
+            }
         }
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using acaShare.DAL.Configuration;
 
 namespace acaShare.DAL.EFPersistence.Migrations
 {
     [DbContext(typeof(AcaShareDbContext))]
-    partial class AcaShareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181125224547_FixedRequiredConstraints")]
+    partial class FixedRequiredConstraints
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -152,6 +154,10 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
                     b.Property<int?>("EditRequestId");
 
+                    b.Property<string>("Extension")
+                        .IsRequired()
+                        .HasMaxLength(5);
+
                     b.Property<string>("FileName")
                         .IsRequired()
                         .HasMaxLength(100);
@@ -159,7 +165,7 @@ namespace acaShare.DAL.EFPersistence.Migrations
                     b.Property<int?>("MaterialId")
                         .IsRequired();
 
-                    b.Property<string>("RelativePath")
+                    b.Property<string>("Path")
                         .IsRequired();
 
                     b.HasKey("FileId");

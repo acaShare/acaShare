@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using acaShare.DAL.Configuration;
@@ -16,6 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 
 namespace acaShare.MVC
 {
@@ -72,9 +74,17 @@ namespace acaShare.MVC
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
             app.UseAuthentication();
             app.UseCookiePolicy();
+
+            app.UseStaticFiles(); // For the wwwroot folder
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), Properties.Resources.UploadsFolderName)),
+                RequestPath = "/" + Properties.Resources.UploadsFolderName
+            });
 
             app.Use(async (ctx, next) =>
             {

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using acaShare.DAL.Configuration;
 
 namespace acaShare.DAL.EFPersistence.Migrations
 {
     [DbContext(typeof(AcaShareDbContext))]
-    partial class AcaShareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181125180813_OptedForStoringFilesInFileSystem")]
+    partial class OptedForStoringFilesInFileSystem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -146,21 +148,21 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ContentType")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
                     b.Property<int?>("EditRequestId");
 
                     b.Property<string>("FileName")
                         .IsRequired()
                         .HasMaxLength(100);
 
-                    b.Property<int?>("MaterialId")
-                        .IsRequired();
+                    b.Property<string>("Format")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
-                    b.Property<string>("RelativePath")
-                        .IsRequired();
+                    b.Property<int?>("MaterialId");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasMaxLength(1000);
 
                     b.HasKey("FileId");
 

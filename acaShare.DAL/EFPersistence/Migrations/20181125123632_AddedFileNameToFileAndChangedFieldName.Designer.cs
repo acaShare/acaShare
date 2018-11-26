@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using acaShare.DAL.Configuration;
 
 namespace acaShare.DAL.EFPersistence.Migrations
 {
     [DbContext(typeof(AcaShareDbContext))]
-    partial class AcaShareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181125123632_AddedFileNameToFileAndChangedFieldName")]
+    partial class AddedFileNameToFileAndChangedFieldName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -146,21 +148,15 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ContentType")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
                     b.Property<int?>("EditRequestId");
 
-                    b.Property<string>("FileName")
+                    b.Property<byte[]>("FileData")
                         .IsRequired()
-                        .HasMaxLength(100);
+                        .HasColumnName("FileData");
 
-                    b.Property<int?>("MaterialId")
-                        .IsRequired();
+                    b.Property<string>("FileName");
 
-                    b.Property<string>("RelativePath")
-                        .IsRequired();
+                    b.Property<int?>("MaterialId");
 
                     b.HasKey("FileId");
 
@@ -647,8 +643,7 @@ namespace acaShare.DAL.EFPersistence.Migrations
                     b.HasOne("acaShare.BLL.Models.Material", "Material")
                         .WithMany("Files")
                         .HasForeignKey("MaterialId")
-                        .HasConstraintName("File_Material")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("File_Material");
                 });
 
             modelBuilder.Entity("acaShare.BLL.Models.Lesson", b =>

@@ -5,9 +5,11 @@ namespace acaShare.BLL.Models
 {
     public partial class File
     {
-        public File(byte[] fileData) : this()
+        public File(string fileName, string fileRelativePath, string contentType) : this()
         {
-            File1 = fileData;
+            FileName = fileName;
+            RelativePath = fileRelativePath;
+            ContentType = contentType.ToLower();
         }
 
         protected File()
@@ -25,7 +27,9 @@ namespace acaShare.BLL.Models
 
         public int FileId { get; private set; }
         public int? MaterialId { get; private set; }
-        public byte[] File1 { get; private set; }
+        public string RelativePath { get; private set; }
+        public string FileName { get; private set; }
+        public string ContentType { get; private set; }
         public int? EditRequestId { get; private set; }
 
         public virtual EditRequest EditRequest { get; private set; }

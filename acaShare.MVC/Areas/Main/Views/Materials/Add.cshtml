@@ -1,7 +1,7 @@
 ﻿@model AddMaterialViewModel
 
 <div class="row">
-    <form method="post" class="col s12">
+    <form method="post" enctype="multipart/form-data" class="col s12">
         <div asp-validation-summary="All" class="text-danger"></div>
         <div>
             <div class="input-field">
@@ -17,9 +17,15 @@
                 <span asp-validation-for="Description" class="text-danger input-error-small"></span>
             </div>
         </div>
+        <div>
+            <div class="input-field">
+                <label asp-for="Files"></label>
+                <input asp-for="Files" type="file" multiple />
+            </div>
+        </div>
         <input asp-for="LessonId" type="hidden" />
 
-        <button type="submit">Dodaj</button>
+        <input type="submit" value="Dodaj" />"
         <a asp-action="Materials" asp-route-lessonId="@Model.LessonId">Wróć do listy materiałów</a>
     </form>
 </div>

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using acaShare.MVC.Areas.Main.Models.Materials;
 using acaShare.MVC.Models;
 using acaShare.ServiceLayer.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace acaShare.MVC.Areas.Main.Controllers
@@ -18,12 +20,15 @@ namespace acaShare.MVC.Areas.Main.Controllers
         private readonly IMaterialsService _service;
         private readonly IUniversityTreeTraversalService _traversalService;
         private readonly IUserService _userService;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public MaterialsController(IMaterialsService service, IUniversityTreeTraversalService traversalService, IUserService userService)
+        public MaterialsController(
+            IMaterialsService service, IUniversityTreeTraversalService traversalService, IUserService userService, IHostingEnvironment hostingEnvironment)
         {
             _service = service;
             _traversalService = traversalService;
             _userService = userService;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public IActionResult Materials(int lessonId)
@@ -79,6 +84,12 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 UploadDate = material.UploadDate,
                 ModificationDate = material.ModificationDate,
                 State = material.State.Name,
+                Files = material.Files.Select(f => new FileViewModel
+                {
+                    FileName = f.FileName,
+                    RelativePath = f.RelativePath,
+                    ContentType = f.ContentType
+                }).ToList(),
                 IsFavorite = isFavorite,
                 IsAllowedToEditOrDelete = isAllowedToEditOrDelete
             };
@@ -108,17 +119,11 @@ namespace acaShare.MVC.Areas.Main.Controllers
             var state = _service.GetState(MaterialStateEnum.PENDING);
 
             var materialToAdd = new BLL.Models.Material(vm.Name, vm.Description, lesson, creator, state);
-
-            if (vm.Files != null && vm.Files.ToList().Count != 0)
-            {
-                foreach (var fileData in vm.Files)
-                {
-                    var file = new BLL.Models.File(fileData);
-                    materialToAdd.AddFile(file);
-                }
-            }
-
             _service.AddMaterial(materialToAdd);
+
+            var filesToAdd = ExtractAndSaveFilesFromForm(vm.Files, materialToAdd.MaterialId);
+            materialToAdd.AddFiles(filesToAdd);
+            _service.UpdateMaterial(materialToAdd);
 
             return RedirectToAction("Materials", new { LessonId = lesson.LessonId });
         }
@@ -141,7 +146,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 MaterialId = materialId,
                 Name = materialToEdit.Name,
                 Description = materialToEdit.Description,
-                Files = materialToEdit.Files.Select(f => f.File1).ToList()
+                //FormFiles = materialToEdit.Files.Select(f => f.FileData).ToList()
             };
 
             return View(vm);
@@ -159,13 +164,111 @@ namespace acaShare.MVC.Areas.Main.Controllers
             }
 
             var loggedUser = _userService.FindByIdentityUserId(identityUserId);
-            var filesToRemove = materialToEdit.Update(vm.Name, vm.Description, vm.Files, loggedUser);
 
-            _service.UpdateMaterial(materialToEdit, filesToRemove);
+            var newFiles = ExtractFilesFromForm(vm.FormFiles, vm.MaterialId);
+            var filesToRemove = materialToEdit.Update(vm.Name, vm.Description, newFiles, loggedUser);
+            RemoveFilesFromFileSystem(filesToRemove);
+
+            _service.UpdateMaterial(materialToEdit);
 
             return RedirectToAction("Material", new { @materialId = vm.MaterialId });
         }
 
+        private void RemoveFilesFromFileSystem(ICollection<BLL.Models.File> filesToRemove)
+        {
+            foreach (var file in filesToRemove)
+            {
+                var path = Path.Combine(GetUploadFolderAbsolutePath(), file.RelativePath);
+                System.IO.File.Delete(path);
+            }
+        }
+
+        private ICollection<BLL.Models.File> ExtractFilesFromForm(ICollection<IFormFile> formFiles, int materialId)
+        {
+            ICollection<BLL.Models.File> newFiles = new List<BLL.Models.File>();
+
+            if (formFiles != null && formFiles.Count > 0)
+            {
+                foreach (var formFile in formFiles)
+                {
+                    if (formFile.Length > 0)
+                    {
+                        var relativePath = Path.Combine(
+                            Properties.Resources.MaterialFilesUploadFolderName,
+                            materialId.ToString(),
+                            formFile.FileName);
+                        
+                        var file = new BLL.Models.File(formFile.FileName, relativePath, formFile.ContentType);
+                        newFiles.Add(file);
+                    }
+                }
+            }
+
+            return newFiles;
+        }
+
+        private void SaveFilesFromForm(ICollection<IFormFile> formFiles, int materialId)
+        {
+            if (formFiles != null && formFiles.Count > 0)
+            {
+                foreach (var formFile in formFiles)
+                {
+                    if (formFile.Length > 0)
+                    {
+                        var relativePath = Path.Combine(
+                            Properties.Resources.MaterialFilesUploadFolderName,
+                            materialId.ToString(),
+                            formFile.FileName);
+
+                        var fileAbsolutePath = Path.Combine(GetUploadFolderAbsolutePath(), relativePath);
+
+                        Directory.CreateDirectory(Path.GetDirectoryName(fileAbsolutePath));
+
+                        using (var stream = new FileStream(fileAbsolutePath, FileMode.Create))
+                        {
+                            formFile.CopyTo(stream);
+                        }
+                    }
+                }
+            }
+        }
+
+        private ICollection<BLL.Models.File> ExtractAndSaveFilesFromForm(ICollection<IFormFile> formFiles, int materialId)
+        {
+            ICollection<BLL.Models.File> newFiles = new List<BLL.Models.File>();
+
+            if (formFiles != null && formFiles.Count > 0)
+            {
+                foreach (var formFile in formFiles)
+                {
+                    if (formFile.Length > 0)
+                    {
+                        var relativePath = Path.Combine(
+                            Properties.Resources.MaterialFilesUploadFolderName,
+                            materialId.ToString(),
+                            formFile.FileName);
+
+                        var fileAbsolutePath = Path.Combine(GetUploadFolderAbsolutePath(), relativePath);
+
+                        Directory.CreateDirectory(Path.GetDirectoryName(fileAbsolutePath));
+
+                        using (var stream = new FileStream(fileAbsolutePath, FileMode.Create))
+                        {
+                            formFile.CopyTo(stream);
+                            var file = new BLL.Models.File(formFile.FileName, relativePath, formFile.ContentType);
+                            newFiles.Add(file);
+                        }
+                    }
+                }
+            }
+
+            return newFiles;
+        }
+        
+        private string GetUploadFolderAbsolutePath()
+        {
+            return Path.Combine(_hostingEnvironment.ContentRootPath, Properties.Resources.UploadsFolderName);
+        }
 
         public IActionResult Delete(int materialId)
         {

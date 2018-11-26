@@ -52,32 +52,36 @@ namespace acaShare.DAL.Configuration
                     .WithMany(p => p.Comments)
                     .HasForeignKey(d => d.MaterialId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Comment_Material");
+                    .HasConstraintName("Comment_Material")
+                    .IsRequired();
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Comments)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Comment_User");
+                    .HasConstraintName("Comment_User")
+                    .IsRequired();
             });
 
             modelBuilder.Entity<DeleteRequest>(entity =>
             {
                 entity.Property(e => e.RequestDate)
-                    .IsRequired()
-                    .HasColumnType("datetime");
+                    .HasColumnType("datetime")
+                    .IsRequired();
 
                 entity.HasOne(d => d.Deleter)
                     .WithMany(p => p.DeleteRequests)
                     .HasForeignKey(d => d.DeleterId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("DeleteRequest_User");
+                    .HasConstraintName("DeleteRequest_User")
+                    .IsRequired();
 
                 entity.HasOne(d => d.MaterialToDelete)
                     .WithMany(p => p.DeleteRequests)
                     .HasForeignKey(d => d.MaterialToDeleteId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("DeleteRequest_Material");
+                    .HasConstraintName("DeleteRequest_Material")
+                    .IsRequired();
             });
 
             modelBuilder.Entity<Department>(entity =>
@@ -98,7 +102,8 @@ namespace acaShare.DAL.Configuration
                     .WithMany(p => p.Departments)
                     .HasForeignKey(d => d.UniversityId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Department_University");
+                    .HasConstraintName("Department_University")
+                    .IsRequired();
             });
 
             modelBuilder.Entity<EditRequest>(entity =>
@@ -115,13 +120,15 @@ namespace acaShare.DAL.Configuration
                     .WithMany(p => p.EditRequests)
                     .HasForeignKey(d => d.MaterialToUpdateId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("EditRequest_Material");
+                    .HasConstraintName("EditRequest_Material")
+                    .IsRequired();
 
                 entity.HasOne(d => d.Updater)
                     .WithMany(p => p.EditRequests)
                     .HasForeignKey(d => d.UpdaterId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("EditRequest_User");
+                    .HasConstraintName("EditRequest_User")
+                    .IsRequired();
             });
 
             modelBuilder.Entity<Favorites>(entity =>
@@ -143,9 +150,16 @@ namespace acaShare.DAL.Configuration
 
             modelBuilder.Entity<File>(entity =>
             {
-                entity.Property(e => e.File1)
+                entity.Property(e => e.FileName)
                     .IsRequired()
-                    .HasColumnName("File");
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.RelativePath)
+                    .IsRequired();
+
+                entity.Property(e => e.ContentType)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.HasOne(d => d.EditRequest)
                     .WithMany(p => p.Files)
@@ -155,7 +169,9 @@ namespace acaShare.DAL.Configuration
                 entity.HasOne(d => d.Material)
                     .WithMany(p => p.Files)
                     .HasForeignKey(d => d.MaterialId)
-                    .HasConstraintName("File_Material");
+                    .HasConstraintName("File_Material")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
             });
 
             modelBuilder.Entity<Lesson>(entity =>
@@ -168,13 +184,15 @@ namespace acaShare.DAL.Configuration
                     .WithMany(p => p.Lessons)
                     .HasForeignKey(d => d.SemesterId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Subject_Semester");
+                    .HasConstraintName("Subject_Semester")
+                    .IsRequired();
 
                 entity.HasOne(d => d.SubjectDepartment)
                     .WithMany(p => p.Lessons)
                     .HasForeignKey(d => d.SubjectDepartmentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Lesson_SubjectDepartment");
+                    .HasConstraintName("Lesson_SubjectDepartment")
+                    .IsRequired();
             });
 
             modelBuilder.Entity<Material>(entity =>
@@ -187,7 +205,9 @@ namespace acaShare.DAL.Configuration
                     .IsRequired()
                     .HasMaxLength(255);
 
-                entity.Property(e => e.UploadDate).HasColumnType("datetime");
+                entity.Property(e => e.UploadDate)
+                    .HasColumnType("datetime")
+                    .IsRequired();
 
                 entity.HasOne(d => d.Approver)
                     .WithMany(p => p.ApprovedMaterials)
@@ -198,19 +218,22 @@ namespace acaShare.DAL.Configuration
                     .WithMany(p => p.CreatedMaterials)
                     .HasForeignKey(d => d.CreatorId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Material_Creator");
+                    .HasConstraintName("Material_Creator")
+                    .IsRequired();
 
                 entity.HasOne(d => d.Lesson)
                     .WithMany(p => p.Materials)
                     .HasForeignKey(d => d.LessonId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Material_Lesson");
+                    .HasConstraintName("Material_Lesson")
+                    .IsRequired();
 
                 entity.HasOne(d => d.State)
                     .WithMany(p => p.Materials)
                     .HasForeignKey(d => d.StateId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Material_MaterialState");
+                    .HasConstraintName("Material_MaterialState")
+                    .IsRequired();
 
                 entity.HasOne(d => d.Updater)
                     .WithMany(p => p.UpdatedMaterials)
@@ -269,13 +292,15 @@ namespace acaShare.DAL.Configuration
                     .WithMany(p => p.SubjectDepartment)
                     .HasForeignKey(d => d.DepartmentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("SubjectDepartment_Department");
+                    .HasConstraintName("SubjectDepartment_Department")
+                    .IsRequired();
 
                 entity.HasOne(d => d.Subject)
                     .WithMany(p => p.SubjectDepartment)
                     .HasForeignKey(d => d.SubjectId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("SubjectDepartment_Subject");
+                    .HasConstraintName("SubjectDepartment_Subject")
+                    .IsRequired();
             });
 
             modelBuilder.Entity<University>(entity =>
