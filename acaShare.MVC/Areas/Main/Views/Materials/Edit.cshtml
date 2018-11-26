@@ -1,5 +1,16 @@
 ﻿@model EditMaterialViewModel
 
+@section MaterialViewCSS {
+    <link rel="stylesheet" href="~/css/material.css">
+    <link rel="stylesheet" href="~/css/material-edit.css">
+    <link rel="stylesheet" href="~/css/material-images-modal.css">
+}
+
+@section Scripts {
+    <script src="~/js/edit-material.js"></script>
+    <script src="~/js/material-images-modal.js"></script>
+}
+
 <div class="row">
     <form method="post" class="col s12">
         <div asp-validation-summary="All" class="text-danger"></div>
@@ -17,7 +28,81 @@
                 <span asp-validation-for="Description" class="text-danger input-error-small"></span>
             </div>
         </div>
+        <div class="file-field input-field">
+            <div class="btn">
+                <span>Dodaj</span>
+                <input id="file-picker" type="file" multiple onchange="showUploadedFiles()">
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text" placeholder="Dodaj pliki...">
+            </div>
+        </div>
         <input asp-for="MaterialId" type="hidden" />
+
+        <div class="material-content">
+            <section class="material-content-files">
+                <h2 class="material-content-files-header">Pliki</h2>
+
+                <div class="files-wrapper">
+                    @{
+                        int slideIndex = 1;
+                        int id = 0;
+
+                        foreach (var file in Model.Files)
+                        {
+                            <div id="@id" class="material-file-edit-mode-wrapper">
+                                @if (file.IsImage)
+                                {
+                                    <div class="material-file" onclick="openModal();currentSlide(@(slideIndex++))">
+                                        <div class="delete-file" onclick="deleteFile(@id, event)">
+                                            <span class="delete-file-x">&#10005;</span>
+                                        </div>
+                                        <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName-thumbnail" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="material-file">
+                                        <div class="delete-file" onclick="deleteFile(@id, event)">
+                                            <span class="delete-file-x">&#10005;</span>
+                                        </div>
+                                        <i class="material-icons">description</i>
+                                    </div>
+                                }
+                                
+                                <input type="hidden" asp-for="Files.ToList()[id].FileId" />
+
+                                <div class="input-field material-file-edit-mode-filename">
+                                    <input asp-for="Files.ToList()[id].FileName" class="validate" data-length="50" />
+                                    <span asp-validation-for="Files.ToList()[id].FileName" class="text-danger input-error-small"></span>
+                                </div>
+                            </div>
+
+                            id++;
+                        }
+                    }
+                </div>
+
+                <!-- The Modal/Lightbox -->
+                <div id="gallery-modal" class="gallery-modal" onclick="closeModalOnBackgroundClick(event)">
+                    <div id="current-slide-info" class="current-slide-info"></div>
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <div class="modal-content">
+                        @foreach (var file in Model.Files)
+                        {
+                            <div class="gallery-item">
+                                <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName" />
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Next/previous controls -->
+                    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                </div>
+            </section>
+        </div>
+        <div id="teeest"></div>
 
         <button type="submit">Zapisz</button>
         <a asp-action="Material" asp-route-materialId="@Model.MaterialId">Wróć do widoku materiału</a>

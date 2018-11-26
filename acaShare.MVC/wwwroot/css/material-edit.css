@@ -1,0 +1,35 @@
+﻿.material-file-edit-mode-wrapper .material-file {
+    position: relative;
+    margin: 0;
+    transition: 2s;
+}
+
+.material-file-edit-mode-wrapper .material-file:hover {
+    background-color: rgba(239, 239, 239, 0.81);
+}
+
+.input-field.material-file-edit-mode-filename {
+    margin-top: 0;
+}
+
+.delete-file {
+    position: absolute;
+    top: .5em;
+    right: .5em;
+    background-color: #464646;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 50%;
+    width: 1.6em;
+    height: 1.6em;
+    padding: 0 0 1px 1px;
+}
+
+.delete-file:hover {
+    background-color: red;
+}
+
+.delete-file-x {
+    font-size: .8em;
+}

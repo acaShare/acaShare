@@ -146,7 +146,13 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 MaterialId = materialId,
                 Name = materialToEdit.Name,
                 Description = materialToEdit.Description,
-                //FormFiles = materialToEdit.Files.Select(f => f.FileData).ToList()
+                Files = materialToEdit.Files.Select(f => new FileViewModel
+                {
+                    FileId = f.FileId,
+                    FileName = f.FileName,
+                    RelativePath = f.RelativePath,
+                    ContentType = f.ContentType
+                }).ToList()
             };
 
             return View(vm);

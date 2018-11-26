@@ -25,6 +25,6 @@ namespace acaShare.MVC.Areas.Main.Models.Materials
         public ICollection<IFormFile> FormFiles { get; set; }
 
         [Display(Name = "Pliki")]
-        public ICollection<byte[]> Files { get; set; }
+        public ICollection<FileViewModel> Files { get; set; }
     }
 }
