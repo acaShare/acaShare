@@ -4,5 +4,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>PageNotFound</h2>
+<link href="~/css/PageNotFound.css" rel="stylesheet" />
 
+<div class="main-container">
+    <h1>UPS!</h1>
+    <h3>Wygląda na to że taka strona nie istnieje :(</h3>
+    <img src="~/images/PageNotFound.png" />
+    <h3>BŁĄD 404</h3>
+    <h4>Wróć na <a asp-area="Universities" asp-controller="List" asp-action="AvailableUniversities" >STRONĘ GŁÓWNĄ</a> i spróbuj ponownie</h4>
+</div>

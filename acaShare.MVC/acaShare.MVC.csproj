@@ -67,6 +67,7 @@
     <Folder Include="Areas\Administrator\Controllers\" />
     <Folder Include="Areas\Administrator\Models\" />
     <Folder Include="Areas\Administrator\Views\" />
+    <Folder Include="Areas\Identity\Views\WelcomePage\" />
   </ItemGroup>
 
 </Project>
