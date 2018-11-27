@@ -43,7 +43,7 @@
             <section class="material-content-files">
                 <h2 class="material-content-files-header">Pliki</h2>
 
-                <div class="files-wrapper">
+                <div id="files-wrapper" class="files-wrapper">
                     @{
                         int slideIndex = 1;
                         int id = 0;
@@ -69,8 +69,9 @@
                                         <i class="material-icons">description</i>
                                     </div>
                                 }
-                                
+
                                 <input type="hidden" asp-for="Files.ToList()[id].FileId" />
+                                <input type="hidden" asp-for="Files.ToList()[id].ContentType" />
 
                                 <div class="input-field material-file-edit-mode-filename">
                                     <input asp-for="Files.ToList()[id].FileName" class="validate" data-length="50" />
@@ -87,7 +88,7 @@
                 <div id="gallery-modal" class="gallery-modal" onclick="closeModalOnBackgroundClick(event)">
                     <div id="current-slide-info" class="current-slide-info"></div>
                     <span class="close" onclick="closeModal()">&times;</span>
-                    <div class="modal-content">
+                    <div id="modal-content" class="modal-content">
                         @foreach (var file in Model.Files)
                         {
                             <div class="gallery-item">
@@ -102,7 +103,6 @@
                 </div>
             </section>
         </div>
-        <div id="teeest"></div>
 
         <button type="submit">Zapisz</button>
         <a asp-action="Material" asp-route-materialId="@Model.MaterialId">Wróć do widoku materiału</a>

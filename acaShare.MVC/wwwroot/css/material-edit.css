@@ -1,7 +1,7 @@
 ﻿.material-file-edit-mode-wrapper .material-file {
     position: relative;
     margin: 0;
-    transition: 2s;
+    margin: 0 0.75em 1.5em 0.75em;
 }
 
 .material-file-edit-mode-wrapper .material-file:hover {
