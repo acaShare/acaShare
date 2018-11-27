@@ -7,5 +7,6 @@ namespace acaShare.DAL.Core.Repositories.UniversityRelated
 {
     public interface IDepartmentRepository : IRepository<Department>
     {
+        IEnumerable<SubjectDepartment> FindSubjectDepartmentAssociations(int departmentId);
     }
 }

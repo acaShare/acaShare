@@ -1,4 +1,12 @@
-﻿@model UniversityViewModel
+﻿@model SubjectDepartmentViewModel
+
+@{ 
+    var parms = new Dictionary<string, string>
+    {
+        { "semesterId", Model.SemesterId.ToString() },
+        { "departmentId", Model.DepartmentId.ToString() }
+    };
+}
 
 <div class="row">
     <form method="post" class="col s12">
@@ -17,7 +25,10 @@
                 <span asp-validation-for="SubtitleOrAbbreviation" class="text-danger input-error-small"></span>
             </div>
         </div>
+        <input asp-for="SemesterId" type="hidden" />
+        <input asp-for="DepartmentId" type="hidden" />
+
         <button type="submit">Dodaj</button>
-        <a asp-action="Universities">Wróć do listy uczelni</a>
+        <a asp-action="Subjects" asp-all-route-data="@parms">Wróć do listy przedmiotów</a>
     </form>
 </div>

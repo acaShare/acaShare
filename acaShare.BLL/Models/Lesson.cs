@@ -5,6 +5,12 @@ namespace acaShare.BLL.Models
 {
     public class Lesson
     {
+        public Lesson(int semesterId, int subjectDepartmentId) : this()
+        {
+            SemesterId = semesterId;
+            SubjectDepartmentId = subjectDepartmentId;
+        }
+
         protected Lesson()
         {
             Materials = new HashSet<Material>();

@@ -37,7 +37,13 @@
     <Content Update="Areas\Moderator\Views\UniversitiesManagement\Delete.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Areas\Moderator\Views\_ViewImports.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Areas\Moderator\Views\_ViewStart.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\Universities\Views\_ViewImports.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Areas\Universities\Views\_ViewStart.cshtml">
@@ -67,6 +73,8 @@
     <Folder Include="Areas\Administrator\Controllers\" />
     <Folder Include="Areas\Administrator\Models\" />
     <Folder Include="Areas\Administrator\Views\" />
+    <Folder Include="Areas\Moderator\Models\" />
+    <Folder Include="Areas\Universities\Models\List\" />
     <Folder Include="Areas\Identity\Views\WelcomePage\" />
   </ItemGroup>
 

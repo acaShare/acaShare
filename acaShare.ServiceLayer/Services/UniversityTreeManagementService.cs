@@ -29,10 +29,21 @@ namespace acaShare.ServiceLayer.Services
             _uow.SaveChanges();
         }
 
-        public void AddSubject(Subject subject)
+        public Subject AddSubject(Subject subject)
         {
-            _uow.Subjects.Add(subject);
+            var result = _uow.Subjects.AddSubjectWithResult(subject);
             _uow.SaveChanges();
+
+            return result;
+        }
+
+        public int AddSubjectWithResult(Subject subject)
+        {
+            //int subjectDepartmentId = _uow.Subjects.AddSubjectWithResult(subject);
+            //_uow.SaveChanges();
+
+            //return subjectDepartmentId;
+            return -1;
         }
 
         public void AddUniversity(University university)

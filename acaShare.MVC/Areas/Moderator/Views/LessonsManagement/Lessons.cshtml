@@ -1,27 +1,35 @@
-﻿@model ListViewModel<UniversityViewModel>
+﻿@model LessonsListViewModel
+
+@{ 
+    var parms = new Dictionary<string, string>
+    {
+        { "semesterId", Model.SemesterId.ToString() },
+        { "departmentId", Model.DepartmentId.ToString() }
+    };
+}
 
 <div class="structure-management-container">
     <div class="list-container">
         <ul class="aca-collection">
             @{var rowClass = Model.IsWithSubtitles ? "" : "item-small";}
 
-            @foreach (var university in @Model.Items)
+            @foreach (var lesson in @Model.Items)
             {
                 <li class="aca-collection-item path-list-item">
-                    <a asp-controller="DepartmentsManagement" asp-action="Departments" asp-route-universityId="@university.Id" class="item-link @rowClass">
-                        <span class="path-list-item-title">@university.TitleOrFullName</span>
+                    <a class="item-link @rowClass">
+                        <span class="path-list-item-title">@lesson.TitleOrFullName</span>
                         <br>
                         @if (Model.IsWithSubtitles)
                         {
-                            <span class="path-list-item-subtitle">@university.SubtitleOrAbbreviation</span>
+                            <span class="path-list-item-subtitle">@lesson.SubtitleOrAbbreviation</span>
                         }
                     </a>
 
                     <div class="icons-row-container">
-                        <a asp-action="Edit" asp-route-universityId="@university.Id"> @*class="tooltipped" data-position="top" data-tooltip="Edytuj">*@
+                        <a asp-action="Edit" asp-route-subjectId="@lesson.Id">
                             <i class="material-icons list-icon icon-edit">edit</i>
                         </a>
-                        <a asp-action="Delete" asp-route-universityId="@university.Id"> @*class="tooltipped" data-position="top" data-tooltip="Usuń">*@
+                        <a asp-action="Delete" asp-route-subjectId="@lesson.Id">
                             <i class="material-icons list-icon icon-delete">delete</i>
                         </a>
                     </div>
@@ -29,7 +37,7 @@
             }
         </ul>
     </div>
-    <a asp-action="Add" class="add-button">
+    <a asp-action="Add" asp-all-route-data="@parms" class="add-button">
         Dodaj
     </a>
 </div>

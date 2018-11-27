@@ -245,6 +245,10 @@ namespace acaShare.DAL.Configuration
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(200);
+
+                entity.Property(e => e.Abbreviation)
+                    .IsRequired()
+                    .HasMaxLength(15);
             });
 
             modelBuilder.Entity<SubjectDepartment>(entity =>
@@ -252,8 +256,6 @@ namespace acaShare.DAL.Configuration
                 entity.HasIndex(e => new { e.SubjectId, e.DepartmentId })
                     .HasName("UQ_SubjectDepartment")
                     .IsUnique();
-
-                entity.Property(e => e.SubjectDepartmentId).ValueGeneratedNever();
 
                 entity.HasOne(d => d.Department)
                     .WithMany(p => p.SubjectDepartment)
