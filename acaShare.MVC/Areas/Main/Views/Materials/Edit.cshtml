@@ -12,7 +12,7 @@
 }
 
 <div class="row">
-    <form method="post" class="col s12">
+    <form id="edit-form" method="post" class="col s12">
         <div asp-validation-summary="All" class="text-danger"></div>
         <div>
             <div class="input-field">
@@ -30,11 +30,11 @@
         </div>
         <div class="file-field input-field">
             <div class="btn">
-                <span>Dodaj</span>
-                <input id="file-picker" type="file" multiple onchange="showUploadedFiles()">
+                <span>Wybierz pliki</span>
+                <input id="file-picker" type="file" multiple onchange="showFilesFromInputElement()" title="">
             </div>
             <div class="file-path-wrapper">
-                <input class="file-path validate" type="text" placeholder="Dodaj pliki...">
+                <input class="file-path validate hidden" />
             </div>
         </div>
         <input asp-for="MaterialId" type="hidden" />
@@ -44,6 +44,7 @@
                 <h2 class="material-content-files-header">Pliki</h2>
 
                 <div id="files-wrapper" class="files-wrapper">
+                    <div><p>Upuść pliki tutaj</p></div>
                     @{
                         int slideIndex = 1;
                         int id = 0;
@@ -70,12 +71,12 @@
                                     </div>
                                 }
 
-                                <input type="hidden" asp-for="Files.ToList()[id].FileId" />
-                                <input type="hidden" asp-for="Files.ToList()[id].ContentType" />
+                                <input type="hidden" id="Files[@id].FileId" name="Files[@id].FileId" value="@file.FileId" />
+                                <input type="hidden" id="Files[@id].ContentType" name="Files[@id].ContentType" value="@file.ContentType" />
 
                                 <div class="input-field material-file-edit-mode-filename">
-                                    <input asp-for="Files.ToList()[id].FileName" class="validate" data-length="50" />
-                                    <span asp-validation-for="Files.ToList()[id].FileName" class="text-danger input-error-small"></span>
+                                    <input id="Files[@id].FileName" name="Files[@id].FileName" value="@file.FileName"
+                                           class="validate" data-length="50" />
                                 </div>
                             </div>
 
@@ -104,7 +105,7 @@
             </section>
         </div>
 
-        <button type="submit">Zapisz</button>
+        <button id="submit-button" type="submit" onclick="submitForm(event)">Zapisz</button>
         <a asp-action="Material" asp-route-materialId="@Model.MaterialId">Wróć do widoku materiału</a>
     </form>
 </div>
