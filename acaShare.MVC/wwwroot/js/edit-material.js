@@ -1,4 +1,5 @@
 var existingFilesExtensions = [];
+var filesToUpload = [];
 
 window.onload = function () {
     let existingFilesWrappers = document.querySelectorAll('.material-file-edit-mode-wrapper:not(.added-through-input)');
@@ -21,7 +22,7 @@ function initializeDragAndDropArea() {
     let dragAndDropArea = document.getElementById('files-wrapper');
 
     let counter = 0;
-    dragAndDropArea.ondragstart = () => {
+    dragAndDropArea.ondragenter = () => {
         counter++;
         dragAndDropArea.classList.add("drag-area-highlight");
     };
@@ -35,7 +36,8 @@ function initializeDragAndDropArea() {
 
     dragAndDropArea.ondrop = (e) => {
         dragAndDropArea.classList.remove("drag-area-highlight");
-        showUploadedFiles(e.dataTransfer.files);
+        storeUploadedFiles(e.dataTransfer.files, false);
+        showUploadedFiles(filesToUpload);
         removeDragData(e);
     };
 
@@ -59,25 +61,57 @@ function removeDragData(ev) {
     }
 }
 
+function storeUploadedFiles(files, isFromInput) {
+    let output = document.getElementById('files-wrapper');
+    let id = output.children.length === 1 ? 0 : parseInt(output.lastElementChild.id) + 1;
+
+    for (let i = 0; i < files.length; i++ , id++) {
+        if (!filesToUpload.map(f => f.file).includes(files.item(i))) {
+            filesToUpload.push({ id: id, file: files.item(i), isFromInput: isFromInput });
+        }
+    }
+}
+
 function deleteFile(fileId, event) {
     event.stopPropagation();
     document.getElementById(fileId).remove();
+    document.getElementById('gallery-item-' + fileId).remove();
+    filesToUpload = filesToUpload.filter(f => f.id !== fileId);
+    refreshSlidesIndexes();
 }
 
-function showFilesFromInputElement() {
+function refreshSlidesIndexes() {
+    let elemsThatFireModal = document.querySelectorAll('.material-file-edit-mode-wrapper .material-file');
+    let slideIdx = 1;
+    elemsThatFireModal.forEach(e =>
+        e.onclick = function (slideIndex) { return () => { openModal(); currentSlide(slideIndex); }; }(slideIdx++)
+    );
+}
+
+function handleUploadFromInputElement() {
     removePreviousInputFiles();
     let input = document.getElementById('file-picker');
-    showUploadedFiles(input.files);
+    storeUploadedFiles(input.files, true);
+    showUploadedFiles(filesToUpload);
+}
+
+function removePreviousInputFiles() {
+    filesToUpload
+        .filter(f => f.isFromInput)
+        .map(f => f.id)
+        .forEach(id => {
+            deleteFile(id, event);
+        });
 }
 
 function showUploadedFiles(files) {
     let output = document.getElementById('files-wrapper');
-    let slideIdx = output.lastElementChild === null ? 1 : parseInt(output.lastElementChild.id) + 1; // +1 to get next free idx
-    let id = output.lastElementChild === null ? 0 : parseInt(output.lastElementChild.id) + 1;
+    let slideIdx = output.children.length === 1 ? 1 : parseInt(output.lastElementChild.id) + 2; // +1 to get next free idx
+    let id = output.children.length === 1 ? 0 : parseInt(output.lastElementChild.id) + 1; // lenght 1 because there is hidden drop area div
     let modalContent = document.getElementById('modal-content');
 
-    for (var i = 0; i < files.length; i++ , slideIdx++, id++) {
-        let file = files.item(i);
+    for (var i = 0; i < files.length; i++ , slideIdx++ , id++) {
+        let file = files[i].file;
         let fileName = getFileNameWithoutExtension(file.name);
 
         let imageMaterialFileDiv = createNode(
@@ -88,8 +122,7 @@ function showUploadedFiles(files) {
                     <span class="delete-file-x">&#10005;</span>
                 </div>
                 <img src="${URL.createObjectURL(file)}" alt="${fileName}-thumbnail" />
-            `,
-            () => { openModal(); currentSlide(slideIdx); }
+            `
         );
 
         let otherFormatMaterialFileDiv = createNode(
@@ -109,13 +142,13 @@ function showUploadedFiles(files) {
             "div",
             "input-field material-file-edit-mode-filename",
             `
-                <input type="text" id="FormFile[${i}]__FileName" value="${fileName}" class="validate" data-length="50" data-val="true" data-val-maxlength="Nazwa materia³u nie mo¿e przekraczaæ 50 znaków" data-val-maxlength-max="50" data-val-required="Pole &quot;Nazwa&quot; jest wymagane" >
-                <span class="text-danger input-error-small field-validation-valid" data-valmsg-for="FormFile${i}__FileName" data-valmsg-replace="true"></span>
+                <input type="text" id="FormFile[${id}]__FileName" value="${fileName}" class="validate" data-length="50" data-val="true" data-val-maxlength="Nazwa materia³u nie mo¿e przekraczaæ 50 znaków" data-val-maxlength-max="50" data-val-required="Pole &quot;Nazwa&quot; jest wymagane" >
+                <span class="text-danger input-error-small field-validation-valid" data-valmsg-for="FormFile[${id}]__FileName" data-valmsg-replace="true"></span>
             `
         );
 
-        let wrapperDiv = createNode("div", "material-file-edit-mode-wrapper added-through-input", "", null, id);
-        wrapperDiv.setAttribute('input-file-id', i);
+        let wrapperDiv = createNode("div", "material-file-edit-mode-wrapper added-through-upload", "", null, id);
+        wrapperDiv.setAttribute('upload-file-id', id);
         output.appendChild(wrapperDiv);
 
         if (isImage(file)) {
@@ -123,8 +156,10 @@ function showUploadedFiles(files) {
 
             let galleryItemDiv = createNode(
                 "div",
-                "gallery-item added-through-input",
-                `<img src="${URL.createObjectURL(file)}" alt="${fileName}" />`
+                "gallery-item added-through-upload",
+                `<img src="${URL.createObjectURL(file)}" alt="${fileName}" />`,
+                null,
+                'gallery-item-' + id
             );
 
             modalContent.appendChild(galleryItemDiv);
@@ -134,6 +169,8 @@ function showUploadedFiles(files) {
         }
 
         wrapperDiv.appendChild(nameInputsDiv);
+
+        refreshSlidesIndexes();
     }
 }
 
@@ -160,7 +197,6 @@ function getFileNameWithoutExtension(fileName) {
     return fileName.split('.').slice(0, -1).join('.');
 }
 
-
 function createNode(elementName, className, innerHTML, onclick = null, id = -1) {
     let node = document.createElement(elementName);
 
@@ -176,13 +212,6 @@ function createNode(elementName, className, innerHTML, onclick = null, id = -1) 
     return node;
 }
 
-function removePreviousInputFiles() {
-    let elementsToRemove = document.getElementsByClassName('added-through-input');
-    while (elementsToRemove.length > 0) {
-        elementsToRemove[0].parentNode.removeChild(elementsToRemove[0]);
-    }
-}
-
 
 function submitForm(e) {
     e.preventDefault();
@@ -192,7 +221,7 @@ function submitForm(e) {
     let formData = new FormData(form);
 
     // append original extension to filename
-    let existingFilesWrappers = document.querySelectorAll('.material-file-edit-mode-wrapper:not(.added-through-input)');
+    let existingFilesWrappers = document.querySelectorAll('.material-file-edit-mode-wrapper:not(.added-through-upload)');
     for (let i = 0; i < existingFilesWrappers.length; i++) {
         let existingFileId = document.getElementById(`Files[${i}].FileId`).value;
         let extension = existingFilesExtensions.filter(efe => efe.fileId === existingFileId).fileExtension;
@@ -203,32 +232,22 @@ function submitForm(e) {
         }
     }
 
-    // get visible files (the ones that weren't removed by clicking an 'x' button)
-    let newFilesWrappers = document.querySelectorAll('.material-file-edit-mode-wrapper.added-through-input');
-    let newFilesIds = [];
-    for (let i = 0; i < newFilesWrappers.length; i++) {
-        newFilesIds.push(newFilesWrappers[i].getAttribute('input-file-id'));
-    }
-
-    // append only these files that are visible
-    let input = document.getElementById('file-picker');
-    let inputFiles = input.files;
-
-    for (let i = 0; i < inputFiles.length; i++) {
-        if (newFilesIds.includes(i+"")) {
-            let file = inputFiles.item(i);
-            let nameInput = document.getElementById(`FormFile[${i}]__FileName`);
-            let extension = getExtensionFromFileName(file.name);
-            let newFileName = nameInput.value;
-            if (extension) {
-                newFileName += "." + extension;
-            }
-            formData.append('FormFiles', file, newFileName);
-        }
-    }
-
     // remove files from the input element to prevent interference with the data retreived above
-    input.value = "";
+    document.getElementById('file-picker').value = "";
+
+    // append newly uploaded files (from input and from drag and drop area)
+    for (let i = 0; i < filesToUpload.length; i++) {
+        let id = filesToUpload[i].id;
+        let file = filesToUpload[i].file;
+
+        let nameInput = document.getElementById(`FormFile[${id}]__FileName`);
+        let extension = getExtensionFromFileName(file.name);
+        let newFileName = nameInput.value;
+        if (extension) {
+            newFileName += "." + extension;
+        }
+        formData.append('FormFiles', file, newFileName);
+    }
 
     // submit form - send data to a controller action
     let request = new XMLHttpRequest();
@@ -244,6 +263,29 @@ function submitForm(e) {
 
 
 
+//// get visible files (the ones that weren't removed by clicking an 'x' button)
+//let newFilesWrappers = document.querySelectorAll('.material-file-edit-mode-wrapper.added-through-upload');
+//let newFilesIds = [];
+//for (let i = 0; i < newFilesWrappers.length; i++) {
+//    newFilesIds.push(newFilesWrappers[i].getAttribute('upload-file-id'));
+//}
+
+//// append only these files that are visible
+//let input = document.getElementById('file-picker');
+//let inputFiles = input.files;
+
+//for (let i = 0; i < inputFiles.length; i++) {
+//    if (newFilesIds.includes(i + "")) {
+//        let file = inputFiles.item(i);
+//        let nameInput = document.getElementById(`FormFile[${i}]__FileName`);
+//        let extension = getExtensionFromFileName(file.name);
+//        let newFileName = nameInput.value;
+//        if (extension) {
+//            newFileName += "." + extension;
+//        }
+//        formData.append('FormFiles', file, newFileName);
+//    }
+//}
 
 
 

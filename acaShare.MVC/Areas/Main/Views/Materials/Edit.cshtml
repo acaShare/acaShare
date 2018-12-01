@@ -31,7 +31,7 @@
         <div class="file-field input-field">
             <div class="btn">
                 <span>Wybierz pliki</span>
-                <input id="file-picker" type="file" multiple onchange="showFilesFromInputElement()" title="">
+                <input id="file-picker" type="file" multiple onchange="handleUploadFromInputElement()" title="">
             </div>
             <div class="file-path-wrapper">
                 <input class="file-path validate hidden" />
@@ -44,7 +44,7 @@
                 <h2 class="material-content-files-header">Pliki</h2>
 
                 <div id="files-wrapper" class="files-wrapper">
-                    <div><p>Upuść pliki tutaj</p></div>
+                    <div id="drop-area-text" class="hidden"><p>Upuść pliki tutaj</p></div>
                     @{
                         int slideIndex = 1;
                         int id = 0;
@@ -90,11 +90,14 @@
                     <div id="current-slide-info" class="current-slide-info"></div>
                     <span class="close" onclick="closeModal()">&times;</span>
                     <div id="modal-content" class="modal-content">
-                        @foreach (var file in Model.Files)
-                        {
-                            <div class="gallery-item">
-                                <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName" />
-                            </div>
+                        @{ 
+                            id = 0;
+                            foreach (var file in Model.Files)
+                            {
+                                <div id="gallery-item-@(id++)" class="gallery-item">
+                                    <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName" />
+                                </div>
+                            }
                         }
                     </div>
 
