@@ -9,5 +9,6 @@ namespace acaShare.ServiceLayer.Interfaces
     {
         ICollection<LastActivity> GetLastActivities();
         ICollection<Comment> GetComments(int materialId);
+        ICollection<Material> GetFavoriteMaterials(string loggedUserId);
     }
 }

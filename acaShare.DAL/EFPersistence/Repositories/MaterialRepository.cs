@@ -26,5 +26,24 @@ namespace acaShare.DAL.EFPersistence.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public new Material FindById(int materialId)
+        {
+            return _dbSet
+                .Include(m => m.Lesson)
+                .Include(m => m.State)
+                .Include(m => m.Updater)
+                .Include(m => m.Files)
+                .Include(m => m.Favorites)
+                .Include(m => m.Creator)
+                .Include(m => m.Approver)
+                .Include(m => m.Lesson)
+                .Include(m => m.Lesson.Semester)
+                .Include(m => m.Lesson.SubjectDepartment)
+                .Include(m => m.Lesson.SubjectDepartment.Subject)
+                .Include(m => m.Lesson.SubjectDepartment.Department)
+                .Include(m => m.Lesson.SubjectDepartment.Department.University)
+                .First(m => m.MaterialId == materialId);
+        }
     }
 }

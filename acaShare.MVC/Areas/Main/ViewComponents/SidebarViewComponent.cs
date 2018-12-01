@@ -24,10 +24,7 @@ namespace acaShare.MVC.Areas.Main.ViewComponents
         public IViewComponentResult Invoke(int? materialId, string loggedUserId)
         {
             var comments = materialId.HasValue ? _sidebarService.GetComments(materialId.Value) : null;
-
-            var loggedUser = _userService.FindByIdentityUserId(loggedUserId);
-            var favoriteMaterials = loggedUser.GetFavoriteMaterials();
-
+            var favoriteMaterials = _sidebarService.GetFavoriteMaterials(loggedUserId);
             var lastActivities = _sidebarService.GetLastActivities();
 
             SidebarViewModel vm = new SidebarViewModel
@@ -106,7 +103,7 @@ namespace acaShare.MVC.Areas.Main.ViewComponents
             var semester = lesson.Semester;
             
             return $"{university.Abbreviation} -> {department.Abbreviation} -> {semester.Number} -> " +
-                   $"{ subjectDepartment.Subject.Abbreviation} -> {material.Name}";
+                   $"{subjectDepartment.Subject.Abbreviation} -> {material.Name}";
         }
     }
 }

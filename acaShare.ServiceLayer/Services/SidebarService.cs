@@ -25,5 +25,10 @@ namespace acaShare.ServiceLayer.Services
         {
             return _uow.SidebarRepository.GetLastActivities();
         }
+
+        public ICollection<Material> GetFavoriteMaterials(string loggedUserId)
+        {
+            return _uow.SidebarRepository.GetFavoriteMaterials(loggedUserId);
+        }
     }
 }

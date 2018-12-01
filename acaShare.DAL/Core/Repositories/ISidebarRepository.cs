@@ -9,5 +9,6 @@ namespace acaShare.DAL.Core.Repositories
     {
         ICollection<LastActivity> GetLastActivities();
         ICollection<Comment> GetComments(int materialId);
+        ICollection<Material> GetFavoriteMaterials(string loggedUserId);
     }
 }
