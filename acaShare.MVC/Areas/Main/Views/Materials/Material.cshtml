@@ -81,9 +81,12 @@
                 <div class="modal-content">
                     @foreach (var file in Model.Files)
                     {
-                        <div class="gallery-item">
-                            <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName" />
-                        </div>
+                        if (file.IsImage)
+                        {
+                            <div class="gallery-item">
+                                <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName" />
+                            </div>
+                        }
                     }
                 </div>
 

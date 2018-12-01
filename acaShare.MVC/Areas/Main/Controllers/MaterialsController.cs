@@ -136,7 +136,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
 
             if (identityUserId != materialToEdit.Creator.IdentityUserId)
             {
-                return NotFound("Nie masz uprawnień do tego działania"); // TODO zrobić jakiś handler do tego w stylu 404 not found
+                return Forbid("Nie masz uprawnień do tego działania"); // TODO some authorization handler like 404 not found
             }
             
             ConfigureEditMaterialBreadcrumbs(materialToEdit.Lesson);
@@ -158,26 +158,38 @@ namespace acaShare.MVC.Areas.Main.Controllers
             return View(vm);
         }
 
-        [HttpPost]
+        [HttpPost] // AJAX request
         public IActionResult Edit(EditMaterialViewModel vm)
         {
+            if (!ModelState.IsValid)
+            {
+                // TODO validation errors handling on the front-end
+                return BadRequest(vm.MaterialId);
+            }
+
             var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var materialToEdit = _service.GetMaterial(vm.MaterialId);
 
             if (identityUserId != materialToEdit.Creator.IdentityUserId)
             {
-                return NotFound("Nie masz uprawnień do tego działania"); // zrobić jakiś handler do tego
+                return Forbid("Nie masz uprawnień do tego działania"); // TODO some authorization handler
             }
 
             var loggedUser = _userService.FindByIdentityUserId(identityUserId);
 
-            var newFiles = ExtractFilesFromForm(vm.FormFiles, vm.MaterialId);
-            var filesToRemove = materialToEdit.Update(vm.Name, vm.Description, newFiles, loggedUser);
-            RemoveFilesFromFileSystem(filesToRemove);
+            if (vm.Files?.Count > 0)
+            {
+                var filesToRemove = materialToEdit.UpdateExistingFilesAndGetFilesToRemove(
+                    vm.Files.Select(f => new BLL.Models.File(f.FileId, f.FileName)).ToList()
+                );
+                RemoveFilesFromFileSystem(filesToRemove);
+            }
 
+            var newFiles = ExtractAndSaveFilesFromForm(vm.FormFiles, vm.MaterialId);
+            materialToEdit.Update(vm.Name, vm.Description, newFiles, loggedUser);
             _service.UpdateMaterial(materialToEdit);
 
-            return RedirectToAction("Material", new { @materialId = vm.MaterialId });
+            return Json(vm.MaterialId);
         }
 
         private void RemoveFilesFromFileSystem(ICollection<BLL.Models.File> filesToRemove)
@@ -189,61 +201,11 @@ namespace acaShare.MVC.Areas.Main.Controllers
             }
         }
 
-        private ICollection<BLL.Models.File> ExtractFilesFromForm(ICollection<IFormFile> formFiles, int materialId)
-        {
-            ICollection<BLL.Models.File> newFiles = new List<BLL.Models.File>();
-
-            if (formFiles != null && formFiles.Count > 0)
-            {
-                foreach (var formFile in formFiles)
-                {
-                    if (formFile.Length > 0)
-                    {
-                        var relativePath = Path.Combine(
-                            Properties.Resources.MaterialFilesUploadFolderName,
-                            materialId.ToString(),
-                            formFile.FileName);
-                        
-                        var file = new BLL.Models.File(formFile.FileName, relativePath, formFile.ContentType);
-                        newFiles.Add(file);
-                    }
-                }
-            }
-
-            return newFiles;
-        }
-
-        private void SaveFilesFromForm(ICollection<IFormFile> formFiles, int materialId)
-        {
-            if (formFiles != null && formFiles.Count > 0)
-            {
-                foreach (var formFile in formFiles)
-                {
-                    if (formFile.Length > 0)
-                    {
-                        var relativePath = Path.Combine(
-                            Properties.Resources.MaterialFilesUploadFolderName,
-                            materialId.ToString(),
-                            formFile.FileName);
-
-                        var fileAbsolutePath = Path.Combine(GetUploadFolderAbsolutePath(), relativePath);
-
-                        Directory.CreateDirectory(Path.GetDirectoryName(fileAbsolutePath));
-
-                        using (var stream = new FileStream(fileAbsolutePath, FileMode.Create))
-                        {
-                            formFile.CopyTo(stream);
-                        }
-                    }
-                }
-            }
-        }
-
         private ICollection<BLL.Models.File> ExtractAndSaveFilesFromForm(ICollection<IFormFile> formFiles, int materialId)
         {
             ICollection<BLL.Models.File> newFiles = new List<BLL.Models.File>();
 
-            if (formFiles != null && formFiles.Count > 0)
+            if (formFiles?.Count > 0)
             {
                 foreach (var formFile in formFiles)
                 {
@@ -261,7 +223,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
                         using (var stream = new FileStream(fileAbsolutePath, FileMode.Create))
                         {
                             formFile.CopyTo(stream);
-                            var file = new BLL.Models.File(formFile.FileName, relativePath, formFile.ContentType);
+                            var file = new BLL.Models.File(Path.GetFileNameWithoutExtension(formFile.FileName), relativePath, formFile.ContentType);
                             newFiles.Add(file);
                         }
                     }
@@ -283,7 +245,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
 
             if (identityUserId != materialToDelete.Creator.IdentityUserId)
             {
-                return NotFound("Nie masz uprawnień do tego działania"); // zrobić jakiś handler do tego
+                return Forbid("Nie masz uprawnień do tego działania"); // zrobić jakiś handler do tego
             }
 
             ConfigureDeleteMaterialBreadcrumbs(materialToDelete.Lesson);
@@ -307,7 +269,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
 
             if (identityUserId != materialToDelete.Creator.IdentityUserId)
             {
-                return NotFound("Nie masz uprawnień do tego działania"); // zrobić jakiś handler do tego
+                return Forbid("Nie masz uprawnień do tego działania"); // zrobić jakiś handler do tego
             }
 
             _service.DeleteMaterial(materialToDelete);

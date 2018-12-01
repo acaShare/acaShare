@@ -5,6 +5,12 @@ namespace acaShare.BLL.Models
 {
     public partial class File
     {
+        public File(int fileId, string fileName)
+        {
+            FileId = fileId;
+            FileName = fileName;
+        }
+
         public File(string fileName, string fileRelativePath, string contentType) : this()
         {
             FileName = fileName;
@@ -34,5 +40,10 @@ namespace acaShare.BLL.Models
 
         public virtual EditRequest EditRequest { get; private set; }
         public virtual Material Material { get; private set; }
+
+        public void Update(string fileName)
+        {
+            FileName = fileName;
+        }
     }
 }

@@ -94,9 +94,12 @@
                             id = 0;
                             foreach (var file in Model.Files)
                             {
-                                <div id="gallery-item-@(id++)" class="gallery-item">
-                                    <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName" />
-                                </div>
+                                @if (file.IsImage)
+                                {
+                                    <div id="gallery-item-@(id++)" class="gallery-item">
+                                        <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName" />
+                                    </div>
+                                }
                             }
                         }
                     </div>

@@ -69,45 +69,13 @@ namespace acaShare.BLL.Models
 
         public int FilesCount => Files.Count;
 
-        public ICollection<File> Update(string name, string description, ICollection<File> files, User updater)
+        public void Update(string name, string description, ICollection<File> newFiles, User updater)
         {
             Name = name;
             Description = description;
             ModificationDate = DateTime.Now;
             Updater = updater;
-            var filesToRemove = ReplaceFiles(files);
-            return filesToRemove;
-        }
-
-        private ICollection<File> ReplaceFiles(ICollection<File> newFiles)
-        {
-            ICollection<File> filesToRemove = new List<File>();
-
-            if (newFiles != null && newFiles.Count > 0)
-            {
-                foreach (var existingFile in Files)
-                {
-                    if (!newFiles.Contains(existingFile))
-                    {
-                        filesToRemove.Add(existingFile);
-                    }
-                }
-
-                foreach (var fileToRemove in filesToRemove)
-                {
-                    Files.Remove(fileToRemove);
-                }
-            
-                foreach (var file in newFiles)
-                {
-                    if (!Files.Contains(file) && !filesToRemove.Contains(file))
-                    {
-                        this.AddFile(file);
-                    }
-                }
-            }
-
-            return filesToRemove;
+            AddFiles(newFiles);
         }
 
         public bool IsUserAllowedToEditOrDelete(User loggedUser)
@@ -126,6 +94,26 @@ namespace acaShare.BLL.Models
             {
                 AddFile(file);
             }
+        }
+
+        public ICollection<File> UpdateExistingFilesAndGetFilesToRemove(ICollection<File> files)
+        {
+            var newFiles = Files.Where(existingFile => files.Select(f => f.FileId).Contains(existingFile.FileId)).ToList();
+            var filesToRemove = Files.Where(existingFile => !newFiles.Select(f => f.FileId).Contains(existingFile.FileId)).ToList();
+            
+            foreach (var existingFile in newFiles)
+            {
+                var newFile = files.FirstOrDefault(f => f.FileId == existingFile.FileId);
+
+                if (newFile != null)
+                {
+                    existingFile.Update(newFile.FileName);
+                }
+            }
+
+            Files = newFiles;
+            
+            return filesToRemove;
         }
     }
 }

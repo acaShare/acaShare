@@ -1,26 +1,12 @@
-var existingFilesExtensions = [];
 var filesToUpload = [];
 
 window.onload = function () {
-    let existingFilesWrappers = document.querySelectorAll('.material-file-edit-mode-wrapper:not(.added-through-input)');
-    for (let i = 0; i < existingFilesWrappers.length; i++) {
-        let existingFileId = document.getElementById(`Files[${i}].FileId`).value;
-        let existingFileNameInput = document.getElementById(`Files[${i}].FileName`);
-        let existingFileName = existingFileNameInput.value;
-        let extension = getExtensionFromFileName(existingFileName);
-
-        let data = { fileId: existingFileId, fileExtension: extension };
-        existingFilesExtensions.push(data);
-
-        existingFileNameInput.value = getFileNameWithoutExtension(existingFileName);
-    }
-
     initializeDragAndDropArea();
 };
 
 function initializeDragAndDropArea() {
     let dragAndDropArea = document.getElementById('files-wrapper');
-
+    
     let counter = 0;
     dragAndDropArea.ondragenter = () => {
         counter++;
@@ -37,7 +23,7 @@ function initializeDragAndDropArea() {
     dragAndDropArea.ondrop = (e) => {
         dragAndDropArea.classList.remove("drag-area-highlight");
         storeUploadedFiles(e.dataTransfer.files, false);
-        showUploadedFiles(filesToUpload);
+        showUploadedFiles(e.dataTransfer.files);
         removeDragData(e);
     };
 
@@ -74,10 +60,34 @@ function storeUploadedFiles(files, isFromInput) {
 
 function deleteFile(fileId, event) {
     event.stopPropagation();
-    document.getElementById(fileId).remove();
+
+    // remove visually and possibly refresh existing files list indexes to satisfy model binder's requirements 
+    let elementToRemove = document.getElementById(fileId);
+    elementToRemove.remove();
+    if (!elementToRemove.classList.contains('added-through-upload')) {
+        refreshExistingFilesIndexes();
+    }
+
+    // remove from (hidden) gallery
     document.getElementById('gallery-item-' + fileId).remove();
+
+    // remove from filesToUpload
     filesToUpload = filesToUpload.filter(f => f.id !== fileId);
+
+    // refresh slides indexes for gallery management
     refreshSlidesIndexes();
+}
+
+function refreshExistingFilesIndexes() {
+    let existingFilesWrappers = document.querySelectorAll('.material-file-edit-mode-wrapper:not(.added-through-upload)');
+    for (let i = 0; i < existingFilesWrappers.length; i++) {
+        let inputs = existingFilesWrappers[i].querySelectorAll('input');
+        
+        for (let j = 0; j < inputs.length; j++) {
+            inputs[j].id = inputs[j].id.replace(/\d+/, i);
+            inputs[j].name = inputs[j].name.replace(/\d+/, i);
+        }
+    }
 }
 
 function refreshSlidesIndexes() {
@@ -92,7 +102,7 @@ function handleUploadFromInputElement() {
     removePreviousInputFiles();
     let input = document.getElementById('file-picker');
     storeUploadedFiles(input.files, true);
-    showUploadedFiles(filesToUpload);
+    showUploadedFiles(input.files);
 }
 
 function removePreviousInputFiles() {
@@ -111,7 +121,7 @@ function showUploadedFiles(files) {
     let modalContent = document.getElementById('modal-content');
 
     for (var i = 0; i < files.length; i++ , slideIdx++ , id++) {
-        let file = files[i].file;
+        let file = files.item(i);
         let fileName = getFileNameWithoutExtension(file.name);
 
         let imageMaterialFileDiv = createNode(
@@ -169,9 +179,9 @@ function showUploadedFiles(files) {
         }
 
         wrapperDiv.appendChild(nameInputsDiv);
-
-        refreshSlidesIndexes();
     }
+
+    refreshSlidesIndexes();
 }
 
 
@@ -220,18 +230,6 @@ function submitForm(e) {
     let form = document.getElementById('edit-form');
     let formData = new FormData(form);
 
-    // append original extension to filename
-    let existingFilesWrappers = document.querySelectorAll('.material-file-edit-mode-wrapper:not(.added-through-upload)');
-    for (let i = 0; i < existingFilesWrappers.length; i++) {
-        let existingFileId = document.getElementById(`Files[${i}].FileId`).value;
-        let extension = existingFilesExtensions.filter(efe => efe.fileId === existingFileId).fileExtension;
-        let existingFileNameInput = document.getElementById(`Files[${i}].FileName`);
-
-        if (extension) {
-            existingFileNameInput.value += "." + extension;
-        }
-    }
-
     // remove files from the input element to prevent interference with the data retreived above
     document.getElementById('file-picker').value = "";
 
@@ -251,6 +249,16 @@ function submitForm(e) {
 
     // submit form - send data to a controller action
     let request = new XMLHttpRequest();
+    request.onload = () => {
+        if (request.status === 200) {
+            let materialId = JSON.parse(request.responseText);
+            window.location.href = `Material?materialId=${materialId}`;
+        }
+        else {
+            let materialId = JSON.parse(request.responseText);
+            window.location.href = `Edit?materialId=${materialId}`;
+        }
+    };
     request.open("POST", form.action);
     request.send(formData);
 }
