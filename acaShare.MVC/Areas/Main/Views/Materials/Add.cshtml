@@ -1,8 +1,19 @@
 ﻿@model AddMaterialViewModel
 
+@section MaterialViewCSS {
+    <link rel="stylesheet" href="~/css/material.css">
+    <link rel="stylesheet" href="~/css/material-management.css">
+    <link rel="stylesheet" href="~/css/material-images-modal.css">
+}
+
+@section Scripts {
+    <script src="~/js/material-management.js"></script>
+    <script src="~/js/material-images-modal.js"></script>
+}
+
 <div class="row">
-    <form method="post" enctype="multipart/form-data" class="col s12">
-        <div asp-validation-summary="All" class="text-danger"></div>
+    <form id="material-form" method="post" class="col s12">
+        <div asp-validation-summary="All" id="validation-summary" class="text-danger"></div>
         <div>
             <div class="input-field">
                 <label asp-for="Name"></label>
@@ -18,14 +29,43 @@
             </div>
         </div>
         <div>
-            <div class="input-field">
-                <label asp-for="Files"></label>
-                <input asp-for="Files" type="file" multiple />
+            <div class="file-field input-field">
+                <div class="btn">
+                    <span>Wybierz pliki</span>
+                    <input id="file-picker" type="file" multiple onchange="handleUploadFromInputElement()" title="">
+                </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate hidden" />
+                </div>
             </div>
         </div>
         <input asp-for="LessonId" type="hidden" />
 
-        <input type="submit" value="Dodaj" />"
+        <div class="material-content">
+            <section class="material-content-files">
+                <h2 class="material-content-files-header">Pliki</h2>
+
+                <div id="files-wrapper" class="files-wrapper">
+                    <div id="drop-area-text" class="hidden"><p>Upuść pliki tutaj</p></div>
+                    <!-- Dynamic content -->
+                </div>
+
+                <!-- The Modal/Lightbox -->
+                <div id="gallery-modal" class="gallery-modal" onclick="closeModalOnBackgroundClick(event)">
+                    <div id="current-slide-info" class="current-slide-info"></div>
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <div id="modal-content" class="modal-content">
+                        <!-- Dynamic content -->
+                    </div>
+
+                    <!-- Next/previous controls -->
+                    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                </div>
+            </section>
+        </div>
+
+        <button type="button" onclick="submitForm(event)">Dodaj</button>
         <a asp-action="Materials" asp-route-lessonId="@Model.LessonId">Wróć do listy materiałów</a>
     </form>
 </div>

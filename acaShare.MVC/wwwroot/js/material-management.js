@@ -142,7 +142,7 @@ function showUploadedFiles(files) {
                 <div class="delete-file" onclick="deleteFile(${id}, event)">
                     <span class="delete-file-x">&#10005;</span>
                 </div>
-                <a href="${URL.createObjectURL(file)}" download="${file.name}" class="existing-file-download">
+                <a href="${URL.createObjectURL(file)}" download="${file.name}" class="material-file-download">
                     <i class="material-icons">description</i>
                 </a>
             `
@@ -158,7 +158,6 @@ function showUploadedFiles(files) {
         );
 
         let wrapperDiv = createNode("div", "material-file-edit-mode-wrapper added-through-upload", "", null, id);
-        wrapperDiv.setAttribute('upload-file-id', id);
         output.appendChild(wrapperDiv);
 
         if (isImage(file)) {
@@ -186,8 +185,8 @@ function showUploadedFiles(files) {
 }
 
 function refreshjQueryValidation() {
-    $('#edit-form').removeData("validator").removeData("unobtrusiveValidation");
-    $.validator.unobtrusive.parse('#edit-form');
+    $('#material-form').removeData("validator").removeData("unobtrusiveValidation");
+    $.validator.unobtrusive.parse('#material-form');
 }
 
 let imagesExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'ico', 'svg', 'tif', 'tiff', 'webp'];
@@ -204,7 +203,7 @@ function getExtensionFromFileName(fileName) {
         return "";
     }
     else {
-        return splitted.pop();
+        return splitted.pop().toLowerCase();
     }
 }
 
@@ -232,14 +231,14 @@ function submitForm(e) {
     e.preventDefault();
     if (!validate()) { return false;}
 
-    // create FormData from existing form
-    let form = document.getElementById('edit-form');
-    let formData = new FormData(form);
-
     // remove files from the input element to prevent interference with the data retreived above
     document.getElementById('file-picker').value = "";
 
-    // append newly uploaded files (from input and from drag and drop area)
+    // create FormData from existing form
+    let form = document.getElementById('material-form');
+    let formData = new FormData(form);
+
+    // append newly uploaded files (from input and from drag and drop area.. existing files are passed as plain inputs and they are already in formData)
     for (let i = 0; i < filesToUpload.length; i++) {
         let id = filesToUpload[i].id;
         let file = filesToUpload[i].file;
@@ -252,6 +251,10 @@ function submitForm(e) {
         }
         formData.append('FormFiles', file, newFileName);
     }
+
+    // add to give proper information about which files are not valid (in case of server side validation)
+    let existingFilesCount = document.querySelectorAll('.material-file-edit-mode-wrapper:not(.added-through-upload)').length;
+    formData.append("StartingId", existingFilesCount);
 
     // submit form - send data to a controller's action
     let request = new XMLHttpRequest();
@@ -283,5 +286,5 @@ function submitForm(e) {
 }
 
 function validate() {
-    return $("#edit-form").valid();
+    return $("#material-form").valid();
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace acaShare.MVC.Areas.Main.Models.Materials
 {
-    public class EditMaterialViewModel
+    public class EditMaterialViewModel : IMaterialManagementViewModel
     {
         public int MaterialId { get; set; }
 
@@ -15,7 +15,8 @@ namespace acaShare.MVC.Areas.Main.Models.Materials
         [MaxLength(255, ErrorMessage = "{0} materiału nie może przekraczać {1} znaków")]
         [Display(Name = "Nazwa")]
         public string Name { get; set; }
-        
+
+        [Required(ErrorMessage = "Pole \"{0}\" jest wymagane")]
         [MaxLength(4000, ErrorMessage = "{0} materiału nie może przekraczać {1} znaków")]
         [Display(Name = "Opis")]
         public string Description { get; set; }
@@ -25,5 +26,7 @@ namespace acaShare.MVC.Areas.Main.Models.Materials
 
         [Display(Name = "Pliki")]
         public ICollection<FileViewModel> Files { get; set; }
+
+        public int StartingId { get; set; }
     }
 }

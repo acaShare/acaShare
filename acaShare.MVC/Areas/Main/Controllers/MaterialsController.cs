@@ -111,14 +111,10 @@ namespace acaShare.MVC.Areas.Main.Controllers
             return View(vm);
         }
 
+        [ValidateMaterial(MaterialViewModelParam = "vm")]
         [HttpPost]
         public IActionResult Add(AddMaterialViewModel vm)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(vm);
-            }
-
             var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var lesson = _traversalService.GetLesson(vm.LessonId);
             var creator = _userService.FindByIdentityUserId(identityUserId);
@@ -127,7 +123,8 @@ namespace acaShare.MVC.Areas.Main.Controllers
             var materialToAdd = new BLL.Models.Material(vm.Name, vm.Description, lesson, creator, state);
             _service.AddMaterial(materialToAdd);
 
-            var filesToAdd = ExtractAndSaveFilesFromForm(vm.Files, materialToAdd.MaterialId);
+            // TODO splitted into two roundtrips to name folders with materialId (can be changed in the future)
+            var filesToAdd = ExtractAndSaveFilesFromForm(vm.FormFiles, materialToAdd.MaterialId);
             materialToAdd.AddFiles(filesToAdd);
             _service.UpdateMaterial(materialToAdd);
 
@@ -164,40 +161,10 @@ namespace acaShare.MVC.Areas.Main.Controllers
             return View(vm);
         }
 
+        [ValidateMaterial(MaterialViewModelParam = "vm")]
         [HttpPost] // AJAX request
         public IActionResult Edit(EditMaterialViewModel vm)
         {
-            if (!UploadedFilesAreValid(vm.FormFiles))
-            {
-                int i = vm.Files?.Count ?? 0;
-                foreach (var file in vm.FormFiles)
-                {
-                    if (IsNotValidUploadFile(file))
-                    {
-                        string error = string.Empty;
-
-                        if (!HasFileName(file))
-                        {
-                            error = $"Nazwa pliku numer {i + 1} jest wymagana";
-                        }
-
-                        if (!HasFileNameRequiredLength(file.FileName))
-                        {
-                            error = $"Nazwa pliku numer {i + 1} nie<br>może przekraczać 50 znaków";
-                        }
-
-                        ModelState.AddModelError($"FormFile[{i}]__FileName", error);
-                    }
-
-                    i++;
-                }
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState.Errors());
-            }
-
             var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var materialToEdit = _service.GetMaterial(vm.MaterialId);
 
@@ -223,25 +190,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
             return Json(vm.MaterialId);
         }
 
-        private bool UploadedFilesAreValid(ICollection<IFormFile> formFiles)
-        {
-            return !formFiles?.Any(f => IsNotValidUploadFile(f)) ?? true;
-        }
-
-        private bool IsNotValidUploadFile(IFormFile file)
-        {
-            return !HasFileName(file) || !HasFileNameRequiredLength(file.FileName);
-        }
-
-        private bool HasFileName(IFormFile file)
-        {
-            return !string.IsNullOrEmpty(file.FileName) && !string.IsNullOrEmpty(Path.GetFileNameWithoutExtension(file.FileName));
-        }
-
-        private bool HasFileNameRequiredLength(string fileName)
-        {
-            return fileName.Length <= 50;
-        }
+        
 
         private void RemoveFilesFromFileSystem(ICollection<BLL.Models.File> filesToRemove)
         {

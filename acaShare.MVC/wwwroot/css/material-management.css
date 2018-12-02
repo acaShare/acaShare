@@ -68,7 +68,7 @@
     opacity: 1;
 }
 
-.existing-file-download {
+.material-file-download {
     text-decoration: none;
     color: black;
     display: flex;

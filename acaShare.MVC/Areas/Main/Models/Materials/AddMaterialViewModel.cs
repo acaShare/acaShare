@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace acaShare.MVC.Areas.Main.Models.Materials
 {
-    public class AddMaterialViewModel
+    public class AddMaterialViewModel : IMaterialManagementViewModel
     {
         public int LessonId { get; set; }
 
@@ -20,8 +20,10 @@ namespace acaShare.MVC.Areas.Main.Models.Materials
         [MaxLength(4000, ErrorMessage = "{0} materiału nie może przekraczać {1} znaków")]
         [Display(Name = "Opis")]
         public string Description { get; set; }
+        
+        public ICollection<IFormFile> FormFiles { get; set; }
 
-        [Display(Name = "Pliki")]
-        public ICollection<IFormFile> Files { get; set; }
+        // not used here
+        public int StartingId { get; set; }
     }
 }

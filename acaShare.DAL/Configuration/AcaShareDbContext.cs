@@ -197,7 +197,9 @@ namespace acaShare.DAL.Configuration
 
             modelBuilder.Entity<Material>(entity =>
             {
-                entity.Property(e => e.Description).HasMaxLength(4000);
+                entity.Property(e => e.Description)
+                    .HasMaxLength(4000)
+                    .IsRequired();
 
                 entity.Property(e => e.ModificationDate).HasColumnType("datetime");
 
