@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,9 +9,14 @@ namespace acaShare.MVC.Areas.Main.Models.Materials
     public class FileViewModel
     {
         public int FileId { get; set; }
+
+        [Required(ErrorMessage = "Wszystkie załączone pliki muszą posiadać nazwę")]
         public string FileName { get; set; }
-        public string RelativePath { get; set; }
+
+        [Required]
         public string ContentType { get; set; }
+
+        public string RelativePath { get; set; }
         public bool IsImage => ContentType.StartsWith("image");
 
         //public string IconFileName

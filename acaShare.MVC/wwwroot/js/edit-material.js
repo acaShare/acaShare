@@ -1,4 +1,4 @@
-var filesToUpload = [];
+ï»¿var filesToUpload = [];
 
 window.onload = function () {
     initializeDragAndDropArea();
@@ -152,8 +152,8 @@ function showUploadedFiles(files) {
             "div",
             "input-field material-file-edit-mode-filename",
             `
-                <input type="text" id="FormFile[${id}]__FileName" value="${fileName}" class="validate" data-length="50" data-val="true" data-val-maxlength="Nazwa materia³u nie mo¿e przekraczaæ 50 znaków" data-val-maxlength-max="50" data-val-required="Pole &quot;Nazwa&quot; jest wymagane" >
-                <span class="text-danger input-error-small field-validation-valid" data-valmsg-for="FormFile[${id}]__FileName" data-valmsg-replace="true"></span>
+                <input type="text" id="FormFile[${id}]__FileName" name="FormFile[${id}]__FileName" value="${fileName}" class="validate" data-length="50" data-val="true" data-val-maxlength="Nazwa pliku numer ${id + 1} nie<br>moÅ¼e przekraczaÄ‡ 50 znakÃ³w" data-val-maxlength-max="50" data-val-required="Nazwa pliku numer ${id+1} jest wymagana" required />
+                <span class="text-danger input-error-small file-name-input-error field-validation-valid" data-valmsg-for="FormFile[${id}]__FileName" data-valmsg-replace="true"></span>
             `
         );
 
@@ -182,8 +182,13 @@ function showUploadedFiles(files) {
     }
 
     refreshSlidesIndexes();
+    refreshjQueryValidation();
 }
 
+function refreshjQueryValidation() {
+    $('#edit-form').removeData("validator").removeData("unobtrusiveValidation");
+    $.validator.unobtrusive.parse('#edit-form');
+}
 
 let imagesExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'ico', 'svg', 'tif', 'tiff', 'webp'];
 
@@ -225,6 +230,7 @@ function createNode(elementName, className, innerHTML, onclick = null, id = -1) 
 
 function submitForm(e) {
     e.preventDefault();
+    if (!validate()) { return false;}
 
     // create FormData from existing form
     let form = document.getElementById('edit-form');
@@ -247,83 +253,35 @@ function submitForm(e) {
         formData.append('FormFiles', file, newFileName);
     }
 
-    // submit form - send data to a controller action
+    // submit form - send data to a controller's action
     let request = new XMLHttpRequest();
     request.onload = () => {
         if (request.status === 200) {
             let materialId = JSON.parse(request.responseText);
             window.location.href = `Material?materialId=${materialId}`;
         }
+        else if (request.status === 400) {
+            let errors = JSON.parse(request.responseText);
+            let validationSummaryContainer = document.getElementById('validation-summary');
+            validationSummaryContainer.innerHTML = "";
+
+            let ul = document.createElement('ul');
+            errors.map(err => {
+                let li = document.createElement('li');
+                li.textContent = err;
+                ul.appendChild(li);
+            });
+            validationSummaryContainer.appendChild(ul);
+        }
         else {
-            let materialId = JSON.parse(request.responseText);
-            window.location.href = `Edit?materialId=${materialId}`;
+            let otherErrorText = request.responseText;
+            form.innerHTML = otherErrorText;
         }
     };
     request.open("POST", form.action);
     request.send(formData);
 }
 
-
-
-
-
-
-
-
-
-//// get visible files (the ones that weren't removed by clicking an 'x' button)
-//let newFilesWrappers = document.querySelectorAll('.material-file-edit-mode-wrapper.added-through-upload');
-//let newFilesIds = [];
-//for (let i = 0; i < newFilesWrappers.length; i++) {
-//    newFilesIds.push(newFilesWrappers[i].getAttribute('upload-file-id'));
-//}
-
-//// append only these files that are visible
-//let input = document.getElementById('file-picker');
-//let inputFiles = input.files;
-
-//for (let i = 0; i < inputFiles.length; i++) {
-//    if (newFilesIds.includes(i + "")) {
-//        let file = inputFiles.item(i);
-//        let nameInput = document.getElementById(`FormFile[${i}]__FileName`);
-//        let extension = getExtensionFromFileName(file.name);
-//        let newFileName = nameInput.value;
-//        if (extension) {
-//            newFileName += "." + extension;
-//        }
-//        formData.append('FormFiles', file, newFileName);
-//    }
-//}
-
-
-
-
-
-// Getting values from inputs of existing files... Not anymore needed as we create new FormData() from existing form which already has the necessary data.
-//let existingFilesWrappers = document.querySelectorAll('.material-file-edit-mode-wrapper:not(.added-through-input)');
-//for (let i = 0; i < existingFilesWrappers.length; i++) {
-//    let inputs = existingFilesWrappers[i].querySelectorAll('input');
-
-//    let existingFileId;
-//    let existingFileName;
-//    let existingFileContentType;
-
-//    for (let j = 0; j < inputs.length; j++) {
-//        let elementProp = inputs[j].id;
-//        let elementValue = inputs[j].value;
-
-//        if (elementProp.includes("FileId")) {
-//            existingFileId = elementValue;
-//        }
-//        else if (elementProp.includes("FileName")) {
-//            existingFileName = elementValue;
-//        }
-//        else if (elementProp.includes("ContentType")) {
-//            existingFileContentType = elementValue;
-//        }
-//    }
-
-//    formData.append(`Files[${i}].FileId`, existingFileId);
-//    formData.append(`Files[${i}].FileName`, existingFileName);
-//    formData.append(`Files[${i}].ContentType`, existingFileContentType);
-//}
+function validate() {
+    return $("#edit-form").valid();
+}

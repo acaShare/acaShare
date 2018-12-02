@@ -1,7 +1,9 @@
-﻿.material-file-edit-mode-wrapper .material-file {
+﻿.material-file-edit-mode-wrapper {
+    margin: 0.75em;
+}
+
+.material-file-edit-mode-wrapper .material-file {
     position: relative;
-    margin: 0;
-    margin: 0 0.75em 1.5em 0.75em;
 }
 
 .material-file-edit-mode-wrapper .material-file:hover {
@@ -74,4 +76,9 @@
     height: 100%;
     justify-content: center;
     align-items: center;
+}
+
+.file-name-input-error {
+    display: block;
+    text-align: center;
 }

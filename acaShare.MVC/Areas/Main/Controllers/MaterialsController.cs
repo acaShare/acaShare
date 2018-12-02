@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using acaShare.MVC.Areas.Main.Models.Materials;
+using acaShare.MVC.Common;
 using acaShare.MVC.Models;
 using acaShare.ServiceLayer.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -113,6 +114,11 @@ namespace acaShare.MVC.Areas.Main.Controllers
         [HttpPost]
         public IActionResult Add(AddMaterialViewModel vm)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+
             var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var lesson = _traversalService.GetLesson(vm.LessonId);
             var creator = _userService.FindByIdentityUserId(identityUserId);
@@ -161,10 +167,35 @@ namespace acaShare.MVC.Areas.Main.Controllers
         [HttpPost] // AJAX request
         public IActionResult Edit(EditMaterialViewModel vm)
         {
+            if (!UploadedFilesAreValid(vm.FormFiles))
+            {
+                int i = vm.Files?.Count ?? 0;
+                foreach (var file in vm.FormFiles)
+                {
+                    if (IsNotValidUploadFile(file))
+                    {
+                        string error = string.Empty;
+
+                        if (!HasFileName(file))
+                        {
+                            error = $"Nazwa pliku numer {i + 1} jest wymagana";
+                        }
+
+                        if (!HasFileNameRequiredLength(file.FileName))
+                        {
+                            error = $"Nazwa pliku numer {i + 1} nie<br>może przekraczać 50 znaków";
+                        }
+
+                        ModelState.AddModelError($"FormFile[{i}]__FileName", error);
+                    }
+
+                    i++;
+                }
+            }
+
             if (!ModelState.IsValid)
             {
-                // TODO validation errors handling on the front-end
-                return BadRequest(vm.MaterialId);
+                return BadRequest(ModelState.Errors());
             }
 
             var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -190,6 +221,26 @@ namespace acaShare.MVC.Areas.Main.Controllers
             _service.UpdateMaterial(materialToEdit);
 
             return Json(vm.MaterialId);
+        }
+
+        private bool UploadedFilesAreValid(ICollection<IFormFile> formFiles)
+        {
+            return !formFiles?.Any(f => IsNotValidUploadFile(f)) ?? true;
+        }
+
+        private bool IsNotValidUploadFile(IFormFile file)
+        {
+            return !HasFileName(file) || !HasFileNameRequiredLength(file.FileName);
+        }
+
+        private bool HasFileName(IFormFile file)
+        {
+            return !string.IsNullOrEmpty(file.FileName) && !string.IsNullOrEmpty(Path.GetFileNameWithoutExtension(file.FileName));
+        }
+
+        private bool HasFileNameRequiredLength(string fileName)
+        {
+            return fileName.Length <= 50;
         }
 
         private void RemoveFilesFromFileSystem(ICollection<BLL.Models.File> filesToRemove)

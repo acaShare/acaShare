@@ -13,7 +13,7 @@
 
 <div class="row">
     <form id="edit-form" method="post" class="col s12">
-        <div asp-validation-summary="All" class="text-danger"></div>
+        <div asp-validation-summary="All" id="validation-summary" class="text-danger"></div>
         <div>
             <div class="input-field">
                 <label asp-for="Name"></label>
@@ -49,7 +49,7 @@
                         int slideIndex = 1;
                         int id = 0;
 
-                        foreach (var file in Model.Files)
+                        foreach (var file in Model.Files ?? Enumerable.Empty<FileViewModel>())
                         {
                             <div id="@id" class="material-file-edit-mode-wrapper">
                                 @if (file.IsImage)
@@ -76,7 +76,12 @@
 
                                 <div class="input-field material-file-edit-mode-filename">
                                     <input id="Files[@id].FileName" name="Files[@id].FileName" value="@file.FileName"
-                                           class="validate" data-length="50" />
+                                           class="validate" data-length="50" data-val="true"
+                                           data-val-maxlength="Nazwa pliku numer @(id+1) nie<br>może przekraczać 50 znaków" data-val-maxlength-max="50" 
+                                           data-val-required="Nazwa pliku numer @(id+1) jest wymagana" required />
+
+                                    <span class="text-danger input-error-small file-name-input-error"
+                                          data-valmsg-for="Files[@id].FileName" data-valmsg-replace="true"></span>
                                 </div>
                             </div>
 
@@ -92,7 +97,7 @@
                     <div id="modal-content" class="modal-content">
                         @{ 
                             id = 0;
-                            foreach (var file in Model.Files)
+                            foreach (var file in Model.Files ?? Enumerable.Empty<FileViewModel>())
                             {
                                 @if (file.IsImage)
                                 {
@@ -111,7 +116,7 @@
             </section>
         </div>
 
-        <button id="submit-button" type="submit" onclick="submitForm(event)">Zapisz</button>
+        <button id="submit-button" type="button" onclick="submitForm(event)">Zapisz</button>
         <a asp-action="Material" asp-route-materialId="@Model.MaterialId">Wróć do widoku materiału</a>
     </form>
 </div>
