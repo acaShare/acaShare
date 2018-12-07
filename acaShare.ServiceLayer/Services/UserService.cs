@@ -31,5 +31,10 @@ namespace acaShare.ServiceLayer.Services
         {
             return _uow.Users.FindByIdentityUserId(identityUserId);
         }
+
+        public bool IsMaterialFavorite(Material material, string identityUserId)
+        {
+            return _uow.Users.IsMaterialFavorite(identityUserId, material.MaterialId);
+        }
     }
 }

@@ -71,7 +71,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
             ConfigureMaterialBreadcrumbs(material);
 
             var loggedUser = _userService.FindByIdentityUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var isFavorite = loggedUser.IsMaterialFavorite(material);
+            var isFavorite = _userService.IsMaterialFavorite(material, User.FindFirstValue(ClaimTypes.NameIdentifier));
             var isAllowedToEditOrDelete = material.IsUserAllowedToEditOrDelete(loggedUser);
 
             var vm = new MaterialViewModel
