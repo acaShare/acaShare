@@ -18,8 +18,9 @@ namespace acaShare.MVC.Models.StructureTraversal
         [Display(Name = "Skrót")]
         public string SubtitleOrAbbreviation { get; set; }
 
-        // Helper property
+        // Helper properties
+        public int MaterialsCount { get; set; }
         public int SemesterId { get; set; }
-        public int SubjectDepartmentId { get; set; }
+        public int DepartmentId { get; set; }
     }
 }

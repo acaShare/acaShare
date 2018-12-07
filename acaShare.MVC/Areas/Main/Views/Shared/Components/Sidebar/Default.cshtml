@@ -1,0 +1,113 @@
+﻿@addTagHelper *, acaShare.MVC.Areas.Main.ViewComponents.SidebarViewComponent
+@using acaShare.BLL.Models
+@model SidebarViewModel
+
+<div class="col s12 m4 l3 right-side-bar">
+    <ul id="tabs-swipe-demo" class="tabs tabs-fixed-width">
+        <li class="tab"><a href="#test-swipe-1">Ulubione</a></li>
+        @if (Model.Comments != null)
+        {
+            <li class="tab"><a href="#test-swipe-2">Ostatnia aktywność</a></li>
+            <li class="tab"><a class="active" href="#test-swipe-3">Komentarze</a></li>
+        }
+        else
+        {
+            <li class="tab"><a class="active" href="#test-swipe-2">Ostatnia aktywność</a></li>
+        }
+    </ul>
+
+    <div id="test-swipe-1" class="sidebar-content-wrapper">
+        @if (Model.Favourites.Count == 0)
+        {
+            <div class="no-content">~ Brak ulubionych ~</div>
+        }
+        else
+        {
+            @foreach (var favouriteMaterial in Model.Favourites)
+            {
+                <a asp-area="Main" asp-controller="Materials" asp-action="Material" asp-route-materialId="@favouriteMaterial.RouteValue" class="favourites-link">
+                    <div class="last-activity-wrapper">
+                        <div class="last-activities-content">
+                            <i class="medium material-icons">description</i>
+                            <span class="last-activities-material-type">@favouriteMaterial.Content</span>
+                        </div>
+                    </div>
+                </a>
+            }
+        }
+    </div>
+
+    <div id="test-swipe-2" class="sidebar-content-wrapper">
+        @{
+            if (Model.LastActivities.Count == 0)
+            {
+                <div class="no-content">~ Brak ostatnich aktywności ~</div>
+            }
+            else
+            {
+                var activity = string.Empty;
+                var activityIcon = string.Empty;
+
+                foreach (var lastActivity in Model.LastActivities)
+                {
+                    if (lastActivity.Type == LastActivityType.MATERIAL_ADD)
+                    {
+                        activity = "dodał";
+                        activityIcon = "note_add";
+                    }
+                    else
+                    {
+                        activity = "skomentował";
+                        activityIcon = "comment";
+                    }
+
+                    lastActivity.Content =
+                            $"Użytkownik {lastActivity.Material.Creator.Username} {activity} materiał \"{lastActivity.Material.Name}\"";
+
+                    <a asp-area="Main" asp-controller="Materials" asp-action="Material" asp-route-materialId="@lastActivity.RouteValue">
+                        <div class="last-activity-wrapper">
+                            <div class="last-activities-date">@lastActivity.When</div>
+                            <div class="last-activities-content">
+                                <i class="medium material-icons">@activityIcon</i>
+                                <span class="last-activities-material-type">@lastActivity.Content</span>
+                            </div>
+                        </div>
+                    </a>
+                }
+            }
+        }
+    </div>
+
+    @if (Model.Comments != null)
+    {
+        <div id="test-swipe-3" class="sidebar-content-wrapper">
+            <form id="new-comment-form" asp-action="AddComment" method="post">
+                <div class="add-comment-wrapper">
+                    <input asp-for="NewComment" placeholder="Dodaj komentarz" />
+                    <input asp-for="MaterialId" type="hidden" />
+                    <a href="javascript:{}" onclick="document.getElementById('new-comment-form').submit()" class="add-comment-button">
+                        <i class="material-icons">send</i>
+                    </a>
+                </div>
+            </form>
+            
+            @if (Model.Comments.Count == 0)
+            {
+                <div class="no-content">~ Brak komentarzy ~</div>
+            }
+            else
+            {
+                @foreach (var comment in Model.Comments)
+                {
+                    <div class="last-activity-wrapper comment-wrapper">
+                        <div class="last-activities-date">@comment.Author - @comment.When</div>
+                        <div class="last-activities-content">
+                            <i class="medium material-icons">face</i>
+                            <span class="last-activities-material-type">@comment.Content</span>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    }
+</div>

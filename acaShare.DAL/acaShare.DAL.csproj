@@ -6,6 +6,12 @@
 
   <ItemGroup>
     <Compile Remove="EFPersistence\Migrations\20181104204247_IntroducedIdentityForSubjectDepartmentTable.cs" />
+    <Compile Remove="EFPersistence\Migrations\20181115233959_AddedIdentityUserDbSet.cs" />
+    <Compile Remove="EFPersistence\Migrations\20181115235330_AddedCreatedDateColumnsToSomeTables.cs" />
+    <Compile Remove="EFPersistence\Migrations\20181115235904_AddedCreatedDateColumnsToSomeTables.cs" />
+    <Compile Remove="EFPersistence\Migrations\20181115235945_AddedCreatedDateAndUsernameColumns.cs" />
+    <Compile Remove="EFPersistence\Migrations\20181125123219_AddedFileNameToFile.cs" />
+    <Compile Remove="EFPersistence\Migrations\20181125164824_aa.cs" />
   </ItemGroup>
 
   <ItemGroup>
