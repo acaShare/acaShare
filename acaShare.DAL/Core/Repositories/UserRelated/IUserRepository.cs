@@ -7,5 +7,6 @@ namespace acaShare.DAL.Core.Repositories.UserRelated
 {
     public interface IUserRepository : IRepository<User>
     {
+        User FindByIdentityUserId(string identityUserId);
     }
 }

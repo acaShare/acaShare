@@ -1,0 +1,27 @@
+﻿@model LessonViewModel
+
+@{
+    var parms = new Dictionary<string, string>
+    {
+        { "lessonId", Model.Id.ToString() },
+        { "confirmation", "true" }
+    };
+
+    var backParms = new Dictionary<string, string>
+    {
+        { "semesterId", Model.SemesterId.ToString() },
+        { "departmentId", Model.DepartmentId.ToString() },
+    };
+}
+
+<span class="text-danger">
+    UWAGA! Czy na pewno chcesz usunąć przedmiot "@Model.TitleOrFullName"?
+    Wiąże się to z usunięciem wszystkich materiałów z nim związanych. Liczba materiałów jakie zostaną usunięte to @Model.MaterialsCount
+</span>
+<br /><br />
+<div>
+    <a asp-action="Delete" asp-all-route-data="parms">Usuń wszystkie dane przedmiotu</a>
+</div>
+<div>
+    <a asp-action="Lessons" asp-all-route-data="backParms">Anuluj</a>
+</div>

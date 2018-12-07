@@ -4,17 +4,47 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <noscript>
+        <meta http-equiv="refresh" content="60;url=/" />
+    </noscript>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="~/css/home.css">
     <link rel="stylesheet" href="~/css/list.css">
     <title>acaShare</title>
     @RenderSection("ModeratorPanelCSS", false)
+    @RenderSection("MaterialViewCSS", false)
 </head>
 <body>
+    <noscript class="no-script">
+        <style>
+            body *:not(.no-script) { display: none; }
+            .no-script { text-align: center; }
+            .no-script-data { padding: 1em; }
+            .brand-logo { margin: 0; position: static !important; }
+            .no-script h1 { font-size: 3.4rem; }
+            .no-script h3 { font-size: 2rem; }
+            .no-script img { margin-top: 1em; }
+        </style>
+
+        <nav class="no-script">
+            <div class="nav-wrapper no-script">
+                <a asp-area="Main" asp-controller="List" asp-action="AvailableUniversities" class="brand-logo no-script">acaShare</a>
+            </div>
+        </nav>
+        <div class="no-script no-script-data">
+            <h1 class="no-script">Ups...</h1>
+            <h3 class="no-script home-container">
+                Wygląda na to, że obsługa Javascript jest wyłączona.<br class="no-script"/>
+                Aby korzystać ze wszystkich funkcjonalności aplikacji, włącz obsługę Javascript.
+            </h3>
+            <img class="no-script" src="~/images/PageNotFound.png" />
+        </div>
+    </noscript>
+
     <nav>
         <div class="nav-wrapper">
-            <a asp-area="Universities" asp-controller="List" asp-action="AvailableUniversities" class="brand-logo">acaShare</a>
+            <a asp-area="Main" asp-controller="List" asp-action="AvailableUniversities" class="brand-logo">acaShare</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li><a asp-area="Administrator" asp-controller="AdministratorPanel" asp-action="Home">Panel administratora</a></li>
                 <li><a asp-area="Moderator" asp-controller="ModeratorPanel" asp-action="Home">Panel moderatora</a></li>

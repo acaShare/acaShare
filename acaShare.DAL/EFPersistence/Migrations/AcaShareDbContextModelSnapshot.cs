@@ -29,6 +29,9 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .IsRequired()
                         .HasMaxLength(512);
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime");
+
                     b.Property<int>("MaterialId");
 
                     b.Property<int>("UserId");
@@ -53,6 +56,9 @@ namespace acaShare.DAL.EFPersistence.Migrations
                     b.Property<int>("MaterialToDeleteId");
 
                     b.Property<int>("Reason");
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("datetime");
 
                     b.HasKey("DeleteRequestId");
 
@@ -125,11 +131,11 @@ namespace acaShare.DAL.EFPersistence.Migrations
                 {
                     b.Property<int>("UserId");
 
-                    b.Property<int>("FileId");
+                    b.Property<int>("MaterialId");
 
-                    b.HasKey("UserId", "FileId");
+                    b.HasKey("UserId", "MaterialId");
 
-                    b.HasIndex("FileId");
+                    b.HasIndex("MaterialId");
 
                     b.ToTable("Favorites");
                 });
@@ -140,13 +146,21 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
                     b.Property<int?>("EditRequestId");
 
-                    b.Property<byte[]>("File1")
+                    b.Property<string>("FileName")
                         .IsRequired()
-                        .HasColumnName("File");
+                        .HasMaxLength(100);
 
-                    b.Property<int?>("MaterialId");
+                    b.Property<int?>("MaterialId")
+                        .IsRequired();
+
+                    b.Property<string>("RelativePath")
+                        .IsRequired();
 
                     b.HasKey("FileId");
 
@@ -189,6 +203,7 @@ namespace acaShare.DAL.EFPersistence.Migrations
                     b.Property<int>("CreatorId");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasMaxLength(4000);
 
                     b.Property<int>("LessonId");
@@ -340,6 +355,10 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
                     b.Property<DateTime>("RegisterDate")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(100);
 
                     b.HasKey("UserId");
 
@@ -608,9 +627,9 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
             modelBuilder.Entity("acaShare.BLL.Models.Favorites", b =>
                 {
-                    b.HasOne("acaShare.BLL.Models.Material", "File")
+                    b.HasOne("acaShare.BLL.Models.Material", "Material")
                         .WithMany("Favorites")
-                        .HasForeignKey("FileId")
+                        .HasForeignKey("MaterialId")
                         .HasConstraintName("Favorites_Material");
 
                     b.HasOne("acaShare.BLL.Models.User", "User")
@@ -629,7 +648,8 @@ namespace acaShare.DAL.EFPersistence.Migrations
                     b.HasOne("acaShare.BLL.Models.Material", "Material")
                         .WithMany("Files")
                         .HasForeignKey("MaterialId")
-                        .HasConstraintName("File_Material");
+                        .HasConstraintName("File_Material")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("acaShare.BLL.Models.Lesson", b =>
