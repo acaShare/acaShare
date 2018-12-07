@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewData["Title"] = "WelcomePage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/WelcomePage.css">
+
+<div class="main-container">
+
+    <h2>Witaj w acaShare</h2>
+
+    <a href="~/Identity/Account/Login?ReturnUrl=%2F%3Fpage%3D%252FIndex">
+        <div class="card">
+            <i class="material-icons" style="font-size: 10em">vpn_key</i>
+            <div class="container">
+                <b>Zaloguj</b>
+            </div>
+        </div>
+    </a>
+    <a href="~/Identity/Account/Register?returnUrl=%2F%3Fpage%3D%252FIndex">
+        <div class="card" style="padding-top: 27px">
+            <i class="material-icons" style="font-size: 8em">border_color</i>
+            <div class="container" style="padding-top: 10px">
+                <b>Zarejestruj się</b>
+            </div>
+        </div>
+    </a>
+</div>
