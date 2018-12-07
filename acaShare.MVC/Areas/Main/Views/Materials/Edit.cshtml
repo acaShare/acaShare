@@ -1,0 +1,122 @@
+﻿@model EditMaterialViewModel
+
+@section MaterialViewCSS {
+    <link rel="stylesheet" href="~/css/material.css">
+    <link rel="stylesheet" href="~/css/material-management.css">
+    <link rel="stylesheet" href="~/css/material-images-modal.css">
+}
+
+@section Scripts {
+    <script src="~/js/material-management.js"></script>
+    <script src="~/js/material-images-modal.js"></script>
+}
+
+<div class="row">
+    <form id="material-form" method="post" class="col s12">
+        <div asp-validation-summary="All" id="validation-summary" class="text-danger"></div>
+        <div>
+            <div class="input-field">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="validate" data-length="255" />
+                <span asp-validation-for="Name" class="text-danger input-error-small"></span>
+            </div>
+        </div>
+        <div>
+            <div class="input-field">
+                <label asp-for="Description"></label>
+                <textarea asp-for="Description" class="materialize-textarea" data-length="4000"></textarea>
+                <span asp-validation-for="Description" class="text-danger input-error-small"></span>
+            </div>
+        </div>
+        <div class="file-field input-field">
+            <div class="btn">
+                <span>Wybierz pliki</span>
+                <input id="file-picker" type="file" multiple onchange="handleUploadFromInputElement()" title="">
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate hidden" />
+            </div>
+        </div>
+        <input asp-for="MaterialId" type="hidden" />
+
+        <div class="material-content">
+            <section class="material-content-files">
+                <h2 class="material-content-files-header">Pliki</h2>
+
+                <div id="files-wrapper" class="files-wrapper">
+                    <div id="drop-area-text" class="hidden"><p>Upuść pliki tutaj</p></div>
+                    @{
+                        int slideIndex = 1;
+                        int id = 0;
+
+                        foreach (var file in Model.Files ?? Enumerable.Empty<FileViewModel>())
+                        {
+                            <div id="@id" class="material-file-edit-mode-wrapper">
+                                @if (file.IsImage)
+                                {
+                                    <div class="material-file" onclick="openModal();currentSlide(@(slideIndex++))">
+                                        <div class="delete-file" onclick="deleteFile(@id, event)">
+                                            <span class="delete-file-x">&#10005;</span>
+                                        </div>
+                                        <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName-thumbnail" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="material-file">
+                                        <div class="delete-file" onclick="deleteFile(@id, event)">
+                                            <span class="delete-file-x">&#10005;</span>
+                                        </div>
+                                        <i class="material-icons">description</i>
+                                    </div>
+                                }
+
+                                <input type="hidden" id="Files[@id].FileId" name="Files[@id].FileId" value="@file.FileId" />
+                                <input type="hidden" id="Files[@id].ContentType" name="Files[@id].ContentType" value="@file.ContentType" />
+
+                                <div class="input-field material-file-edit-mode-filename">
+                                    <input id="Files[@id].FileName" name="Files[@id].FileName" value="@file.FileName"
+                                           class="validate" data-length="50" data-val="true"
+                                           data-val-maxlength="Nazwa pliku numer @(id+1) nie<br>może przekraczać 50 znaków" data-val-maxlength-max="50"
+                                           data-val-required="Nazwa pliku numer @(id+1) jest wymagana" required />
+
+                                    <span class="text-danger input-error-small file-name-input-error"
+                                          data-valmsg-for="Files[@id].FileName" data-valmsg-replace="true"></span>
+                                </div>
+                            </div>
+
+                            id++;
+                        }
+                    }
+                </div>
+
+                <!-- The Modal/Lightbox -->
+                <div id="gallery-modal" class="gallery-modal" onclick="closeModalOnBackgroundClick(event)">
+                    <div id="current-slide-info" class="current-slide-info"></div>
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <div id="modal-content" class="modal-content">
+                        @{
+                            id = 0;
+                            foreach (var file in Model.Files ?? Enumerable.Empty<FileViewModel>())
+                            {
+                                @if (file.IsImage)
+                                {
+                                    <div id="gallery-item-@(id++)" class="gallery-item">
+                                        <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName" />
+                                    </div>
+                                }
+                            }
+                        }
+                    </div>
+
+                    <!-- Next/previous controls -->
+                    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                </div>
+            </section>
+        </div>
+
+        <button id="submit-button" type="button" onclick="submitForm(event)">Zapisz</button>
+        <a asp-action="Material" asp-route-materialId="@Model.MaterialId">Wróć do widoku materiału</a>
+    </form>
+</div>

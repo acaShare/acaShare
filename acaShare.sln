@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "acaShare.BLL", "acaShare.BL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "acaShare.ServiceLayer", "acaShare.ServiceLayer\acaShare.ServiceLayer.csproj", "{83F08AC5-652B-4A82-92BB-8848FBA3CE80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "acaShare.MVC", "acaShare.MVC\acaShare.MVC.csproj", "{F0B80BF4-9E8B-4107-935D-A89FAF545BB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "acaShare.MVC", "acaShare.MVC\acaShare.MVC.csproj", "{F0B80BF4-9E8B-4107-935D-A89FAF545BB3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

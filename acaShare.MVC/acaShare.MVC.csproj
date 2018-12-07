@@ -6,6 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Main\Models\List\**" />
+    <Compile Remove="Areas\Moderator\Models\**" />
+    <Content Remove="Areas\Main\Models\List\**" />
+    <Content Remove="Areas\Moderator\Models\**" />
+    <EmbeddedResource Remove="Areas\Main\Models\List\**" />
+    <EmbeddedResource Remove="Areas\Moderator\Models\**" />
+    <None Remove="Areas\Main\Models\List\**" />
+    <None Remove="Areas\Moderator\Models\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.5" />
   </ItemGroup>
@@ -16,6 +27,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Areas\Main\Views\List\_ViewImports.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\Main\Views\Materials\Delete.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\Main\Views\Materials\Edit.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\Main\Views\Materials\_ViewImports.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Areas\Moderator\Views\DepartmentsManagement\Add.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
@@ -43,13 +66,10 @@
     <Content Update="Areas\Moderator\Views\_ViewStart.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Areas\Universities\Views\_ViewImports.cshtml">
+    <Content Update="Areas\Main\Views\_ViewImports.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Areas\Universities\Views\_ViewStart.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="Areas\_ViewImports.cshtml">
+    <Content Update="Areas\Main\Views\_ViewStart.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\Shared\Error.cshtml">
@@ -75,6 +95,23 @@
     <Folder Include="Areas\Administrator\Views\" />
     <Folder Include="Areas\Moderator\Models\" />
     <Folder Include="Areas\Universities\Models\List\" />
+    <Folder Include="Areas\Identity\Views\WelcomePage\" />
+    <Folder Include="_Uploads\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
