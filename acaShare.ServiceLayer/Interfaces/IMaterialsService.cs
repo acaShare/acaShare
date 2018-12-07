@@ -18,6 +18,10 @@ namespace acaShare.ServiceLayer.Interfaces
         void ToggleFavorite(Material material, User loggedUser);
         void UpdateMaterial(Material material);
         void DeleteMaterial(Material materialToDelete);
+        ICollection<Material> GetMaterialsToApprove();
+        void RejectMaterial(int materialId);
+        Material GetMaterialToApprove(int materialId);
+        void ApproveMaterial(int materialId, User approver);
     }
 
     public enum MaterialStateEnum

@@ -58,6 +58,7 @@ namespace acaShare.BLL.Models
         public virtual User Approver { get; private set; }
         public virtual User Creator { get; private set; }
         public virtual Lesson Lesson { get; private set; }
+
         public virtual MaterialState State { get; private set; }
         public virtual User Updater { get; private set; }
         public virtual ICollection<Comment> Comments { get; private set; }
@@ -76,6 +77,20 @@ namespace acaShare.BLL.Models
             ModificationDate = DateTime.Now;
             Updater = updater;
             AddFiles(newFiles);
+        }
+
+        public void Approve(User approver)
+        {
+            if (StateId != 4)
+            {
+                UpdateState(4);
+                Approver = approver;
+            }
+        }
+
+        public void Reject()
+        {
+            UpdateState(3);
         }
 
         public bool IsUserAllowedToEditOrDelete(User loggedUser)

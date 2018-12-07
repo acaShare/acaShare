@@ -9,5 +9,7 @@ namespace acaShare.DAL.Core.Repositories
     {
         void CreateDeleteRequest(Material material);
         void CreateUpdateRequest(Material material);
+        ICollection<Material> GetMaterialsToApprove();
+        Material GetMaterialToApprove(int materialId);
     }
 }

@@ -56,8 +56,7 @@ namespace acaShare.ServiceLayer.Services
         {
             Comment comment = new Comment(newComment, commentAuthor);
             material.AddComment(comment);
-            _uow.Materials.Update(material);
-            _uow.SaveChanges();
+            UpdateMaterial(material);
         }
 
         public void ToggleFavorite(Material material, User loggedUser)
@@ -77,6 +76,33 @@ namespace acaShare.ServiceLayer.Services
         {
             _uow.Materials.Delete(materialToDelete);
             _uow.SaveChanges();
+        }
+
+        public ICollection<Material> GetMaterialsToApprove()
+        {
+            return _uow.Materials.GetMaterialsToApprove();
+        }
+
+        public void ApproveMaterial(int materialId, User approver)
+        {
+            var material = GetMaterial(materialId);
+            material.Approve(approver);
+            UpdateMaterial(material);
+        }
+
+        public void RejectMaterial(int materialId)
+        {
+            var material = GetMaterial(materialId);
+            DeleteMaterial(material);
+            // If something in the future related to materials rejection was made, this code will be used
+            //var material = GetMaterial(materialId);
+            //material.Reject();
+            //UpdateMaterial(material);
+        }
+
+        public Material GetMaterialToApprove(int materialId)
+        {
+            return _uow.Materials.GetMaterialToApprove(materialId);
         }
     }
 }

@@ -19,6 +19,7 @@ h2 {
     cursor: pointer;
     transition: .5s;
     color: #212121;
+    display: inline-block;
 }
 
 .action-button:hover {

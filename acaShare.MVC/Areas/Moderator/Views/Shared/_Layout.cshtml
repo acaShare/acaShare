@@ -4,10 +4,13 @@
 
 @section ModeratorPanelCSS {
     <link rel="stylesheet" href="~/css/moderator-panel/home.css">
-    <link rel="stylesheet" href="~/css/moderator-panel/structure-management/structure-management.css">
-    <link rel="stylesheet" href="~/css/moderator-panel/structure-management/structure-management-add.css">
-    <link rel="stylesheet" href="~/css/moderator-panel/structure-management/structure-management-edit.css">
-    <link rel="stylesheet" href="~/css/moderator-panel/structure-management/structure-management-delete.css">
+    <link rel="stylesheet" href="~/css/moderator-panel/list.css">
+    <link rel="stylesheet" href="~/css/materials/material.css">
+    <link rel="stylesheet" href="~/css/materials/material-images-modal.css">
+}
+
+@section Scripts {
+    @RenderSection("Scripts", false);
 }
 
 <div class="row home-container">
@@ -24,19 +27,29 @@
             <div class="home-content">
                 <ul class="moderator-actions">
                     <li class="moderator-actions-item">
-                        <a class="moderator-actions-item-link" asp-action="">Sugestie edycji</a>
+                        <a class="moderator-actions-item-link" asp-action="">
+                            Sugestie edycji
+                        </a>
                     </li>
                     <li class="moderator-actions-item">
-                        <a class="moderator-actions-item-link" asp-action="">Sugestie usunięcia</a>
+                        <a class="moderator-actions-item-link" asp-action="">
+                            Sugestie usunięcia
+                        </a>
                     </li>
                     <li class="moderator-actions-item">
-                        <a class="moderator-actions-item-link" asp-action="">Materiały oczekujące na zatwierdzenie</a>
+                        <a class="moderator-actions-item-link" asp-controller="ModeratorPanel" asp-action="MaterialsToApprove">
+                            Materiały oczekujące na zatwierdzenie
+                        </a>
                     </li>
                     <li class="moderator-actions-item">
-                        <a class="moderator-actions-item-link" asp-controller="UniversitiesManagement" asp-action="Universities">Zarządzaj strukturą uczelni</a>
+                        <a class="moderator-actions-item-link" asp-controller="UniversitiesManagement" asp-action="Universities">
+                            Zarządzaj strukturą uczelni
+                        </a>
                     </li>
                     <li class="moderator-actions-item">
-                        <a class="moderator-actions-item-link" asp-action="">Zarządzaj moderatorami</a>
+                        <a class="moderator-actions-item-link" asp-action="">
+                            Zarządzaj moderatorami
+                        </a>
                     </li>
                 </ul>
             </div>
