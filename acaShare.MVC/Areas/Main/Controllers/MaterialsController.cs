@@ -70,9 +70,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
             var material = _service.GetMaterial(materialId);
             ConfigureMaterialBreadcrumbs(material);
 
-            var loggedUser = _userService.FindByIdentityUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
             var isFavorite = _userService.IsMaterialFavorite(material, User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var isAllowedToEditOrDelete = material.IsUserAllowedToEditOrDelete(loggedUser);
 
             var vm = new MaterialViewModel
             {
@@ -92,7 +90,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
                     ContentType = f.ContentType
                 }).ToList(),
                 IsFavorite = isFavorite,
-                IsAllowedToEditOrDelete = isAllowedToEditOrDelete
+                IsAllowedToEditOrDelete = material.IsUserAllowedToEditOrDelete(User.FindFirstValue(ClaimTypes.NameIdentifier)) // TODO Change to some authorization mechanism
             };
 
             return View(vm);
@@ -601,6 +599,16 @@ namespace acaShare.MVC.Areas.Main.Controllers
             _service.AddComment(newComment, material, commentAuthor);
 
             return RedirectToAction("Material", new { @materialId = materialId });
+        }
+
+        public IActionResult CreateDeleteSuggestion(int materialId)
+        {
+            return View();
+        }
+
+        public IActionResult CreateEditSuggestion(int materialId)
+        {
+            return View();
         }
     }
 }

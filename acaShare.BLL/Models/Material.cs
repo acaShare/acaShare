@@ -93,9 +93,9 @@ namespace acaShare.BLL.Models
             UpdateState(3);
         }
 
-        public bool IsUserAllowedToEditOrDelete(User loggedUser)
+        public bool IsUserAllowedToEditOrDelete(string identityUserId)
         {
-            return loggedUser.IdentityUserId == this.Creator.IdentityUserId;
+            return this.Creator.IdentityUserId == identityUserId;
         }
 
         public void UpdateState(int newStateId)
