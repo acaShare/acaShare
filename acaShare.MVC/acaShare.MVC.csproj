@@ -73,7 +73,6 @@
     <Folder Include="Areas\Administrator\Controllers\" />
     <Folder Include="Areas\Administrator\Models\" />
     <Folder Include="Areas\Administrator\Views\" />
-    <Folder Include="Areas\Moderator\Models\" />
     <Folder Include="Areas\Universities\Models\List\" />
     <Folder Include="Areas\Identity\Views\WelcomePage\" />
   </ItemGroup>

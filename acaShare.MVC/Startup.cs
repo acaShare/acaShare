@@ -36,6 +36,7 @@ namespace acaShare.MVC
             services.AddScoped<IUniversityTreeManagementService, UniversityTreeManagementService>();
             services.AddScoped<IUniversityTreeTraversalService, UniversityTreeTraversalService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRolesManagementService, RolesManagementService>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -50,8 +51,9 @@ namespace acaShare.MVC
                 options.UseSqlServer(Configuration["AcaShareConfiguration:ConnectionString"]);
             });
 
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<AcaShareDbContext>();
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<AcaShareDbContext>()
+                .AddDefaultUI();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
