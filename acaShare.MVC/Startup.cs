@@ -57,6 +57,7 @@ namespace acaShare.MVC
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<AcaShareDbContext>()
+                .AddDefaultTokenProviders()
                 .AddDefaultUI();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
