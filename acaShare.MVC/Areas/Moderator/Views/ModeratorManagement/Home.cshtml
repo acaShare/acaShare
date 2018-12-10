@@ -9,6 +9,7 @@
     var currentUser = await userManager.GetUserAsync(User);
     var isAdmin = currentUser != null && await userManager.IsInRoleAsync(currentUser, Roles.AdministratorRole);
 
+<div class="moderator-management-wrapper">
     <div class="legend">
         <img src="~/images/cross.png" /> - Degraduj &emsp;
         <img src="~/images/one-arrow-up.png" /> - Awansuj na moderatora &emsp;
@@ -16,64 +17,64 @@
         {<img src="~/images/two-arrows-up.png" /> <div class="legend"> - Awansuj na moderatora głównego</div>}
     </div>
 
-    if (isAdmin)
+    @if (isAdmin)
     {
 
-        <h4 class="title">Administratorzy</h4>
+    <h4 class="title">Administratorzy</h4>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.DefaultUser.UserName)</th>
-                    <th>@Html.DisplayNameFor(model => model.DefaultUser.Email)</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.DefaultUser.UserName)</th>
+                <th>@Html.DisplayNameFor(model => model.DefaultUser.Email)</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
 
-            @foreach (var user in Model.Administrators)
-            {
-                <tr>
-                    <td>@user.UserName</td>
-                    <td>@user.Email</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            }
-        </table>
+        @foreach (var user in Model.Administrators)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        }
+    </table>
 
-        <h4 class="title">Główni Moderatorzy</h4>
+    <h4 class="title">Główni Moderatorzy</h4>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.DefaultUser.UserName)</th>
-                    <th>@Html.DisplayNameFor(model => model.DefaultUser.Email)</th>
-                    <th></th>
-                    <th></th>
-                    <th>Opcje</th>
-                </tr>
-            </thead>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.DefaultUser.UserName)</th>
+                <th>@Html.DisplayNameFor(model => model.DefaultUser.Email)</th>
+                <th></th>
+                <th></th>
+                <th>Opcje</th>
+            </tr>
+        </thead>
 
-            @foreach (var user in Model.MainModerators)
-            {
-                <tr>
-                    <td>@user.UserName</td>
-                    <td>@user.Email</td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                        <img style="visibility: hidden;" src="~/images/one-arrow-up.png" />
-                        <img style="visibility: hidden;" src="~/images/two-arrows-up.png" />
-                        <a href="@Url.Action("DemoteToMember", "ModeratorManagement", new { userId = user.Id })">
-                            <img src="~/images/cross.png" />
-                        </a>
-                    </td>
-                </tr>
-            }
-        </table>
+        @foreach (var user in Model.MainModerators)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td></td>
+                <td></td>
+                <td>
+                    <img style="visibility: hidden;" src="~/images/one-arrow-up.png" />
+                    <img style="visibility: hidden;" src="~/images/two-arrows-up.png" />
+                    <a href="@Url.Action("DemoteToMember", "ModeratorManagement", new { userId = user.Id })">
+                        <img src="~/images/cross.png" />
+                    </a>
+                </td>
+            </tr>
+        }
+    </table>
     }
 
     <h4 class="title">Moderatorzy</h4>
@@ -147,4 +148,5 @@
             </tr>
         }
     </table>
+</div>
 }

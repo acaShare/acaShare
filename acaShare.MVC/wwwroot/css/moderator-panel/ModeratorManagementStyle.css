@@ -17,3 +17,8 @@ th, td {
 .legend {
     display: inline-block;
 }
+
+.moderator-management-wrapper {
+    max-height: 69vh;
+    overflow: auto;
+}
