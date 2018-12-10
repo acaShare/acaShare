@@ -7,6 +7,8 @@
 
 .title {
     text-align: center;
+    font-size: 1.8rem;
+    margin: 3.5rem 0 0 0;
 }
 
 th, td {

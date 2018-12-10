@@ -18,6 +18,8 @@
 
   <ItemGroup>
     <Compile Include="Areas\Moderator\Models\DisplayUserViewModel.cs" />
+    <Compile Include="Areas\Moderator\Models\FileViewModel.cs" />
+    <Compile Include="Areas\Moderator\Models\MaterialToApproveViewModel.cs" />
     <Compile Include="Areas\Moderator\Models\ModeratorManagementViewModel.cs" />
   </ItemGroup>
 
