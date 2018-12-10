@@ -23,5 +23,11 @@ namespace acaShare.BLL.Models
         public string Abbreviation { get; private set; }
 
         public virtual ICollection<SubjectDepartment> SubjectDepartment { get; private set; }
+
+        public void Update(string newName, string newAbbreviation)
+        {
+            Name = newName;
+            Abbreviation = newAbbreviation;
+        }
     }
 }

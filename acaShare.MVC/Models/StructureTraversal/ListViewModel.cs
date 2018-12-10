@@ -1,4 +1,4 @@
-﻿using acaShare.MVC.Areas.Universities.Models.Sidebar;
+﻿using acaShare.MVC.Areas.Main.Models.Sidebar;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -66,7 +66,7 @@ namespace acaShare.ServiceLayer.Services
 
         public Lesson GetLesson(int id)
         {
-            throw new NotImplementedException();
+            return _uow.Lessons.FindById(id);
         }
 
         public IEnumerable<Lesson> GetLessons()

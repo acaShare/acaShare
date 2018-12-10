@@ -1,0 +1,156 @@
+﻿@using acaShare.ServiceLayer.Interfaces;
+@using System.Security.Claims;
+@model acaShare.MVC.Areas.Main.Models.Materials.MaterialViewModel
+
+@section MaterialViewCSS {
+    <link rel="stylesheet" href="~/css/materials/material.css">
+    <link rel="stylesheet" href="~/css/materials/material-images-modal.css">
+}
+
+@section Scripts {
+    <script src="~/js/material-images-modal.js"></script>
+}
+
+@section SidebarWithComments {
+    @{
+        int materialId = Model.MaterialId;
+    }
+    @await Component.InvokeAsync("Sidebar", new { @materialId = materialId, @loggedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier) })
+}
+
+<div class="material-container">
+    <header class="material-header">
+        <h1 class="material-header-title">
+            @Html.DisplayFor(model => model.Name)
+        </h1>
+
+        <div class="material-header-action-buttons">
+            @{
+                var favoriteIcon = "star_border";
+                if (Model.IsFavorite)
+                {
+                    favoriteIcon = "star";
+                }
+            }
+
+            <a asp-action="ToggleFavorites" asp-route-materialId="@Model.MaterialId" class="sep action-button">
+                <i class="material-icons lh">@favoriteIcon</i>
+            </a>
+
+            @if (Model.IsAllowedToEditOrDelete)
+            {
+                <a asp-action="Edit" asp-route-materialId="@Model.MaterialId" class="sep action-button">
+                    <i class="material-icons lh">edit</i>
+                </a> <!-- przekierowanie do pliku z edycją i wysłaniem sugestii edycji -->
+                <a asp-action="Delete" asp-route-materialId="@Model.MaterialId" class="sep action-button">
+                    <i class="material-icons lh">delete</i>
+                </a> <!-- przekierowanie do pliku z wysłaniem sugestii usunięcia -->
+            }
+        </div>
+    </header>
+
+    <div class="material-content">
+        <section class="material-content-files">
+            <h2 class="material-content-files-header">Pliki</h2>
+            
+            <div class="files-wrapper">
+                @{
+                    int i = 1;
+                    foreach (var file in Model.Files)
+                    {
+                        if (file.IsImage)
+                        {
+                            <div class="material-file" onclick="openModal();currentSlide(@(i++))">
+                                <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName-thumbnail" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="material-file">
+                                <i class="material-icons">description</i>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+
+            <!-- The Modal/Lightbox -->
+            <div id="gallery-modal" class="gallery-modal" onclick="closeModalOnBackgroundClick(event)">
+                <div id="current-slide-info" class="current-slide-info"></div>
+                <span class="close" onclick="closeModal()">&times;</span>
+                <div class="modal-content">
+                    @foreach (var file in Model.Files)
+                    {
+                        if (file.IsImage)
+                        {
+                            <div class="gallery-item">
+                                <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName" />
+                            </div>
+                        }
+                    }
+                </div>
+
+                <!-- Next/previous controls -->
+                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="material-content-description-header">
+                @Html.DisplayNameFor(model => model.Description)
+            </h2>
+
+            <div class="material-content-description">
+                @Html.DisplayFor(model => model.Description)
+            </div>
+        </section>
+    </div>
+
+    <footer class="material-footer">
+        <p class="material-footer-content">
+            <span>
+                @Html.DisplayNameFor(model => model.CreatorUsername): @Html.DisplayFor(model => model.CreatorUsername)
+            </span>
+
+            <span>
+                @{ var uploadDate = Model.UploadDate.ToString("d MMMM yyyy, HH:mm");}
+                @Html.DisplayNameFor(model => model.UploadDate): @Html.DisplayFor(model => uploadDate)
+            </span>
+
+            @{
+                var res = Enum.TryParse(Model.State, out MaterialStateEnum materialState);
+            }
+            @switch (materialState)
+            {
+                case MaterialStateEnum.PENDING:
+                    <span>
+                        Status: Oczekujący na zatwierdzenie
+                    </span>
+                    break;
+                case MaterialStateEnum.APPROVED:
+                    <span>
+                        Zatwierdzony przez: @Html.DisplayFor(model => model.ApproverUsername)
+                    </span>
+                    break;
+                case MaterialStateEnum.REJECTED:
+                    <span>
+                        Odrzucony przez: @Html.DisplayFor(model => model.ApproverUsername)
+                    </span>
+                    break;
+            }
+
+            @if (Model.ModificationDate != null)
+            {
+                <span>
+                    @Html.DisplayNameFor(model => model.ModificationDate):
+
+                    @{ var modificationDate = Model.ModificationDate.Value.ToString("d MMMM yyyy, HH:mm"); }
+
+                    @Html.DisplayFor(model => modificationDate) @Html.DisplayNameFor(model => model.UpdaterUsername)
+                    @Html.DisplayFor(model => model.UpdaterUsername)
+                </span>
+            }
+        </p>
+    </footer>
+</div>

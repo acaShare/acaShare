@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using acaShare.DAL.Configuration;
@@ -16,6 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 
 namespace acaShare.MVC
 {
@@ -37,6 +39,8 @@ namespace acaShare.MVC
             services.AddScoped<IUniversityTreeTraversalService, UniversityTreeTraversalService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRolesManagementService, RolesManagementService>();
+            services.AddScoped<IMaterialsService, MaterialsService>();
+            services.AddScoped<ISidebarService, SidebarService>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -72,9 +76,17 @@ namespace acaShare.MVC
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
             app.UseAuthentication();
             app.UseCookiePolicy();
+
+            app.UseStaticFiles(); // For the wwwroot folder
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), Properties.Resources.UploadsFolderName)),
+                RequestPath = "/" + Properties.Resources.UploadsFolderName
+            });
 
             app.Use(async (ctx, next) =>
             {
@@ -91,7 +103,7 @@ namespace acaShare.MVC
             {
                 routes.MapRoute(
                     name: "areaRoute",
-                    template: "{area=Universities}/{controller=List}/{action=AvailableUniversities}/{id?}");
+                    template: "{area=Main}/{controller=List}/{action=AvailableUniversities}/{id?}");
 
                 //routes.MapAreaRoute(
                 //    name: "default",

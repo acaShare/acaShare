@@ -23,5 +23,12 @@ namespace acaShare.BLL.Models
         public virtual Semester Semester { get; private set; }
         public virtual SubjectDepartment SubjectDepartment { get; private set; }
         public virtual ICollection<Material> Materials { get; private set; }
+
+        public int MaterialsCount => Materials.Count;
+
+        public void Update(string newName, string newAbbreviation)
+        {
+            SubjectDepartment.Subject.Update(newName, newAbbreviation);
+        }
     }
 }
