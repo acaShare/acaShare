@@ -1,0 +1,19 @@
+﻿body {
+}
+
+.table {
+    table-layout: fixed;
+}
+
+.title {
+    text-align: center;
+}
+
+th, td {
+    text-align: left;
+    width: 40%;
+}
+
+.legend {
+    display: inline-block;
+}

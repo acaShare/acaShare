@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/css/moderator-panel/list.css">
     <link rel="stylesheet" href="~/css/materials/material.css">
     <link rel="stylesheet" href="~/css/materials/material-images-modal.css">
+    <link rel="stylesheet" href="~/css/moderator-panel/ModeratorManagementStyle.css"/>
 }
 
 @section Scripts {
@@ -47,9 +48,7 @@
                         </a>
                     </li>
                     <li class="moderator-actions-item">
-                        <a class="moderator-actions-item-link" asp-action="">
-                            Zarządzaj moderatorami
-                        </a>
+                        <a class="moderator-actions-item-link" asp-controller="ModeratorManagement" asp-action="Home">Zarządzaj moderatorami</a>
                     </li>
                 </ul>
             </div>
@@ -82,7 +81,7 @@
                 </div>
             </nav>
 
-            <div class="home-content">
+            <div class="home-content" style="height: 700px; overflow: scroll;">
                 @RenderBody()
             </div>
         </div>

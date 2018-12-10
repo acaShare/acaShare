@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using acaShare.MVC.Models
+
+@inject SignInManager<IdentityUser> signInManager
+@inject UserManager<IdentityUser> userManager
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -46,7 +52,19 @@
         <div class="nav-wrapper">
             <a asp-area="Main" asp-controller="List" asp-action="AvailableUniversities" class="brand-logo">acaShare</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a asp-area="Moderator" asp-controller="ModeratorPanel" asp-action="Home">Panel moderatora</a></li>
+                @if (signInManager.IsSignedIn(User))
+                {
+                    var currentUser = await userManager.GetUserAsync(User);
+
+                    var isAdmin = currentUser != null && await userManager.IsInRoleAsync(currentUser, Roles.AdministratorRole);
+
+                    var isMainMod = currentUser != null && await userManager.IsInRoleAsync(currentUser, Roles.MainModeratorRole);
+
+                    if (isAdmin || isMainMod)
+                    {
+                        <li><a asp-area="Moderator" asp-controller="ModeratorPanel" asp-action="Home">Panel moderatora</a></li>
+                    }
+                }
                 <li>
                     <form id="logout-form"
                           asp-area="Identity"
