@@ -38,6 +38,19 @@ namespace acaShare.BLL.Models
         public virtual ICollection<Material> CreatedMaterials { get; private set; }
         public virtual ICollection<Material> UpdatedMaterials { get; private set; }
         public virtual ICollection<UserInUniversity> UsersInUniversity { get; private set; }
+        public virtual ICollection<Notification> Notifications { get; private set; }
+
+        public void Notify(string notificationContent, int materialId = -1)
+        {
+            var newNotification = new Notification { Content = notificationContent, Date = DateTime.Now, User = this };
+
+            if (materialId != -1)
+            {
+                newNotification.MaterialId = materialId;
+            }
+            
+            Notifications.Add(newNotification);
+        }
 
         public bool IsMaterialFavorite(Material material)
         {

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using acaShare.DAL.Configuration;
 
 namespace acaShare.DAL.EFPersistence.Migrations
 {
     [DbContext(typeof(AcaShareDbContext))]
-    partial class AcaShareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181211124313_AddedNotificationsAndChangeReasons")]
+    partial class AddedNotificationsAndChangeReasons
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,18 +33,7 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
                     b.HasKey("ChangeReasonId");
 
-                    b.HasIndex("Reason")
-                        .IsUnique()
-                        .HasName("UQ_ChangeReason_Reason");
-
-                    b.ToTable("ChangeReason");
-
-                    b.HasData(
-                        new { ChangeReasonId = 1, Reason = "Nieodpowiednie treści" },
-                        new { ChangeReasonId = 2, Reason = "Naruszenie praw własności" },
-                        new { ChangeReasonId = 3, Reason = "Bezwartościowe informacje" },
-                        new { ChangeReasonId = 4, Reason = "Inne" }
-                    );
+                    b.ToTable("DeleteReason");
                 });
 
             modelBuilder.Entity("acaShare.BLL.Models.Comment", b =>

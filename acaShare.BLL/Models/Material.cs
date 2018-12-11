@@ -65,6 +65,7 @@ namespace acaShare.BLL.Models
         public virtual ICollection<DeleteRequest> DeleteRequests { get; private set; }
         public virtual ICollection<EditRequest> EditRequests { get; private set; }
         public virtual ICollection<Favorites> Favorites { get; private set; }
+        public virtual ICollection<Notification> Notifications { get; private set; }
 
         public virtual ICollection<File> Files { get; private set; }
 
