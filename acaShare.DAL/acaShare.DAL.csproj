@@ -12,6 +12,11 @@
     <Compile Remove="EFPersistence\Migrations\20181115235945_AddedCreatedDateAndUsernameColumns.cs" />
     <Compile Remove="EFPersistence\Migrations\20181125123219_AddedFileNameToFile.cs" />
     <Compile Remove="EFPersistence\Migrations\20181125164824_aa.cs" />
+    <Compile Remove="EFPersistence\Migrations\20181211170459_AddedChangeType.cs" />
+    <Compile Remove="EFPersistence\Migrations\20181211183048_aaa.cs" />
+    <Compile Remove="EFPersistence\Migrations\20181212175203_AddedModeratorInfoToDeleteRequest.cs" />
+    <Compile Remove="EFPersistence\Migrations\20181212181240_AddedModeratorInfoToDeleteRequestAndMadeFKsNullableToStoreRequestsDataForStatistics.cs" />
+    <Compile Remove="EFPersistence\Migrations\20181212182406_AddedModeratorInfoToDeleteRequest.cs" />
   </ItemGroup>
 
   <ItemGroup>

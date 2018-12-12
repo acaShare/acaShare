@@ -44,7 +44,7 @@ namespace acaShare.DAL.Configuration
             {
                 entity.Property(e => e.Reason)
                     .IsRequired()
-                    .HasMaxLength(1000);
+                    .HasMaxLength(100);
 
                 entity.HasIndex(e => e.Reason)
                     .HasName("UQ_ChangeReason_Reason")
@@ -54,22 +54,26 @@ namespace acaShare.DAL.Configuration
                     new ChangeReason
                     {
                         ChangeReasonId = 1,
-                        Reason = "Nieodpowiednie treści"
+                        Reason = "Nieodpowiednie treści",
+                        ChangeType = ChangeType.DELETE
                     },
                     new ChangeReason
                     {
                         ChangeReasonId = 2,
-                        Reason = "Naruszenie praw własności"
+                        Reason = "Naruszenie praw własności",
+                        ChangeType = ChangeType.DELETE
                     },
                     new ChangeReason
                     {
                         ChangeReasonId = 3,
-                        Reason = "Bezwartościowe informacje"
+                        Reason = "Bezwartościowe informacje",
+                        ChangeType = ChangeType.DELETE
                     },
                     new ChangeReason
                     {
                         ChangeReasonId = 4,
-                        Reason = "Inne"
+                        Reason = "Inne",
+                        ChangeType = ChangeType.DELETE
                     }
                 );
             });
@@ -125,6 +129,12 @@ namespace acaShare.DAL.Configuration
                     .HasConstraintName("DeleteRequest_Material")
                     .IsRequired();
 
+                entity.HasOne(d => d.Moderator)
+                    .WithMany(p => p.HandledDeleteRequests)
+                    .HasForeignKey(d => d.ModeratorId)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_DeleteRequest_User");
+                
                 entity.HasOne(d => d.DeleteReason);
             });
 
@@ -307,7 +317,7 @@ namespace acaShare.DAL.Configuration
             {
                 entity.Property(e => e.Content)
                     .IsRequired()
-                    .HasMaxLength(100);
+                    .HasMaxLength(1000);
 
                 entity.Property(e => e.Date)
                     .IsRequired();

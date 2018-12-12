@@ -19,6 +19,8 @@
   <ItemGroup>
     <Compile Include="Areas\Moderator\Models\DisplayUserViewModel.cs" />
     <Compile Include="Areas\Moderator\Models\FileViewModel.cs" />
+    <Compile Include="Areas\Moderator\Models\MaterialChangeRequests\ChangeRequestApprovalDecision.cs" />
+    <Compile Include="Areas\Moderator\Models\MaterialChangeRequests\DeleteRequestViewModel.cs" />
     <Compile Include="Areas\Moderator\Models\MaterialToApproveViewModel.cs" />
     <Compile Include="Areas\Moderator\Models\ModeratorManagementViewModel.cs" />
   </ItemGroup>
@@ -100,7 +102,6 @@
     <Folder Include="Areas\Administrator\Controllers\" />
     <Folder Include="Areas\Administrator\Models\" />
     <Folder Include="Areas\Administrator\Views\" />
-    <Folder Include="Areas\Moderator\Models\MaterialChangeRequests\" />
     <Folder Include="Areas\Universities\Models\List\" />
     <Folder Include="Areas\Identity\Views\WelcomePage\" />
     <Folder Include="_Uploads\" />

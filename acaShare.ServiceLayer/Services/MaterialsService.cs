@@ -33,12 +33,12 @@ namespace acaShare.ServiceLayer.Services
             _uow.SaveChanges();
         }
 
-        public void CreateDeleteRequest(int deleterId, int materialToDeleteId)
+        public void CreateDeleteRequest(User deleter, int materialToDeleteId, int reasonId, string additionalComment = null)
         {
-            var deleter = _uow.Users.FindById(deleterId);
             var materialToDelete = _uow.Materials.FindById(materialToDeleteId);
 
-            DeleteRequest deleteRequest = new DeleteRequest(deleter, materialToDelete);
+            DeleteRequest deleteRequest = new DeleteRequest(deleter, materialToDelete, reasonId, additionalComment);
+            _uow.Materials.AddDeleteRequest(deleteRequest);
             _uow.SaveChanges();
         }
 
@@ -103,6 +103,29 @@ namespace acaShare.ServiceLayer.Services
         public Material GetMaterialToApprove(int materialId)
         {
             return _uow.Materials.GetMaterialToApprove(materialId);
+        }
+
+        public ICollection<ChangeReason> GetChangeReasons(ChangeType changeType)
+        {
+            return _uow.Materials.GetChangeReasons(changeType);
+        }
+
+        public ICollection<DeleteRequest> GetPendingDeleteSuggestions()
+        {
+            return _uow.Materials.GetDeleteRequests(RequestState.PENDING);
+        }
+
+        public DeleteRequest GetDeleteRequestToApprove(int deleteRequestId)
+        {
+            return _uow.Materials.GetDeleteRequest(deleteRequestId);
+        }
+
+        public void ApproveRequest(int deleteRequestId, User loggedModerator)
+        {
+            var deleteRequest = _uow.Materials.GetDeleteRequest(deleteRequestId);
+            deleteRequest.ApproveRequest(loggedModerator);
+            _uow.Materials.ApproveDeleteRequest(deleteRequest);
+            _uow.SaveChanges();
         }
     }
 }

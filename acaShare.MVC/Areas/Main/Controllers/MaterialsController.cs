@@ -601,9 +601,33 @@ namespace acaShare.MVC.Areas.Main.Controllers
             return RedirectToAction("Material", new { @materialId = materialId });
         }
 
-        public IActionResult CreateDeleteSuggestion(int materialId)
+        public IActionResult CreateDeleteSuggestion(int materialId, string materialName)
         {
-            return View();
+            var reasons = _service.GetChangeReasons(BLL.Models.ChangeType.DELETE);
+
+            var vm = new DeleteRequestViewModel
+            {
+                MaterialId = materialId,
+                MaterialName = materialName,
+                Reasons = reasons
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public IActionResult CreateDeleteSuggestion(DeleteRequestViewModel vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+
+            var deleter = _userService.FindByIdentityUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            _service.CreateDeleteRequest(deleter, vm.MaterialId, vm.ReasonId, vm.AdditionalComment);
+
+            return RedirectToAction("Material", new { materialId = vm.MaterialId });
         }
 
         public IActionResult CreateEditSuggestion(int materialId)

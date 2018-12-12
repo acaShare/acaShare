@@ -11,20 +11,27 @@ namespace acaShare.DAL.EFPersistence.Repositories
     public sealed class MaterialRepository : EFRepository<Material>, IMaterialRepository
     {
         private readonly DbSet<File> _files;
+        private readonly DbSet<ChangeReason> _changeReasons;
+        private readonly DbSet<DeleteRequest> _deleteRequests;
+        private readonly DbSet<EditRequest> _editRequests;
 
-        public MaterialRepository(DbSet<Material> materials, DbSet<File> files) : base(materials)
+        public MaterialRepository(DbSet<Material> materials, DbSet<File> files, DbSet<ChangeReason> changeReasons, 
+            DbSet<DeleteRequest> deleteRequests, DbSet<EditRequest> editRequests) : base(materials)
         {
             _files = files;
+            _changeReasons = changeReasons;
+            _deleteRequests = deleteRequests;
+            _editRequests = editRequests;
         }
 
-        public void CreateDeleteRequest(Material material)
+        public void AddDeleteRequest(DeleteRequest deleteRequest)
         {
-            throw new NotImplementedException();
+            _deleteRequests.Add(deleteRequest);
         }
 
-        public void CreateUpdateRequest(Material material)
+        public void AddUpdateRequest(EditRequest editRequest)
         {
-            throw new NotImplementedException();
+            _editRequests.Add(editRequest);
         }
 
         public new Material FindById(int materialId)
@@ -67,6 +74,36 @@ namespace acaShare.DAL.EFPersistence.Repositories
                 .Include(m => m.Lesson.SubjectDepartment.Subject)
                 .Include(m => m.Lesson.SubjectDepartment.Department)
                 .Include(m => m.Lesson.SubjectDepartment.Department.University);
+        }
+
+        public ICollection<ChangeReason> GetChangeReasons(ChangeType changeType)
+        {
+            return _changeReasons.Where(cr => cr.ChangeType == changeType).ToList();
+        }
+
+        public ICollection<DeleteRequest> GetDeleteRequests(RequestState requestState)
+        {
+            return _deleteRequests
+                .Include(r => r.Deleter)
+                .Include(r => r.DeleteReason)
+                .Include(r => r.MaterialToDelete)
+                .Where(r => r.RequestState == requestState)
+                .ToList();
+        }
+
+        public DeleteRequest GetDeleteRequest(int deleteRequestId)
+        {
+            return _deleteRequests
+                .Include(r => r.Deleter)
+                .Include(r => r.DeleteReason)
+                .Include(r => r.MaterialToDelete)
+                .Include(r => r.MaterialToDelete.Creator)
+                .FirstOrDefault(r=> r.DeleteRequestId == deleteRequestId);
+        }
+
+        public void ApproveDeleteRequest(DeleteRequest deleteRequest)
+        {
+            _deleteRequests.Update(deleteRequest);
         }
     }
 }

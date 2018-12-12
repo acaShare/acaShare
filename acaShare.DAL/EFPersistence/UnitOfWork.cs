@@ -35,7 +35,7 @@ namespace acaShare.DAL.EFPersistence
             Subjects = new SubjectRepository(_db.Subject);
             Lessons = new LessonRepository(_db.Lesson);
             Users = new UserRepository(_db.User);
-            Materials = new MaterialRepository(_db.Material, _db.File);
+            Materials = new MaterialRepository(_db.Material, _db.File, _db.ChangeReason, _db.DeleteRequest, _db.EditRequest);
             MaterialStates = new MaterialStatesRepository(_db.MaterialState);
             SidebarRepository = new SidebarRepository(_db);
         }

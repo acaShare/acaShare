@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using acaShare.DAL.Configuration;
 
 namespace acaShare.DAL.EFPersistence.Migrations
 {
     [DbContext(typeof(AcaShareDbContext))]
-    partial class AcaShareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181211173521_UpdatedReasonLength")]
+    partial class UpdatedReasonLength
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,8 +93,6 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
                     b.Property<int>("MaterialToDeleteId");
 
-                    b.Property<int?>("ModeratorId");
-
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("datetime");
 
@@ -105,8 +105,6 @@ namespace acaShare.DAL.EFPersistence.Migrations
                     b.HasIndex("DeleterId");
 
                     b.HasIndex("MaterialToDeleteId");
-
-                    b.HasIndex("ModeratorId");
 
                     b.ToTable("DeleteRequest");
                 });
@@ -308,11 +306,9 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(1000);
+                        .HasMaxLength(100);
 
                     b.Property<DateTime>("Date");
-
-                    b.Property<bool>("IsRead");
 
                     b.Property<int?>("MaterialId");
 
@@ -677,12 +673,6 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .HasForeignKey("MaterialToDeleteId")
                         .HasConstraintName("DeleteRequest_Material")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("acaShare.BLL.Models.User", "Moderator")
-                        .WithMany("HandledDeleteRequests")
-                        .HasForeignKey("ModeratorId")
-                        .HasConstraintName("FK_DeleteRequest_User")
-                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("acaShare.BLL.Models.Department", b =>

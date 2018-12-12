@@ -10,11 +10,12 @@ namespace acaShare.ServiceLayer.Interfaces
     {
         ICollection<Material> GetAllMaterials();
         void AddMaterial(Material material);
-        void CreateDeleteRequest(int deleterId, int materialToDeleteId);
+        void CreateDeleteRequest(User deleter, int materialToDeleteId, int reasonId, string additionalComment = null);
         void CreateUpdateRequest(Material material);
         Material GetMaterial(int materialId);
         MaterialState GetState(MaterialStateEnum materialStateEnum);
         void AddComment(string newComment, Material material, User commentAuthor);
+        ICollection<DeleteRequest> GetPendingDeleteSuggestions();
         void ToggleFavorite(Material material, User loggedUser);
         void UpdateMaterial(Material material);
         void DeleteMaterial(Material materialToDelete);
@@ -22,6 +23,9 @@ namespace acaShare.ServiceLayer.Interfaces
         void RejectMaterial(int materialId);
         Material GetMaterialToApprove(int materialId);
         void ApproveMaterial(int materialId, User approver);
+        ICollection<ChangeReason> GetChangeReasons(ChangeType changeType);
+        DeleteRequest GetDeleteRequestToApprove(int deleteRequestId);
+        void ApproveRequest(int deleteRequestId, User loggedModerator);
     }
 
     public enum MaterialStateEnum

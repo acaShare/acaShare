@@ -8,5 +8,11 @@ namespace acaShare.BLL.Models
     {
         public int ChangeReasonId { get; set; }
         public string Reason { get; set; }
+        public ChangeType ChangeType { get; set; }
+    }
+
+    public enum ChangeType
+    {
+        EDIT, DELETE
     }
 }

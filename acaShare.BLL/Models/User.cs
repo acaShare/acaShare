@@ -1,4 +1,5 @@
-﻿using System;
+﻿using acaShare.BLL.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,6 +24,8 @@ namespace acaShare.BLL.Models
             CreatedMaterials = new HashSet<Material>();
             UpdatedMaterials = new HashSet<Material>();
             UsersInUniversity = new HashSet<UserInUniversity>();
+            Notifications = new HashSet<Notification>();
+            HandledDeleteRequests = new HashSet<DeleteRequest>();
         }
         
         public int UserId { get; private set; }
@@ -39,17 +42,29 @@ namespace acaShare.BLL.Models
         public virtual ICollection<Material> UpdatedMaterials { get; private set; }
         public virtual ICollection<UserInUniversity> UsersInUniversity { get; private set; }
         public virtual ICollection<Notification> Notifications { get; private set; }
+        public virtual ICollection<DeleteRequest> HandledDeleteRequests { get; private set; }
 
-        public void Notify(string notificationContent, int materialId = -1)
+        public void Notify(NotificationType notificationType, IDictionary<string, string> data)
         {
-            var newNotification = new Notification { Content = notificationContent, Date = DateTime.Now, User = this };
+            var notifier = new Notifier();
+            Notification newNotification = notifier.CreateNotificationForUser(notificationType, data, this);
 
-            if (materialId != -1)
+            if (data["MaterialId"] != null)
             {
-                newNotification.MaterialId = materialId;
+                newNotification.MaterialId = int.Parse(data["MaterialId"]);
             }
             
             Notifications.Add(newNotification);
+        }
+        
+        public void MarkNotificationAsRead(Notification notification)
+        {
+            Notifications.FirstOrDefault(n => n == notification)?.MarkAsRead();
+        }
+
+        public void RemoveNotification(Notification notification)
+        {
+            Notifications.Remove(notification);
         }
 
         public bool IsMaterialFavorite(Material material)
