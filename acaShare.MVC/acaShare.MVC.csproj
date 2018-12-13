@@ -48,6 +48,9 @@
     <Content Update="Areas\Main\Views\Materials\_ViewImports.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Areas\Moderator\Views\DeleteSuggestions\_ViewImports.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Areas\Moderator\Views\DepartmentsManagement\Add.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

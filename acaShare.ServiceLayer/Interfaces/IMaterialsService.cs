@@ -25,7 +25,8 @@ namespace acaShare.ServiceLayer.Interfaces
         void ApproveMaterial(int materialId, User approver);
         ICollection<ChangeReason> GetChangeReasons(ChangeType changeType);
         DeleteRequest GetDeleteRequestToApprove(int deleteRequestId);
-        void ApproveRequest(int deleteRequestId, User loggedModerator);
+        void ApproveDeleteRequest(int deleteRequestId, User loggedModerator);
+        void DeclineDeleteRequest(int deleteRequestId, User loggedModerator, string declineReason);
     }
 
     public enum MaterialStateEnum

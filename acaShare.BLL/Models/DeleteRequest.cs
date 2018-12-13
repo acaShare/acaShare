@@ -27,7 +27,7 @@ namespace acaShare.BLL.Models
 
         public int DeleteRequestId { get; private set; }
         public int DeleterId { get; private set; }
-        public int MaterialToDeleteId { get; private set; }
+        public int? MaterialToDeleteId { get; private set; }
         public int DeleteReasonId { get; private set; }
         public int? ModeratorId { get; private set; }
         public DateTime RequestDate { get; private set; }

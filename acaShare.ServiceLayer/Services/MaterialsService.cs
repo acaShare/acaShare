@@ -37,6 +37,11 @@ namespace acaShare.ServiceLayer.Services
         {
             var materialToDelete = _uow.Materials.FindById(materialToDeleteId);
 
+            if (materialToDelete == null)
+            {
+                throw new ArgumentNullException("Provided materialToDeleteId is not valid");
+            }
+
             DeleteRequest deleteRequest = new DeleteRequest(deleter, materialToDelete, reasonId, additionalComment);
             _uow.Materials.AddDeleteRequest(deleteRequest);
             _uow.SaveChanges();
@@ -120,11 +125,32 @@ namespace acaShare.ServiceLayer.Services
             return _uow.Materials.GetDeleteRequest(deleteRequestId);
         }
 
-        public void ApproveRequest(int deleteRequestId, User loggedModerator)
+        public void ApproveDeleteRequest(int deleteRequestId, User loggedModerator)
         {
             var deleteRequest = _uow.Materials.GetDeleteRequest(deleteRequestId);
+
+            if (deleteRequest == null)
+            {
+                throw new ArgumentException("Provided deleteRequestId is not valid");
+            }
+
             deleteRequest.ApproveRequest(loggedModerator);
-            _uow.Materials.ApproveDeleteRequest(deleteRequest);
+            _uow.Materials.UpdateDeleteRequest(deleteRequest);
+            _uow.Materials.Delete(deleteRequest.MaterialToDelete);
+            _uow.SaveChanges();
+        }
+
+        public void DeclineDeleteRequest(int deleteRequestId, User loggedModerator, string declineReason)
+        {
+            var deleteRequest = _uow.Materials.GetDeleteRequest(deleteRequestId);
+
+            if (deleteRequest == null)
+            {
+                throw new ArgumentException("Provided deleteRequestId is not valid");
+            }
+
+            deleteRequest.DeclineRequest(declineReason, loggedModerator);
+            _uow.Materials.UpdateDeleteRequest(deleteRequest);
             _uow.SaveChanges();
         }
     }

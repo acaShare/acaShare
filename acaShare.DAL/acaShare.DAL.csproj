@@ -17,6 +17,8 @@
     <Compile Remove="EFPersistence\Migrations\20181212175203_AddedModeratorInfoToDeleteRequest.cs" />
     <Compile Remove="EFPersistence\Migrations\20181212181240_AddedModeratorInfoToDeleteRequestAndMadeFKsNullableToStoreRequestsDataForStatistics.cs" />
     <Compile Remove="EFPersistence\Migrations\20181212182406_AddedModeratorInfoToDeleteRequest.cs" />
+    <Compile Remove="EFPersistence\Migrations\20181213013132_ChangedMaterialToDeleteOnDeleteBehaviorToSetNull.cs" />
+    <Compile Remove="EFPersistence\Migrations\20181213013246_ChangedMaterialToDeleteOnDeleteBehaviorToSetNull.cs" />
   </ItemGroup>
 
   <ItemGroup>

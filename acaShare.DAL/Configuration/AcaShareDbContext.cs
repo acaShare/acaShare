@@ -125,9 +125,8 @@ namespace acaShare.DAL.Configuration
                 entity.HasOne(d => d.MaterialToDelete)
                     .WithMany(p => p.DeleteRequests)
                     .HasForeignKey(d => d.MaterialToDeleteId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("DeleteRequest_Material")
-                    .IsRequired();
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("DeleteRequest_Material");
 
                 entity.HasOne(d => d.Moderator)
                     .WithMany(p => p.HandledDeleteRequests)

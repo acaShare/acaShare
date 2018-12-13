@@ -9,11 +9,14 @@ namespace acaShare.MVC.Areas.Moderator.Models.MaterialChangeRequests
 {
     public class DeleteRequestViewModel
     {
+        [Required]
         public int DeleteRequestId { get; set; }
 
         [Display(Name = "Nazwa materiału")]
         public string MaterialName { get; set; }
 
+        [Required]
+        [Range(1, int.MaxValue)]
         public int ReasonId { get; set; }
 
         [Display(Name = "Powód")]
@@ -24,5 +27,8 @@ namespace acaShare.MVC.Areas.Moderator.Models.MaterialChangeRequests
 
         [Display(Name = "Sugestia utworzona przez")]
         public string DeleterName { get; set; }
+
+        [Display(Name = "Powód odrzucenia sugestii")]
+        public string DeclineReason { get; set; }
     }
 }

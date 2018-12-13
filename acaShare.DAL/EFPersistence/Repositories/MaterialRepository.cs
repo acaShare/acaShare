@@ -47,7 +47,14 @@ namespace acaShare.DAL.EFPersistence.Repositories
                 .Include(m => m.Lesson.SubjectDepartment.Subject)
                 .Include(m => m.Lesson.SubjectDepartment.Department)
                 .Include(m => m.Lesson.SubjectDepartment.Department.University)
-                .First(m => m.MaterialId == materialId);
+                .FirstOrDefault(m => m.MaterialId == materialId);
+        }
+
+        public new void Delete(Material material)
+        {
+            var deleteRequests = material.DeleteRequests.Where(dr => dr.RequestState == RequestState.PENDING).ToList();
+            _deleteRequests.RemoveRange(deleteRequests);
+            base.Delete(material);
         }
 
         public ICollection<Material> GetMaterialsToApprove()
@@ -101,7 +108,7 @@ namespace acaShare.DAL.EFPersistence.Repositories
                 .FirstOrDefault(r=> r.DeleteRequestId == deleteRequestId);
         }
 
-        public void ApproveDeleteRequest(DeleteRequest deleteRequest)
+        public void UpdateDeleteRequest(DeleteRequest deleteRequest)
         {
             _deleteRequests.Update(deleteRequest);
         }

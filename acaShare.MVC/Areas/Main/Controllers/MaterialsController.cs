@@ -110,7 +110,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
         }
 
         [ValidateMaterial(MaterialViewModelParam = "vm")]
-        [HttpPost]
+        [HttpPost] // AJAX request
         public IActionResult Add(AddMaterialViewModel vm)
         {
             var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -126,7 +126,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
             materialToAdd.AddFiles(filesToAdd);
             _service.UpdateMaterial(materialToAdd);
 
-            return RedirectToAction("Materials", new { LessonId = lesson.LessonId });
+            return Json(materialToAdd.MaterialId);
         }
 
 
@@ -625,7 +625,14 @@ namespace acaShare.MVC.Areas.Main.Controllers
 
             var deleter = _userService.FindByIdentityUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            _service.CreateDeleteRequest(deleter, vm.MaterialId, vm.ReasonId, vm.AdditionalComment);
+            try
+            {
+                _service.CreateDeleteRequest(deleter, vm.MaterialId, vm.ReasonId, vm.AdditionalComment);
+            }
+            catch (ArgumentNullException e)
+            {
+                return BadRequest("Materiał o podanym Id nie istnieje");
+            }
 
             return RedirectToAction("Material", new { materialId = vm.MaterialId });
         }

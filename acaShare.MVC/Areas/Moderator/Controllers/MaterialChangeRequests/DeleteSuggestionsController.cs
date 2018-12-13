@@ -55,7 +55,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
             {
                 MaterialViewModel = new MaterialToApproveViewModel
                 {
-                    MaterialId = deleteRequest.MaterialToDeleteId,
+                    MaterialId = deleteRequest.MaterialToDeleteId.Value,
                     CreatorUsername = deleteRequest.MaterialToDelete.Creator.Username,
                     Name = deleteRequest.MaterialToDelete.Name,
                     Description = deleteRequest.MaterialToDelete.Description,
@@ -86,13 +86,58 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
         public IActionResult ApproveDeleteRequest(int deleteRequestId)
         {
             var loggedModerator = _userService.FindByIdentityUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            _materialsService.ApproveRequest(deleteRequestId, loggedModerator);
+
+            try
+            {
+                _materialsService.ApproveDeleteRequest(deleteRequestId, loggedModerator);
+            }
+            catch(ArgumentException e)
+            {
+                return BadRequest("Sugestia usunięcia o podanym Id nie istnieje");
+            }
 
             return RedirectToAction("DeleteSuggestions");
         }
-        
-        public IActionResult DeclineDeleteRequest()
+
+        public IActionResult DeclineDeleteRequest(int deleteRequestId)
         {
+            BLL.Models.DeleteRequest deleteRequest = _materialsService.GetDeleteRequestToApprove(deleteRequestId);
+
+            if (deleteRequest == null)
+            {
+                return BadRequest("Sugestia usunięcia o podanym Id nie istnieje");
+            }
+
+            var vm = new DeleteRequestViewModel
+            {
+                DeleteRequestId = deleteRequestId,
+                MaterialName = deleteRequest.MaterialToDelete.Name,
+                ReasonId = deleteRequest.DeleteReasonId,
+                Reason = deleteRequest.DeleteReason.Reason
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public IActionResult DeclineDeleteRequest(DeleteRequestViewModel vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+
+            var loggedModerator = _userService.FindByIdentityUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            try
+            {
+                _materialsService.DeclineDeleteRequest(vm.DeleteRequestId, loggedModerator, vm.DeclineReason);
+            }
+            catch (ArgumentException e)
+            {
+                return BadRequest("Sugestia usunięcia o podanym Id nie istnieje");
+            }
+
             return RedirectToAction("DeleteSuggestions");
         }
     }

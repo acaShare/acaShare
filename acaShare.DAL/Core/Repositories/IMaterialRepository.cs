@@ -14,6 +14,6 @@ namespace acaShare.DAL.Core.Repositories
         ICollection<ChangeReason> GetChangeReasons(ChangeType changeType);
         ICollection<DeleteRequest> GetDeleteRequests(RequestState requestState);
         DeleteRequest GetDeleteRequest(int deleteRequestId);
-        void ApproveDeleteRequest(DeleteRequest deleteRequest);
+        void UpdateDeleteRequest(DeleteRequest deleteRequest);
     }
 }

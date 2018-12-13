@@ -17,7 +17,8 @@ namespace acaShare.BLL.Common
                     content = $"Twoja sugestia usunięcia materiału \"{data["MaterialName"]}\" została zaakceptowana.";
                     break;
                 case NotificationType.DELETE_REQUEST_DECLINED:
-                    content = $"Twoja sugestia usunięcia materiału \"{data["MaterialName"]}\" została odrzucona. Powód: {data["DeclineReason"]}.";
+                    var reason = string.IsNullOrEmpty(data["DeclineReason"]) ? "Nie podano" : data["DeclineReason"];
+                    content = $"Twoja sugestia usunięcia materiału \"{data["MaterialName"]}\" została odrzucona. Powód: {reason}.";
                     break;
                 default:
                     content = "Wystąpił błąd w module powiadomień. Skontaktuj się z administratorem serwisu.";
