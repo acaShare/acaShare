@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using acaShare.BLL.Models;
+using acaShare.MVC.Models;
 using acaShare.ServiceLayer.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -93,6 +94,8 @@ namespace acaShare.MVC.Areas.Identity.Pages.Account
                         pageHandler: null,
                         values: new { userId = user.Id, code = code },
                         protocol: Request.Scheme);
+
+                    await _userManager.AddToRoleAsync(user, Roles.MemberRole);
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
