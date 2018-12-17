@@ -8,5 +8,7 @@ namespace acaShare.DAL.Configuration
     public class AcaShareConfiguration
     {
         public string ConnectionString { get; set; }
+
+        public string AdminPassword { get; set; }
     }
 }

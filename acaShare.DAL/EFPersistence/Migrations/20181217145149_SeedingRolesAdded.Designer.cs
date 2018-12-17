@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using acaShare.DAL.Configuration;
 
 namespace acaShare.DAL.EFPersistence.Migrations
 {
     [DbContext(typeof(AcaShareDbContext))]
-    partial class AcaShareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181217145149_SeedingRolesAdded")]
+    partial class SeedingRolesAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -437,10 +439,11 @@ namespace acaShare.DAL.EFPersistence.Migrations
                     b.ToTable("AspNetRoles");
 
                     b.HasData(
-                        new { Id = "c44b3819-4779-4fc4-bb34-c8c3a53b288c", ConcurrencyStamp = "211e2e67-458f-4b1f-a918-5452a50e044f", Name = "Administrator", NormalizedName = "ADMINISTRATOR" },
-                        new { Id = "bd0553b5-bf3a-432a-a50c-1020ca9604ca", ConcurrencyStamp = "bd8c88ab-39e4-4428-983e-585824af5213", Name = "MainModerator", NormalizedName = "MAINMODERATOR" },
-                        new { Id = "7614cd25-8006-485d-8045-695cf6421cfd", ConcurrencyStamp = "8ae3cd42-286c-4fe7-a1a0-805ad9cbbdf9", Name = "Moderator", NormalizedName = "MODERATOR" },
-                        new { Id = "276988ca-214e-45db-b73b-b05a2a74c750", ConcurrencyStamp = "81639d5c-f172-4a7f-866b-beed6b0901f3", Name = "Member", NormalizedName = "MEMBER" }
+                        new { Id = "b4a68bbe-ab6c-4b5f-861c-90b55feb5888", ConcurrencyStamp = "2abe2c82-00dc-44a1-878f-44b6a41f0c96", Name = "Administrator", NormalizedName = "ADMINISTRATOR" },
+                        new { Id = "d436cead-c56c-48ab-94a0-4cbd4ee5f566", ConcurrencyStamp = "d9f419fb-bec6-40f7-89b5-2cb7aed43978", Name = "MainModerator", NormalizedName = "MAINMODERATOR" },
+                        new { Id = "65463026-d015-4611-9133-ad03e19e193e", ConcurrencyStamp = "860ae1a3-83ac-4637-b9eb-450c31b250e9", Name = "Moderator", NormalizedName = "MODERATOR" },
+                        new { Id = "b6c7c4e8-7436-4015-85c1-d66c7b4b2f3b", ConcurrencyStamp = "56f150c1-1a71-4323-ab61-689bb22c716a", Name = "Member", NormalizedName = "MEMBER" },
+                        new { Id = "6e42f725-10bc-4213-86cf-ea0e3fb042ab", ConcurrencyStamp = "22044b24-ebdc-49a1-816b-3e1efa1832bc", Name = "aaa", NormalizedName = "AAA" }
                     );
                 });
 

@@ -378,6 +378,11 @@ namespace acaShare.DAL.Configuration
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
+
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole { Name = "Administrator", NormalizedName = "Administrator".ToUpper() });
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole { Name = "MainModerator", NormalizedName = "MainModerator".ToUpper() });
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole { Name = "Moderator", NormalizedName = "Moderator".ToUpper() });
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole { Name = "Member", NormalizedName = "Member".ToUpper() });
         }
     }
 }
