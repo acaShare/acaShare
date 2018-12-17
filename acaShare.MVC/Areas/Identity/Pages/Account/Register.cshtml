@@ -5,13 +5,15 @@
     ViewData["Title"] = "Register";
 }
 
-<link rel="stylesheet" href="~/css/login/Register.css">
+@section LoginRegisterCSS{ 
+    <link rel="stylesheet" href="~/css/login/Register.css">
+}
 
 <div class="row">
     <h2>Rejestracja</h2>
     <div class="main-container">
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h4>Stwórz nowe konto.</h4>
+            <h4>Stwórz nowe konto</h4>
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <input asp-for="Input.UserName" class="form-control" placeholder="Użytkownik" />

@@ -9,3 +9,8 @@
     margin: 0 auto;
     width: 30%;
 }
+
+#box {
+    opacity: 1;
+    position: relative;
+}
