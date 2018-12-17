@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using acaShare.MVC.Models;
 using acaShare.ServiceLayer.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace acaShare.MVC.Areas.Moderator.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole + ", " + Roles.ModeratorRole)]
     [Area("Moderator")]
     public class ModeratorPanelController : Controller
     {

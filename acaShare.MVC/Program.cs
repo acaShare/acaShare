@@ -11,31 +11,7 @@ namespace acaShare.MVC
     {
         public static void Main(string[] args)
         {
-            var host = CreateWebHostBuilder(args).Build();
-
-            InitializeDatabase(host);
-
-            host.Run();
-
-        }
-
-        private static void InitializeDatabase(IWebHost host)
-        {
-            using (var scope = host.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-
-                try
-                {
-                    SeedData.InitializeAsync(services).Wait();
-                }
-                catch (Exception ex)
-                {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-
-                    logger.LogError(ex, "Error occured seeding the DB.");
-                }
-            }
+            CreateWebHostBuilder(args).Build().Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

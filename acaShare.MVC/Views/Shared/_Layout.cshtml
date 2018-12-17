@@ -49,7 +49,7 @@
         <div class="nav-wrapper">
             <a asp-area="Main" asp-controller="List" asp-action="AvailableUniversities" class="brand-logo">acaShare</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                @if (User.IsInRole(Roles.AdministratorRole) || User.IsInRole(Roles.MainModeratorRole))
+                @if (User.IsInRole(Roles.AdministratorRole) || User.IsInRole(Roles.MainModeratorRole) || User.IsInRole(Roles.ModeratorRole))
                 {
                     <li><a asp-area="Moderator" asp-controller="ModeratorPanel" asp-action="Home">Panel moderatora</a></li>
                 }
