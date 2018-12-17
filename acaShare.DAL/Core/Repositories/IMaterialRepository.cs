@@ -15,5 +15,9 @@ namespace acaShare.DAL.Core.Repositories
         ICollection<DeleteRequest> GetDeleteRequests(RequestState requestState);
         DeleteRequest GetDeleteRequest(int deleteRequestId);
         void UpdateDeleteRequest(DeleteRequest deleteRequest);
+        ICollection<EditRequest> GetEditRequests();
+        EditRequest GetEditRequest(int editRequestId);
+        void DeleteEditRequest(EditRequest editRequest);
+        void UpdateEditRequest(EditRequest editRequest);
     }
 }

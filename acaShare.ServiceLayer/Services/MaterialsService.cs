@@ -1,6 +1,7 @@
 ﻿using acaShare.BLL.Models;
 using acaShare.DAL.Core;
 using acaShare.ServiceLayer.Interfaces;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -151,6 +152,58 @@ namespace acaShare.ServiceLayer.Services
 
             deleteRequest.DeclineRequest(declineReason, loggedModerator);
             _uow.Materials.UpdateDeleteRequest(deleteRequest);
+            _uow.SaveChanges();
+        }
+
+        public int CreateEditRequest(
+            User updater, Material materialToUpdate, string editSummary, string newName, string newDescription, ICollection<File> newFiles)
+        {
+            if (materialToUpdate == null)
+            {
+                throw new ArgumentNullException("Provided materialId is not valid");
+            }
+
+            EditRequest editRequest = new EditRequest(updater, materialToUpdate, editSummary, newName, newDescription, newFiles);
+            _uow.Materials.AddUpdateRequest(editRequest);
+            _uow.SaveChanges();
+
+            return editRequest.EditRequestId;
+        }
+
+        public ICollection<EditRequest> GetPendingEditSuggestions()
+        {
+            return _uow.Materials.GetEditRequests();
+        }
+
+        public EditRequest GetEditRequest(int editRequestId)
+        {
+            return _uow.Materials.GetEditRequest(editRequestId);
+        }
+        
+        public void ApproveEditRequest(EditRequest editRequest)
+        {
+            if (editRequest == null)
+            {
+                throw new ArgumentException("Provided deleteRequestId is not valid");
+            }
+
+            editRequest.ApproveRequest();
+
+            UpdateMaterial(editRequest.MaterialToUpdate);
+            _uow.SaveChanges();
+        }
+
+        public void DeclineEditRequest(int editRequestId, string declineReason)
+        {
+            var editRequest = _uow.Materials.GetEditRequest(editRequestId);
+
+            if (editRequest == null)
+            {
+                throw new ArgumentException("Provided editRequestId is not valid");
+            }
+
+            editRequest.DeclineRequest(declineReason);
+            _uow.Materials.DeleteEditRequest(editRequest);
             _uow.SaveChanges();
         }
     }

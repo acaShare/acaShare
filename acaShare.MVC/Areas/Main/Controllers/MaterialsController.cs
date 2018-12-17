@@ -22,14 +22,16 @@ namespace acaShare.MVC.Areas.Main.Controllers
         private readonly IUniversityTreeTraversalService _traversalService;
         private readonly IUserService _userService;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IFormFilesManagement _filesManagement;
 
-        public MaterialsController(
-            IMaterialsService service, IUniversityTreeTraversalService traversalService, IUserService userService, IHostingEnvironment hostingEnvironment)
+        public MaterialsController(IMaterialsService service, IUniversityTreeTraversalService traversalService, 
+            IUserService userService, IHostingEnvironment hostingEnvironment, IFormFilesManagement formFilesManagement)
         {
             _service = service;
             _traversalService = traversalService;
             _userService = userService;
             _hostingEnvironment = hostingEnvironment;
+            _filesManagement = formFilesManagement;
         }
 
         public IActionResult Materials(int lessonId)
@@ -109,7 +111,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
             return View(vm);
         }
 
-        [ValidateMaterial(MaterialViewModelParam = "vm")]
+        [ValidateMaterial(ViewModelToValidateParam = "vm")]
         [HttpPost] // AJAX request
         public IActionResult Add(AddMaterialViewModel vm)
         {
@@ -121,8 +123,17 @@ namespace acaShare.MVC.Areas.Main.Controllers
             var materialToAdd = new BLL.Models.Material(vm.Name, vm.Description, lesson, creator, state);
             _service.AddMaterial(materialToAdd);
 
+            try
+            {
+                _filesManagement.SaveFilesToFileSystem(vm.FormFiles, materialToAdd.MaterialId);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Somethig went wrong while saving files to the file system. Try again.");
+            }
+
             // TODO splitted into two roundtrips to name folders with materialId (can be changed in the future)
-            var filesToAdd = ExtractAndSaveFilesFromForm(vm.FormFiles, materialToAdd.MaterialId);
+            var filesToAdd = _filesManagement.ExtractFilesFromForm(vm.FormFiles, materialToAdd.MaterialId);
             materialToAdd.AddFiles(filesToAdd);
             _service.UpdateMaterial(materialToAdd);
 
@@ -159,7 +170,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
             return View(vm);
         }
 
-        [ValidateMaterial(MaterialViewModelParam = "vm")]
+        [ValidateMaterial(ViewModelToValidateParam = "vm")]
         [HttpPost] // AJAX request
         public IActionResult Edit(EditMaterialViewModel vm)
         {
@@ -178,62 +189,23 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 var filesToRemove = materialToEdit.UpdateExistingFilesAndGetFilesToRemove(
                     vm.Files.Select(f => new BLL.Models.File(f.FileId, f.FileName)).ToList()
                 );
-                RemoveFilesFromFileSystem(filesToRemove);
+                _filesManagement.RemoveFilesFromFileSystem(filesToRemove);
             }
 
-            var newFiles = ExtractAndSaveFilesFromForm(vm.FormFiles, vm.MaterialId);
+            try
+            {
+                _filesManagement.SaveFilesToFileSystem(vm.FormFiles, vm.MaterialId);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest("Somethig went wrong while saving files to the file system. Try again.");
+            }
+
+            var newFiles = _filesManagement.ExtractFilesFromForm(vm.FormFiles, vm.MaterialId);
             materialToEdit.Update(vm.Name, vm.Description, newFiles, loggedUser);
             _service.UpdateMaterial(materialToEdit);
 
             return Json(vm.MaterialId);
-        }
-
-        
-
-        private void RemoveFilesFromFileSystem(ICollection<BLL.Models.File> filesToRemove)
-        {
-            foreach (var file in filesToRemove)
-            {
-                var path = Path.Combine(GetUploadFolderAbsolutePath(), file.RelativePath);
-                System.IO.File.Delete(path);
-            }
-        }
-
-        private ICollection<BLL.Models.File> ExtractAndSaveFilesFromForm(ICollection<IFormFile> formFiles, int materialId)
-        {
-            ICollection<BLL.Models.File> newFiles = new List<BLL.Models.File>();
-
-            if (formFiles?.Count > 0)
-            {
-                foreach (var formFile in formFiles)
-                {
-                    if (formFile.Length > 0)
-                    {
-                        var relativePath = Path.Combine(
-                            Properties.Resources.MaterialFilesUploadFolderName,
-                            materialId.ToString(),
-                            formFile.FileName);
-
-                        var fileAbsolutePath = Path.Combine(GetUploadFolderAbsolutePath(), relativePath);
-
-                        Directory.CreateDirectory(Path.GetDirectoryName(fileAbsolutePath));
-
-                        using (var stream = new FileStream(fileAbsolutePath, FileMode.Create))
-                        {
-                            formFile.CopyTo(stream);
-                            var file = new BLL.Models.File(Path.GetFileNameWithoutExtension(formFile.FileName), relativePath, formFile.ContentType);
-                            newFiles.Add(file);
-                        }
-                    }
-                }
-            }
-
-            return newFiles;
-        }
-        
-        private string GetUploadFolderAbsolutePath()
-        {
-            return Path.Combine(_hostingEnvironment.ContentRootPath, Properties.Resources.UploadsFolderName);
         }
 
         public IActionResult Delete(int materialId)
@@ -270,6 +242,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 return Forbid("Nie masz uprawnień do tego działania"); // zrobić jakiś handler do tego
             }
 
+            _filesManagement.RemoveFilesFromFileSystem(materialToDelete.Files);
             _service.DeleteMaterial(materialToDelete);
 
             return RedirectToAction("Materials", new { @lessonId = vm.LessonId });
@@ -637,9 +610,78 @@ namespace acaShare.MVC.Areas.Main.Controllers
             return RedirectToAction("Material", new { materialId = vm.MaterialId });
         }
 
+
         public IActionResult CreateEditSuggestion(int materialId)
         {
-            return View();
+            var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var materialToEdit = _service.GetMaterial(materialId);
+
+            if (identityUserId == materialToEdit.Creator.IdentityUserId)
+            {
+                return Forbid("Jesteś autorem danego materiału - skorzystaj z opcji edycji"); // TODO some authorization handler like 404 not found
+            }
+
+            ConfigureEditMaterialBreadcrumbs(materialToEdit.Lesson);
+
+            var emvm = new EditMaterialViewModel
+            {
+                MaterialId = materialId,
+                Name = materialToEdit.Name,
+                Description = materialToEdit.Description,
+                Files = materialToEdit.Files.Select(f => new FileViewModel
+                {
+                    FileId = f.FileId,
+                    FileName = f.FileName,
+                    RelativePath = f.RelativePath,
+                    ContentType = f.ContentType
+                }).ToList()
+            };
+
+            var vm = new EditRequestViewModel
+            {
+                EditMaterialViewModel = emvm
+            };
+
+            return View(vm);
+        }
+
+        
+        [ValidateMaterial(ViewModelToValidateParam = "vm")]
+        [HttpPost] // AJAX request
+        public IActionResult CreateEditSuggestion(EditRequestViewModel vm)
+        {
+            var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var materialToEdit = _service.GetMaterial(vm.EditMaterialViewModel.MaterialId);
+
+            if (identityUserId == materialToEdit.Creator.IdentityUserId)
+            {
+                return Forbid("Jesteś autorem danego materiału - skorzystaj z opcji edycji"); // TODO some authorization handler like 404 not found
+            }
+
+            var updater = _userService.FindByIdentityUserId(identityUserId);
+            
+            try
+            {
+                var newFiles = _filesManagement.ExtractFilesFromForm(vm.FormFiles, vm.EditMaterialViewModel.MaterialId).ToList();
+
+                if (vm.EditMaterialViewModel.Files != null)
+                {
+                    newFiles.AddRange(
+                        vm.EditMaterialViewModel.Files.Select(f =>
+                            new BLL.Models.File(f.FileId, f.FileName, f.RelativePath, f.ContentType)));
+                }
+
+                int editRequestId = _service.CreateEditRequest(
+                        updater, materialToEdit, vm.Summary, vm.EditMaterialViewModel.Name, vm.EditMaterialViewModel.Description, newFiles);
+
+                _filesManagement.SaveEditRequestFilesToFileSystem(vm.FormFiles, vm.EditMaterialViewModel.MaterialId, editRequestId);
+            }
+            catch (ArgumentNullException e)
+            {
+                return BadRequest("Materiał o podanym Id nie istnieje");
+            }
+
+            return Json(vm.EditMaterialViewModel.MaterialId);
         }
     }
 }

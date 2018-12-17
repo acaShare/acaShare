@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using acaShare.DAL.Configuration;
 using acaShare.DAL.Core;
 using acaShare.DAL.EFPersistence;
+using acaShare.MVC.Common;
 using acaShare.ServiceLayer.Interfaces;
 using acaShare.ServiceLayer.Services;
 using Microsoft.AspNetCore.Builder;
@@ -23,12 +24,14 @@ namespace acaShare.MVC
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             Configuration = configuration;
+            HostingEnvironment = hostingEnvironment;
         }
 
         public IConfiguration Configuration { get; }
+        public IHostingEnvironment HostingEnvironment { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -41,6 +44,7 @@ namespace acaShare.MVC
             services.AddScoped<IRolesManagementService, RolesManagementService>();
             services.AddScoped<IMaterialsService, MaterialsService>();
             services.AddScoped<ISidebarService, SidebarService>();
+            services.AddSingleton<IFormFilesManagement>(f => new FormFilesManagement(HostingEnvironment));
 
             services.Configure<CookiePolicyOptions>(options =>
             {

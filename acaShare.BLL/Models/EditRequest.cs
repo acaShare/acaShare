@@ -5,21 +5,76 @@ namespace acaShare.BLL.Models
 {
     public partial class EditRequest
     {
-        public EditRequest()
+        protected EditRequest()
         {
             Files = new HashSet<File>();
         }
 
-        public int EditRequestId { get; set; }
-        public int UpdaterId { get; set; }
-        public int MaterialToUpdateId { get; set; }
-        public DateTime RequestDate { get; set; }
-        public string Summary { get; set; }
-        public string NewName { get; set; }
-        public string NewDescription { get; set; }
+        public EditRequest(User updater, Material materialToUpdate, string summary, string newName, string newDescription, ICollection<File> files) : this()
+        {
+            if (updater == null || materialToUpdate == null || string.IsNullOrEmpty(summary) || 
+                string.IsNullOrEmpty(newName) || string.IsNullOrEmpty(newDescription))
+            {
+                throw new ArgumentException("Passed arguments are not valid for creation of a new Edit Request");
+            }
 
-        public virtual Material MaterialToUpdate { get; set; }
-        public virtual User Updater { get; set; }
-        public virtual ICollection<File> Files { get; set; }
+            Updater = updater;
+            MaterialToUpdate = materialToUpdate;
+            RequestDate = DateTime.Now;
+            Summary = summary;
+            NewName = newName;
+            NewDescription = newDescription;
+            Files = files;
+        }
+
+        public int EditRequestId { get; private set; }
+        public int UpdaterId { get; private set; }
+        public int MaterialToUpdateId { get; private set; }
+        public DateTime RequestDate { get; private set; }
+        public string Summary { get; private set; }
+        public string NewName { get; private set; }
+        public string NewDescription { get; private set; }
+
+        public virtual Material MaterialToUpdate { get; private set; }
+        public virtual User Updater { get; private set; }
+        public virtual ICollection<File> Files { get; private set; }
+        
+
+        public void ApproveRequest()
+        {
+            MaterialToUpdate.UpdateThroughEditRequest(this);
+
+            MaterialToUpdate.Creator.Notify(
+                NotificationType.UPDATE_REQUEST_APPROVED,
+                new Dictionary<string, string>
+                {
+                    { "MaterialName", MaterialToUpdate.Name },
+                    { "EditSummary", Summary },
+                    { "MaterialId", MaterialToUpdateId.ToString() },
+                    { "IsCreator", true.ToString() }
+                });
+
+            Updater.Notify(
+                NotificationType.UPDATE_REQUEST_APPROVED,
+                new Dictionary<string, string>
+                {
+                    { "MaterialName", MaterialToUpdate.Name },
+                    { "EditSummary", Summary },
+                    { "MaterialId", MaterialToUpdateId.ToString() }
+                });
+        }
+
+        public void DeclineRequest(string declineReason)
+        {
+            Updater.Notify(
+                NotificationType.UPDATE_REQUEST_DECLINED,
+                new Dictionary<string, string>
+                {
+                    { "MaterialName", MaterialToUpdate.Name },
+                    { "DeclineReason", declineReason },
+                    { "MaterialId", MaterialToUpdateId.ToString() }
+                });
+        }
     }
 }
+

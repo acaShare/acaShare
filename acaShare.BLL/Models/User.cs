@@ -46,8 +46,7 @@ namespace acaShare.BLL.Models
 
         public void Notify(NotificationType notificationType, IDictionary<string, string> data)
         {
-            var notifier = new Notifier();
-            Notification newNotification = notifier.CreateNotificationForUser(notificationType, data, this);
+            Notification newNotification = Notifier.CreateNotificationForUser(notificationType, data, this);
 
             if (data["MaterialId"] != null)
             {

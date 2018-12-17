@@ -80,6 +80,18 @@ namespace acaShare.BLL.Models
             AddFiles(newFiles);
         }
 
+        public void UpdateThroughEditRequest(EditRequest editRequest)
+        {
+            Name = editRequest.NewName;
+            Description = editRequest.NewDescription;
+            ModificationDate = DateTime.Now;
+            Updater = editRequest.Updater;
+            Files = editRequest.Files;
+
+            EditRequests.Clear();
+            EditRequests = null;
+        }
+
         public void Approve(User approver)
         {
             if (StateId != 4)

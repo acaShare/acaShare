@@ -12,32 +12,32 @@ namespace acaShare.MVC.Common
 {
     public class ValidateMaterial : ActionFilterAttribute
     {
-        public string MaterialViewModelParam { get; set; }
+        public string ViewModelToValidateParam { get; set; }
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             var actionArguments = context.ActionArguments;
 
-            if (actionArguments.ContainsKey(MaterialViewModelParam))
+            if (actionArguments.ContainsKey(ViewModelToValidateParam))
             {
                 var modelState = context.ModelState;
-                var vm = ((IMaterialManagementViewModel)actionArguments[MaterialViewModelParam]);
+                var vm = ((IMaterialManagementViewModel)actionArguments[ViewModelToValidateParam]);
 
-                if (!UploadedFilesAreValid(vm.FormFiles))
+                if (!FormFilesValidator.AreUploadedFilesValid(vm.FormFiles, maxFileNameLength: 50))
                 {
                     int i = vm.StartingId;
                     foreach (var file in vm.FormFiles)
                     {
-                        if (IsNotValidUploadFile(file))
+                        if (FormFilesValidator.IsNotValidUploadFile(file))
                         {
                             string error = string.Empty;
 
-                            if (!HasFileName(file))
+                            if (!FormFilesValidator.HasFileName(file))
                             {
                                 error = $"Nazwa pliku numer {i + 1} jest wymagana";
                             }
 
-                            if (!HasFileNameRequiredLength(file.FileName))
+                            if (!FormFilesValidator.HasFileNameRequiredLength(file.FileName))
                             {
                                 error = $"Nazwa pliku numer {i + 1} nie\nmoże przekraczać 50 znaków";
                             }
@@ -54,26 +54,6 @@ namespace acaShare.MVC.Common
                     context.Result = new BadRequestObjectResult(modelState.Errors());
                 }
             }
-        }
-
-        private bool UploadedFilesAreValid(ICollection<IFormFile> formFiles)
-        {
-            return !formFiles?.Any(f => IsNotValidUploadFile(f)) ?? true;
-        }
-
-        private bool IsNotValidUploadFile(IFormFile file)
-        {
-            return !HasFileName(file) || !HasFileNameRequiredLength(file.FileName);
-        }
-
-        private bool HasFileName(IFormFile file)
-        {
-            return !string.IsNullOrEmpty(file.FileName) && !string.IsNullOrEmpty(Path.GetFileNameWithoutExtension(file.FileName));
-        }
-
-        private bool HasFileNameRequiredLength(string fileName)
-        {
-            return fileName.Length <= 50;
         }
     }
 }

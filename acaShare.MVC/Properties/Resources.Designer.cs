@@ -61,6 +61,15 @@ namespace acaShare.MVC.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EditRequests.
+        /// </summary>
+        internal static string EditRequestFilesUploadFolderName {
+            get {
+                return ResourceManager.GetString("EditRequestFilesUploadFolderName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Materials.
         /// </summary>
         internal static string MaterialFilesUploadFolderName {

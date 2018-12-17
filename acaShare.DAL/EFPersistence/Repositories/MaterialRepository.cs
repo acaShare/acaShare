@@ -108,9 +108,38 @@ namespace acaShare.DAL.EFPersistence.Repositories
                 .FirstOrDefault(r=> r.DeleteRequestId == deleteRequestId);
         }
 
+        public void UpdateEditRequest(EditRequest editRequest)
+        {
+            _editRequests.Update(editRequest);
+        }
+
         public void UpdateDeleteRequest(DeleteRequest deleteRequest)
         {
             _deleteRequests.Update(deleteRequest);
+        }
+
+        public ICollection<EditRequest> GetEditRequests()
+        {
+            return _editRequests
+                .Include(r => r.Updater)
+                .Include(r => r.MaterialToUpdate)
+                .Include(r => r.Files)
+                .ToList();
+        }
+
+        public EditRequest GetEditRequest(int editRequestId)
+        {
+            return _editRequests
+                .Include(r => r.Updater)
+                .Include(r => r.MaterialToUpdate)
+                .Include(r => r.MaterialToUpdate.Creator)
+                .Include(r => r.Files)
+                .FirstOrDefault(r => r.EditRequestId == editRequestId);
+        }
+
+        public void DeleteEditRequest(EditRequest editRequest)
+        {
+            _editRequests.Remove(editRequest);
         }
     }
 }

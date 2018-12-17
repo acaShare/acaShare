@@ -14,13 +14,11 @@ namespace acaShare.MVC.Areas.Moderator.Controllers
     [Area("Moderator")]
     public class ModeratorPanelController : Controller
     {
-        private readonly IUniversityTreeTraversalService _treeManagementservice;
         private readonly IMaterialsService _materialsService;
         private readonly IUserService _userService;
 
-        public ModeratorPanelController(IUniversityTreeTraversalService treeManagementService, IMaterialsService materialsService, IUserService userService)
+        public ModeratorPanelController(IMaterialsService materialsService, IUserService userService)
         {
-            _treeManagementservice = treeManagementService;
             _materialsService = materialsService;
             _userService = userService;
         }

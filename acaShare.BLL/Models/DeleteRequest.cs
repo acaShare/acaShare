@@ -44,6 +44,16 @@ namespace acaShare.BLL.Models
         {
             RequestState = RequestState.APPROVED;
             Moderator = moderator;
+
+            MaterialToDelete.Creator.Notify(
+                NotificationType.DELETE_REQUEST_APPROVED,
+                new Dictionary<string, string>
+                {
+                    { "MaterialName", MaterialToDelete.Name },
+                    { "MaterialId", MaterialToDeleteId.ToString() },
+                    { "DeleteReason", DeleteReason.Reason }
+                });
+
             Deleter.Notify(
                 NotificationType.DELETE_REQUEST_APPROVED,
                 new Dictionary<string, string>

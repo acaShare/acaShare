@@ -1,0 +1,130 @@
+﻿@model ChangeRequestApprovalDecision
+
+@section Scripts {
+    <script src="~/js/material-images-modal.js"></script>
+}
+
+@section UpperManageBox {
+    <div class="upper-manage-box">
+        <div class="data-container">
+            <nav class="colornav">
+                <div class="nav-wrapper path-header-wrapper">
+                    <div class="col s12 tree-path">
+                        <p class="breadcrumb">Sugestia usunięcia materiału "@Model.MaterialViewModel.Name"</p>
+                    </div>
+                </div>
+            </nav>
+            <div class="home-content">
+                <div class="material-container">
+                    <header class="material-header">
+                        <div class="material-header-action-buttons">
+                            <a asp-action="ApproveEditRequest" asp-route-editRequestId="@Model.EditRequestViewModel.EditRequestId"
+                               class="sep action-button tooltipped" data-position="top" data-tooltip="Zatwierdź sugestię">
+
+                                <i class="material-icons lh">delete_forever</i>
+                            </a>
+                            <a asp-action="DeclineEditRequest" asp-route-editRequestId="@Model.EditRequestViewModel.EditRequestId"
+                               class="sep action-button tooltipped" data-position="top" data-tooltip="Odrzuć sugestię">
+
+                                <i class="material-icons lh">not_interested</i>
+                            </a>
+                        </div>
+                    </header>
+                    <section>
+                        <h2>@Html.DisplayNameFor(model => model.EditRequestViewModel.Summary)</h2>:
+                        <p class="additional-comment">
+                            @Html.DisplayFor(model => model.EditRequestViewModel.Summary)
+                        </p>
+                    </section>
+                </div>
+
+                <footer class="material-footer upper-manage-box-footer">
+                    <p class="material-footer-content">
+                        <span>
+                            @Html.DisplayNameFor(model => model.EditRequestViewModel.UpdaterName): @Html.DisplayFor(model => model.EditRequestViewModel.UpdaterName)
+                        </span>
+                    </p>
+                </footer>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="material-container">
+    <header class="material-header">
+        <h1 class="material-header-title">
+            @Html.DisplayFor(model => model.MaterialViewModel.Name)
+        </h1>
+    </header>
+
+    <div class="material-content">
+        <section class="material-content-files">
+            <h2 class="material-content-files-header">Pliki</h2>
+
+            <div class="files-wrapper">
+                @{
+                    int i = 1;
+                    foreach (var file in Model.EditRequestViewModel.Files)
+                    {
+                        if (file.IsImage)
+                        {
+                            <div class="material-file" onclick="openModal();currentSlide(@(i++))">
+                                <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName-thumbnail" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="material-file">
+                                <i class="material-icons">description</i>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+
+            <!-- The Modal/Lightbox -->
+            <div id="gallery-modal" class="gallery-modal" onclick="closeModalOnBackgroundClick(event)">
+                <div id="current-slide-info" class="current-slide-info"></div>
+                <span class="close" onclick="closeModal()">&times;</span>
+                <div class="modal-content">
+                    @foreach (var file in Model.EditRequestViewModel.Files)
+                    {
+                        if (file.IsImage)
+                        {
+                            <div class="gallery-item">
+                                <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName" />
+                            </div>
+                        }
+                    }
+                </div>
+
+                <!-- Next/previous controls -->
+                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="material-content-description-header">
+                @Html.DisplayNameFor(model => model.MaterialViewModel.Description)
+            </h2>
+
+            <div class="material-content-description">
+                @Html.DisplayFor(model => model.MaterialViewModel.Description)
+            </div>
+        </section>
+    </div>
+
+    <footer class="material-footer">
+        <p class="material-footer-content">
+            <span>
+                @Html.DisplayNameFor(model => model.MaterialViewModel.CreatorUsername): @Html.DisplayFor(model => model.MaterialViewModel.CreatorUsername)
+            </span>
+
+            <span>
+                @{ var uploadDate = Model.MaterialViewModel.UploadDate.ToString("d MMMM yyyy, HH:mm"); }
+                @Html.DisplayNameFor(model => model.MaterialViewModel.UploadDate): @Html.DisplayFor(model => uploadDate)
+            </span>
+        </p>
+    </footer>
+</div>

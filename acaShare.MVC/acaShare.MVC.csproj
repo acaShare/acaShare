@@ -21,6 +21,7 @@
     <Compile Include="Areas\Moderator\Models\FileViewModel.cs" />
     <Compile Include="Areas\Moderator\Models\MaterialChangeRequests\ChangeRequestApprovalDecision.cs" />
     <Compile Include="Areas\Moderator\Models\MaterialChangeRequests\DeleteRequestViewModel.cs" />
+    <Compile Include="Areas\Moderator\Models\MaterialChangeRequests\EditRequestViewModel.cs" />
     <Compile Include="Areas\Moderator\Models\MaterialToApproveViewModel.cs" />
     <Compile Include="Areas\Moderator\Models\ModeratorManagementViewModel.cs" />
   </ItemGroup>
@@ -61,6 +62,12 @@
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Areas\Moderator\Views\DepartmentsManagement\Departments.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\Moderator\Views\EditSuggestions\DeclineEditRequest.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\Moderator\Views\EditSuggestions\_ViewImports.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Areas\Moderator\Views\UniversitiesManagement\Add.cshtml">

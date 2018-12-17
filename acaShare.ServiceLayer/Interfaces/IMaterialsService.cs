@@ -18,6 +18,7 @@ namespace acaShare.ServiceLayer.Interfaces
         ICollection<DeleteRequest> GetPendingDeleteSuggestions();
         void ToggleFavorite(Material material, User loggedUser);
         void UpdateMaterial(Material material);
+        ICollection<EditRequest> GetPendingEditSuggestions();
         void DeleteMaterial(Material materialToDelete);
         ICollection<Material> GetMaterialsToApprove();
         void RejectMaterial(int materialId);
@@ -26,7 +27,11 @@ namespace acaShare.ServiceLayer.Interfaces
         ICollection<ChangeReason> GetChangeReasons(ChangeType changeType);
         DeleteRequest GetDeleteRequestToApprove(int deleteRequestId);
         void ApproveDeleteRequest(int deleteRequestId, User loggedModerator);
+        EditRequest GetEditRequest(int editRequestId);
         void DeclineDeleteRequest(int deleteRequestId, User loggedModerator, string declineReason);
+        int CreateEditRequest(User updater, Material materialToUpdate, string editSummary, string newName, string newDescription, ICollection<File> newFiles);
+        void DeclineEditRequest(int editRequestId, string declineReason);
+        void ApproveEditRequest(EditRequest editRequest);
     }
 
     public enum MaterialStateEnum

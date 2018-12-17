@@ -5,6 +5,10 @@ namespace acaShare.BLL.Models
 {
     public partial class File
     {
+        protected File()
+        {
+        }
+
         public File(int fileId, string fileName)
         {
             FileId = fileId;
@@ -18,8 +22,9 @@ namespace acaShare.BLL.Models
             ContentType = contentType.ToLower();
         }
 
-        protected File()
+        public File(int fileId, string fileName, string fileRelativePath, string contentType) : this(fileName, fileRelativePath, contentType)
         {
+            FileId = fileId;
         }
 
         public void AddToMaterial(Material material)

@@ -9,5 +9,6 @@ namespace acaShare.MVC.Areas.Moderator.Models.MaterialChangeRequests
     {
         public MaterialToApproveViewModel MaterialViewModel { get; set; }
         public DeleteRequestViewModel DeleteRequestViewModel { get; set; }
+        public EditRequestViewModel EditRequestViewModel { get; set; }
     }
 }
