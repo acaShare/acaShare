@@ -29,7 +29,7 @@ namespace acaShare.DAL.EFPersistence.Repositories
             _deleteRequests.Add(deleteRequest);
         }
 
-        public void AddUpdateRequest(EditRequest editRequest)
+        public void AddEditRequest(EditRequest editRequest)
         {
             _editRequests.Add(editRequest);
         }
@@ -52,8 +52,12 @@ namespace acaShare.DAL.EFPersistence.Repositories
 
         public new void Delete(Material material)
         {
-            var deleteRequests = material.DeleteRequests.Where(dr => dr.RequestState == RequestState.PENDING).ToList();
+            var deleteRequests = material.DeleteRequests.Where(dr => dr.RequestState == RequestState.PENDING);
             _deleteRequests.RemoveRange(deleteRequests);
+
+            var editRequests = material.EditRequests;
+            _editRequests.RemoveRange(editRequests);
+            
             base.Delete(material);
         }
 

@@ -198,7 +198,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
             }
             catch(Exception ex)
             {
-                return BadRequest("Somethig went wrong while saving files to the file system. Try again.");
+                return BadRequest("Coś poszło nie tak przy zapisywaniu plików do systemu plików. Spróbuj ponownie.");
             }
 
             var newFiles = _filesManagement.ExtractFilesFromForm(vm.FormFiles, vm.MaterialId);
@@ -662,23 +662,38 @@ namespace acaShare.MVC.Areas.Main.Controllers
             
             try
             {
-                var newFiles = _filesManagement.ExtractFilesFromForm(vm.FormFiles, vm.EditMaterialViewModel.MaterialId).ToList();
+                BLL.Models.EditRequest editRequest = _service.CreateEditRequest(
+                       updater, materialToEdit, vm.Summary, vm.EditMaterialViewModel.Name, vm.EditMaterialViewModel.Description);
+
+                // # physical save #
+                _filesManagement.SaveFilesToFileSystem(vm.FormFiles, vm.EditMaterialViewModel.MaterialId, editRequest.EditRequestId);
+
+                // # database save #
+                // existing files
+                var newFiles = new List<BLL.Models.File>();
 
                 if (vm.EditMaterialViewModel.Files != null)
                 {
                     newFiles.AddRange(
-                        vm.EditMaterialViewModel.Files.Select(f =>
-                            new BLL.Models.File(f.FileId, f.FileName, f.RelativePath, f.ContentType)));
+                        vm.EditMaterialViewModel.Files
+                            .Select(f => new BLL.Models.File(f.FileName, f.RelativePath, f.ContentType))
+                            .ToList());
                 }
 
-                int editRequestId = _service.CreateEditRequest(
-                        updater, materialToEdit, vm.Summary, vm.EditMaterialViewModel.Name, vm.EditMaterialViewModel.Description, newFiles);
+                // new files
+                var filesFromForm = _filesManagement.ExtractFilesFromForm(vm.FormFiles, vm.EditMaterialViewModel.MaterialId, editRequest.EditRequestId);
+                newFiles.AddRange(filesFromForm);
 
-                _filesManagement.SaveEditRequestFilesToFileSystem(vm.FormFiles, vm.EditMaterialViewModel.MaterialId, editRequestId);
+                editRequest.AddFiles(newFiles);
+                _service.UpdateEditRequest(editRequest);
             }
             catch (ArgumentNullException e)
             {
                 return BadRequest("Materiał o podanym Id nie istnieje");
+            }
+            catch(Exception e)
+            {
+                return BadRequest("Coś poszło nie tak przy zapisywaniu plików do systemu plików. Spróbuj ponownie.");
             }
 
             return Json(vm.EditMaterialViewModel.MaterialId);

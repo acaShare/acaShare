@@ -89,6 +89,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
 
             try
             {
+                // TODO DELETE REQUEST DOES NOT DELETE FILES PHYSICALLY
                 _materialsService.ApproveDeleteRequest(deleteRequestId, loggedModerator);
             }
             catch(ArgumentException e)

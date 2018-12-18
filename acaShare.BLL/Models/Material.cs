@@ -87,7 +87,10 @@ namespace acaShare.BLL.Models
             ModificationDate = DateTime.Now;
             Updater = editRequest.Updater;
             Files = editRequest.Files;
+        }
 
+        public void RemoveEditRequests()
+        {
             EditRequests.Clear();
             EditRequests = null;
         }

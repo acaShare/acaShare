@@ -155,19 +155,25 @@ namespace acaShare.ServiceLayer.Services
             _uow.SaveChanges();
         }
 
-        public int CreateEditRequest(
-            User updater, Material materialToUpdate, string editSummary, string newName, string newDescription, ICollection<File> newFiles)
+        public EditRequest CreateEditRequest(
+            User updater, Material materialToUpdate, string editSummary, string newName, string newDescription)
         {
             if (materialToUpdate == null)
             {
                 throw new ArgumentNullException("Provided materialId is not valid");
             }
 
-            EditRequest editRequest = new EditRequest(updater, materialToUpdate, editSummary, newName, newDescription, newFiles);
-            _uow.Materials.AddUpdateRequest(editRequest);
+            EditRequest editRequest = new EditRequest(updater, materialToUpdate, editSummary, newName, newDescription);
+            _uow.Materials.AddEditRequest(editRequest);
             _uow.SaveChanges();
 
-            return editRequest.EditRequestId;
+            return editRequest;
+        }
+
+        public void UpdateEditRequest(EditRequest editRequest)
+        {
+            _uow.Materials.UpdateEditRequest(editRequest);
+            _uow.SaveChanges();
         }
 
         public ICollection<EditRequest> GetPendingEditSuggestions()
@@ -187,10 +193,10 @@ namespace acaShare.ServiceLayer.Services
                 throw new ArgumentException("Provided deleteRequestId is not valid");
             }
 
+            var materialToUpdate = editRequest.MaterialToUpdate;
             editRequest.ApproveRequest();
 
-            UpdateMaterial(editRequest.MaterialToUpdate);
-            _uow.SaveChanges();
+            UpdateMaterial(materialToUpdate);
         }
 
         public void DeclineEditRequest(int editRequestId, string declineReason)

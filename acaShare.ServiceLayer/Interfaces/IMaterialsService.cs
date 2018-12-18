@@ -29,7 +29,8 @@ namespace acaShare.ServiceLayer.Interfaces
         void ApproveDeleteRequest(int deleteRequestId, User loggedModerator);
         EditRequest GetEditRequest(int editRequestId);
         void DeclineDeleteRequest(int deleteRequestId, User loggedModerator, string declineReason);
-        int CreateEditRequest(User updater, Material materialToUpdate, string editSummary, string newName, string newDescription, ICollection<File> newFiles);
+        EditRequest CreateEditRequest(User updater, Material materialToUpdate, string editSummary, string newName, string newDescription);
+        void UpdateEditRequest(EditRequest editRequest);
         void DeclineEditRequest(int editRequestId, string declineReason);
         void ApproveEditRequest(EditRequest editRequest);
     }

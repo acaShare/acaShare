@@ -220,13 +220,13 @@ namespace acaShare.DAL.Configuration
                     .WithMany(p => p.Files)
                     .HasForeignKey(d => d.EditRequestId)
                     .HasConstraintName("File_EditRequest");
+                    //.OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(d => d.Material)
                     .WithMany(p => p.Files)
                     .HasForeignKey(d => d.MaterialId)
                     .HasConstraintName("File_Material")
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .IsRequired();
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Lesson>(entity =>

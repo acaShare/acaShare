@@ -13,6 +13,9 @@ namespace acaShare.MVC.Areas.Moderator.Models.MaterialChangeRequests
         public string MaterialName { get; set; }
         public DateTime RequestDate { get; set; }
 
+        [Display(Name = "Opis")]
+        public string NewDescription { get; set; }
+
         [Display(Name = "Podsumowanie zmian")]
         public string Summary { get; set; }
 

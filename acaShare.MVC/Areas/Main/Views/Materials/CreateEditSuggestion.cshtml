@@ -59,39 +59,40 @@
 
                         foreach (var file in Model.EditMaterialViewModel.Files ?? Enumerable.Empty<FileViewModel>())
                         {
-                            <div id="@id" class="material-file-edit-mode-wrapper">
-                                @if (file.IsImage)
-                                {
-                                    <div class="material-file" onclick="openModal();currentSlide(@(slideIndex++))">
-                                        <div class="delete-file" onclick="deleteFile(@id, event)">
-                                            <span class="delete-file-x">&#10005;</span>
-                                        </div>
-                                        <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName-thumbnail" />
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="material-file">
-                                        <div class="delete-file" onclick="deleteFile(@id, event)">
-                                            <span class="delete-file-x">&#10005;</span>
-                                        </div>
-                                        <i class="material-icons">description</i>
-                                    </div>
-                                }
-
-                                <input type="hidden" id="EditMaterialViewModel.Files[@id].FileId" name="EditMaterialViewModel.Files[@id].FileId" value="@file.FileId" />
-                                <input type="hidden" id="EditMaterialViewModel.Files[@id].ContentType" name="EditMaterialViewModel.Files[@id].ContentType" value="@file.ContentType" />
-
-                                <div class="input-field material-file-edit-mode-filename">
-                                    <input id="EditMaterialViewModel.Files[@id].FileName" name="EditMaterialViewModel.Files[@id].FileName" value="@file.FileName"
-                                           class="validate" data-length="50" data-val="true"
-                                           data-val-maxlength="Nazwa pliku numer @(id+1) nie<br>może przekraczać 50 znaków" data-val-maxlength-max="50"
-                                           data-val-required="Nazwa pliku numer @(id+1) jest wymagana" required />
-
-                                    <span class="text-danger input-error-small file-name-input-error"
-                                          data-valmsg-for="EditMaterialViewModel.Files[@id].FileName" data-valmsg-replace="true"></span>
+                    <div id="@id" class="material-file-edit-mode-wrapper">
+                        @if (file.IsImage)
+                        {
+                            <div class="material-file" onclick="openModal();currentSlide(@(slideIndex++))">
+                                <div class="delete-file" onclick="deleteFile(@id, event)">
+                                    <span class="delete-file-x">&#10005;</span>
                                 </div>
+                                <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName-thumbnail" />
                             </div>
+                        }
+                        else
+                        {
+                            <div class="material-file">
+                                <div class="delete-file" onclick="deleteFile(@id, event)">
+                                    <span class="delete-file-x">&#10005;</span>
+                                </div>
+                                <i class="material-icons">description</i>
+                            </div>
+                        }
+
+                        <input type="hidden" id="EditMaterialViewModel.Files[@id].FileId" name="EditMaterialViewModel.Files[@id].FileId" value="@file.FileId" />
+                        <input type="hidden" id="EditMaterialViewModel.Files[@id].ContentType" name="EditMaterialViewModel.Files[@id].ContentType" value="@file.ContentType" />
+                        <input type="hidden" id="EditMaterialViewModel.Files[@id].RelativePath" name="EditMaterialViewModel.Files[@id].RelativePath" value="@file.RelativePath" />
+
+                        <div class="input-field material-file-edit-mode-filename">
+                            <input id="EditMaterialViewModel.Files[@id].FileName" name="EditMaterialViewModel.Files[@id].FileName" value="@file.FileName"
+                                   class="validate" data-length="50" data-val="true"
+                                   data-val-maxlength="Nazwa pliku numer @(id+1) nie<br>może przekraczać 50 znaków" data-val-maxlength-max="50"
+                                   data-val-required="Nazwa pliku numer @(id+1) jest wymagana" required />
+
+                            <span class="text-danger input-error-small file-name-input-error"
+                                  data-valmsg-for="EditMaterialViewModel.Files[@id].FileName" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
 
                             id++;
                         }

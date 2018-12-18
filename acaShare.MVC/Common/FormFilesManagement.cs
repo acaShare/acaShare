@@ -27,8 +27,13 @@ namespace acaShare.MVC.Common
             }
         }
 
-        public ICollection<BLL.Models.File> ExtractFilesFromForm(ICollection<IFormFile> formFiles, int materialId)
+        public ICollection<BLL.Models.File> ExtractFilesFromForm(ICollection<IFormFile> formFiles, int materialId, int? editRequestId = null)
         {
+            if (materialId < 1)
+            {
+                throw new ArgumentOutOfRangeException("Provided materialId is not valid");
+            }
+
             ICollection<BLL.Models.File> newFiles = new List<BLL.Models.File>();
 
             if (formFiles?.Count > 0)
@@ -37,10 +42,29 @@ namespace acaShare.MVC.Common
                 {
                     if (formFile.Length > 0)
                     {
-                        var relativePath = Path.Combine(
-                            Properties.Resources.MaterialFilesUploadFolderName,
-                            materialId.ToString(),
-                            formFile.FileName);
+                        var relativePath = string.Empty;
+
+                        if (editRequestId == null)
+                        {
+                            relativePath = Path.Combine(
+                                Properties.Resources.MaterialFilesUploadFolderName,
+                                materialId.ToString(),
+                                formFile.FileName);
+                        }
+                        else
+                        {
+                            if (editRequestId.Value < 1)
+                            {
+                                throw new ArgumentOutOfRangeException("Provided EditRequestId is not valid");
+                            }
+                            
+                            relativePath = Path.Combine(
+                                Properties.Resources.MaterialFilesUploadFolderName,
+                                materialId.ToString(),
+                                Properties.Resources.EditRequestFilesUploadFolderName,
+                                editRequestId.ToString(),
+                                formFile.FileName);
+                        }
 
                         var file = new BLL.Models.File(Path.GetFileNameWithoutExtension(formFile.FileName), relativePath, formFile.ContentType);
                         newFiles.Add(file);
@@ -51,18 +75,42 @@ namespace acaShare.MVC.Common
             return newFiles;
         }
 
-        public void SaveFilesToFileSystem(ICollection<IFormFile> formFiles, int materialId)
+        public void SaveFilesToFileSystem(ICollection<IFormFile> formFiles, int materialId, int? editRequestId = null)
         {
+            if (materialId < 1)
+            {
+                throw new ArgumentOutOfRangeException("Provided materialId is not valid");
+            }
+
             if (formFiles?.Count > 0)
             {
                 foreach (var formFile in formFiles)
                 {
+                    var relativePath = string.Empty;
+
                     if (formFile.Length > 0)
                     {
-                        var relativePath = Path.Combine(
-                            Properties.Resources.MaterialFilesUploadFolderName,
-                            materialId.ToString(),
-                            formFile.FileName);
+                        if (editRequestId == null)
+                        {
+                            relativePath = Path.Combine(
+                                Properties.Resources.MaterialFilesUploadFolderName,
+                                materialId.ToString(),
+                                formFile.FileName);
+                        }
+                        else
+                        {
+                            if (editRequestId.Value < 1)
+                            {
+                                throw new ArgumentOutOfRangeException("Provided EditRequestId is not valid");
+                            }
+
+                            relativePath = Path.Combine(
+                                Properties.Resources.MaterialFilesUploadFolderName,
+                                materialId.ToString(),
+                                Properties.Resources.EditRequestFilesUploadFolderName,
+                                editRequestId.ToString(),
+                                formFile.FileName);
+                        }
 
                         var fileAbsolutePath = Path.Combine(GetUploadFolderAbsolutePath(), relativePath);
 
@@ -76,35 +124,7 @@ namespace acaShare.MVC.Common
                 }
             }
         }
-
-        public void SaveEditRequestFilesToFileSystem(ICollection<IFormFile> formFiles, int materialId, int editRequestId)
-        {
-            if (formFiles?.Count > 0)
-            {
-                foreach (var formFile in formFiles)
-                {
-                    if (formFile.Length > 0)
-                    {
-                        var relativePath = Path.Combine(
-                            Properties.Resources.MaterialFilesUploadFolderName,
-                            materialId.ToString(),
-                            Properties.Resources.EditRequestFilesUploadFolderName,
-                            editRequestId.ToString(),
-                            formFile.FileName);
-
-                        var fileAbsolutePath = Path.Combine(GetUploadFolderAbsolutePath(), relativePath);
-
-                        Directory.CreateDirectory(Path.GetDirectoryName(fileAbsolutePath));
-
-                        using (var stream = new FileStream(fileAbsolutePath, FileMode.Create))
-                        {
-                            formFile.CopyTo(stream);
-                        }
-                    }
-                }
-            }
-        }
-
+        
         public string GetUploadFolderAbsolutePath()
         {
             return Path.Combine(_hostingEnvironment.ContentRootPath, Properties.Resources.UploadsFolderName);
@@ -112,50 +132,58 @@ namespace acaShare.MVC.Common
 
         public void ReplaceMaterialFilesWithEditRequestFiles(int materialId, int editRequestId, ICollection<BLL.Models.File> allNewFiles)
         {
-            var materialFolderPath = Path.Combine(
-                Properties.Resources.MaterialFilesUploadFolderName,
-                materialId.ToString());
+            if (materialId < 1 || editRequestId < 1)
+            {
+                throw new ArgumentOutOfRangeException("Provided materialId or editRequestId is not valid");
+            }
 
-            var materialFolderAbsolutePath = Path.Combine(GetUploadFolderAbsolutePath(), materialFolderPath);
+            if (allNewFiles?.Count > 0)
+            {
+                var materialFolderAbsolutePath = Path.Combine(
+                    GetUploadFolderAbsolutePath(),
+                    Properties.Resources.MaterialFilesUploadFolderName,
+                    materialId.ToString());
 
-            var existingFilesToStay = allNewFiles.Where(f => f.FileId > 0).ToList();
-            RemoveExistingMaterialFilesExceptSupplied(materialFolderAbsolutePath, existingFilesToStay);
+                RemoveOldFiles(materialFolderAbsolutePath, allNewFiles);
 
-            var newFiles = allNewFiles.Where(f => f.FileId > 0).ToList();
-            MoveNewFilesFromEditRequestToMaterial(materialFolderAbsolutePath, editRequestId, newFiles);
+                MoveNewFilesFromEditRequestToMaterial(materialFolderAbsolutePath, editRequestId);
+            }
         }
 
-        private void RemoveExistingMaterialFilesExceptSupplied(string materialFolderAbsolutePath, List<BLL.Models.File> filesToStay)
+        private void RemoveOldFiles(string materialFolderAbsolutePath, ICollection<BLL.Models.File> newFiles)
         {
-            var existingFilesPathsInFileServer = Directory.GetFiles(materialFolderAbsolutePath);
+            var existingFilesPaths = Directory.GetFiles(materialFolderAbsolutePath);
 
-            foreach (var existingFilePathInFileServer in existingFilesPathsInFileServer)
+            foreach (var existingFilePath in existingFilesPaths)
             {
-                var existingFile = filesToStay.FirstOrDefault(ef => existingFilePathInFileServer.EndsWith(ef.RelativePath));
+                var existingFile = newFiles.FirstOrDefault(ef => existingFilePath.EndsWith(ef.RelativePath));
 
                 if (existingFile == null)
                 {
-                    Directory.Delete(existingFilePathInFileServer);
+                    System.IO.File.Delete(existingFilePath);
                 }
             }
         }
         
-        private void MoveNewFilesFromEditRequestToMaterial(string materialFolderAbsolutePath, int editRequestId, List<BLL.Models.File> newFiles)
+        private void MoveNewFilesFromEditRequestToMaterial(string materialFolderAbsolutePath, int editRequestId)
         {
-            var pathToEditRequestFiles = Path.Combine(
+            var editRequestFolderAbsolutePath = Path.Combine(
                 materialFolderAbsolutePath, 
                 Properties.Resources.EditRequestFilesUploadFolderName,
                 editRequestId.ToString());
 
-            var editRequestFilesPaths = Directory.GetFiles(materialFolderAbsolutePath);
-
-            foreach (var filePath in editRequestFilesPaths)
+            if(Directory.Exists(editRequestFolderAbsolutePath))
             {
-                var destination = Path.Combine(materialFolderAbsolutePath, Path.GetFileName(filePath));
-                System.IO.File.Move(filePath, destination);
-            }
+                var editRequestFilesPaths = Directory.GetFiles(editRequestFolderAbsolutePath);
 
-            Directory.Delete(pathToEditRequestFiles);
+                foreach (var filePath in editRequestFilesPaths)
+                {
+                    var destination = Path.Combine(materialFolderAbsolutePath, Path.GetFileName(filePath));
+                    System.IO.File.Move(filePath, destination);
+                }
+
+                Directory.Delete(editRequestFolderAbsolutePath);
+            }
         }
     }
 }

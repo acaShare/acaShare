@@ -8,7 +8,7 @@ namespace acaShare.DAL.Core.Repositories
     public interface IMaterialRepository : IRepository<Material>
     {
         void AddDeleteRequest(DeleteRequest deleteRequest);
-        void AddUpdateRequest(EditRequest editRequest);
+        void AddEditRequest(EditRequest editRequest);
         ICollection<Material> GetMaterialsToApprove();
         Material GetMaterialToApprove(int materialId);
         ICollection<ChangeReason> GetChangeReasons(ChangeType changeType);

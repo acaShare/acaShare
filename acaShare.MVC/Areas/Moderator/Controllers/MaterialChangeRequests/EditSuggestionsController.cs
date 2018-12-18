@@ -55,25 +55,27 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
                 {
                     MaterialId = editRequest.MaterialToUpdateId,
                     CreatorUsername = editRequest.MaterialToUpdate.Creator.Username,
-                    Name = editRequest.NewName,
-                    Description = editRequest.NewDescription,
-                    UploadDate = editRequest.MaterialToUpdate.UploadDate,
+                    Name = editRequest.MaterialToUpdate.Name,
+                    Description = editRequest.MaterialToUpdate.Description,
+                    UploadDate = editRequest.MaterialToUpdate.UploadDate
                 },
                 EditRequestViewModel = new EditRequestViewModel
                 {
                     EditRequestId = editRequest.EditRequestId,
+                    MaterialName = editRequest.NewName,
+                    NewDescription = editRequest.NewDescription,
                     Summary = editRequest.Summary,
                     UpdaterName = editRequest.Updater.Username,
+                    RequestDate = editRequest.RequestDate,
                     Files = editRequest.Files.Select(f =>
-                        new FileViewModel
-                        {
-                            FileId = f.FileId,
-                            FileName = f.FileName,
-                            RelativePath = f.RelativePath,
-                            ContentType = f.ContentType
-                        }
-                    ).ToList(),
-                    RequestDate = editRequest.RequestDate
+                       new FileViewModel
+                       {
+                           FileId = f.FileId,
+                           FileName = f.FileName,
+                           RelativePath = f.RelativePath,
+                           ContentType = f.ContentType
+                       }
+                    ).ToList()
                 }
             };
 

@@ -10,7 +10,7 @@
             <nav class="colornav">
                 <div class="nav-wrapper path-header-wrapper">
                     <div class="col s12 tree-path">
-                        <p class="breadcrumb">Sugestia usunięcia materiału "@Model.MaterialViewModel.Name"</p>
+                        <p class="breadcrumb">Sugestia edycji materiału "@Model.MaterialViewModel.Name"</p>
                     </div>
                 </div>
             </nav>
@@ -21,7 +21,7 @@
                             <a asp-action="ApproveEditRequest" asp-route-editRequestId="@Model.EditRequestViewModel.EditRequestId"
                                class="sep action-button tooltipped" data-position="top" data-tooltip="Zatwierdź sugestię">
 
-                                <i class="material-icons lh">delete_forever</i>
+                                <i class="material-icons lh">check</i>
                             </a>
                             <a asp-action="DeclineEditRequest" asp-route-editRequestId="@Model.EditRequestViewModel.EditRequestId"
                                class="sep action-button tooltipped" data-position="top" data-tooltip="Odrzuć sugestię">
@@ -31,7 +31,17 @@
                         </div>
                     </header>
                     <section>
-                        <h2>@Html.DisplayNameFor(model => model.EditRequestViewModel.Summary)</h2>:
+                        <h2>Poprzednia nazwa materiału:</h2>
+                        <p class="additional-comment">
+                            @Html.DisplayFor(model => model.MaterialViewModel.Name)
+                        </p>
+                        <br />
+                        <h2>Poprzedni opis materiału:</h2>
+                        <p class="additional-comment">
+                            @Html.DisplayFor(model => model.MaterialViewModel.Description)
+                        </p>
+                        <br />
+                        <h2>@Html.DisplayNameFor(model => model.EditRequestViewModel.Summary):</h2>
                         <p class="additional-comment">
                             @Html.DisplayFor(model => model.EditRequestViewModel.Summary)
                         </p>
@@ -53,7 +63,7 @@
 <div class="material-container">
     <header class="material-header">
         <h1 class="material-header-title">
-            @Html.DisplayFor(model => model.MaterialViewModel.Name)
+            @Html.DisplayFor(model => model.EditRequestViewModel.MaterialName)
         </h1>
     </header>
 
@@ -106,11 +116,11 @@
 
         <section>
             <h2 class="material-content-description-header">
-                @Html.DisplayNameFor(model => model.MaterialViewModel.Description)
+                @Html.DisplayNameFor(model => model.EditRequestViewModel.NewDescription)
             </h2>
 
             <div class="material-content-description">
-                @Html.DisplayFor(model => model.MaterialViewModel.Description)
+                @Html.DisplayFor(model => model.EditRequestViewModel.NewDescription)
             </div>
         </section>
     </div>

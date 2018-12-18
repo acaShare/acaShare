@@ -10,7 +10,7 @@ namespace acaShare.BLL.Models
             Files = new HashSet<File>();
         }
 
-        public EditRequest(User updater, Material materialToUpdate, string summary, string newName, string newDescription, ICollection<File> files) : this()
+        public EditRequest(User updater, Material materialToUpdate, string summary, string newName, string newDescription) : this()
         {
             if (updater == null || materialToUpdate == null || string.IsNullOrEmpty(summary) || 
                 string.IsNullOrEmpty(newName) || string.IsNullOrEmpty(newDescription))
@@ -24,7 +24,6 @@ namespace acaShare.BLL.Models
             Summary = summary;
             NewName = newName;
             NewDescription = newDescription;
-            Files = files;
         }
 
         public int EditRequestId { get; private set; }
@@ -62,6 +61,8 @@ namespace acaShare.BLL.Models
                     { "EditSummary", Summary },
                     { "MaterialId", MaterialToUpdateId.ToString() }
                 });
+
+            MaterialToUpdate.RemoveEditRequests();
         }
 
         public void DeclineRequest(string declineReason)
@@ -74,6 +75,19 @@ namespace acaShare.BLL.Models
                     { "DeclineReason", declineReason },
                     { "MaterialId", MaterialToUpdateId.ToString() }
                 });
+        }
+
+        public void AddFiles(ICollection<File> newFiles)
+        {
+            if (newFiles == null)
+            {
+                throw new ArgumentNullException("Provided files cannot be null");
+            }
+
+            foreach (var file in newFiles)
+            {
+                Files.Add(file);
+            }
         }
     }
 }

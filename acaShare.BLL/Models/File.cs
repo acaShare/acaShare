@@ -22,11 +22,6 @@ namespace acaShare.BLL.Models
             ContentType = contentType.ToLower();
         }
 
-        public File(int fileId, string fileName, string fileRelativePath, string contentType) : this(fileName, fileRelativePath, contentType)
-        {
-            FileId = fileId;
-        }
-
         public void AddToMaterial(Material material)
         {
             if (Material == null && material != null)
