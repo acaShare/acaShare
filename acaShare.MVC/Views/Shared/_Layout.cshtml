@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using acaShare.MVC.Models
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -14,6 +17,7 @@
     <title>acaShare</title>
     @RenderSection("ModeratorPanelCSS", false)
     @RenderSection("MaterialViewCSS", false)
+    @RenderSection("LoginRegisterCSS", false)
 </head>
 <body>
     <noscript class="no-script">
@@ -35,7 +39,7 @@
         <div class="no-script no-script-data">
             <h1 class="no-script">Ups...</h1>
             <h3 class="no-script home-container">
-                Wygląda na to, że obsługa Javascript jest wyłączona.<br class="no-script"/>
+                Wygląda na to, że obsługa Javascript jest wyłączona.<br class="no-script" />
                 Aby korzystać ze wszystkich funkcjonalności aplikacji, włącz obsługę Javascript.
             </h3>
             <img class="no-script" src="~/images/PageNotFound.png" />
@@ -46,18 +50,23 @@
         <div class="nav-wrapper">
             <a asp-area="Main" asp-controller="List" asp-action="AvailableUniversities" class="brand-logo">acaShare</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a asp-area="Administrator" asp-controller="AdministratorPanel" asp-action="Home">Panel administratora</a></li>
-                <li><a asp-area="Moderator" asp-controller="ModeratorPanel" asp-action="Home">Panel moderatora</a></li>
-                <li>
-                    <form id="logout-form"
-                          asp-area="Identity"
-                          asp-page="/Account/Logout"
-                          asp-route-returnUrl="@Url.Page("/Index", new { area = "" })"
-                          method="post">
+                @if (User.IsInRole(Roles.AdministratorRole) || User.IsInRole(Roles.MainModeratorRole) || User.IsInRole(Roles.ModeratorRole))
+                {
+                    <li><a asp-area="Moderator" asp-controller="ModeratorPanel" asp-action="Home">Panel moderatora</a></li>
+                }
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li>
+                        <form id="logout-form"
+                              asp-area="Identity"
+                              asp-page="/Account/Logout"
+                              asp-route-returnUrl="@Url.Page("/Index", new { area = "" })"
+                              method="post">
 
-                        <a href="javascript:{}" onclick="document.getElementById('logout-form').submit()">Wyloguj</a>
-                    </form>
-                </li>
+                            <a href="javascript:{}" onclick="document.getElementById('logout-form').submit()">Wyloguj</a>
+                        </form>
+                    </li>
+                }
             </ul>
         </div>
     </nav>

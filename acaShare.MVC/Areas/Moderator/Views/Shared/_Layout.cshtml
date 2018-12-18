@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="~/css/moderator-panel/structure-management/structure-management-add.css">
     <link rel="stylesheet" href="~/css/moderator-panel/structure-management/structure-management-edit.css">
     <link rel="stylesheet" href="~/css/moderator-panel/structure-management/structure-management-delete.css">
+    <link rel="stylesheet" href="~/css/moderator-panel/ModeratorManagementStyle.css" />
 }
 
 <div class="row home-container">
@@ -32,12 +33,15 @@
                     <li class="moderator-actions-item">
                         <a class="moderator-actions-item-link" asp-action="">Materiały oczekujące na zatwierdzenie</a>
                     </li>
-                    <li class="moderator-actions-item">
-                        <a class="moderator-actions-item-link" asp-controller="UniversitiesManagement" asp-action="Universities">Zarządzaj strukturą uczelni</a>
-                    </li>
-                    <li class="moderator-actions-item">
-                        <a class="moderator-actions-item-link" asp-action="">Zarządzaj moderatorami</a>
-                    </li>
+                    @if (User.IsInRole(Roles.AdministratorRole) || User.IsInRole(Roles.MainModeratorRole))
+                    {
+                        <li class="moderator-actions-item">
+                            <a class="moderator-actions-item-link" asp-controller="UniversitiesManagement" asp-action="Universities">Zarządzaj strukturą uczelni</a>
+                        </li>
+                        <li class="moderator-actions-item">
+                            <a class="moderator-actions-item-link" asp-controller="ModeratorManagement" asp-action="Home">Zarządzaj moderatorami</a>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>

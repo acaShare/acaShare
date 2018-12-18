@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using acaShare.DAL.Configuration;
 using acaShare.DAL.Core;
 using acaShare.DAL.EFPersistence;
+using acaShare.MVC.Areas.Moderator;
 using acaShare.ServiceLayer.Interfaces;
 using acaShare.ServiceLayer.Services;
 using Microsoft.AspNetCore.Builder;
@@ -38,6 +39,7 @@ namespace acaShare.MVC
             services.AddScoped<IUniversityTreeManagementService, UniversityTreeManagementService>();
             services.AddScoped<IUniversityTreeTraversalService, UniversityTreeTraversalService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRolesManagementService, RolesManagementService>();
             services.AddScoped<IMaterialsService, MaterialsService>();
             services.AddScoped<ISidebarService, SidebarService>();
 
@@ -54,15 +56,19 @@ namespace acaShare.MVC
                 options.UseSqlServer(Configuration["AcaShareConfiguration:ConnectionString"]);
             });
 
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<AcaShareDbContext>();
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<AcaShareDbContext>()
+                .AddDefaultUI()
+                .AddDefaultTokenProviders();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<IdentityUser> userManager, IConfiguration config)
         {
+            SeedData.SeedUsers(userManager, config);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

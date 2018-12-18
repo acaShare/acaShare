@@ -1,0 +1,16 @@
+﻿body {
+}
+
+.row {
+    text-align: center;
+}
+
+.main-container {
+    margin: 0 auto;
+    width: 30%;
+}
+
+#box {
+    opacity: 1;
+    position: relative;
+}
