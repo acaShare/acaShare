@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using acaShare.MVC.Areas.Moderator.Models;
 using acaShare.MVC.Areas.Moderator.Models.MaterialChangeRequests;
+using acaShare.MVC.Common;
 using acaShare.MVC.Models;
 using acaShare.ServiceLayer.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -17,11 +18,13 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
     {
         private readonly IMaterialsService _materialsService;
         private readonly IUserService _userService;
+        private readonly IFormFilesManagement _filesManagement;
 
-        public DeleteSuggestionsController(IMaterialsService materialsService, IUserService userService)
+        public DeleteSuggestionsController(IMaterialsService materialsService, IUserService userService, IFormFilesManagement formFilesManagement)
         {
             _materialsService = materialsService;
             _userService = userService;
+            _filesManagement = formFilesManagement;
         }
 
         public IActionResult DeleteSuggestions()
@@ -44,7 +47,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
 
         public IActionResult DeleteRequestApprovalDecision(int deleteRequestId)
         {
-            BLL.Models.DeleteRequest deleteRequest = _materialsService.GetDeleteRequestToApprove(deleteRequestId);
+            BLL.Models.DeleteRequest deleteRequest = _materialsService.GetDeleteRequest(deleteRequestId);
 
             if (deleteRequest == null)
             {
@@ -89,8 +92,11 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
 
             try
             {
-                // TODO DELETE REQUEST DOES NOT DELETE FILES PHYSICALLY
-                _materialsService.ApproveDeleteRequest(deleteRequestId, loggedModerator);
+                var deleteRequest = _materialsService.GetDeleteRequest(deleteRequestId);
+                var filesToRemove = deleteRequest.MaterialToDelete.Files;
+                _filesManagement.RemoveFilesFromFileSystem(filesToRemove);
+
+                _materialsService.ApproveDeleteRequest(deleteRequest, loggedModerator);
             }
             catch(ArgumentException e)
             {
@@ -102,7 +108,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
 
         public IActionResult DeclineDeleteRequest(int deleteRequestId)
         {
-            BLL.Models.DeleteRequest deleteRequest = _materialsService.GetDeleteRequestToApprove(deleteRequestId);
+            BLL.Models.DeleteRequest deleteRequest = _materialsService.GetDeleteRequest(deleteRequestId);
 
             if (deleteRequest == null)
             {
