@@ -47,7 +47,7 @@ namespace acaShare.MVC.Common
                         if (editRequestId == null)
                         {
                             relativePath = Path.Combine(
-                                Properties.Resources.MaterialFilesUploadFolderName,
+                                SharedResourcesLibrary.Properties.Resources.MaterialFilesUploadFolderName,
                                 materialId.ToString(),
                                 formFile.FileName);
                         }
@@ -59,9 +59,9 @@ namespace acaShare.MVC.Common
                             }
                             
                             relativePath = Path.Combine(
-                                Properties.Resources.MaterialFilesUploadFolderName,
+                                SharedResourcesLibrary.Properties.Resources.MaterialFilesUploadFolderName,
                                 materialId.ToString(),
-                                Properties.Resources.EditRequestFilesUploadFolderName,
+                                SharedResourcesLibrary.Properties.Resources.EditRequestFilesUploadFolderName,
                                 editRequestId.ToString(),
                                 formFile.FileName);
                         }
@@ -93,7 +93,7 @@ namespace acaShare.MVC.Common
                         if (editRequestId == null)
                         {
                             relativePath = Path.Combine(
-                                Properties.Resources.MaterialFilesUploadFolderName,
+                                SharedResourcesLibrary.Properties.Resources.MaterialFilesUploadFolderName,
                                 materialId.ToString(),
                                 formFile.FileName);
                         }
@@ -105,9 +105,9 @@ namespace acaShare.MVC.Common
                             }
 
                             relativePath = Path.Combine(
-                                Properties.Resources.MaterialFilesUploadFolderName,
+                                SharedResourcesLibrary.Properties.Resources.MaterialFilesUploadFolderName,
                                 materialId.ToString(),
-                                Properties.Resources.EditRequestFilesUploadFolderName,
+                                SharedResourcesLibrary.Properties.Resources.EditRequestFilesUploadFolderName,
                                 editRequestId.ToString(),
                                 formFile.FileName);
                         }
@@ -127,7 +127,7 @@ namespace acaShare.MVC.Common
         
         public string GetUploadFolderAbsolutePath()
         {
-            return Path.Combine(_hostingEnvironment.ContentRootPath, Properties.Resources.UploadsFolderName);
+            return Path.Combine(_hostingEnvironment.ContentRootPath, SharedResourcesLibrary.Properties.Resources.UploadsFolderName);
         }
 
         public void ReplaceMaterialFilesWithEditRequestFiles(int materialId, int editRequestId, ICollection<BLL.Models.File> allNewFiles)
@@ -141,7 +141,7 @@ namespace acaShare.MVC.Common
             {
                 var materialFolderAbsolutePath = Path.Combine(
                     GetUploadFolderAbsolutePath(),
-                    Properties.Resources.MaterialFilesUploadFolderName,
+                    SharedResourcesLibrary.Properties.Resources.MaterialFilesUploadFolderName,
                     materialId.ToString());
 
                 RemoveOldFiles(materialFolderAbsolutePath, allNewFiles);
@@ -168,8 +168,8 @@ namespace acaShare.MVC.Common
         private void MoveNewFilesFromEditRequestToMaterial(string materialFolderAbsolutePath, int editRequestId)
         {
             var editRequestFolderAbsolutePath = Path.Combine(
-                materialFolderAbsolutePath, 
-                Properties.Resources.EditRequestFilesUploadFolderName,
+                materialFolderAbsolutePath,
+                SharedResourcesLibrary.Properties.Resources.EditRequestFilesUploadFolderName,
                 editRequestId.ToString());
 
             if(Directory.Exists(editRequestFolderAbsolutePath))

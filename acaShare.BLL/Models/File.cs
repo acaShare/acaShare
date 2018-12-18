@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace acaShare.BLL.Models
 {
@@ -44,6 +45,11 @@ namespace acaShare.BLL.Models
         public void Update(string fileName)
         {
             FileName = fileName;
+        }
+
+        public void MoveToMaterial(string materialsFolderName, int materialId)
+        {
+            RelativePath = Path.Combine(materialsFolderName, materialId.ToString(), Path.GetFileName(RelativePath));
         }
     }
 }

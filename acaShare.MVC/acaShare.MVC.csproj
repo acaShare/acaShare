@@ -34,6 +34,7 @@
   <ItemGroup>
     <ProjectReference Include="..\acaShare.DAL\acaShare.DAL.csproj" />
     <ProjectReference Include="..\acaShare.ServiceLayer\acaShare.ServiceLayer.csproj" />
+    <ProjectReference Include="..\acaShare.SharedResourcesLibrary\acaShare.SharedResourcesLibrary.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -115,21 +116,6 @@
     <Folder Include="Areas\Universities\Models\List\" />
     <Folder Include="Areas\Identity\Views\WelcomePage\" />
     <Folder Include="_Uploads\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

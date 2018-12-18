@@ -89,8 +89,8 @@ namespace acaShare.MVC
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(
-                    Path.Combine(Directory.GetCurrentDirectory(), Properties.Resources.UploadsFolderName)),
-                RequestPath = "/" + Properties.Resources.UploadsFolderName
+                    Path.Combine(Directory.GetCurrentDirectory(), SharedResourcesLibrary.Properties.Resources.UploadsFolderName)),
+                RequestPath = "/" + SharedResourcesLibrary.Properties.Resources.UploadsFolderName
             });
 
             app.Use(async (ctx, next) =>

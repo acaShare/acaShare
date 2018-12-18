@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace acaShare.BLL.Models
@@ -80,13 +81,21 @@ namespace acaShare.BLL.Models
             AddFiles(newFiles);
         }
 
-        public void UpdateThroughEditRequest(EditRequest editRequest)
+        public ICollection<File> UpdateThroughEditRequest(EditRequest editRequest, string materialsFolderName)
         {
-            Name = editRequest.NewName;
-            Description = editRequest.NewDescription;
-            ModificationDate = DateTime.Now;
-            Updater = editRequest.Updater;
-            Files = editRequest.Files;
+            var filesToRemove = new List<File>(Files);
+            Files.Clear();
+            ChangeRelativePathToMaterial(editRequest.Files, materialsFolderName);
+            Update(editRequest.NewName, editRequest.NewDescription, editRequest.Files, editRequest.Updater);
+            return filesToRemove;
+        }
+
+        private void ChangeRelativePathToMaterial(ICollection<File> files, string materialsFolderName)
+        {
+            foreach (var file in files)
+            {
+                file.MoveToMaterial(materialsFolderName, MaterialId);
+            }
         }
 
         public void RemoveEditRequests()

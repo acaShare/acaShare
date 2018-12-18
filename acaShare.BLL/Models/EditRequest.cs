@@ -39,10 +39,10 @@ namespace acaShare.BLL.Models
         public virtual ICollection<File> Files { get; private set; }
         
 
-        public void ApproveRequest()
+        public ICollection<File> ApproveRequest(string materialsFolderName)
         {
-            MaterialToUpdate.UpdateThroughEditRequest(this);
-
+            var filesToRemove = MaterialToUpdate.UpdateThroughEditRequest(this, materialsFolderName);
+            
             MaterialToUpdate.Creator.Notify(
                 NotificationType.UPDATE_REQUEST_APPROVED,
                 new Dictionary<string, string>
@@ -63,6 +63,8 @@ namespace acaShare.BLL.Models
                 });
 
             MaterialToUpdate.RemoveEditRequests();
+
+            return filesToRemove;
         }
 
         public void DeclineRequest(string declineReason)

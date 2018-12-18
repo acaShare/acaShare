@@ -194,9 +194,12 @@ namespace acaShare.ServiceLayer.Services
             }
 
             var materialToUpdate = editRequest.MaterialToUpdate;
-            editRequest.ApproveRequest();
 
-            UpdateMaterial(materialToUpdate);
+            var filesToRemove = editRequest.ApproveRequest(SharedResourcesLibrary.Properties.Resources.MaterialFilesUploadFolderName);
+            _uow.Materials.RemoveFiles(filesToRemove);
+
+            _uow.Materials.Update(materialToUpdate);
+            _uow.SaveChanges();
         }
 
         public void DeclineEditRequest(int editRequestId, string declineReason)

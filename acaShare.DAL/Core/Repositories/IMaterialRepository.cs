@@ -19,5 +19,6 @@ namespace acaShare.DAL.Core.Repositories
         EditRequest GetEditRequest(int editRequestId);
         void DeleteEditRequest(EditRequest editRequest);
         void UpdateEditRequest(EditRequest editRequest);
+        void RemoveFiles(ICollection<File> filesToRemove);
     }
 }
