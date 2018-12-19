@@ -147,15 +147,26 @@ namespace acaShare.MVC.Common
                 throw new ArgumentOutOfRangeException("Provided materialId or editRequestId is not valid");
             }
 
+            var materialFolderAbsolutePath = Path.Combine(
+                   GetUploadFolderAbsolutePath(),
+                   SharedResourcesLibrary.Properties.Resources.MaterialFilesUploadFolderName,
+                   materialId.ToString());
+
+            var editRequestsFolder = Path.Combine(
+                materialFolderAbsolutePath,
+                SharedResourcesLibrary.Properties.Resources.EditRequestFilesUploadFolderName);
+
+            RemoveOldFiles(materialFolderAbsolutePath, allNewFiles);
+
             if (allNewFiles?.Count > 0)
             {
-                var materialFolderAbsolutePath = Path.Combine(
-                    GetUploadFolderAbsolutePath(),
-                    SharedResourcesLibrary.Properties.Resources.MaterialFilesUploadFolderName,
-                    materialId.ToString());
+                MoveNewFilesFromEditRequestToMaterial(materialFolderAbsolutePath, editRequestsFolder, editRequestId);
+            }
 
-                RemoveOldFiles(materialFolderAbsolutePath, allNewFiles);
-                MoveNewFilesFromEditRequestToMaterial(materialFolderAbsolutePath, editRequestId);
+            // delete all edit requests files connected with this material
+            if (Directory.Exists(editRequestsFolder))
+            {
+                Directory.Delete(editRequestsFolder, true);
             }
         }
 
@@ -174,12 +185,8 @@ namespace acaShare.MVC.Common
             }
         }
         
-        private void MoveNewFilesFromEditRequestToMaterial(string materialFolderAbsolutePath, int editRequestId)
+        private void MoveNewFilesFromEditRequestToMaterial(string materialFolderAbsolutePath, string editRequestsFolder, int editRequestId)
         {
-            var editRequestsFolder = Path.Combine(
-                materialFolderAbsolutePath,
-                SharedResourcesLibrary.Properties.Resources.EditRequestFilesUploadFolderName);
-
             var editRequestFolderAbsolutePath = Path.Combine(editRequestsFolder, editRequestId.ToString());
 
             if (Directory.Exists(editRequestFolderAbsolutePath))
@@ -190,12 +197,6 @@ namespace acaShare.MVC.Common
                 {
                     var destination = Path.Combine(materialFolderAbsolutePath, Path.GetFileName(filePath));
                     System.IO.File.Move(filePath, destination);
-                }
-
-                // delete all edit requests files connected with this material
-                if (Directory.Exists(editRequestsFolder))
-                {
-                    Directory.Delete(editRequestsFolder, true);
                 }
             }
         }
