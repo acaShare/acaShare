@@ -208,8 +208,8 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 return BadRequest("Coś poszło nie tak przy zapisywaniu plików do systemu plików. Spróbuj ponownie.");
             }
 
-            var newFiles = _filesManagement.ExtractFilesFromForm(vm.FormFiles, vm.MaterialId, guid);
-            materialToEdit.Update(vm.Name, vm.Description, newFiles, loggedUser);
+            var filesFromForm = _filesManagement.ExtractFilesFromForm(vm.FormFiles, vm.MaterialId, guid);
+            materialToEdit.Update(vm.Name, vm.Description, filesFromForm, loggedUser);
             _service.UpdateMaterial(materialToEdit);
 
             return Json(vm.MaterialId);
@@ -589,7 +589,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
             {
                 MaterialId = materialId,
                 MaterialName = materialName,
-                Reasons = reasons
+                Reasons = reasons.ToList()
             };
 
             return View(vm);

@@ -21,6 +21,6 @@ namespace acaShare.MVC.Areas.Main.Models.Materials
         public string AdditionalComment { get; set; }
 
         public string MaterialName { get; set; }
-        public ICollection<ChangeReason> Reasons { get; set; }
+        public IList<ChangeReason> Reasons { get; set; }
     }
 }

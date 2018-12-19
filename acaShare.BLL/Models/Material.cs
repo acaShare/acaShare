@@ -83,11 +83,11 @@ namespace acaShare.BLL.Models
 
         public ICollection<File> UpdateThroughEditRequest(EditRequest editRequest, string materialsFolderName)
         {
-            var filesToRemove = new List<File>(Files);
+            var oldMaterialFilesToRemove = new List<File>(Files);
             Files.Clear();
             ChangeRelativePathToMaterial(editRequest.Files, materialsFolderName);
-            Update(editRequest.NewName, editRequest.NewDescription, new List<File>(editRequest.Files), editRequest.Updater);
-            return filesToRemove;
+            Update(editRequest.NewName, editRequest.NewDescription, editRequest.Files, editRequest.Updater);
+            return oldMaterialFilesToRemove;
         }
 
         private void ChangeRelativePathToMaterial(ICollection<File> files, string materialsFolderName)
@@ -96,12 +96,6 @@ namespace acaShare.BLL.Models
             {
                 file.MoveToMaterial(materialsFolderName, MaterialId);
             }
-        }
-
-        public void RemoveEditRequests()
-        {
-            EditRequests.Clear();
-            EditRequests = null;
         }
 
         public void Approve(User approver)

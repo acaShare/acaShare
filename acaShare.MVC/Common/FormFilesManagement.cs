@@ -155,7 +155,6 @@ namespace acaShare.MVC.Common
                     materialId.ToString());
 
                 RemoveOldFiles(materialFolderAbsolutePath, allNewFiles);
-
                 MoveNewFilesFromEditRequestToMaterial(materialFolderAbsolutePath, editRequestId);
             }
         }
@@ -183,7 +182,7 @@ namespace acaShare.MVC.Common
 
             var editRequestFolderAbsolutePath = Path.Combine(editRequestsFolder, editRequestId.ToString());
 
-            if(Directory.Exists(editRequestFolderAbsolutePath))
+            if (Directory.Exists(editRequestFolderAbsolutePath))
             {
                 var editRequestFilesPaths = Directory.GetFiles(editRequestFolderAbsolutePath);
 

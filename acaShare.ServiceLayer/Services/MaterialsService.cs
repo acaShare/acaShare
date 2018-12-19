@@ -192,11 +192,15 @@ namespace acaShare.ServiceLayer.Services
 
             var materialToUpdate = editRequest.MaterialToUpdate;
 
-            var filesToRemove = editRequest.ApproveRequest(SharedResourcesLibrary.Properties.Resources.MaterialFilesUploadFolderName);
-            _uow.Materials.RemoveFiles(filesToRemove);
+            // since onDelete action on File_EditRequest FK constraint is SET NULL - we have to delete these files manually
+            var filesFromOtherEditRequests = materialToUpdate.EditRequests.SelectMany(er => er.Files);
+            _uow.Materials.RemoveFiles(filesFromOtherEditRequests);
 
-            _uow.Materials.DeleteEditRequests(materialToUpdate.EditRequests);
+            var oldMaterialFilesToRemove = editRequest.ApproveRequest(SharedResourcesLibrary.Properties.Resources.MaterialFilesUploadFolderName);
 
+            // since onDelete action on File_Material FK constraint is RESTRICT - we have to delete these files manually before the material
+            _uow.Materials.RemoveFiles(oldMaterialFilesToRemove);
+            
             _uow.Materials.Update(materialToUpdate);
             _uow.SaveChanges();
         }

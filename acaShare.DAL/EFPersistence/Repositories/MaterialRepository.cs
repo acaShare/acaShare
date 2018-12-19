@@ -157,7 +157,7 @@ namespace acaShare.DAL.EFPersistence.Repositories
             _editRequests.RemoveRange(editRequests);
         }
 
-        public void RemoveFiles(ICollection<File> filesToRemove)
+        public void RemoveFiles(IEnumerable<File> filesToRemove)
         {
             _files.RemoveRange(filesToRemove);
         }

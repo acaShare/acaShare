@@ -41,7 +41,7 @@ namespace acaShare.BLL.Models
 
         public ICollection<File> ApproveRequest(string materialsFolderName)
         {
-            var filesToRemove = MaterialToUpdate.UpdateThroughEditRequest(this, materialsFolderName);
+            var oldMaterialFilesToRemove = MaterialToUpdate.UpdateThroughEditRequest(this, materialsFolderName);
             
             MaterialToUpdate.Creator.Notify(
                 NotificationType.UPDATE_REQUEST_APPROVED,
@@ -61,8 +61,10 @@ namespace acaShare.BLL.Models
                     { "EditSummary", Summary },
                     { "MaterialId", MaterialToUpdateId.ToString() }
                 });
-            
-            return filesToRemove;
+
+            MaterialToUpdate.EditRequests.Clear();
+
+            return oldMaterialFilesToRemove;
         }
 
         public void DeclineRequest(string declineReason)
