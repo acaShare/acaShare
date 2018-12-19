@@ -152,7 +152,7 @@ function showUploadedFiles(files) {
             "div",
             "input-field material-file-edit-mode-filename",
             `
-                <input type="text" id="FormFile[${id}]__FileName" name="FormFile[${id}]__FileName" value="${fileName}" class="validate" data-length="50" data-val="true" data-val-maxlength="Nazwa pliku numer ${id + 1} nie<br>może przekraczać 50 znaków" data-val-maxlength-max="50" data-val-required="Nazwa pliku numer ${id+1} jest wymagana" required />
+                <input type="text" id="FormFile[${id}]__FileName" name="FormFile[${id}]__FileName" value="${fileName}" class="validate" data-length="100" data-val="true" data-val-maxlength="Nazwa pliku numer ${id + 1} nie<br>może przekraczać 100 znaków" data-val-maxlength-max="100" data-val-required="Nazwa pliku numer ${id+1} jest wymagana" required />
                 <span class="text-danger input-error-small file-name-input-error field-validation-valid" data-valmsg-for="FormFile[${id}]__FileName" data-valmsg-replace="true"></span>
             `
         );

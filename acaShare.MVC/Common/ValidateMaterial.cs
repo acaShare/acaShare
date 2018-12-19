@@ -17,7 +17,7 @@ namespace acaShare.MVC.Common
         public string ViewModelName { get; set; }
 
         private IFilesValidator _filesValidator;
-        private static readonly int MaxFileNameLength = 50;
+        private static readonly int MaxFileNameLength = 100;
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
