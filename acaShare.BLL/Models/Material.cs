@@ -86,7 +86,7 @@ namespace acaShare.BLL.Models
             var filesToRemove = new List<File>(Files);
             Files.Clear();
             ChangeRelativePathToMaterial(editRequest.Files, materialsFolderName);
-            Update(editRequest.NewName, editRequest.NewDescription, editRequest.Files, editRequest.Updater);
+            Update(editRequest.NewName, editRequest.NewDescription, new List<File>(editRequest.Files), editRequest.Updater);
             return filesToRemove;
         }
 

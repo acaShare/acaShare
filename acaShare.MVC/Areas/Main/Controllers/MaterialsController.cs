@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace acaShare.MVC.Areas.Main.Controllers
 {
@@ -23,15 +24,17 @@ namespace acaShare.MVC.Areas.Main.Controllers
         private readonly IUserService _userService;
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IFormFilesManagement _filesManagement;
+        private readonly IFilesValidator _filesValidator;
 
-        public MaterialsController(IMaterialsService service, IUniversityTreeTraversalService traversalService, 
-            IUserService userService, IHostingEnvironment hostingEnvironment, IFormFilesManagement formFilesManagement)
+        public MaterialsController(IMaterialsService service, IUniversityTreeTraversalService traversalService, IUserService userService, 
+            IHostingEnvironment hostingEnvironment, IFormFilesManagement formFilesManagement, IFilesValidator filesValidator)
         {
             _service = service;
             _traversalService = traversalService;
             _userService = userService;
             _hostingEnvironment = hostingEnvironment;
             _filesManagement = formFilesManagement;
+            _filesValidator = filesValidator;
         }
 
         public IActionResult Materials(int lessonId)
@@ -111,7 +114,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
             return View(vm);
         }
 
-        [ValidateMaterial(ViewModelToValidateParam = "vm")]
+        [ValidateMaterial(ViewModelName = "vm")]
         [HttpPost] // AJAX request
         public IActionResult Add(AddMaterialViewModel vm)
         {
@@ -123,9 +126,11 @@ namespace acaShare.MVC.Areas.Main.Controllers
             var materialToAdd = new BLL.Models.Material(vm.Name, vm.Description, lesson, creator, state);
             _service.AddMaterial(materialToAdd);
 
+            var guid = Guid.NewGuid();
+
             try
             {
-                _filesManagement.SaveFilesToFileSystem(vm.FormFiles, materialToAdd.MaterialId);
+                _filesManagement.SaveFilesToFileSystem(vm.FormFiles, materialToAdd.MaterialId, guid);
             }
             catch (Exception ex)
             {
@@ -133,7 +138,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
             }
 
             // TODO splitted into two roundtrips to name folders with materialId (can be changed in the future)
-            var filesToAdd = _filesManagement.ExtractFilesFromForm(vm.FormFiles, materialToAdd.MaterialId);
+            var filesToAdd = _filesManagement.ExtractFilesFromForm(vm.FormFiles, materialToAdd.MaterialId, guid);
             materialToAdd.AddFiles(filesToAdd);
             _service.UpdateMaterial(materialToAdd);
 
@@ -170,7 +175,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
             return View(vm);
         }
 
-        [ValidateMaterial(ViewModelToValidateParam = "vm")]
+        [ValidateMaterial(ViewModelName = "vm")]
         [HttpPost] // AJAX request
         public IActionResult Edit(EditMaterialViewModel vm)
         {
@@ -192,16 +197,18 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 _filesManagement.RemoveFilesFromFileSystem(filesToRemove);
             }
 
+            var guid = Guid.NewGuid();
+
             try
             {
-                _filesManagement.SaveFilesToFileSystem(vm.FormFiles, vm.MaterialId);
+                _filesManagement.SaveFilesToFileSystem(vm.FormFiles, vm.MaterialId, guid);
             }
             catch(Exception ex)
             {
                 return BadRequest("Coś poszło nie tak przy zapisywaniu plików do systemu plików. Spróbuj ponownie.");
             }
 
-            var newFiles = _filesManagement.ExtractFilesFromForm(vm.FormFiles, vm.MaterialId);
+            var newFiles = _filesManagement.ExtractFilesFromForm(vm.FormFiles, vm.MaterialId, guid);
             materialToEdit.Update(vm.Name, vm.Description, newFiles, loggedUser);
             _service.UpdateMaterial(materialToEdit);
 
@@ -627,7 +634,12 @@ namespace acaShare.MVC.Areas.Main.Controllers
             {
                 MaterialId = materialId,
                 Name = materialToEdit.Name,
-                Description = materialToEdit.Description,
+                Description = materialToEdit.Description
+            };
+
+            var vm = new EditRequestViewModel
+            {
+                EditMaterialViewModel = emvm,
                 Files = materialToEdit.Files.Select(f => new FileViewModel
                 {
                     FileId = f.FileId,
@@ -637,51 +649,50 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 }).ToList()
             };
 
-            var vm = new EditRequestViewModel
-            {
-                EditMaterialViewModel = emvm
-            };
-
             return View(vm);
         }
 
         
-        [ValidateMaterial(ViewModelToValidateParam = "vm")]
+        [ValidateMaterial(ViewModelName = "vm")]
         [HttpPost] // AJAX request
         public IActionResult CreateEditSuggestion(EditRequestViewModel vm)
         {
             var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var materialToEdit = _service.GetMaterial(vm.EditMaterialViewModel.MaterialId);
-
+            
             if (identityUserId == materialToEdit.Creator.IdentityUserId)
             {
                 return Forbid("Jesteś autorem danego materiału - skorzystaj z opcji edycji"); // TODO some authorization handler like 404 not found
             }
 
             var updater = _userService.FindByIdentityUserId(identityUserId);
-            
+
+            ICollection<BLL.Models.File> filesFromForm = new List<BLL.Models.File>();
             try
             {
                 BLL.Models.EditRequest editRequest = _service.CreateEditRequest(
                        updater, materialToEdit, vm.Summary, vm.EditMaterialViewModel.Name, vm.EditMaterialViewModel.Description);
 
+                var guid = Guid.NewGuid();
+
                 // # physical save #
-                _filesManagement.SaveFilesToFileSystem(vm.FormFiles, vm.EditMaterialViewModel.MaterialId, editRequest.EditRequestId);
+                _filesManagement.SaveFilesToFileSystem(vm.FormFiles, vm.EditMaterialViewModel.MaterialId, guid, editRequest.EditRequestId);
 
                 // # database save #
                 // existing files
                 var newFiles = new List<BLL.Models.File>();
 
-                if (vm.EditMaterialViewModel.Files != null)
+                if (vm.Files != null)
                 {
                     newFiles.AddRange(
-                        vm.EditMaterialViewModel.Files
+                        vm.Files
                             .Select(f => new BLL.Models.File(f.FileName, f.RelativePath, f.ContentType))
                             .ToList());
                 }
 
                 // new files
-                var filesFromForm = _filesManagement.ExtractFilesFromForm(vm.FormFiles, vm.EditMaterialViewModel.MaterialId, editRequest.EditRequestId);
+                filesFromForm = _filesManagement.ExtractFilesFromForm(
+                    vm.FormFiles, vm.EditMaterialViewModel.MaterialId, guid, editRequest.EditRequestId);
                 newFiles.AddRange(filesFromForm);
 
                 editRequest.AddFiles(newFiles);
@@ -693,7 +704,8 @@ namespace acaShare.MVC.Areas.Main.Controllers
             }
             catch(Exception e)
             {
-                return BadRequest("Coś poszło nie tak przy zapisywaniu plików do systemu plików. Spróbuj ponownie.");
+                _filesManagement.RemoveFilesFromFileSystem(filesFromForm);
+                return BadRequest("Coś poszło nie tak podczas zapisywania plików. Spróbuj ponownie.");
             }
 
             return Json(vm.EditMaterialViewModel.MaterialId);

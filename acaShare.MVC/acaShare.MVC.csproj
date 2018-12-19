@@ -115,7 +115,6 @@
     <Folder Include="Areas\Administrator\Views\" />
     <Folder Include="Areas\Universities\Models\List\" />
     <Folder Include="Areas\Identity\Views\WelcomePage\" />
-    <Folder Include="_Uploads\" />
   </ItemGroup>
 
 </Project>

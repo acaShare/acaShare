@@ -27,7 +27,7 @@ namespace acaShare.MVC.Common
             }
         }
 
-        public ICollection<BLL.Models.File> ExtractFilesFromForm(ICollection<IFormFile> formFiles, int materialId, int? editRequestId = null)
+        public ICollection<BLL.Models.File> ExtractFilesFromForm(ICollection<IFormFile> formFiles, int materialId, Guid guid, int? editRequestId = null)
         {
             if (materialId < 1)
             {
@@ -49,7 +49,7 @@ namespace acaShare.MVC.Common
                             relativePath = Path.Combine(
                                 SharedResourcesLibrary.Properties.Resources.MaterialFilesUploadFolderName,
                                 materialId.ToString(),
-                                formFile.FileName);
+                                $"{guid}_{formFile.FileName}");
                         }
                         else
                         {
@@ -63,7 +63,7 @@ namespace acaShare.MVC.Common
                                 materialId.ToString(),
                                 SharedResourcesLibrary.Properties.Resources.EditRequestFilesUploadFolderName,
                                 editRequestId.ToString(),
-                                formFile.FileName);
+                                $"{guid}_{formFile.FileName}");
                         }
 
                         var file = new BLL.Models.File(Path.GetFileNameWithoutExtension(formFile.FileName), relativePath, formFile.ContentType);
@@ -75,7 +75,7 @@ namespace acaShare.MVC.Common
             return newFiles;
         }
 
-        public void SaveFilesToFileSystem(ICollection<IFormFile> formFiles, int materialId, int? editRequestId = null)
+        public void SaveFilesToFileSystem(ICollection<IFormFile> formFiles, int materialId, Guid guid, int? editRequestId = null)
         {
             if (materialId < 1)
             {
@@ -95,7 +95,7 @@ namespace acaShare.MVC.Common
                             relativePath = Path.Combine(
                                 SharedResourcesLibrary.Properties.Resources.MaterialFilesUploadFolderName,
                                 materialId.ToString(),
-                                formFile.FileName);
+                                $"{guid}_{formFile.FileName}");
                         }
                         else
                         {
@@ -109,7 +109,7 @@ namespace acaShare.MVC.Common
                                 materialId.ToString(),
                                 SharedResourcesLibrary.Properties.Resources.EditRequestFilesUploadFolderName,
                                 editRequestId.ToString(),
-                                formFile.FileName);
+                                $"{guid}_{formFile.FileName}");
                         }
 
                         var fileAbsolutePath = Path.Combine(GetUploadFolderAbsolutePath(), relativePath);
@@ -167,10 +167,11 @@ namespace acaShare.MVC.Common
         
         private void MoveNewFilesFromEditRequestToMaterial(string materialFolderAbsolutePath, int editRequestId)
         {
-            var editRequestFolderAbsolutePath = Path.Combine(
+            var editRequestsFolder = Path.Combine(
                 materialFolderAbsolutePath,
-                SharedResourcesLibrary.Properties.Resources.EditRequestFilesUploadFolderName,
-                editRequestId.ToString());
+                SharedResourcesLibrary.Properties.Resources.EditRequestFilesUploadFolderName);
+
+            var editRequestFolderAbsolutePath = Path.Combine(editRequestsFolder, editRequestId.ToString());
 
             if(Directory.Exists(editRequestFolderAbsolutePath))
             {
@@ -182,8 +183,24 @@ namespace acaShare.MVC.Common
                     System.IO.File.Move(filePath, destination);
                 }
 
-                Directory.Delete(editRequestFolderAbsolutePath);
+                // delete all edit requests files connected with this material
+                if (Directory.Exists(editRequestsFolder))
+                {
+                    Directory.Delete(editRequestsFolder, true);
+                }
             }
+        }
+
+        public bool ExistsInMaterial(IFormFile file, int materialId)
+        {
+            var relativePath = Path.Combine(
+                SharedResourcesLibrary.Properties.Resources.MaterialFilesUploadFolderName,
+                materialId.ToString(),
+                file.FileName);
+
+            var fileAbsolutePath = Path.Combine(GetUploadFolderAbsolutePath(), relativePath);
+
+            return System.IO.File.Exists(fileAbsolutePath);
         }
     }
 }

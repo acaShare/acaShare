@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace acaShare.MVC.Areas.Main.Models.Materials
 {
-    public interface IMaterialManagementViewModel
+    public interface IEditViewModel
     {
+        ICollection<FileViewModel> Files { get; set; }
         ICollection<IFormFile> FormFiles { get; set; }
-
-        // used in ValidateMaterial ActionFilterAttribute to give proper information about which files are not valid
-        int StartingId { get; set; }
     }
 }

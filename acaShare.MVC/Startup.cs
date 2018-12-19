@@ -45,6 +45,8 @@ namespace acaShare.MVC
             services.AddScoped<IMaterialsService, MaterialsService>();
             services.AddScoped<ISidebarService, SidebarService>();
             services.AddSingleton<IFormFilesManagement>(f => new FormFilesManagement(HostingEnvironment));
+            services.AddSingleton<IFilesValidator, FilesValidator>();
+            services.AddScoped<ValidateMaterial>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {

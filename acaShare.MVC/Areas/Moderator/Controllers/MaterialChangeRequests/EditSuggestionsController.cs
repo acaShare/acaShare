@@ -53,7 +53,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
             {
                 MaterialViewModel = new MaterialToApproveViewModel
                 {
-                    MaterialId = editRequest.MaterialToUpdateId,
+                    MaterialId = editRequest.MaterialToUpdateId.Value,
                     CreatorUsername = editRequest.MaterialToUpdate.Creator.Username,
                     Name = editRequest.MaterialToUpdate.Name,
                     Description = editRequest.MaterialToUpdate.Description,
@@ -89,8 +89,9 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
 
             try
             {
-                _filesManagement.ReplaceMaterialFilesWithEditRequestFiles(editRequest.MaterialToUpdateId, editRequest.EditRequestId, editRequest.Files);
+                int materialToUpdateId = editRequest.MaterialToUpdateId.Value;
                 _materialsService.ApproveEditRequest(editRequest);
+                _filesManagement.ReplaceMaterialFilesWithEditRequestFiles(materialToUpdateId, editRequest.EditRequestId, editRequest.Files);
             }
             catch (ArgumentException e)
             {
@@ -98,7 +99,8 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
             }
             catch(Exception e)
             {
-                return BadRequest("Coś poszło nie tak przy zapisywaniu plików do systemu plików. Spróbuj ponownie.");
+                _filesManagement.RemoveFilesFromFileSystem(editRequest.Files);
+                return BadRequest("Coś poszło nie tak podczas zapisywania plików. Spróbuj ponownie.");
             }
             
             return RedirectToAction("EditSuggestions");

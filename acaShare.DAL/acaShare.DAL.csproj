@@ -19,6 +19,13 @@
     <Compile Remove="EFPersistence\Migrations\20181212182406_AddedModeratorInfoToDeleteRequest.cs" />
     <Compile Remove="EFPersistence\Migrations\20181213013132_ChangedMaterialToDeleteOnDeleteBehaviorToSetNull.cs" />
     <Compile Remove="EFPersistence\Migrations\20181213013246_ChangedMaterialToDeleteOnDeleteBehaviorToSetNull.cs" />
+    <Compile Remove="EFPersistence\Migrations\20181219004821_AddedFileCascadeDelete.cs" />
+    <Compile Remove="EFPersistence\Migrations\20181219005049_AddedFileOnDeleteActionSetNull.cs" />
+    <Compile Remove="EFPersistence\Migrations\20181219005154_AddedOnEditRequestDeleteActionSetNullToFile.cs" />
+    <Compile Remove="EFPersistence\Migrations\20181219010816_AddedOnEditRequestDeleteActionCascadeToFile.cs" />
+    <Compile Remove="EFPersistence\Migrations\20181219011029_ChangedOnDeleteActionsToClientSetNullOnFileForeignKeys.cs" />
+    <Compile Remove="EFPersistence\Migrations\20181219012541_ChangedOnDeleteActions.cs" />
+    <Compile Remove="EFPersistence\Migrations\20181219012808_ChangedOnDeleteActions.cs" />
   </ItemGroup>
 
   <ItemGroup>

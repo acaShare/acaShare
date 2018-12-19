@@ -57,7 +57,7 @@
                         int slideIndex = 1;
                         int id = 0;
 
-                        foreach (var file in Model.EditMaterialViewModel.Files ?? Enumerable.Empty<FileViewModel>())
+                        foreach (var file in Model.Files ?? Enumerable.Empty<FileViewModel>())
                         {
                     <div id="@id" class="material-file-edit-mode-wrapper">
                         @if (file.IsImage)
@@ -79,18 +79,18 @@
                             </div>
                         }
 
-                        <input type="hidden" id="EditMaterialViewModel.Files[@id].FileId" name="EditMaterialViewModel.Files[@id].FileId" value="@file.FileId" />
-                        <input type="hidden" id="EditMaterialViewModel.Files[@id].ContentType" name="EditMaterialViewModel.Files[@id].ContentType" value="@file.ContentType" />
-                        <input type="hidden" id="EditMaterialViewModel.Files[@id].RelativePath" name="EditMaterialViewModel.Files[@id].RelativePath" value="@file.RelativePath" />
+                        <input type="hidden" id="Files[@id].FileId" name="Files[@id].FileId" value="@file.FileId" />
+                        <input type="hidden" id="Files[@id].ContentType" name="Files[@id].ContentType" value="@file.ContentType" />
+                        <input type="hidden" id="Files[@id].RelativePath" name="Files[@id].RelativePath" value="@file.RelativePath" />
 
                         <div class="input-field material-file-edit-mode-filename">
-                            <input id="EditMaterialViewModel.Files[@id].FileName" name="EditMaterialViewModel.Files[@id].FileName" value="@file.FileName"
+                            <input id="Files[@id].FileName" name="Files[@id].FileName" value="@file.FileName"
                                    class="validate" data-length="50" data-val="true"
                                    data-val-maxlength="Nazwa pliku numer @(id+1) nie<br>może przekraczać 50 znaków" data-val-maxlength-max="50"
                                    data-val-required="Nazwa pliku numer @(id+1) jest wymagana" required />
 
                             <span class="text-danger input-error-small file-name-input-error"
-                                  data-valmsg-for="EditMaterialViewModel.Files[@id].FileName" data-valmsg-replace="true"></span>
+                                  data-valmsg-for="Files[@id].FileName" data-valmsg-replace="true"></span>
                         </div>
                     </div>
 
@@ -106,7 +106,7 @@
                     <div id="modal-content" class="modal-content">
                         @{
                             id = 0;
-                            foreach (var file in Model.EditMaterialViewModel.Files ?? Enumerable.Empty<FileViewModel>())
+                            foreach (var file in Model.Files ?? Enumerable.Empty<FileViewModel>())
                             {
                                 @if (file.IsImage)
                                 {

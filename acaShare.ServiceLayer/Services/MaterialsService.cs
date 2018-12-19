@@ -121,15 +121,13 @@ namespace acaShare.ServiceLayer.Services
             return _uow.Materials.GetDeleteRequests(RequestState.PENDING);
         }
 
-        public DeleteRequest GetDeleteRequestToApprove(int deleteRequestId)
+        public DeleteRequest GetDeleteRequest(int deleteRequestId)
         {
             return _uow.Materials.GetDeleteRequest(deleteRequestId);
         }
 
-        public void ApproveDeleteRequest(int deleteRequestId, User loggedModerator)
+        public void ApproveDeleteRequest(DeleteRequest deleteRequest, User loggedModerator)
         {
-            var deleteRequest = _uow.Materials.GetDeleteRequest(deleteRequestId);
-
             if (deleteRequest == null)
             {
                 throw new ArgumentException("Provided deleteRequestId is not valid");
@@ -197,6 +195,8 @@ namespace acaShare.ServiceLayer.Services
 
             var filesToRemove = editRequest.ApproveRequest(SharedResourcesLibrary.Properties.Resources.MaterialFilesUploadFolderName);
             _uow.Materials.RemoveFiles(filesToRemove);
+
+            _uow.Materials.DeleteEditRequests(materialToUpdate.EditRequests);
 
             _uow.Materials.Update(materialToUpdate);
             _uow.SaveChanges();

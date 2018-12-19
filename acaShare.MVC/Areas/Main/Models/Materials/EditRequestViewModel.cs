@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace acaShare.MVC.Areas.Main.Models.Materials
 {
-    public class EditRequestViewModel : IMaterialManagementViewModel
+    public class EditRequestViewModel : IMaterialManagementViewModel, IEditViewModel
     {
         [Required]
         public EditMaterialViewModel EditMaterialViewModel { get; set; }
@@ -16,9 +16,12 @@ namespace acaShare.MVC.Areas.Main.Models.Materials
         [Display(Name = "Podsumowanie zmian")]
         public string Summary { get; set; }
 
-        // In an Edit requests we use the below formFiles property to not mess with the javascript responsible for editing.
+        // In an Edit requests we use the below FormFiles property to not mess with the javascript responsible for editing.
         [Display(Name = "Pliki")]
         public ICollection<IFormFile> FormFiles { get; set; }
+
+        // In an Edit requests we use the below Files property (not these from EditMaterialViewModel)
+        public ICollection<FileViewModel> Files { get; set; }
 
         public int StartingId { get; set; }
     }

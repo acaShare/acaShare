@@ -28,7 +28,7 @@ namespace acaShare.BLL.Models
 
         public int EditRequestId { get; private set; }
         public int UpdaterId { get; private set; }
-        public int MaterialToUpdateId { get; private set; }
+        public int? MaterialToUpdateId { get; private set; }
         public DateTime RequestDate { get; private set; }
         public string Summary { get; private set; }
         public string NewName { get; private set; }
@@ -61,9 +61,7 @@ namespace acaShare.BLL.Models
                     { "EditSummary", Summary },
                     { "MaterialId", MaterialToUpdateId.ToString() }
                 });
-
-            MaterialToUpdate.RemoveEditRequests();
-
+            
             return filesToRemove;
         }
 
