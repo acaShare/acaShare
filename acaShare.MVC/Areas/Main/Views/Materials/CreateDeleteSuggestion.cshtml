@@ -14,8 +14,10 @@
 
         <div>
             <div class="input-field">
-                <select asp-for="ReasonId" asp-items="@(new SelectList(Model.Reasons, "ChangeReasonId", "Reason"))" onchange="handleSelectListChange(this)">
-                    <option>Wybierz dlaczego sugerujesz usunięcie tego materiału...</option>
+                <select asp-for="ReasonId"
+                        asp-items="@(new SelectList(Model.Reasons, "ChangeReasonId", "Reason"))"
+                        onchange="handleSelectListChange(this)">
+                    <option value="0">Wybierz dlaczego sugerujesz usunięcie tego materiału...</option>
                 </select>
                 <span asp-validation-for="ReasonId" class="text-danger input-error-small"></span>
             </div>
@@ -24,12 +26,17 @@
             <div class="input-field">
                 <label for="AdditionalComment" id="additional-comment-label">Wyjaśnienie (opcjonalnie)</label>
                 <textarea id="additional-comment" class="validate materialize-textarea" data-length="255" type="text" name="AdditionalComment"
-                       data-val="true" data-val-maxlength="Maksymalna długość wyjaśnienia to 500 znaków." 
-                       data-val-maxlength-max="500"></textarea>
+                          data-val="true" data-val-maxlength="Maksymalna długość wyjaśnienia to 500 znaków."
+                          data-val-maxlength-max="500"></textarea>
                 <span asp-validation-for="AdditionalComment" class="text-danger input-error-small"></span>
             </div>
         </div>
         <input asp-for="MaterialId" type="hidden" />
+        @for (int i = 0; i < Model.Reasons.Count; i++)
+        {
+            <input asp-for="Reasons[i].ChangeReasonId" type="hidden" />
+            <input asp-for="Reasons[i].Reason" type="hidden" />
+        }
 
         <input type="submit" value="Wyślij sugestię" />
         <a asp-action="Material" asp-route-MaterialId="@Model.MaterialId">Wróć do materiału</a>
