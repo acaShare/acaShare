@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using acaShare.MVC.Areas.Moderator.Models;
+using acaShare.MVC.Common;
 using acaShare.ServiceLayer.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,11 +17,13 @@ namespace acaShare.MVC.Areas.Moderator.Controllers
     {
         private readonly IMaterialsService _materialsService;
         private readonly IUserService _userService;
+        private readonly IFormFilesManagement _filesManagement;
 
-        public ModeratorPanelController(IMaterialsService materialsService, IUserService userService)
+        public ModeratorPanelController(IMaterialsService materialsService, IUserService userService, IFormFilesManagement formFilesManagement)
         {
             _materialsService = materialsService;
             _userService = userService;
+            _filesManagement = formFilesManagement;
         }
 
         public IActionResult Home()
@@ -82,6 +85,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers
         
         public IActionResult RejectMaterial(int materialId)
         {
+            _filesManagement.DeleteWholeMaterialFolder(materialId);
             _materialsService.RejectMaterial(materialId);
             return RedirectToAction("MaterialsToApprove");
         }
