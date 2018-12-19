@@ -134,7 +134,6 @@ namespace acaShare.ServiceLayer.Services
             }
 
             deleteRequest.ApproveRequest(loggedModerator);
-            _uow.Materials.UpdateDeleteRequest(deleteRequest);
             _uow.Materials.Delete(deleteRequest.MaterialToDelete);
             _uow.SaveChanges();
         }

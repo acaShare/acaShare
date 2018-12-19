@@ -53,7 +53,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
             {
                 MaterialViewModel = new MaterialToApproveViewModel
                 {
-                    MaterialId = editRequest.MaterialToUpdateId.Value,
+                    MaterialId = editRequest.MaterialToUpdateId,
                     CreatorUsername = editRequest.MaterialToUpdate.Creator.Username,
                     Name = editRequest.MaterialToUpdate.Name,
                     Description = editRequest.MaterialToUpdate.Description,
@@ -89,7 +89,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
 
             try
             {
-                int materialToUpdateId = editRequest.MaterialToUpdateId.Value;
+                int materialToUpdateId = editRequest.MaterialToUpdateId;
                 _materialsService.ApproveEditRequest(editRequest);
                 _filesManagement.ReplaceMaterialFilesWithEditRequestFiles(materialToUpdateId, editRequest.EditRequestId, editRequest.Files);
             }

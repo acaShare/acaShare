@@ -27,6 +27,16 @@ namespace acaShare.MVC.Common
             }
         }
 
+        public void DeleteWholeMaterialFolder(int materialId)
+        {
+            var path = Path.Combine(
+                GetUploadFolderAbsolutePath(),
+                SharedResourcesLibrary.Properties.Resources.MaterialFilesUploadFolderName,
+                materialId.ToString());
+
+            Directory.Delete(path, true);
+        }
+
         public ICollection<BLL.Models.File> ExtractFilesFromForm(ICollection<IFormFile> formFiles, int materialId, Guid guid, int? editRequestId = null)
         {
             if (materialId < 1)

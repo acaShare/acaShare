@@ -93,9 +93,8 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
             try
             {
                 var deleteRequest = _materialsService.GetDeleteRequest(deleteRequestId);
-                var filesToRemove = deleteRequest.MaterialToDelete.Files;
-                _filesManagement.RemoveFilesFromFileSystem(filesToRemove);
 
+                _filesManagement.DeleteWholeMaterialFolder(deleteRequest.MaterialToDeleteId.Value);
                 _materialsService.ApproveDeleteRequest(deleteRequest, loggedModerator);
             }
             catch(ArgumentException e)

@@ -55,9 +55,15 @@ namespace acaShare.DAL.EFPersistence.Repositories
             var deleteRequests = material.DeleteRequests.Where(dr => dr.RequestState == RequestState.PENDING);
             _deleteRequests.RemoveRange(deleteRequests);
 
-            var editRequests = material.EditRequests;
-            _editRequests.RemoveRange(editRequests);
-            
+            // Edit requests connected with this material are cascade deleted, but the material's files and it's edit requests' files 
+            // are not (since onDelete action is RESTRICT on material's files and SET NULL on edit request's files due to cyclic cascade deletes) 
+            // so we remove them manually before deleting a material.
+            var materialFiles = material.Files;
+            _files.RemoveRange(materialFiles);
+
+            var editRequestFiles = material.EditRequests.SelectMany(er => er.Files);
+            _files.RemoveRange(editRequestFiles);
+
             base.Delete(material);
         }
 

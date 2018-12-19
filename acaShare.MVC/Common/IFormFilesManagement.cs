@@ -15,5 +15,6 @@ namespace acaShare.MVC.Common
         string GetUploadFolderAbsolutePath();
         void ReplaceMaterialFilesWithEditRequestFiles(int materialId, int editRequestId, ICollection<File> files);
         bool ExistsInMaterial(IFormFile file, int materialId);
+        void DeleteWholeMaterialFolder(int materialId);
     }
 }

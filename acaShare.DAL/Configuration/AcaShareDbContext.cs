@@ -174,8 +174,9 @@ namespace acaShare.DAL.Configuration
                 entity.HasOne(d => d.MaterialToUpdate)
                     .WithMany(p => p.EditRequests)
                     .HasForeignKey(d => d.MaterialToUpdateId)
-                    .OnDelete(DeleteBehavior.SetNull)
-                    .HasConstraintName("EditRequest_Material");
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("EditRequest_Material")
+                    .IsRequired();
 
                 entity.HasOne(d => d.Updater)
                     .WithMany(p => p.EditRequests)
@@ -219,13 +220,13 @@ namespace acaShare.DAL.Configuration
                     .WithMany(p => p.Files)
                     .HasForeignKey(d => d.EditRequestId)
                     .HasConstraintName("File_EditRequest")
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.SetNull);
 
                 entity.HasOne(d => d.Material)
                     .WithMany(p => p.Files)
                     .HasForeignKey(d => d.MaterialId)
                     .HasConstraintName("File_Material")
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Lesson>(entity =>

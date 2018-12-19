@@ -249,7 +249,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 return Forbid("Nie masz uprawnień do tego działania"); // zrobić jakiś handler do tego
             }
 
-            _filesManagement.RemoveFilesFromFileSystem(materialToDelete.Files);
+            _filesManagement.DeleteWholeMaterialFolder(materialToDelete.MaterialId);
             _service.DeleteMaterial(materialToDelete);
 
             return RedirectToAction("Materials", new { @lessonId = vm.LessonId });
