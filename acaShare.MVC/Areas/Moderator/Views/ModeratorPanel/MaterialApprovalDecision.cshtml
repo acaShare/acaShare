@@ -35,14 +35,16 @@
                     {
                         if (file.IsImage)
                         {
-                            <div class="material-file" onclick="openModal();currentSlide(@(i++))">
+                            <div class="material-file material-image" onclick="openModal();currentSlide(@(i++))">
                                 <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName-thumbnail" />
                             </div>
                         }
                         else
                         {
                             <div class="material-file">
-                                <i class="material-icons">description</i>
+                                <a href="~/_Uploads/@file.RelativePath" download="@file.FileName" class="material-file-download">
+                                    <i class="material-icons">description</i>
+                                </a>
                             </div>
                         }
                     }

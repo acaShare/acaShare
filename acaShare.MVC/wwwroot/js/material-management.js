@@ -68,8 +68,11 @@ function deleteFile(fileId, event) {
         refreshExistingFilesIndexes();
     }
 
-    // remove from (hidden) gallery
-    document.getElementById('gallery-item-' + fileId).remove();
+    // remove from (hidden) gallery (if it's a gallery item)
+    let galleryItem = document.getElementById('gallery-item-' + fileId);
+    if (galleryItem) {
+        galleryItem.remove();
+    }
 
     // remove from filesToUpload
     filesToUpload = filesToUpload.filter(f => f.id !== fileId);
@@ -91,7 +94,7 @@ function refreshExistingFilesIndexes() {
 }
 
 function refreshSlidesIndexes() {
-    let elemsThatFireModal = document.querySelectorAll('.material-file-edit-mode-wrapper .material-file');
+    let elemsThatFireModal = document.querySelectorAll('.material-file-edit-mode-wrapper .material-file.material-image');
     let slideIdx = 1;
     elemsThatFireModal.forEach(e =>
         e.onclick = function (slideIndex) { return () => { openModal(); currentSlide(slideIndex); }; }(slideIdx++)
@@ -126,7 +129,7 @@ function showUploadedFiles(files) {
 
         let imageMaterialFileDiv = createNode(
             "div",
-            "material-file",
+            "material-file material-image",
             `
                 <div class="delete-file" onclick="deleteFile(${id}, event)">
                     <span class="delete-file-x">&#10005;</span>

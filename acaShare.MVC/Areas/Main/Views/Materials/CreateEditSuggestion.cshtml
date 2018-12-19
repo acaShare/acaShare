@@ -62,7 +62,7 @@
                     <div id="@id" class="material-file-edit-mode-wrapper">
                         @if (file.IsImage)
                         {
-                            <div class="material-file" onclick="openModal();currentSlide(@(slideIndex++))">
+                            <div class="material-file material-image" onclick="openModal();currentSlide(@(slideIndex++))">
                                 <div class="delete-file" onclick="deleteFile(@id, event)">
                                     <span class="delete-file-x">&#10005;</span>
                                 </div>
@@ -75,7 +75,9 @@
                                 <div class="delete-file" onclick="deleteFile(@id, event)">
                                     <span class="delete-file-x">&#10005;</span>
                                 </div>
-                                <i class="material-icons">description</i>
+                                <a href="~/_Uploads/@file.RelativePath" download="@file.FileName" class="material-file-download">
+                                    <i class="material-icons">description</i>
+                                </a>
                             </div>
                         }
 
