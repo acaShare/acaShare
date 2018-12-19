@@ -214,7 +214,7 @@ namespace acaShare.DAL.Configuration
 
                 entity.Property(e => e.ContentType)
                     .IsRequired()
-                    .HasMaxLength(300);
+                    .HasMaxLength(50);
 
                 entity.HasOne(d => d.EditRequest)
                     .WithMany(p => p.Files)

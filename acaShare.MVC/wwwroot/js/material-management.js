@@ -286,5 +286,5 @@ function submitForm(e) {
 }
 
 function validate() {
-    return true;
+    return $("#material-form").valid();
 }
