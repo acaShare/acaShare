@@ -2,6 +2,7 @@
 
 @section Scripts {
     <script src="~/js/material-images-modal.js"></script>
+    <script src="~/js/peek-previous-material-version.js"></script>
 }
 
 @section UpperManageBox {
@@ -60,11 +61,18 @@
     </div>
 }
 
-<div class="material-container">
+<div id="material-container" class="material-container">
     <header class="material-header">
         <h1 class="material-header-title">
             @Html.DisplayFor(model => model.EditRequestViewModel.MaterialName)
         </h1>
+        <div class="material-header-action-buttons">
+            <a onclick="handleShowPreviousMaterialVersion(@Model.MaterialViewModel.MaterialId)"
+               class="sep action-button tooltipped" data-position="top" data-tooltip="Pokaż poprzednią wersję">
+
+                <i class="material-icons lh">history</i>
+            </a>
+        </div>
     </header>
 
     <div class="material-content">
