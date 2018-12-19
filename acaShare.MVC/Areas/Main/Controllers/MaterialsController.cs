@@ -134,7 +134,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("Somethig went wrong while saving files to the file system. Try again.");
+                return BadRequest(new[] { "Somethig went wrong while saving files to the file system. Try again." });
             }
 
             // TODO splitted into two roundtrips to name folders with materialId (can be changed in the future)
@@ -184,7 +184,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
 
             if (identityUserId != materialToEdit.Creator.IdentityUserId)
             {
-                return Forbid("Nie masz uprawnień do tego działania"); // TODO some authorization handler
+                return Forbid(new[] { "Nie masz uprawnień do tego działania" }); // TODO some authorization handler
             }
 
             var loggedUser = _userService.FindByIdentityUserId(identityUserId);
@@ -205,7 +205,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
             }
             catch(Exception ex)
             {
-                return BadRequest("Coś poszło nie tak przy zapisywaniu plików do systemu plików. Spróbuj ponownie.");
+                return BadRequest(new[] { "Coś poszło nie tak przy zapisywaniu plików do systemu plików. Spróbuj ponownie." });
             }
 
             var filesFromForm = _filesManagement.ExtractFilesFromForm(vm.FormFiles, vm.MaterialId, guid);
@@ -662,7 +662,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
             
             if (identityUserId == materialToEdit.Creator.IdentityUserId)
             {
-                return Forbid("Jesteś autorem danego materiału - skorzystaj z opcji edycji"); // TODO some authorization handler like 404 not found
+                return Forbid(new[] { "Jesteś autorem danego materiału - skorzystaj z opcji edycji" }); // TODO some authorization handler like 404 not found
             }
 
             var updater = _userService.FindByIdentityUserId(identityUserId);
@@ -700,12 +700,12 @@ namespace acaShare.MVC.Areas.Main.Controllers
             }
             catch (ArgumentNullException e)
             {
-                return BadRequest("Materiał o podanym Id nie istnieje");
+                return BadRequest(new[] { "Materiał o podanym Id nie istnieje" });
             }
             catch(Exception e)
             {
                 _filesManagement.RemoveFilesFromFileSystem(filesFromForm);
-                return BadRequest("Coś poszło nie tak podczas zapisywania plików. Spróbuj ponownie.");
+                return BadRequest(new[] { "Coś poszło nie tak podczas zapisywania plików. Spróbuj ponownie." });
             }
 
             return Json(vm.EditMaterialViewModel.MaterialId);
