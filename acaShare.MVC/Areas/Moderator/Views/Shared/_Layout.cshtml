@@ -51,7 +51,7 @@
                                 Zarządzaj strukturą uczelni
                             </a>
                         </li>
-                        <li class="moderator-actions-item @(ViewContext.RouteData.Values["Action"].ToString() == "Home" ? "active" : "")">
+                        <li class="moderator-actions-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ModeratorManagement" ? "active" : "")">
                             <a class="moderator-actions-item-link" asp-controller="ModeratorManagement" asp-action="Home">Zarządzaj moderatorami</a>
                         </li>
                     }
