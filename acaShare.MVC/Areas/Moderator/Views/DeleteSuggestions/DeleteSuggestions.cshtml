@@ -1,0 +1,64 @@
+﻿@model ICollection<DeleteRequestViewModel>
+
+<div class="list-view-wrapper">
+    <div class="list-container">
+        <ul class="aca-collection">
+            @foreach (var deleteRequest in Model)
+            {
+                var smaller = string.Empty;
+                var deleteReasonIcon = string.Empty;
+
+                switch (@deleteRequest.ReasonId)
+                {
+                    case 1:
+                        deleteReasonIcon = "warning";
+                        break;
+                    case 2:
+                        smaller = "smaller";
+                        deleteReasonIcon = "pan_tool";
+                        break;
+                    case 3:
+                        deleteReasonIcon = "receipt"; // thumb_down thumbs_up_down
+                        break;
+                    case 4:
+                        deleteReasonIcon = "feedback";
+                        break;
+                }
+
+                <li class="aca-collection-item path-list-item">
+                    <i class="material-icons list-icon change-request-type-icon tooltipped @smaller" data-position="top" data-tooltip="@deleteRequest.Reason">
+                        @deleteReasonIcon
+                    </i>
+                    <a asp-action="DeleteRequestApprovalDecision" asp-route-deleteRequestId="@deleteRequest.DeleteRequestId" class="item-link">
+                        <span class="path-list-item-title">@deleteRequest.MaterialName</span>
+                        <br>
+                        <span class="path-list-item-subtitle">
+                            @if (deleteRequest.AdditionalComment?.Length > 100)
+                            {
+                                @deleteRequest.AdditionalComment.Substring(0, 100);
+                                @:[...]
+                            }
+                            else if (deleteRequest.AdditionalComment?.Length > 0)
+                            {
+                                @deleteRequest.AdditionalComment;
+                            }
+                            else
+                            {
+                                @:Autor: @deleteRequest.DeleterName nie dołączył dodatkowego wyjaśnienia.
+                            }
+                        </span>
+                    </a>
+
+                    <div class="icons-row-container">
+                        <a asp-action="ApproveDeleteRequest" asp-route-deleteRequestId="@deleteRequest.DeleteRequestId">
+                            <i class="material-icons list-icon icon-edit tooltipped" data-position="top" data-tooltip="Zatwierdź - usuń materiał">delete_forever</i>
+                        </a>
+                        <a asp-action="DeclineDeleteRequest" asp-route-deleteRequestId="@deleteRequest.DeleteRequestId">
+                            <i class="material-icons list-icon icon-delete tooltipped" data-position="top" data-tooltip="Odrzuć sugestię">not_interested</i>
+                        </a>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

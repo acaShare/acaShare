@@ -1,0 +1,18 @@
+﻿@model EditRequestViewModel
+
+<div class="row">
+    <form method="post" class="col s12">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div>
+            <div class="input-field">
+                <label asp-for="DeclineReason"></label>
+                <input asp-for="DeclineReason" class="validate" />
+                <span asp-validation-for="DeclineReason" class="text-danger input-error-small"></span>
+            </div>
+        </div>
+        <input type="hidden" asp-for="EditRequestId" />
+
+        <button type="submit">Odrzuć sugestię edycji</button>
+        <a asp-action="EditSuggestions">Wróć na listę sugestii edycji</a>
+    </form>
+</div>

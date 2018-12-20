@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace acaShare.MVC.Areas.Main.Models.Materials
 {
-    public class EditMaterialViewModel : IMaterialManagementViewModel
+    public class EditMaterialViewModel : IMaterialManagementViewModel, IEditViewModel
     {
         public int MaterialId { get; set; }
 

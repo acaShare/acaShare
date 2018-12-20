@@ -1,0 +1,15 @@
+﻿.change-request-type-icon {
+    align-self: center;
+    margin-left: .8em;
+    transition: .3s ease-in-out;
+    cursor: default;
+}
+
+.change-request-type-icon:hover {
+    color: #1c66ea;
+    transition: .2s ease-in-out;
+}
+
+.smaller {
+    font-size: 1.5em;
+}

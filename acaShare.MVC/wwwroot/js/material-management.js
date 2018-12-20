@@ -68,8 +68,11 @@ function deleteFile(fileId, event) {
         refreshExistingFilesIndexes();
     }
 
-    // remove from (hidden) gallery
-    document.getElementById('gallery-item-' + fileId).remove();
+    // remove from (hidden) gallery (if it's a gallery item)
+    let galleryItem = document.getElementById('gallery-item-' + fileId);
+    if (galleryItem) {
+        galleryItem.remove();
+    }
 
     // remove from filesToUpload
     filesToUpload = filesToUpload.filter(f => f.id !== fileId);
@@ -91,7 +94,7 @@ function refreshExistingFilesIndexes() {
 }
 
 function refreshSlidesIndexes() {
-    let elemsThatFireModal = document.querySelectorAll('.material-file-edit-mode-wrapper .material-file');
+    let elemsThatFireModal = document.querySelectorAll('.material-file-edit-mode-wrapper .material-file.material-image');
     let slideIdx = 1;
     elemsThatFireModal.forEach(e =>
         e.onclick = function (slideIndex) { return () => { openModal(); currentSlide(slideIndex); }; }(slideIdx++)
@@ -126,7 +129,7 @@ function showUploadedFiles(files) {
 
         let imageMaterialFileDiv = createNode(
             "div",
-            "material-file",
+            "material-file material-image",
             `
                 <div class="delete-file" onclick="deleteFile(${id}, event)">
                     <span class="delete-file-x">&#10005;</span>
@@ -152,7 +155,7 @@ function showUploadedFiles(files) {
             "div",
             "input-field material-file-edit-mode-filename",
             `
-                <input type="text" id="FormFile[${id}]__FileName" name="FormFile[${id}]__FileName" value="${fileName}" class="validate" data-length="50" data-val="true" data-val-maxlength="Nazwa pliku numer ${id + 1} nie<br>może przekraczać 50 znaków" data-val-maxlength-max="50" data-val-required="Nazwa pliku numer ${id+1} jest wymagana" required />
+                <input type="text" id="FormFile[${id}]__FileName" name="FormFile[${id}]__FileName" value="${fileName}" class="validate" data-length="100" data-val="true" data-val-maxlength="Nazwa pliku numer ${id + 1} nie<br>może przekraczać 100 znaków" data-val-maxlength-max="100" data-val-required="Nazwa pliku numer ${id+1} jest wymagana" required />
                 <span class="text-danger input-error-small file-name-input-error field-validation-valid" data-valmsg-for="FormFile[${id}]__FileName" data-valmsg-replace="true"></span>
             `
         );

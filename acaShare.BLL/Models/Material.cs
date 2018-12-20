@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace acaShare.BLL.Models
@@ -58,12 +59,14 @@ namespace acaShare.BLL.Models
         public virtual User Approver { get; private set; }
         public virtual User Creator { get; private set; }
         public virtual Lesson Lesson { get; private set; }
+
         public virtual MaterialState State { get; private set; }
         public virtual User Updater { get; private set; }
         public virtual ICollection<Comment> Comments { get; private set; }
         public virtual ICollection<DeleteRequest> DeleteRequests { get; private set; }
         public virtual ICollection<EditRequest> EditRequests { get; private set; }
         public virtual ICollection<Favorites> Favorites { get; private set; }
+        public virtual ICollection<Notification> Notifications { get; private set; }
 
         public virtual ICollection<File> Files { get; private set; }
 
@@ -78,9 +81,40 @@ namespace acaShare.BLL.Models
             AddFiles(newFiles);
         }
 
-        public bool IsUserAllowedToEditOrDelete(User loggedUser)
+        public ICollection<File> UpdateThroughEditRequest(EditRequest editRequest, string materialsFolderName)
         {
-            return loggedUser.IdentityUserId == this.Creator.IdentityUserId;
+            var oldMaterialFilesToRemove = new List<File>(Files);
+            Files.Clear();
+            ChangeRelativePathToMaterial(editRequest.Files, materialsFolderName);
+            Update(editRequest.NewName, editRequest.NewDescription, editRequest.Files, editRequest.Updater);
+            return oldMaterialFilesToRemove;
+        }
+
+        private void ChangeRelativePathToMaterial(ICollection<File> files, string materialsFolderName)
+        {
+            foreach (var file in files)
+            {
+                file.MoveToMaterial(materialsFolderName, MaterialId);
+            }
+        }
+
+        public void Approve(User approver)
+        {
+            if (StateId != 4)
+            {
+                UpdateState(4);
+                Approver = approver;
+            }
+        }
+
+        public void Reject()
+        {
+            UpdateState(3);
+        }
+
+        public bool IsUserAllowedToEditOrDelete(string identityUserId)
+        {
+            return this.Creator.IdentityUserId == identityUserId;
         }
 
         public void UpdateState(int newStateId)

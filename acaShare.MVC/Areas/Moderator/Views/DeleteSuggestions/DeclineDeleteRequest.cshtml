@@ -1,0 +1,19 @@
+﻿@model DeleteRequestViewModel
+
+<div class="row">
+    <form method="post" class="col s12">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div>
+            <div class="input-field">
+                <label asp-for="DeclineReason"></label>
+                <input asp-for="DeclineReason" class="validate" />
+                <span asp-validation-for="DeclineReason" class="text-danger input-error-small"></span>
+            </div>
+        </div>
+        <input type="hidden" asp-for="DeleteRequestId" />
+        <input type="hidden" asp-for="ReasonId" />
+
+        <button type="submit">Odrzuć sugestię usunięcia</button>
+        <a asp-action="DeleteSuggestions">Wróć na listę sugestii usunięcia</a>
+    </form>
+</div>

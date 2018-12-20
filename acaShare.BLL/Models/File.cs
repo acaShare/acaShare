@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace acaShare.BLL.Models
 {
     public partial class File
     {
+        protected File()
+        {
+        }
+
         public File(int fileId, string fileName)
         {
             FileId = fileId;
@@ -16,10 +21,6 @@ namespace acaShare.BLL.Models
             FileName = fileName;
             RelativePath = fileRelativePath;
             ContentType = contentType.ToLower();
-        }
-
-        protected File()
-        {
         }
 
         public void AddToMaterial(Material material)
@@ -44,6 +45,11 @@ namespace acaShare.BLL.Models
         public void Update(string fileName)
         {
             FileName = fileName;
+        }
+
+        public void MoveToMaterial(string materialsFolderName, int materialId)
+        {
+            RelativePath = Path.Combine(materialsFolderName, materialId.ToString(), Path.GetFileName(RelativePath));
         }
     }
 }
