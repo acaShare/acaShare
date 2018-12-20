@@ -7,6 +7,11 @@
   <ItemGroup>
     <ProjectReference Include="..\acaShare.BLL\acaShare.BLL.csproj" />
     <ProjectReference Include="..\acaShare.DAL\acaShare.DAL.csproj" />
+    <ProjectReference Include="..\acaShare.SharedResourcesLibrary\acaShare.SharedResourcesLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 
 </Project>

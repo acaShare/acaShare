@@ -1,0 +1,37 @@
+﻿@model ICollection<acaShare.MVC.Areas.Moderator.Models.MaterialToApproveViewModel>
+
+<div class="list-view-wrapper">
+    <div class="list-container">
+        <ul class="aca-collection">
+            @foreach (var material in Model)
+            {
+                <li class="aca-collection-item path-list-item">
+                    <a asp-action="MaterialApprovalDecision" asp-route-materialId="@material.MaterialId" class="item-link">
+                        <span class="path-list-item-title">@material.Name</span>
+                        <br>
+                        <span class="path-list-item-subtitle">
+                            @if (material.Description?.Length > 100)
+                            {
+                                @material.Description.Substring(0, 100);
+                                @:[...]
+                            }
+                            else
+                            {
+                                @material.Description;
+                            }
+                        </span>
+                    </a>
+
+                    <div class="icons-row-container">
+                        <a asp-action="ApproveMaterial" asp-route-materialId="@material.MaterialId">
+                            <i class="material-icons list-icon icon-edit tooltipped" data-position="top" data-tooltip="Zatwierdź">check</i>
+                        </a>
+                        <a asp-action="RejectMaterial" asp-route-materialId="@material.MaterialId">
+                            <i class="material-icons list-icon icon-delete tooltipped" data-position="top" data-tooltip="Odrzuć">not_interested</i>
+                        </a>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

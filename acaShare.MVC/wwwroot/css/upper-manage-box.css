@@ -1,0 +1,51 @@
+﻿.upper-manage-box .colornav {
+    height: 35px;
+}
+
+.upper-manage-box .breadcrumb {
+    font-size: .9rem;
+}
+
+.upper-manage-box .home-content {
+    padding-bottom: .9em;
+    padding-top: .9em;
+}
+
+.upper-manage-box .material-header {
+    margin-bottom: .2em;
+}
+
+.upper-manage-box .material-header-title {
+    font-size: 1em;
+}
+
+.upper-manage-box h2 {
+    font-size: 1em;
+    display: inline-block;
+}
+
+.upper-manage-box .additional-comment {
+    font-size: .9em;
+    display: inline-block;
+}
+
+.upper-manage-box .material-footer-content span {
+    font-size: .8em;
+}
+
+.upper-manage-box footer {
+    margin-top: .4em;
+}
+
+.aaa {
+    overflow: auto;
+}
+
+/*.upper-manage-box .change-request-type-icon {
+    margin-left: 0;
+    position: absolute;
+    display: inline-block;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}*/

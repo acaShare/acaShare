@@ -36,16 +36,17 @@ namespace acaShare.MVC.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
-            [Display(Name = "Username")]
+            [Required(ErrorMessage = "Pole {0} jest wymagane.")]
+            [StringLength(100, ErrorMessage = "Pole {0} musi mieć przynajmniej {2} i maksymalnie {1} znaków.", MinimumLength = 6)]
+            [Display(Name = "Użytkownik")]
             public string UserName { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Pole {0} jest wymagane.")]
             [DataType(DataType.Password)]
+            [Display(Name = "Hasło")]
             public string Password { get; set; }
 
-            [Display(Name = "Remember me?")]
+            [Display(Name = "Zapamiętaj mnie?")]
             public bool RememberMe { get; set; }
         }
 

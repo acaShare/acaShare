@@ -18,6 +18,11 @@
 
   <ItemGroup>
     <Compile Include="Areas\Moderator\Models\DisplayUserViewModel.cs" />
+    <Compile Include="Areas\Moderator\Models\FileViewModel.cs" />
+    <Compile Include="Areas\Moderator\Models\MaterialChangeRequests\ChangeRequestApprovalDecision.cs" />
+    <Compile Include="Areas\Moderator\Models\MaterialChangeRequests\DeleteRequestViewModel.cs" />
+    <Compile Include="Areas\Moderator\Models\MaterialChangeRequests\EditRequestViewModel.cs" />
+    <Compile Include="Areas\Moderator\Models\MaterialToApproveViewModel.cs" />
     <Compile Include="Areas\Moderator\Models\ModeratorManagementViewModel.cs" />
   </ItemGroup>
 
@@ -29,6 +34,7 @@
   <ItemGroup>
     <ProjectReference Include="..\acaShare.DAL\acaShare.DAL.csproj" />
     <ProjectReference Include="..\acaShare.ServiceLayer\acaShare.ServiceLayer.csproj" />
+    <ProjectReference Include="..\acaShare.SharedResourcesLibrary\acaShare.SharedResourcesLibrary.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,6 +50,9 @@
     <Content Update="Areas\Main\Views\Materials\_ViewImports.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Areas\Moderator\Views\DeleteSuggestions\_ViewImports.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Areas\Moderator\Views\DepartmentsManagement\Add.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
@@ -54,6 +63,12 @@
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Areas\Moderator\Views\DepartmentsManagement\Departments.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\Moderator\Views\EditSuggestions\DeclineEditRequest.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\Moderator\Views\EditSuggestions\_ViewImports.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Areas\Moderator\Views\UniversitiesManagement\Add.cshtml">
@@ -98,25 +113,8 @@
     <Folder Include="Areas\Administrator\Controllers\" />
     <Folder Include="Areas\Administrator\Models\" />
     <Folder Include="Areas\Administrator\Views\" />
-    <Folder Include="Areas\Moderator\Models\MaterialChangeRequests\" />
     <Folder Include="Areas\Universities\Models\List\" />
     <Folder Include="Areas\Identity\Views\WelcomePage\" />
-    <Folder Include="_Uploads\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

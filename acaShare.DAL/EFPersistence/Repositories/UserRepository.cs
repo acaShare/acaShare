@@ -18,5 +18,13 @@ namespace acaShare.DAL.EFPersistence.Repositories
         {
             return _dbSet.First(u => u.IdentityUserId == identityUserId);
         }
+
+        public bool IsMaterialFavorite(string identityUserId, int materialId)
+        {
+            return _dbSet
+                .Where(u => u.IdentityUserId == identityUserId)
+                .SelectMany(u => u.Favorites)
+                .Any(f => f.MaterialId == materialId);
+        }
     }
 }

@@ -10,5 +10,6 @@ namespace acaShare.ServiceLayer.Interfaces
         User GetUser(int userId);
         void RegisterNewUser(User newUser);
         User FindByIdentityUserId(string identityUserId);
+        bool IsMaterialFavorite(Material material, string identityUserId);
     }
 }
