@@ -4,11 +4,16 @@
 
 @section ModeratorPanelCSS {
     <link rel="stylesheet" href="~/css/moderator-panel/home.css">
-    <link rel="stylesheet" href="~/css/moderator-panel/structure-management/structure-management.css">
-    <link rel="stylesheet" href="~/css/moderator-panel/structure-management/structure-management-add.css">
-    <link rel="stylesheet" href="~/css/moderator-panel/structure-management/structure-management-edit.css">
-    <link rel="stylesheet" href="~/css/moderator-panel/structure-management/structure-management-delete.css">
+    <link rel="stylesheet" href="~/css/moderator-panel/list.css">
+    <link rel="stylesheet" href="~/css/materials/material.css">
+    <link rel="stylesheet" href="~/css/materials/material-images-modal.css">
     <link rel="stylesheet" href="~/css/moderator-panel/ModeratorManagementStyle.css" />
+    <link rel="stylesheet" href="~/css/moderator-panel/change-requests.css" />
+    <link rel="stylesheet" href="~/css/upper-manage-box.css" />
+}
+
+@section Scripts {
+    @RenderSection("Scripts", false);
 }
 
 <div class="row home-container">
@@ -23,22 +28,30 @@
             </nav>
 
             <div class="home-content">
-                <ul class="moderator-actions">
-                    <li class="moderator-actions-item">
-                        <a class="moderator-actions-item-link" asp-action="">Sugestie edycji</a>
+                <ul id="moderator-actions" class="moderator-actions">
+                    <li class="moderator-actions-item @(ViewContext.RouteData.Values["Action"].ToString() == "EditSuggestions" ? "active" : "")">
+                        <a class="moderator-actions-item-link" asp-controller="EditSuggestions" asp-action="EditSuggestions">
+                            Sugestie edycji
+                        </a>
                     </li>
-                    <li class="moderator-actions-item">
-                        <a class="moderator-actions-item-link" asp-action="">Sugestie usunięcia</a>
+                    <li class="moderator-actions-item @(ViewContext.RouteData.Values["Action"].ToString() == "DeleteSuggestions" ? "active" : "")">
+                        <a class="moderator-actions-item-link" asp-controller="DeleteSuggestions" asp-action="DeleteSuggestions">
+                            Sugestie usunięcia
+                        </a>
                     </li>
-                    <li class="moderator-actions-item">
-                        <a class="moderator-actions-item-link" asp-action="">Materiały oczekujące na zatwierdzenie</a>
+                    <li class="moderator-actions-item @(ViewContext.RouteData.Values["Action"].ToString() == "MaterialsToApprove" ? "active" : "")">
+                        <a class="moderator-actions-item-link" asp-controller="ModeratorPanel" asp-action="MaterialsToApprove">
+                            Materiały oczekujące na zatwierdzenie
+                        </a>
                     </li>
                     @if (User.IsInRole(Roles.AdministratorRole) || User.IsInRole(Roles.MainModeratorRole))
                     {
-                        <li class="moderator-actions-item">
-                            <a class="moderator-actions-item-link" asp-controller="UniversitiesManagement" asp-action="Universities">Zarządzaj strukturą uczelni</a>
+                        <li class="moderator-actions-item @(ViewContext.RouteData.Values["Action"].ToString() == "Universities" ? "active" : "")">
+                            <a class="moderator-actions-item-link" asp-controller="UniversitiesManagement" asp-action="Universities">
+                                Zarządzaj strukturą uczelni
+                            </a>
                         </li>
-                        <li class="moderator-actions-item">
+                        <li class="moderator-actions-item @(ViewContext.RouteData.Values["Action"].ToString() == "Home" ? "active" : "")">
                             <a class="moderator-actions-item-link" asp-controller="ModeratorManagement" asp-action="Home">Zarządzaj moderatorami</a>
                         </li>
                     }
@@ -48,6 +61,9 @@
     </div>
 
     <div class="col s12 m7 l9 home-part">
+        @*@(IsSectionDefined("UpperManageBox") ? "aaa" : "")*@
+        @RenderSection("UpperManageBox", false)
+
         <div class="data-container">
             <nav class="colornav">
                 <div class="nav-wrapper path-header-wrapper">
