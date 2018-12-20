@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
 {
-    [Authorize]
+    [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole)]
     [Area("Moderator")]
     public class UniversitiesManagementController : Controller
     {

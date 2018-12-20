@@ -3,49 +3,23 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using acaShare.DAL.Configuration;
 
 namespace acaShare.DAL.EFPersistence.Migrations
 {
     [DbContext(typeof(AcaShareDbContext))]
-    partial class AcaShareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181217145149_SeedingRolesAdded")]
+    partial class SeedingRolesAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("acaShare.BLL.Models.ChangeReason", b =>
-                {
-                    b.Property<int>("ChangeReasonId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ChangeType");
-
-                    b.Property<string>("Reason")
-                        .IsRequired()
-                        .HasMaxLength(100);
-
-                    b.HasKey("ChangeReasonId");
-
-                    b.HasIndex("Reason")
-                        .IsUnique()
-                        .HasName("UQ_ChangeReason_Reason");
-
-                    b.ToTable("ChangeReason");
-
-                    b.HasData(
-                        new { ChangeReasonId = 1, ChangeType = 1, Reason = "Nieodpowiednie treści" },
-                        new { ChangeReasonId = 2, ChangeType = 1, Reason = "Naruszenie praw własności" },
-                        new { ChangeReasonId = 3, ChangeType = 1, Reason = "Bezwartościowe informacje" },
-                        new { ChangeReasonId = 4, ChangeType = 1, Reason = "Inne" }
-                    );
-                });
 
             modelBuilder.Entity("acaShare.BLL.Models.Comment", b =>
                 {
@@ -79,34 +53,20 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AdditionalComment")
-                        .HasMaxLength(500);
-
-                    b.Property<string>("DeclineReason")
-                        .HasMaxLength(1000);
-
-                    b.Property<int>("DeleteReasonId");
-
                     b.Property<int>("DeleterId");
 
-                    b.Property<int?>("MaterialToDeleteId");
+                    b.Property<int>("MaterialToDeleteId");
 
-                    b.Property<int?>("ModeratorId");
+                    b.Property<int>("Reason");
 
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("RequestState");
-
                     b.HasKey("DeleteRequestId");
-
-                    b.HasIndex("DeleteReasonId");
 
                     b.HasIndex("DeleterId");
 
                     b.HasIndex("MaterialToDeleteId");
-
-                    b.HasIndex("ModeratorId");
 
                     b.ToTable("DeleteRequest");
                 });
@@ -156,7 +116,6 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("Summary")
-                        .IsRequired()
                         .HasMaxLength(500);
 
                     b.Property<int>("UpdaterId");
@@ -191,7 +150,7 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
                     b.Property<string>("ContentType")
                         .IsRequired()
-                        .HasMaxLength(300);
+                        .HasMaxLength(50);
 
                     b.Property<int?>("EditRequestId");
 
@@ -199,7 +158,8 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .IsRequired()
                         .HasMaxLength(100);
 
-                    b.Property<int?>("MaterialId");
+                    b.Property<int?>("MaterialId")
+                        .IsRequired();
 
                     b.Property<string>("RelativePath")
                         .IsRequired();
@@ -297,33 +257,6 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .HasName("UQ_MaterialState_Name");
 
                     b.ToTable("MaterialState");
-                });
-
-            modelBuilder.Entity("acaShare.BLL.Models.Notification", b =>
-                {
-                    b.Property<int>("NotificationId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasMaxLength(1000);
-
-                    b.Property<DateTime>("Date");
-
-                    b.Property<bool>("IsRead");
-
-                    b.Property<int?>("MaterialId");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("NotificationId");
-
-                    b.HasIndex("MaterialId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Notification");
                 });
 
             modelBuilder.Entity("acaShare.BLL.Models.Semester", b =>
@@ -506,10 +439,11 @@ namespace acaShare.DAL.EFPersistence.Migrations
                     b.ToTable("AspNetRoles");
 
                     b.HasData(
-                        new { Id = "c44b3819-4779-4fc4-bb34-c8c3a53b288c", ConcurrencyStamp = "211e2e67-458f-4b1f-a918-5452a50e044f", Name = "Administrator", NormalizedName = "ADMINISTRATOR" },
-                        new { Id = "bd0553b5-bf3a-432a-a50c-1020ca9604ca", ConcurrencyStamp = "bd8c88ab-39e4-4428-983e-585824af5213", Name = "MainModerator", NormalizedName = "MAINMODERATOR" },
-                        new { Id = "7614cd25-8006-485d-8045-695cf6421cfd", ConcurrencyStamp = "8ae3cd42-286c-4fe7-a1a0-805ad9cbbdf9", Name = "Moderator", NormalizedName = "MODERATOR" },
-                        new { Id = "276988ca-214e-45db-b73b-b05a2a74c750", ConcurrencyStamp = "81639d5c-f172-4a7f-866b-beed6b0901f3", Name = "Member", NormalizedName = "MEMBER" }
+                        new { Id = "b4a68bbe-ab6c-4b5f-861c-90b55feb5888", ConcurrencyStamp = "2abe2c82-00dc-44a1-878f-44b6a41f0c96", Name = "Administrator", NormalizedName = "ADMINISTRATOR" },
+                        new { Id = "d436cead-c56c-48ab-94a0-4cbd4ee5f566", ConcurrencyStamp = "d9f419fb-bec6-40f7-89b5-2cb7aed43978", Name = "MainModerator", NormalizedName = "MAINMODERATOR" },
+                        new { Id = "65463026-d015-4611-9133-ad03e19e193e", ConcurrencyStamp = "860ae1a3-83ac-4637-b9eb-450c31b250e9", Name = "Moderator", NormalizedName = "MODERATOR" },
+                        new { Id = "b6c7c4e8-7436-4015-85c1-d66c7b4b2f3b", ConcurrencyStamp = "56f150c1-1a71-4323-ab61-689bb22c716a", Name = "Member", NormalizedName = "MEMBER" },
+                        new { Id = "6e42f725-10bc-4213-86cf-ea0e3fb042ab", ConcurrencyStamp = "22044b24-ebdc-49a1-816b-3e1efa1832bc", Name = "aaa", NormalizedName = "AAA" }
                     );
                 });
 
@@ -606,9 +540,11 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128);
 
-                    b.Property<string>("ProviderKey");
+                    b.Property<string>("ProviderKey")
+                        .HasMaxLength(128);
 
                     b.Property<string>("ProviderDisplayName");
 
@@ -639,9 +575,11 @@ namespace acaShare.DAL.EFPersistence.Migrations
                 {
                     b.Property<string>("UserId");
 
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasMaxLength(128);
 
                     b.Property<string>("Value");
 
@@ -655,40 +593,25 @@ namespace acaShare.DAL.EFPersistence.Migrations
                     b.HasOne("acaShare.BLL.Models.Material", "Material")
                         .WithMany("Comments")
                         .HasForeignKey("MaterialId")
-                        .HasConstraintName("Comment_Material")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("Comment_Material");
 
                     b.HasOne("acaShare.BLL.Models.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("Comment_User")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("Comment_User");
                 });
 
             modelBuilder.Entity("acaShare.BLL.Models.DeleteRequest", b =>
                 {
-                    b.HasOne("acaShare.BLL.Models.ChangeReason", "DeleteReason")
-                        .WithMany()
-                        .HasForeignKey("DeleteReasonId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("acaShare.BLL.Models.User", "Deleter")
                         .WithMany("DeleteRequests")
                         .HasForeignKey("DeleterId")
-                        .HasConstraintName("DeleteRequest_User")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("DeleteRequest_User");
 
                     b.HasOne("acaShare.BLL.Models.Material", "MaterialToDelete")
                         .WithMany("DeleteRequests")
                         .HasForeignKey("MaterialToDeleteId")
-                        .HasConstraintName("DeleteRequest_Material")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("acaShare.BLL.Models.User", "Moderator")
-                        .WithMany("HandledDeleteRequests")
-                        .HasForeignKey("ModeratorId")
-                        .HasConstraintName("FK_DeleteRequest_User")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasConstraintName("DeleteRequest_Material");
                 });
 
             modelBuilder.Entity("acaShare.BLL.Models.Department", b =>
@@ -696,8 +619,7 @@ namespace acaShare.DAL.EFPersistence.Migrations
                     b.HasOne("acaShare.BLL.Models.University", "University")
                         .WithMany("Departments")
                         .HasForeignKey("UniversityId")
-                        .HasConstraintName("Department_University")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("Department_University");
                 });
 
             modelBuilder.Entity("acaShare.BLL.Models.EditRequest", b =>
@@ -705,14 +627,12 @@ namespace acaShare.DAL.EFPersistence.Migrations
                     b.HasOne("acaShare.BLL.Models.Material", "MaterialToUpdate")
                         .WithMany("EditRequests")
                         .HasForeignKey("MaterialToUpdateId")
-                        .HasConstraintName("EditRequest_Material")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("EditRequest_Material");
 
                     b.HasOne("acaShare.BLL.Models.User", "Updater")
                         .WithMany("EditRequests")
                         .HasForeignKey("UpdaterId")
-                        .HasConstraintName("EditRequest_User")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("EditRequest_User");
                 });
 
             modelBuilder.Entity("acaShare.BLL.Models.Favorites", b =>
@@ -720,14 +640,12 @@ namespace acaShare.DAL.EFPersistence.Migrations
                     b.HasOne("acaShare.BLL.Models.Material", "Material")
                         .WithMany("Favorites")
                         .HasForeignKey("MaterialId")
-                        .HasConstraintName("Favorites_Material")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("Favorites_Material");
 
                     b.HasOne("acaShare.BLL.Models.User", "User")
                         .WithMany("Favorites")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("Favorites_User")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("Favorites_User");
                 });
 
             modelBuilder.Entity("acaShare.BLL.Models.File", b =>
@@ -735,14 +653,13 @@ namespace acaShare.DAL.EFPersistence.Migrations
                     b.HasOne("acaShare.BLL.Models.EditRequest", "EditRequest")
                         .WithMany("Files")
                         .HasForeignKey("EditRequestId")
-                        .HasConstraintName("File_EditRequest")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasConstraintName("File_EditRequest");
 
                     b.HasOne("acaShare.BLL.Models.Material", "Material")
                         .WithMany("Files")
                         .HasForeignKey("MaterialId")
                         .HasConstraintName("File_Material")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("acaShare.BLL.Models.Lesson", b =>
@@ -750,14 +667,12 @@ namespace acaShare.DAL.EFPersistence.Migrations
                     b.HasOne("acaShare.BLL.Models.Semester", "Semester")
                         .WithMany("Lessons")
                         .HasForeignKey("SemesterId")
-                        .HasConstraintName("Subject_Semester")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("Subject_Semester");
 
                     b.HasOne("acaShare.BLL.Models.SubjectDepartment", "SubjectDepartment")
                         .WithMany("Lessons")
                         .HasForeignKey("SubjectDepartmentId")
-                        .HasConstraintName("Lesson_SubjectDepartment")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("Lesson_SubjectDepartment");
                 });
 
             modelBuilder.Entity("acaShare.BLL.Models.Material", b =>
@@ -770,20 +685,17 @@ namespace acaShare.DAL.EFPersistence.Migrations
                     b.HasOne("acaShare.BLL.Models.User", "Creator")
                         .WithMany("CreatedMaterials")
                         .HasForeignKey("CreatorId")
-                        .HasConstraintName("Material_Creator")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasConstraintName("Material_Creator");
 
                     b.HasOne("acaShare.BLL.Models.Lesson", "Lesson")
                         .WithMany("Materials")
                         .HasForeignKey("LessonId")
-                        .HasConstraintName("Material_Lesson")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasConstraintName("Material_Lesson");
 
                     b.HasOne("acaShare.BLL.Models.MaterialState", "State")
                         .WithMany("Materials")
                         .HasForeignKey("StateId")
-                        .HasConstraintName("Material_MaterialState")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasConstraintName("Material_MaterialState");
 
                     b.HasOne("acaShare.BLL.Models.User", "Updater")
                         .WithMany("UpdatedMaterials")
@@ -791,34 +703,17 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .HasConstraintName("Material_WhoChanged");
                 });
 
-            modelBuilder.Entity("acaShare.BLL.Models.Notification", b =>
-                {
-                    b.HasOne("acaShare.BLL.Models.Material", "Material")
-                        .WithMany("Notifications")
-                        .HasForeignKey("MaterialId")
-                        .HasConstraintName("FK_Material_Notification")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("acaShare.BLL.Models.User", "User")
-                        .WithMany("Notifications")
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("FK_User_Notification")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("acaShare.BLL.Models.SubjectDepartment", b =>
                 {
                     b.HasOne("acaShare.BLL.Models.Department", "Department")
                         .WithMany("SubjectDepartment")
                         .HasForeignKey("DepartmentId")
-                        .HasConstraintName("SubjectDepartment_Department")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("SubjectDepartment_Department");
 
                     b.HasOne("acaShare.BLL.Models.Subject", "Subject")
                         .WithMany("SubjectDepartment")
                         .HasForeignKey("SubjectId")
-                        .HasConstraintName("SubjectDepartment_Subject")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("SubjectDepartment_Subject");
                 });
 
             modelBuilder.Entity("acaShare.BLL.Models.UserInUniversity", b =>
@@ -826,20 +721,17 @@ namespace acaShare.DAL.EFPersistence.Migrations
                     b.HasOne("acaShare.BLL.Models.UserType", "Type")
                         .WithMany("UsersInUniversity")
                         .HasForeignKey("TypeId")
-                        .HasConstraintName("UserUniversity_UserType")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasConstraintName("UserUniversity_UserType");
 
                     b.HasOne("acaShare.BLL.Models.University", "University")
                         .WithMany("UsersInUniversity")
                         .HasForeignKey("UniversityId")
-                        .HasConstraintName("UserUniversity_University")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("UserUniversity_University");
 
                     b.HasOne("acaShare.BLL.Models.User", "User")
                         .WithMany("UsersInUniversity")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("UserUniversity_User")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("UserUniversity_User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -44,14 +44,17 @@
                             Materiały oczekujące na zatwierdzenie
                         </a>
                     </li>
-                    <li class="moderator-actions-item @(ViewContext.RouteData.Values["Action"].ToString() == "Universities" ? "active" : "")">
-                        <a class="moderator-actions-item-link" asp-controller="UniversitiesManagement" asp-action="Universities">
-                            Zarządzaj strukturą uczelni
-                        </a>
-                    </li>
-                    <li class="moderator-actions-item @(ViewContext.RouteData.Values["Action"].ToString() == "Home" ? "active" : "")">
-                        <a class="moderator-actions-item-link" asp-controller="ModeratorManagement" asp-action="Home">Zarządzaj moderatorami</a>
-                    </li>
+                    @if (User.IsInRole(Roles.AdministratorRole) || User.IsInRole(Roles.MainModeratorRole))
+                    {
+                        <li class="moderator-actions-item @(ViewContext.RouteData.Values["Action"].ToString() == "Universities" ? "active" : "")">
+                            <a class="moderator-actions-item-link" asp-controller="UniversitiesManagement" asp-action="Universities">
+                                Zarządzaj strukturą uczelni
+                            </a>
+                        </li>
+                        <li class="moderator-actions-item @(ViewContext.RouteData.Values["Action"].ToString() == "Home" ? "active" : "")">
+                            <a class="moderator-actions-item-link" asp-controller="ModeratorManagement" asp-action="Home">Zarządzaj moderatorami</a>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>

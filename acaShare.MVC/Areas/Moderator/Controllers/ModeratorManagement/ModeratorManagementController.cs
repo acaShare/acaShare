@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace acaShare.MVC.Areas.Moderator.Controllers.ModeratorManagement
 {
-    [Authorize(Roles = Roles.AdministratorRole + "," + Roles.MainModeratorRole)]
+    [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole)]
     [Area("Moderator")]
     public class ModeratorManagementController : Controller
     {
@@ -72,7 +72,6 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.ModeratorManagement
             return RedirectToAction("Home");
         }
 
-        [Authorize(Roles = Roles.AdministratorRole + "," + Roles.MainModeratorRole)]
         public async Task<IActionResult> PromoteToModerator(string userId)
         {
             var userToPromote = await _service.FindByIdAsync(userId);
@@ -84,7 +83,6 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.ModeratorManagement
             return RedirectToAction("Home");
         }
 
-        [Authorize(Roles = Roles.AdministratorRole + "," + Roles.MainModeratorRole)]
         public async Task<IActionResult> DemoteToMember(string userId)
         {
             var userToDemote = await _service.FindByIdAsync(userId);
