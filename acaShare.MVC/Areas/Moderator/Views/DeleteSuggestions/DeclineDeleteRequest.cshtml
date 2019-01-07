@@ -13,7 +13,9 @@
         <input type="hidden" asp-for="DeleteRequestId" />
         <input type="hidden" asp-for="ReasonId" />
 
-        <button type="submit">Odrzuć sugestię usunięcia</button>
-        <a asp-action="DeleteSuggestions">Wróć na listę sugestii usunięcia</a>
+        <div class="buttons">
+            <button type="submit" class="btn btn-default accept-button">Odrzuć sugestię usunięcia</button>
+            <a asp-action="DeleteSuggestions" class="btn btn-default back-button">Wróć na listę sugestii usunięcia</a>
+        </div>
     </form>
 </div>

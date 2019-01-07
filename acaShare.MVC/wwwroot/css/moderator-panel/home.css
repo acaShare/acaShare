@@ -18,7 +18,7 @@
     transition: .5s all;
 }
 
-.moderator-actions-item:hover, .active {
+.moderator-actions-item:hover, .moderator-actions-item-active {
     background-color: #e8e8e8; /*#d8d8d8*/
     border-radius: 5px;
     transition: .5s all;

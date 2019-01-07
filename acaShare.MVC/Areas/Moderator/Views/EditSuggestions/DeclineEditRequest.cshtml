@@ -12,7 +12,9 @@
         </div>
         <input type="hidden" asp-for="EditRequestId" />
 
-        <button type="submit">Odrzuć sugestię edycji</button>
-        <a asp-action="EditSuggestions">Wróć na listę sugestii edycji</a>
+        <div class="buttons">
+            <button type="submit" class="btn btn-default accept-button">Odrzuć sugestię edycji</button>
+            <a asp-action="EditSuggestions" class="btn btn-default back-button">Wróć na listę sugestii edycji</a>
+        </div>
     </form>
 </div>

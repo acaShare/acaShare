@@ -59,42 +59,42 @@
 
                         foreach (var file in Model.Files ?? Enumerable.Empty<FileViewModel>())
                         {
-                    <div id="@id" class="material-file-edit-mode-wrapper">
-                        @if (file.IsImage)
-                        {
-                            <div class="material-file material-image" onclick="openModal();currentSlide(@(slideIndex++))">
-                                <div class="delete-file" onclick="deleteFile(@id, event)">
-                                    <span class="delete-file-x">&#10005;</span>
+                            <div id="@id" class="material-file-edit-mode-wrapper">
+                                @if (file.IsImage)
+                                {
+                                    <div class="material-file material-image" onclick="openModal();currentSlide(@(slideIndex++))">
+                                        <div class="delete-file" onclick="deleteFile(@id, event)">
+                                            <span class="delete-file-x">&#10005;</span>
+                                        </div>
+                                        <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName-thumbnail" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="material-file">
+                                        <div class="delete-file" onclick="deleteFile(@id, event)">
+                                            <span class="delete-file-x">&#10005;</span>
+                                        </div>
+                                        <a href="~/_Uploads/@file.RelativePath" download="@file.FileName" class="material-file-download">
+                                            <i class="material-icons">description</i>
+                                        </a>
+                                    </div>
+                                }
+
+                                <input type="hidden" id="Files[@id].FileId" name="Files[@id].FileId" value="@file.FileId" />
+                                <input type="hidden" id="Files[@id].ContentType" name="Files[@id].ContentType" value="@file.ContentType" />
+                                <input type="hidden" id="Files[@id].RelativePath" name="Files[@id].RelativePath" value="@file.RelativePath" />
+
+                                <div class="input-field material-file-edit-mode-filename">
+                                    <input id="Files[@id].FileName" name="Files[@id].FileName" value="@file.FileName"
+                                           class="validate" data-length="100" data-val="true"
+                                           data-val-maxlength="Nazwa pliku numer @(id+1) nie<br>może przekraczać 100 znaków" data-val-maxlength-max="100"
+                                           data-val-required="Nazwa pliku numer @(id+1) jest wymagana" required />
+
+                                    <span class="text-danger input-error-small file-name-input-error"
+                                          data-valmsg-for="Files[@id].FileName" data-valmsg-replace="true"></span>
                                 </div>
-                                <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName-thumbnail" />
                             </div>
-                        }
-                        else
-                        {
-                            <div class="material-file">
-                                <div class="delete-file" onclick="deleteFile(@id, event)">
-                                    <span class="delete-file-x">&#10005;</span>
-                                </div>
-                                <a href="~/_Uploads/@file.RelativePath" download="@file.FileName" class="material-file-download">
-                                    <i class="material-icons">description</i>
-                                </a>
-                            </div>
-                        }
-
-                        <input type="hidden" id="Files[@id].FileId" name="Files[@id].FileId" value="@file.FileId" />
-                        <input type="hidden" id="Files[@id].ContentType" name="Files[@id].ContentType" value="@file.ContentType" />
-                        <input type="hidden" id="Files[@id].RelativePath" name="Files[@id].RelativePath" value="@file.RelativePath" />
-
-                        <div class="input-field material-file-edit-mode-filename">
-                            <input id="Files[@id].FileName" name="Files[@id].FileName" value="@file.FileName"
-                                   class="validate" data-length="100" data-val="true"
-                                   data-val-maxlength="Nazwa pliku numer @(id+1) nie<br>może przekraczać 100 znaków" data-val-maxlength-max="100"
-                                   data-val-required="Nazwa pliku numer @(id+1) jest wymagana" required />
-
-                            <span class="text-danger input-error-small file-name-input-error"
-                                  data-valmsg-for="Files[@id].FileName" data-valmsg-replace="true"></span>
-                        </div>
-                    </div>
 
                             id++;
                         }
@@ -127,7 +127,9 @@
             </section>
         </div>
 
-        <button id="submit-button" type="button" onclick="submitForm(event)">Zapisz</button>
-        <a asp-action="Material" asp-route-materialId="@Model.EditMaterialViewModel.MaterialId">Wróć do widoku materiału</a>
+        <div class="buttons">
+            <button id="submit-button" type="button" onclick="submitForm(event)" class="btn btn-default accept-button">Zapisz</button>
+            <a asp-action="Material" asp-route-materialId="@Model.EditMaterialViewModel.MaterialId" class="btn btn-default back-button">Wróć do widoku materiału</a>
+        </div>
     </form>
 </div>

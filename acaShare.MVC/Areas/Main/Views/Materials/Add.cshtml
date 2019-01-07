@@ -65,7 +65,9 @@
             </section>
         </div>
 
-        <button type="button" onclick="submitForm(event)">Dodaj</button>
-        <a asp-action="Materials" asp-route-lessonId="@Model.LessonId">Wróć do listy materiałów</a>
+        <div class="buttons">
+            <button type="button" onclick="submitForm(event)" class="btn btn-default accept-button">Dodaj</button>
+            <a asp-action="Materials" asp-route-lessonId="@Model.LessonId" class="btn btn-default back-button">Wróć do listy materiałów</a>
+        </div>
     </form>
 </div>

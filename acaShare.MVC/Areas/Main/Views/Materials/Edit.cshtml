@@ -118,7 +118,9 @@
             </section>
         </div>
 
-        <button id="submit-button" type="button" onclick="submitForm(event)">Zapisz</button>
-        <a asp-action="Material" asp-route-materialId="@Model.MaterialId">Wróć do widoku materiału</a>
+        <div class="buttons">
+            <button id="submit-button" type="button" onclick="submitForm(event)" class="btn btn-default accept-button">Zapisz</button>
+            <a asp-action="Material" asp-route-materialId="@Model.MaterialId" class="btn btn-default back-button">Wróć do widoku materiału</a>
+        </div>
     </form>
 </div>

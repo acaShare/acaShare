@@ -29,29 +29,29 @@
 
             <div class="home-content">
                 <ul id="moderator-actions" class="moderator-actions">
-                    <li class="moderator-actions-item @(ViewContext.RouteData.Values["Action"].ToString() == "EditSuggestions" ? "active" : "")">
+                    <li class="moderator-actions-item @(ViewContext.RouteData.Values["Action"].ToString() == "EditSuggestions" ? "moderator-actions-item-active" : "")">
                         <a class="moderator-actions-item-link" asp-controller="EditSuggestions" asp-action="EditSuggestions">
                             Sugestie edycji
                         </a>
                     </li>
-                    <li class="moderator-actions-item @(ViewContext.RouteData.Values["Action"].ToString() == "DeleteSuggestions" ? "active" : "")">
+                    <li class="moderator-actions-item @(ViewContext.RouteData.Values["Action"].ToString() == "DeleteSuggestions" ? "moderator-actions-item-active" : "")">
                         <a class="moderator-actions-item-link" asp-controller="DeleteSuggestions" asp-action="DeleteSuggestions">
                             Sugestie usunięcia
                         </a>
                     </li>
-                    <li class="moderator-actions-item @(ViewContext.RouteData.Values["Action"].ToString() == "MaterialsToApprove" ? "active" : "")">
+                    <li class="moderator-actions-item @(ViewContext.RouteData.Values["Action"].ToString() == "MaterialsToApprove" ? "moderator-actions-item-active" : "")">
                         <a class="moderator-actions-item-link" asp-controller="ModeratorPanel" asp-action="MaterialsToApprove">
                             Materiały oczekujące na zatwierdzenie
                         </a>
                     </li>
                     @if (User.IsInRole(Roles.AdministratorRole) || User.IsInRole(Roles.MainModeratorRole))
                     {
-                        <li class="moderator-actions-item @(ViewContext.RouteData.Values["Action"].ToString() == "Universities" ? "active" : "")">
+                        <li class="moderator-actions-item @(ViewContext.RouteData.Values["Action"].ToString() == "Universities" ? "moderator-actions-item-active" : "")">
                             <a class="moderator-actions-item-link" asp-controller="UniversitiesManagement" asp-action="Universities">
                                 Zarządzaj strukturą uczelni
                             </a>
                         </li>
-                        <li class="moderator-actions-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ModeratorManagement" ? "active" : "")">
+                        <li class="moderator-actions-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ModeratorManagement" ? "moderator-actions-item-active" : "")">
                             <a class="moderator-actions-item-link" asp-controller="ModeratorManagement" asp-action="Home">Zarządzaj moderatorami</a>
                         </li>
                     }

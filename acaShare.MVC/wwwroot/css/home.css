@@ -166,7 +166,41 @@ html, body {
     margin-bottom: 2em;
 }
 
+.buttons {
+    margin: 2em auto 0 auto;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+}
 
+.accept-button, .back-button {
+    width: 19em;
+}
+
+.accept-button {
+    font-size: .7em;
+    margin-right: 1em;
+}
+
+.back-button {
+    font-size: .7em;
+    background-color: gray;
+}
+
+.delete-button {
+    font-weight: bold;
+    background-color: #F44336;
+    width: 24em;
+}
+
+.delete-button:hover {
+    background-color: #fa1d0d;
+}
+
+.delete-warning {
+    font-weight: bold;
+    text-align: center;
+}
 
 
 @media only screen and (max-width: 600px) {

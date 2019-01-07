@@ -14,14 +14,12 @@
     };
 }
 
-<span class="text-danger">
+<div class="text-danger delete-warning">
     UWAGA! Czy na pewno chcesz usunąć przedmiot "@Model.TitleOrFullName"?
     Wiąże się to z usunięciem wszystkich materiałów z nim związanych. Liczba materiałów jakie zostaną usunięte to @Model.MaterialsCount
-</span>
-<br /><br />
-<div>
-    <a asp-action="Delete" asp-all-route-data="parms">Usuń wszystkie dane przedmiotu</a>
 </div>
-<div>
-    <a asp-action="Lessons" asp-all-route-data="backParms">Anuluj</a>
+<br />
+<div class="buttons">
+    <a asp-action="Delete" asp-all-route-data="parms" class="btn btn-default accept-button delete-button">Usuń wszystkie dane przedmiotu</a>
+    <a asp-action="Lessons" asp-all-route-data="backParms" class="btn btn-default back-button">Anuluj</a>
 </div>
