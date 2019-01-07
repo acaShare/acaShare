@@ -1,9 +1,13 @@
-﻿.row {
+﻿body {
+    overflow: auto;
+}
+
+.row {
     text-align: center;
 }
 
 .main-container {
-    margin: 0 auto;
+    margin: 3em auto 0 auto;
     width: 85%;
 }
 
@@ -23,10 +27,6 @@
 
 .signup-button {
     margin-top: .7rem;
-}
-
-.sss {
-    text-align: left !important;
 }
 
 @media only screen and (min-width: 600px) {

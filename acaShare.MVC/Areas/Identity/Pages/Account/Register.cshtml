@@ -13,30 +13,35 @@
     <h2>Rejestracja</h2>
     <div class="main-container">
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h4>Stwórz nowe konto</h4>
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
-                <input asp-for="Input.UserName" class="form-control" placeholder="Użytkownik" />
-                <label asp-for="Input.UserName">Użytkownik</label><br />
+                <input asp-for="Input.UserName" class="form-control" />
+                <label asp-for="Input.ConfirmPassword">@Html.DisplayNameFor(m => m.Input.UserName)</label><br />
                 <span asp-validation-for="Input.UserName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input asp-for="Input.Email" class="form-control" placeholder="E-mail"/>
-                <label asp-for="Input.Email"></label><br />
+                <input asp-for="Input.Email" class="form-control" />
+                <label asp-for="Input.ConfirmPassword">@Html.DisplayNameFor(m => m.Input.Email)</label><br />
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input asp-for="Input.Password" class="form-control" placeholder="Hasło"/>
-                <label asp-for="Input.Password">Hasło</label><br />
+                <input asp-for="Input.Password" class="form-control" />
+                <label asp-for="Input.ConfirmPassword">@Html.DisplayNameFor(m => m.Input.Password)</label><br />
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Potwierdź hasło"/>
-                <label asp-for="Input.ConfirmPassword">Potwierdź hasło</label><br />
+                <input asp-for="Input.ConfirmPassword" class="form-control" />
+                <label asp-for="Input.ConfirmPassword">@Html.DisplayNameFor(m => m.Input.ConfirmPassword)</label><br />
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-            <br />
-            <button type="submit" class="btn btn-default">Zarejestruj</button>
+
+            <button type="submit" class="btn btn-default signup-button">Zarejestruj się</button>
+            lub
+            <div class="form-group">
+                <p>
+                    <a class="btn btn-default signin-button" asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">Zaloguj się</a>
+                </p>
+            </div>
         </form>
     </div>
 </div>

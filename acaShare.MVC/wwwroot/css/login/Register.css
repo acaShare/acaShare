@@ -1,11 +1,48 @@
 ﻿body {
+    overflow: auto;
 }
 
 .row {
     text-align: center;
 }
 
-.main-container{
-    width: 30%;
-    margin: 0 auto;
+.main-container {
+    margin: 1em auto 0 auto;
+    width: 85%;
+}
+
+.signin-button, .signup-button {
+    width: 100%;
+}
+
+.signup-button {
+    margin: 1.5rem 0 .7rem 0;
+}
+
+.signin-button {
+    margin-top: .7rem;
+}
+
+@media only screen and (min-width: 600px) {
+    .main-container {
+        width: 60%;
+    }
+}
+
+@media only screen and (min-width: 800px) {
+    .main-container {
+        width: 50%;
+    }
+}
+
+@media only screen and (min-width: 1000px) {
+    .main-container {
+        width: 40%;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    .main-container {
+        width: 30%;
+    }
 }
