@@ -1,16 +1,54 @@
-﻿body {
-}
-
-.row {
+﻿.row {
     text-align: center;
 }
 
 .main-container {
     margin: 0 auto;
-    width: 30%;
+    width: 85%;
 }
 
 #box {
     opacity: 1;
     position: relative;
+    margin-bottom: 1rem;
+}
+
+.signin-button, .signup-button {
+    width: 100%;
+}
+
+.signin-button {
+    margin: 1rem 0 .7rem 0;
+}
+
+.signup-button {
+    margin-top: .7rem;
+}
+
+.sss {
+    text-align: left !important;
+}
+
+@media only screen and (min-width: 600px) {
+    .main-container {
+        width: 60%;
+    }
+}
+
+@media only screen and (min-width: 800px) {
+    .main-container {
+        width: 50%;
+    }
+}
+
+@media only screen and (min-width: 1000px) {
+    .main-container {
+        width: 40%;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+     .main-container {
+         width: 30%;
+     }
 }
