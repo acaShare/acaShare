@@ -56,6 +56,24 @@ h2 {
     line-height: 36px;
 }
 
+.home-part {
+    height: auto;
+}
+
+.home-content {
+    height: auto;
+}
+
+.material-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.material-content {
+    overflow: scroll;
+}
+
 .material-content-files {
     display: flex;
     justify-content: space-around;

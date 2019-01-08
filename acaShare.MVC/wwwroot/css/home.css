@@ -5,8 +5,9 @@
 
 html, body {
     max-height: 100vh;
+    height: 100%;
     width: 100%;
-    overflow: hidden;
+    overflow: scroll;
 }
 
 .nav-wrapper {
@@ -22,18 +23,20 @@ html, body {
 }
 
 .home-part {
-    height: 100%;
+    max-height: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 3em .75rem !important;
 }
 
 .right-side-bar {
-    height: 100vh;
     margin-top: 4px;
-    border-left: 1px solid lightgrey;
 }
 
 .data-container {
     width: 95%;
-    margin: 4% auto;
+    display: flex;
+    flex-direction: column;
 
     border-radius: 10px;
     -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
@@ -62,6 +65,8 @@ html, body {
 
 .home-content {
     padding: 1.5em;
+    display: flex;
+    height: 100%;
 }
 
 .path-list-item:hover {
@@ -214,6 +219,13 @@ html, body {
     .tabs .tab a {
         padding: 0 3px;
         font-size: 65%;
+    }
+    body {
+        overflow: hidden;
+    }
+    .right-side-bar {
+        height: 100vh;
+        border-left: 1px solid lightgrey;
     }
 }
 
