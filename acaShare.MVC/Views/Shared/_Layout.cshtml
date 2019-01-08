@@ -22,34 +22,13 @@
 <body>
     <noscript class="no-script">
         <style>
-            body *:not(.no-script) {
-                display: none;
-            }
-
-            .no-script {
-                text-align: center;
-            }
-
-            .no-script-data {
-                padding: 1em;
-            }
-
-            .brand-logo {
-                margin: 0;
-                position: static !important;
-            }
-
-            .no-script h1 {
-                font-size: 3.4rem;
-            }
-
-            .no-script h3 {
-                font-size: 2rem;
-            }
-
-            .no-script img {
-                margin-top: 1em;
-            }
+            body *:not(.no-script) { display: none; }
+            .no-script { text-align: center; }
+            .no-script-data { padding: 1em; }
+            .brand-logo { margin: 0; position: static !important; }
+            .no-script h1 { font-size: 3.4rem; }
+            .no-script h3 { font-size: 2rem; }
+            .no-script img { margin-top: 1em; }
         </style>
 
         <nav class="no-script">
@@ -70,14 +49,16 @@
     <nav>
         <div class="nav-wrapper">
             <a asp-area="Main" asp-controller="List" asp-action="AvailableUniversities" class="brand-logo">acaShare</a>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a class="material-icons" id="notification" onclick="dropDown()">notifications</a>@*<a class="material-icons" id="notification" asp-area="Main" asp-controller="Notification" asp-action="aaa">notifications</a>*@</li>
-                @if (User.IsInRole(Roles.AdministratorRole) || User.IsInRole(Roles.MainModeratorRole) || User.IsInRole(Roles.ModeratorRole))
-                {
-                    <li><a asp-area="Moderator" asp-controller="ModeratorPanel" asp-action="Home">Panel moderatora</a></li>
-                }
-                @if (User.Identity.IsAuthenticated)
-                {
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a href="#" data-target="mobile-hamburger" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                <ul class="right hide-on-med-and-down">
+                    <li id="notifications-button" onclick="toggleNotifications(event);"><a>aaaa</a></li>
+                    @if (User.IsInRole(Roles.AdministratorRole) || User.IsInRole(Roles.MainModeratorRole) || User.IsInRole(Roles.ModeratorRole))
+                    {
+                        <li><a asp-area="Moderator" asp-controller="ModeratorPanel" asp-action="Home">Panel moderatora</a></li>
+                    }
+
                     <li>
                         <form id="logout-form"
                               asp-area="Identity"
@@ -88,21 +69,37 @@
                             <a href="javascript:{}" onclick="document.getElementById('logout-form').submit()">Wyloguj</a>
                         </form>
                     </li>
-                }
-            </ul>
+                </ul>
+            }
         </div>
     </nav>
-    <div class="notificationContainer">
-        <div class="notificationList" id="notificationList">
-            @*<a>Link 1</a><br />
-            <a>Link 2</a><br />
-            <a>Link 2</a><br />
-            <a>Link 2</a><br />
-            <a>Link 2</a><br />
-            <a>Link 2</a><br />
-            <a>Link 2</a><br />
-            <a>Link 2</a><br />
-            <a>Link 3</a>*@
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <ul class="sidenav" id="mobile-hamburger">
+            @if (User.IsInRole(Roles.AdministratorRole) || User.IsInRole(Roles.MainModeratorRole) || User.IsInRole(Roles.ModeratorRole))
+            {
+                <li><a asp-area="Moderator" asp-controller="ModeratorPanel" asp-action="Home">Panel moderatora</a></li>
+            }
+
+            <li>
+                <form id="logout-form"
+                      asp-area="Identity"
+                      asp-page="/Account/Logout"
+                      asp-route-returnUrl="@Url.Page("/Index", new { area = "" })"
+                      method="post"></form>
+
+                <a href="javascript:{}" onclick="document.getElementById('logout-form').submit()">Wyloguj</a>
+            </li>
+        </ul>
+    }
+
+    <div id="notifications-wrapper" class="notifications-wrapper" style="display: none;">
+        <div class="notifications">
+            <ul>
+                <li>test1</li>
+                <li>test2</li>
+            </ul>
         </div>
     </div>
 
