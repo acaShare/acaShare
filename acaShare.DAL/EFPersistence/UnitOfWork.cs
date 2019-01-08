@@ -25,6 +25,7 @@ namespace acaShare.DAL.EFPersistence
         public IMaterialRepository Materials { get; }
         public IMaterialStateRepository MaterialStates { get; }
         public ISidebarRepository SidebarRepository { get; }
+        public INotificationRepository NotificationRepository { get; }
 
         public UnitOfWork(AcaShareDbContext dbContext)
         {
@@ -38,6 +39,7 @@ namespace acaShare.DAL.EFPersistence
             Materials = new MaterialRepository(_db.Material, _db.File, _db.ChangeReason, _db.DeleteRequest, _db.EditRequest);
             MaterialStates = new MaterialStatesRepository(_db.MaterialState);
             SidebarRepository = new SidebarRepository(_db);
+            NotificationRepository = new NotificationRepository(_db.Notification);
         }
 
         public void SaveChanges()

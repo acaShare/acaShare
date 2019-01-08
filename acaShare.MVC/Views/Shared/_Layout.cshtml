@@ -22,13 +22,34 @@
 <body>
     <noscript class="no-script">
         <style>
-            body *:not(.no-script) { display: none; }
-            .no-script { text-align: center; }
-            .no-script-data { padding: 1em; }
-            .brand-logo { margin: 0; position: static !important; }
-            .no-script h1 { font-size: 3.4rem; }
-            .no-script h3 { font-size: 2rem; }
-            .no-script img { margin-top: 1em; }
+            body *:not(.no-script) {
+                display: none;
+            }
+
+            .no-script {
+                text-align: center;
+            }
+
+            .no-script-data {
+                padding: 1em;
+            }
+
+            .brand-logo {
+                margin: 0;
+                position: static !important;
+            }
+
+            .no-script h1 {
+                font-size: 3.4rem;
+            }
+
+            .no-script h3 {
+                font-size: 2rem;
+            }
+
+            .no-script img {
+                margin-top: 1em;
+            }
         </style>
 
         <nav class="no-script">
@@ -50,6 +71,7 @@
         <div class="nav-wrapper">
             <a asp-area="Main" asp-controller="List" asp-action="AvailableUniversities" class="brand-logo">acaShare</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a class="material-icons" id="notification" onclick="dropDown()">notifications</a>@*<a class="material-icons" id="notification" asp-area="Main" asp-controller="Notification" asp-action="aaa">notifications</a>*@</li>
                 @if (User.IsInRole(Roles.AdministratorRole) || User.IsInRole(Roles.MainModeratorRole) || User.IsInRole(Roles.ModeratorRole))
                 {
                     <li><a asp-area="Moderator" asp-controller="ModeratorPanel" asp-action="Home">Panel moderatora</a></li>
@@ -70,6 +92,19 @@
             </ul>
         </div>
     </nav>
+    <div class="notificationContainer">
+        <div class="notificationList" id="notificationList">
+            @*<a>Link 1</a><br />
+            <a>Link 2</a><br />
+            <a>Link 2</a><br />
+            <a>Link 2</a><br />
+            <a>Link 2</a><br />
+            <a>Link 2</a><br />
+            <a>Link 2</a><br />
+            <a>Link 2</a><br />
+            <a>Link 3</a>*@
+        </div>
+    </div>
 
     @RenderBody()
 
@@ -78,7 +113,7 @@
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
     <script src="~/js/home.js"></script>
-
+    <script src="~/js/notification.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
