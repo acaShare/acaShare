@@ -1,5 +1,9 @@
 ﻿@model ChangeRequestApprovalDecision
 
+@section UpperManageBoxStyles {
+    <link rel="stylesheet" href="~/css/upper-manage-box.css" />
+}
+
 @section Scripts {
     <script src="~/js/material-images-modal.js"></script>
 }
@@ -34,7 +38,7 @@
                             </a>
                         </div>
                     </header>
-                    <section>
+                    <section class="upper-manage-box-content">
                         <h2>@Html.DisplayNameFor(model => model.DeleteRequestViewModel.AdditionalComment)</h2>:
                         <p class="additional-comment">
                             @if (string.IsNullOrEmpty(Model.DeleteRequestViewModel.AdditionalComment))

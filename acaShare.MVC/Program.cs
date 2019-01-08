@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using acaShare.MVC.Areas.Moderator;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -15,7 +16,13 @@ namespace acaShare.MVC
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+            //WebHost.CreateDefaultBuilder(args)
+            //    .UseStartup<Startup>();
             WebHost.CreateDefaultBuilder(args)
+                .UseKestrel()
+                .UseUrls("https://*:5001")
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIISIntegration()
                 .UseStartup<Startup>();
     }
 }

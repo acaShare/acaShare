@@ -1,11 +1,15 @@
+.home-part.moderator-actions-container {
+    padding-bottom: 1em;
+}
+
 .home-container {
-  width: 93%;
-  max-height: 100vh;
+    width: 95%;
+    max-height: 100vh;
 }
 
 .data-container {
-  margin: 2.5em auto;
-  width: 98%;
+    margin: 0 auto;
+    width: 100%;
 }
 
 .tree-path {
@@ -40,4 +44,19 @@
     margin-top: -1.1em;
     text-align: center;
     font-size: .9em;
+}
+
+@media only screen and (min-width: 600px) {
+    .home-container {
+        width: 93%;
+    }
+    
+    .data-container {
+        width: 98%;
+    }
+
+    .home-part {
+        max-height: 100%;
+        padding: 3em .75rem 1em .75em !important;
+    }
 }

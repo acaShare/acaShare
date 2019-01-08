@@ -1,5 +1,9 @@
 ﻿@model ChangeRequestApprovalDecision
 
+@section UpperManageBoxStyles {
+    <link rel="stylesheet" href="~/css/upper-manage-box.css" />
+}
+
 @section Scripts {
     <script src="~/js/material-images-modal.js"></script>
     <script src="~/js/peek-previous-material-version.js"></script>
@@ -31,7 +35,7 @@
                             </a>
                         </div>
                     </header>
-                    <section>
+                    <section class="upper-manage-box-content">
                         <h2>Poprzednia nazwa materiału:</h2>
                         <p class="additional-comment">
                             @Html.DisplayFor(model => model.MaterialViewModel.Name)

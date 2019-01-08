@@ -9,15 +9,15 @@
     <link rel="stylesheet" href="~/css/materials/material-images-modal.css">
     <link rel="stylesheet" href="~/css/moderator-panel/ModeratorManagementStyle.css" />
     <link rel="stylesheet" href="~/css/moderator-panel/change-requests.css" />
-    <link rel="stylesheet" href="~/css/upper-manage-box.css" />
+    @RenderSection("UpperManageBoxStyles", false)
 }
 
 @section Scripts {
-    @RenderSection("Scripts", false);
+    @RenderSection("Scripts", false)
 }
 
 <div class="row home-container">
-    <div class="col s12 m5 l3 home-part">
+    <div class="col s12 m5 l3 home-part moderator-actions-container">
         <div class="data-container">
             <nav class="colornav">
                 <div class="nav-wrapper path-header-wrapper">
