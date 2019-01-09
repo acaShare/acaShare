@@ -214,6 +214,9 @@ body {
     text-align: center;
 }
 
+.back-button-large {
+    display: none;
+}
 
 @media only screen and (max-width: 600px) {
     .tabs .tab a {
@@ -260,6 +263,18 @@ body {
     .tabs .tab a {
         padding: 0 10px;
         font-size: 70%;
+    }
+}
+
+@media only screen and (min-width: 1280px) {
+    
+
+    .back-button-large {
+        display: block;
+    }
+
+    .back-button-small {
+        display: none;
     }
 }
 

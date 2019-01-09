@@ -15,11 +15,18 @@
 .material-file {
     width: 7em;
     height: 7em;
+    margin-bottom: .5em;
+}
+
+div.input-field.material-file-edit-mode-filename {
+    margin-bottom: 0;
+    width: 90%;
 }
 
 .material-file-edit-mode-filename input {
     font-size: 11px !important;
     height: 2rem !important;
+    margin: 0;
 }
 
 div.file-field.input-field {
@@ -44,6 +51,10 @@ div.file-field.input-field .btn {
 @media only screen and (min-height: 950px) {
     .materialize-textarea.material-edit-description-textarea {
         max-height: 10em;
+    }
+
+    div.input-field.material-file-edit-mode-filename {
+        width: 100%;
     }
 
     .material-file-edit-mode-filename input {
