@@ -1,0 +1,75 @@
+﻿.materialize-textarea.material-edit-description-textarea {
+    max-height: 6em;
+    overflow: auto;
+    margin-bottom: 0;
+}
+
+.material-content {
+    max-height: 50vh;
+}
+
+.material-container .buttons {
+    margin-top: .5em;
+}
+
+.material-file {
+    width: 7em;
+    height: 7em;
+}
+
+.material-file-edit-mode-filename input {
+    font-size: 11px !important;
+    height: 2rem !important;
+}
+
+div.file-field.input-field {
+    margin-top: 0;
+    margin-bottom: .5em;
+}
+
+div.file-field.input-field .btn {
+    font-size: .7em;
+}
+
+.home-container .home-part {
+    max-height: none;
+}
+
+@media only screen and (min-height: 600px) {
+    .material-content {
+        max-height: 24vh;
+    }
+}
+
+@media only screen and (min-height: 950px) {
+    .materialize-textarea.material-edit-description-textarea {
+        max-height: 10em;
+    }
+
+    .material-file-edit-mode-filename input {
+        font-size: 16px !important;
+        height: 3rem !important;
+    }
+
+    .material-file {
+        width: 13em;
+        height: 13em;
+    }
+
+    div.file-field.input-field {
+        margin-top: .5em;
+        margin-bottom: .5em;
+    }
+
+    div.file-field.input-field .btn {
+        font-size: 1em;
+    }
+
+    .material-content {
+        max-height: 40vh;
+    }
+
+    .material-container .buttons {
+        margin-top: 1.6em;
+    }
+}
