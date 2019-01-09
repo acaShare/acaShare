@@ -20,7 +20,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
             _userService = userService;
         }
 
-        public JsonResult NotificationData()
+        public IActionResult NotificationData()
         {
             var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var appUserId = _userService.FindByIdentityUserId(identityUserId).UserId;
