@@ -14,6 +14,9 @@
 </div>
 <br />
 <div class="buttons">
-    <a asp-action="Delete" asp-all-route-data="parms" class="btn btn-default accept-button delete-button">Usuń wszystkie dane wydziału</a>
+    <a asp-action="Delete" asp-all-route-data="parms" class="btn btn-default accept-button delete-button">
+        <span class="delete-button-large">Usuń dane wydziału</span>
+        <span class="delete-button-small">Usuń</span>
+    </a>
     <a asp-action="Departments" asp-route-universityId="@Model.UniversityId" class="btn btn-default back-button">Anuluj</a>
 </div>

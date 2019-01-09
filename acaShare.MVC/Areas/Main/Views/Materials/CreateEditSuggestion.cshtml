@@ -2,6 +2,7 @@
 
 @section MaterialViewCSS {
     <link rel="stylesheet" href="~/css/materials/material.css">
+    <link rel="stylesheet" href="~/css/materials/material-edit.css">
     <link rel="stylesheet" href="~/css/materials/material-management.css">
     <link rel="stylesheet" href="~/css/materials/material-images-modal.css">
 }
@@ -12,7 +13,7 @@
 }
 
 @* Differences in the code below and an Edit view are minor - only the fields' names are changed (only the EditMaterialViewModel prefix is added) *@
-<div class="row">
+<div class="material-container">
     <form id="material-form" method="post" class="col s12">
         <div asp-validation-summary="All" id="validation-summary" class="text-danger"></div>
         <div>

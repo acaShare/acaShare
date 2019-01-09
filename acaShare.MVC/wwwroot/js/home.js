@@ -36,3 +36,15 @@ function closeOnBackgroundClick(event) {
         document.body.onclick = null;
     }
 }
+
+window.onload = () => {
+    let elem = document.getElementsByClassName('material-header-title')[0];
+    if (elem.innerHTML.trim().length > 30) {
+        let elem1 = document.getElementsByClassName('material-header')[0];
+        let elem2 = document.getElementsByClassName('material-header-action-buttons')[0];
+
+        elem.classList.replace('material-header-title', 'material-header-title-smaller');
+        elem1.classList.replace('material-header', 'material-header-smaller');
+        elem2.classList.replace('material-header-action-buttons', 'material-header-action-buttons-smaller');
+    }
+}

@@ -73,6 +73,7 @@ body {
 .home-content {
     padding: 1.5em;
     display: flex;
+    flex-direction: column;
     height: 100%;
 }
 
@@ -202,7 +203,6 @@ body {
 .delete-button {
     font-weight: bold;
     background-color: #F44336;
-    width: 24em;
 }
 
 .delete-button:hover {
@@ -214,7 +214,15 @@ body {
     text-align: center;
 }
 
+.accept-button-large {
+    display: none;
+}
+
 .back-button-large {
+    display: none;
+}
+
+.delete-button-large {
     display: none;
 }
 
@@ -251,6 +259,22 @@ body {
         padding: 0 5px;
         font-size: 65%;
     }
+
+    .accept-button-large {
+        display: block;
+    }
+
+    .accept-button-small {
+        display: none;
+    }
+
+    .delete-button-large {
+        display: block;
+    }
+
+    .delete-button-small {
+        display: none;
+    }
 }
 
 @media only screen and (max-width: 992px) {
@@ -267,8 +291,6 @@ body {
 }
 
 @media only screen and (min-width: 1280px) {
-    
-
     .back-button-large {
         display: block;
     }

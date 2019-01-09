@@ -53,6 +53,25 @@ h2 {
     transform: translateY(-50%);
 }
 
+.material-header-smaller {
+    margin-bottom: 2em;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.material-header-title-smaller {
+    display: block;
+    flex: 1;
+    color: #212121;
+    font-weight: 700;
+    font-size: 1.2em;
+}
+
+.material-header-action-buttons-smaller {
+    display: block;
+}
+
 .lh {
     line-height: 36px;
 }
@@ -92,6 +111,7 @@ h2 {
     height: 13em;
     cursor: pointer;
     box-sizing: border-box;
+    margin: 0 0.75em 1.5em 0.75em;
     background-color: rgba(239, 239, 239, 0.81);
     border-radius: 10px;
     transition: .3s;
