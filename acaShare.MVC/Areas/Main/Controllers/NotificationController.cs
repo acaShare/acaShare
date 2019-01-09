@@ -26,7 +26,25 @@ namespace acaShare.MVC.Areas.Main.Controllers
             var appUserId = _userService.FindByIdentityUserId(identityUserId).UserId;
             var userNotifications = _notificationService.GetUserNotifications(appUserId);
 
-            return Json(userNotifications);
+            var notifications = userNotifications.Select(n =>
+                new testVM
+                {
+                    MaterialId = n.MaterialId,
+                    UserId = n.UserId,
+                    Date = n.Date,
+                    Content = n.Content
+                }
+            );
+
+            return Json(notifications);
         }
+    }
+
+    public class testVM
+    {
+        public int? MaterialId { get; set; }
+        public int UserId { get; set; }
+        public string Content { get; set; }
+        public DateTime Date { get; set; }
     }
 }

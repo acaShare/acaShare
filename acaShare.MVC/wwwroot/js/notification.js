@@ -6,13 +6,13 @@
 function getData() {
     var xhttp = new XMLHttpRequest();
 
-    xhttp.onreadystatechange = () => {
-        //if (this.status === 200) {
-            var data = JSON.parse(this.responseText);
+    xhttp.onload = () => {
+        if (xhttp.readyState === 4 && xhttp.status === 200) {
+            let data = JSON.parse(xhttp.responseText);
             document.getElementById("notificationList").innerHTML = data;
-        //}
+        }
     };
-    xhttp.open("GET", "Main/Notification/NotificationData");
+    xhttp.open("GET", "/Main/Notification/NotificationData");
     xhttp.send();
 }
 

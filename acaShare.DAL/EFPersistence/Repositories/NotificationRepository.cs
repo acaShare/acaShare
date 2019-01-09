@@ -19,7 +19,7 @@ namespace acaShare.DAL.EFPersistence.Repositories
 
         public ICollection<Notification> GetUserNotifications(int userId)
         {
-            return _dbSet.Where(x => x.UserId == userId).ToList();
+            return _dbSet.AsNoTracking().Where(x => x.UserId == userId).ToList();
         }
     }
 }
