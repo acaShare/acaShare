@@ -3,6 +3,7 @@ using acaShare.DAL.Core;
 using acaShare.ServiceLayer.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace acaShare.ServiceLayer.Services
@@ -17,33 +18,65 @@ namespace acaShare.ServiceLayer.Services
             _uow = uow;
         }
 
-        public void AddDepartment(Department department)
+        public bool AddDepartment(Department department)
         {
+            if (_uow.Departments.DoesDepartmentAlreadyExistInUniversity(department.Name, department.University.Name))
+            {
+                return false;
+            }
+           
+            if (_uow.Departments.IsAbbreviationAlreadyTaken(department.University.Name, department.Abbreviation))
+            {
+                return false;
+            }
+
             _uow.Departments.Add(department);
             _uow.SaveChanges();
+
+            return true;
         }
 
-        public void AddLesson(Lesson lesson)
+        public bool AddLesson(Lesson lesson, string abbreviation, SubjectDepartment subjectDepartment)
         {
+            if (_uow.Lessons.IsAbbreviationAlreadyTaken(subjectDepartment.DepartmentId, lesson.SemesterId, abbreviation))
+            {
+                return false;
+            }
+
+            if (_uow.Lessons.DoesLessonAlreadyExist(lesson.SubjectDepartmentId, lesson.SemesterId))
+            {
+                return false;
+            }
+
             _uow.Lessons.Add(lesson);
             _uow.SaveChanges();
+
+            return true;
         }
 
-        public Subject AddSubject(Subject subject)
+        public SubjectDepartment AddSubject(Subject subject)
         {
-            var result = _uow.Subjects.AddSubjectWithResult(subject);
+            var existingSubject = _uow.Subjects.GetByName(subject.Name);
+            if (existingSubject != null)
+            {
+                var subDept = _uow.Subjects.GetSubDept(subject);
+                if (subDept != null)
+                {
+                    return subDept;
+                }
+                else
+                {
+                    subDept = subject.SubjectDepartment.First();
+                    existingSubject.SubjectDepartment.Add(subDept);
+                    _uow.SaveChanges();
+                    return subDept;
+                }
+            }
+
+            _uow.Subjects.Add(subject);
             _uow.SaveChanges();
 
-            return result;
-        }
-
-        public int AddSubjectWithResult(Subject subject)
-        {
-            //int subjectDepartmentId = _uow.Subjects.AddSubjectWithResult(subject);
-            //_uow.SaveChanges();
-
-            //return subjectDepartmentId;
-            return -1;
+            return subject.SubjectDepartment.First();
         }
 
         public void AddUniversity(University university)

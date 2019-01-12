@@ -22,19 +22,15 @@ namespace acaShare.MVC.Areas.Main.Controllers
         private readonly IMaterialsService _service;
         private readonly IUniversityTreeTraversalService _traversalService;
         private readonly IUserService _userService;
-        private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IFormFilesManagement _filesManagement;
-        private readonly IFilesValidator _filesValidator;
 
         public MaterialsController(IMaterialsService service, IUniversityTreeTraversalService traversalService, IUserService userService, 
-            IHostingEnvironment hostingEnvironment, IFormFilesManagement formFilesManagement, IFilesValidator filesValidator)
+            IFormFilesManagement formFilesManagement)
         {
             _service = service;
             _traversalService = traversalService;
             _userService = userService;
-            _hostingEnvironment = hostingEnvironment;
             _filesManagement = formFilesManagement;
-            _filesValidator = filesValidator;
         }
 
         public IActionResult Materials(int lessonId)
@@ -368,7 +364,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 {
                     Controller = "Materials",
                     Action = "Material",
-                    Title = material.Name,
+                    Title = "Materiał",
                     Params = parms
                 }
             };

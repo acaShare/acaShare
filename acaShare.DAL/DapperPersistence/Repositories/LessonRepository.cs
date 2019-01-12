@@ -9,7 +9,7 @@ using System.Text;
 
 namespace acaShare.DAL.DapperPersistence.Repositories
 {
-    public sealed class LessonRepository : DapperRepository<Lesson>, ILessonRepository
+    public sealed class LessonRepository : DapperRepository<Lesson>//, ILessonRepository
     {
         public LessonRepository(IDbTransaction transaction) : base(transaction)
         {
@@ -78,6 +78,11 @@ namespace acaShare.DAL.DapperPersistence.Repositories
             //lesson.Department = department;
 
             //return lesson;
+        }
+
+        public Lesson DoesLessonAlreadyExist(int subjectDepartmentId)
+        {
+            return null;
         }
     }
 }

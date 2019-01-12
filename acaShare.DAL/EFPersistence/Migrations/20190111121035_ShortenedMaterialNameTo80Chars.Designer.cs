@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using acaShare.DAL.Configuration;
 
 namespace acaShare.DAL.EFPersistence.Migrations
 {
     [DbContext(typeof(AcaShareDbContext))]
-    partial class AcaShareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190111121035_ShortenedMaterialNameTo80Chars")]
+    partial class ShortenedMaterialNameTo80Chars
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -119,7 +121,7 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
                     b.Property<string>("Abbreviation")
                         .IsRequired()
-                        .HasMaxLength(5);
+                        .HasMaxLength(15);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -129,15 +131,11 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
                     b.HasKey("DepartmentId");
 
-                    b.HasIndex("UniversityId");
-
-                    b.HasIndex("Abbreviation", "UniversityId")
-                        .IsUnique()
-                        .HasName("UQ_Department_Abbreviation");
-
-                    b.HasIndex("Name", "UniversityId")
+                    b.HasIndex("Name")
                         .IsUnique()
                         .HasName("UQ_Department_Name");
+
+                    b.HasIndex("UniversityId");
 
                     b.ToTable("Department");
                 });
@@ -358,7 +356,7 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
                     b.Property<string>("Abbreviation")
                         .IsRequired()
-                        .HasMaxLength(5);
+                        .HasMaxLength(15);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -402,7 +400,7 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
                     b.Property<string>("Abbreviation")
                         .IsRequired()
-                        .HasMaxLength(5);
+                        .HasMaxLength(15);
 
                     b.Property<string>("Name")
                         .IsRequired()

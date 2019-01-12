@@ -30,6 +30,7 @@ namespace acaShare.DAL.Configuration
         public virtual DbSet<Notification> Notification { get; set; }
         public virtual DbSet<Semester> Semester { get; set; }
         public virtual DbSet<Subject> Subject { get; set; }
+        public virtual DbSet<SubjectDepartment> SubjectDepartment { get; set; }
         public virtual DbSet<University> University { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserInUniversity> UserInUniversity { get; set; }
@@ -139,8 +140,12 @@ namespace acaShare.DAL.Configuration
 
             modelBuilder.Entity<Department>(entity =>
             {
-                entity.HasIndex(e => e.Name)
+                entity.HasIndex(e => new { e.Name, e.UniversityId})
                     .HasName("UQ_Department_Name")
+                    .IsUnique();
+
+                entity.HasIndex(e => new { e.Abbreviation, e.UniversityId })
+                    .HasName("UQ_Department_Abbreviation")
                     .IsUnique();
 
                 entity.Property(e => e.Name)
@@ -149,7 +154,7 @@ namespace acaShare.DAL.Configuration
 
                 entity.Property(e => e.Abbreviation)
                     .IsRequired()
-                    .HasMaxLength(15);
+                    .HasMaxLength(5);
 
                 entity.HasOne(d => d.University)
                     .WithMany(p => p.Departments)
@@ -260,7 +265,7 @@ namespace acaShare.DAL.Configuration
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(255);
+                    .HasMaxLength(80);
 
                 entity.Property(e => e.UploadDate)
                     .HasColumnType("datetime")
@@ -359,7 +364,7 @@ namespace acaShare.DAL.Configuration
 
                 entity.Property(e => e.Abbreviation)
                     .IsRequired()
-                    .HasMaxLength(15);
+                    .HasMaxLength(5);
             });
 
             modelBuilder.Entity<SubjectDepartment>(entity =>
@@ -395,7 +400,7 @@ namespace acaShare.DAL.Configuration
 
                 entity.Property(e => e.Abbreviation)
                     .IsRequired()
-                    .HasMaxLength(15);
+                    .HasMaxLength(5);
             });
 
             modelBuilder.Entity<User>(entity =>
@@ -457,10 +462,32 @@ namespace acaShare.DAL.Configuration
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole { Name = "Administrator", NormalizedName = "Administrator".ToUpper() });
-            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole { Name = "MainModerator", NormalizedName = "MainModerator".ToUpper() });
-            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole { Name = "Moderator", NormalizedName = "Moderator".ToUpper() });
-            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole { Name = "Member", NormalizedName = "Member".ToUpper() });
+            modelBuilder.Entity<IdentityRole>().HasData(
+                new IdentityRole {
+                    Id = "51825ef9-7c53-41c0-88a2-53768f3fdb4b",
+                    Name = "Administrator",
+                    NormalizedName = "Administrator".ToUpper(),
+                    ConcurrencyStamp = "c6f86064-ac00-4fa1-9e51-9c8c1ea6fce9"
+                },
+                new IdentityRole {
+                    Id = "b1f6687c-5bff-425f-af5c-5341b44c64c0",
+                    Name = "MainModerator",
+                    NormalizedName = "MainModerator".ToUpper(),
+                    ConcurrencyStamp = "178c3ef7-ad05-44a6-93c4-a28c9bf72571"
+                },
+                new IdentityRole {
+                    Id = "2eb6a235-de89-4d75-9ef7-3f44b352fb58",
+                    Name = "Moderator",
+                    NormalizedName = "Moderator".ToUpper(),
+                    ConcurrencyStamp = "4b976fc9-50fa-4c24-9544-d7fad5f7ab5a"
+                },
+                new IdentityRole {
+                    Id = "b64c4ab9-b764-49ba-aff9-8d5cf733751c",
+                    Name = "Member",
+                    NormalizedName = "Member".ToUpper(),
+                    ConcurrencyStamp = "4284daa1-3427-48d3-8732-885b0c63addf"
+                }
+            );
         }
     }
 }
