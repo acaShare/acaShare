@@ -32,6 +32,7 @@
     <Compile Remove="EFPersistence\Migrations\20190111121609_test.cs" />
     <Compile Remove="EFPersistence\Migrations\20190111122000_test.cs" />
     <Compile Remove="EFPersistence\Migrations\20190111202857_ReducedAbbreviationsLengths.cs" />
+    <Compile Remove="EFPersistence\Migrations\20190112161253_ShortenedUsernames.cs" />
   </ItemGroup>
 
   <ItemGroup>

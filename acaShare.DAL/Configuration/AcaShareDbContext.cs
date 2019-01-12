@@ -403,13 +403,15 @@ namespace acaShare.DAL.Configuration
                     .HasMaxLength(5);
             });
 
+            modelBuilder.Entity<IdentityUser>().Property(x => x.UserName).HasMaxLength(22);
+
             modelBuilder.Entity<User>(entity =>
             {
                 entity.Property(e => e.RegisterDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Username)
                     .IsRequired()
-                    .HasMaxLength(100);
+                    .HasMaxLength(22);
 
                 entity.Property(e => e.IdentityUserId)
                     .IsRequired();
