@@ -31,7 +31,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
 
         public IActionResult Departments(int universityId)
         {
-            ConfigureBreadcrumbs(universityId);
+            ConfigureListBreadcrumbs(universityId);
 
             var departments = _traversalService.GetDepartmentsFromUniversity(universityId);
 
@@ -54,7 +54,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
             return View(vm);
         }
 
-        private void ConfigureBreadcrumbs(int universityId)
+        private void ConfigureListBreadcrumbs(int universityId)
         {
             var university = _traversalService.GetUniversity(universityId);
 
@@ -81,9 +81,112 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
             };
         }
 
+        private void ConfigureAddBreadcrumbs(int universityId)
+        {
+            var university = _traversalService.GetUniversity(universityId);
+
+            var parms = new Dictionary<string, string>
+            {
+                { "universityId", universityId.ToString() }
+            };
+
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "UniversitiesManagement",
+                    Action = "Universities",
+                    Title = "Uczelnie"
+                },
+                new Breadcrumb
+                {
+                    Controller = "DepartmentsManagement",
+                    Action = "Departments",
+                    Title = university.Abbreviation,
+                    Params = parms
+                },
+                new Breadcrumb
+                {
+                    Controller = "DepartmentsManagement",
+                    Action = "Add",
+                    Title = "Dodawanie wydziału",
+                    Params = parms
+                }
+            };
+        }
+
+        private void ConfigureEditBreadcrumbs(int departmentId, int universityId)
+        {
+            var university = _traversalService.GetUniversity(universityId);
+
+            var parms = new Dictionary<string, string>
+            {
+                { "universityId", universityId.ToString() }
+            };
+
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "UniversitiesManagement",
+                    Action = "Universities",
+                    Title = "Uczelnie"
+                },
+                new Breadcrumb
+                {
+                    Controller = "DepartmentsManagement",
+                    Action = "Departments",
+                    Title = university.Abbreviation,
+                    Params = parms
+                },
+                new Breadcrumb
+                {
+                    Controller = "DepartmentsManagement",
+                    Action = "Edit",
+                    Title = "Edycja wydziału",
+                    Params = new Dictionary<string, string>() { { "departmentId", departmentId.ToString() } }
+                }
+            };
+        }
+
+        private void ConfigureDeleteBreadcrumbs(int departmentId, int universityId)
+        {
+            var university = _traversalService.GetUniversity(universityId);
+
+            var parms = new Dictionary<string, string>
+            {
+                { "universityId", universityId.ToString() }
+            };
+
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "UniversitiesManagement",
+                    Action = "Universities",
+                    Title = "Uczelnie"
+                },
+                new Breadcrumb
+                {
+                    Controller = "DepartmentsManagement",
+                    Action = "Departments",
+                    Title = university.Abbreviation,
+                    Params = parms
+                },
+                new Breadcrumb
+                {
+                    Controller = "DepartmentsManagement",
+                    Action = "Delete",
+                    Title = "Usuwanie wydziału",
+                    Params = new Dictionary<string, string>() { { "departmentId", departmentId.ToString() } }
+                }
+            };
+        }
 
         public IActionResult Add(int universityId)
         {
+            ConfigureAddBreadcrumbs(universityId);
+
             var vm = new DepartmentViewModel
             {
                 UniversityId = universityId
@@ -115,6 +218,8 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
         {
             var departmentToEdit = _traversalService.GetDepartment(departmentId);
 
+            ConfigureEditBreadcrumbs(departmentId, departmentToEdit.UniversityId);
+
             var vm = new DepartmentViewModel
             {
                 Id = departmentToEdit.DepartmentId,
@@ -143,6 +248,8 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
         public IActionResult Delete(int departmentId, bool confirmation = false)
         {
             var departmentToDelete = _traversalService.GetDepartment(departmentId);
+
+            ConfigureDeleteBreadcrumbs(departmentId, departmentToDelete.UniversityId);
 
             if (!confirmation)
             {

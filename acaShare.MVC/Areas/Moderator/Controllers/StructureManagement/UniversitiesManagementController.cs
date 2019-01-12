@@ -31,7 +31,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
 
         public IActionResult Universities()
         {
-            ConfigureBreadcrumbs();
+            ConfigureListBreadcrumbs();
 
             var universities = _traversalService.GetUniversities();
 
@@ -53,7 +53,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
             return View(vm);
         }
 
-        private void ConfigureBreadcrumbs()
+        private void ConfigureListBreadcrumbs()
         {
             ViewBag.Breadcrumbs = new List<Breadcrumb>
             {
@@ -66,9 +66,68 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
             };
         }
 
+        private void ConfigureAddBreadcrumbs()
+        {
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "UniversitiesManagement",
+                    Action = "Universities",
+                    Title = "Uczelnie"
+                },
+                 new Breadcrumb
+                {
+                    Controller = "UniversitiesManagement",
+                    Action = "Add",
+                    Title = "Dodawanie uczelni"
+                }
+            };
+        }
+
+        private void ConfigureEditBreadcrumbs(int universityId)
+        {
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "UniversitiesManagement",
+                    Action = "Universities",
+                    Title = "Uczelnie"
+                },
+                 new Breadcrumb
+                {
+                    Controller = "UniversitiesManagement",
+                    Action = "Edit",
+                    Title = "Edycja uczelni",
+                    Params = new Dictionary<string, string>() { { "universityId", universityId.ToString() } }
+                }
+            };
+        }
+
+        private void ConfigureDeleteBreadcrumbs(int universityId)
+        {
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "UniversitiesManagement",
+                    Action = "Universities",
+                    Title = "Uczelnie"
+                },
+                 new Breadcrumb
+                {
+                    Controller = "UniversitiesManagement",
+                    Action = "Delete",
+                    Title = "Usuwanie uczelni",
+                    Params = new Dictionary<string, string>() { { "universityId", universityId.ToString() } }
+                }
+            };
+        }
 
         public IActionResult Add()
         {
+            ConfigureAddBreadcrumbs();
             return View();
         }
 
@@ -91,6 +150,8 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
 
         public IActionResult Edit(int universityId)
         {
+            ConfigureEditBreadcrumbs(universityId);
+
             var universityToEdit = _traversalService.GetUniversity(universityId);
 
             var vm = new UniversityViewModel
@@ -117,6 +178,8 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
 
         public IActionResult Delete(int universityId, bool confirmation = false)
         {
+            ConfigureDeleteBreadcrumbs(universityId);
+
             var universityToDelete = _traversalService.GetUniversity(universityId);
 
             if (!confirmation)
