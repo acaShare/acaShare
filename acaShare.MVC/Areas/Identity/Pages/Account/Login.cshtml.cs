@@ -37,7 +37,7 @@ namespace acaShare.MVC.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required(ErrorMessage = "Pole {0} jest wymagane.")]
-            [StringLength(100, ErrorMessage = "Pole {0} musi mieć przynajmniej {2} i maksymalnie {1} znaków.", MinimumLength = 6)]
+            [StringLength(22, ErrorMessage = "Pole {0} musi mieć przynajmniej {2} i maksymalnie {1} znaków.", MinimumLength = 6)]
             [Display(Name = "Nazwa użytkownika")]
             public string UserName { get; set; }
 
