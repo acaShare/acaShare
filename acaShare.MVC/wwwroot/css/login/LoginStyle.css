@@ -17,16 +17,21 @@
     margin-bottom: 1rem;
 }
 
-.signin-button, .signup-button {
+.wide {
     width: 100%;
 }
 
+.short {
+    width: 50%;
+}
+
 .signin-button {
-    margin: 1rem 0 .7rem 0;
+    margin: 1rem 0 2rem 0;
 }
 
 .signup-button {
     margin-top: .7rem;
+    margin-bottom: 1em;
 }
 
 @media only screen and (min-width: 600px) {
