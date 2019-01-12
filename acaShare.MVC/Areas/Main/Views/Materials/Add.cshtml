@@ -2,6 +2,7 @@
 
 @section MaterialViewCSS {
     <link rel="stylesheet" href="~/css/materials/material.css">
+    <link rel="stylesheet" href="~/css/materials/material-edit.css">
     <link rel="stylesheet" href="~/css/materials/material-management.css">
     <link rel="stylesheet" href="~/css/materials/material-images-modal.css">
 }
@@ -67,7 +68,10 @@
 
         <div class="buttons">
             <button type="button" onclick="submitForm(event)" class="btn btn-default accept-button">Dodaj</button>
-            <a asp-action="Materials" asp-route-lessonId="@Model.LessonId" class="btn btn-default back-button">Wróć do listy materiałów</a>
+            <a asp-action="Materials" asp-route-lessonId="@Model.LessonId" class="btn btn-default back-button">
+                <span class="back-button-large">Wróć do widoku materiału</span>
+                <span class="back-button-small">Cofnij</span>
+            </a>
         </div>
     </form>
 </div>

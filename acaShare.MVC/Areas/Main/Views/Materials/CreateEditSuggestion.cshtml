@@ -130,7 +130,10 @@
 
         <div class="buttons">
             <button id="submit-button" type="button" onclick="submitForm(event)" class="btn btn-default accept-button">Zapisz</button>
-            <a asp-action="Material" asp-route-materialId="@Model.EditMaterialViewModel.MaterialId" class="btn btn-default back-button">Wróć do widoku materiału</a>
+            <a asp-action="Material" asp-route-materialId="@Model.EditMaterialViewModel.MaterialId" class="btn btn-default back-button">
+                <span class="back-button-large">Wróć do widoku materiału</span>
+                <span class="back-button-small">Cofnij</span>
+            </a>
         </div>
     </form>
 </div>
