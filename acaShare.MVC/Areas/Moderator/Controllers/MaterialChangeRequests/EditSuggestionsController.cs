@@ -65,6 +65,8 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
                 return BadRequest("Sugestia edycji o podanym Id nie istnieje");
             }
 
+            ConfigureSuggestionBreadcrumbs(editRequestId);
+
             var vm = new ChangeRequestApprovalDecision
             {
                 MaterialViewModel = new MaterialToApproveViewModel
@@ -96,6 +98,20 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
             };
 
             return View(vm);
+        }
+
+        private void ConfigureSuggestionBreadcrumbs(int editRequestId)
+        {
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "EditSuggestions",
+                    Action = "EditRequestApprovalDecision",
+                    Title = "Podgląd zmian",
+                    Params = new Dictionary<string, string>() { { "editRequestId", editRequestId.ToString() } }
+                }
+            };
         }
 
         public IActionResult ApproveEditRequest(int editRequestId)

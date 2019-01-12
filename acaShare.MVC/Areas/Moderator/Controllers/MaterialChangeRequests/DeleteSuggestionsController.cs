@@ -68,6 +68,8 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
                 return BadRequest("Sugestia usunięcia o podanym Id nie istnieje");
             }
 
+            ConfigureSuggestionBreadcrumbs(deleteRequestId);
+
             var vm = new ChangeRequestApprovalDecision
             {
                 MaterialViewModel = new MaterialToApproveViewModel
@@ -99,7 +101,21 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
 
             return View(vm);
         }
-        
+
+        private void ConfigureSuggestionBreadcrumbs(int deleteRequestId)
+        {
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "DeleteSuggestions",
+                    Action = "DeleteRequestApprovalDecision",
+                    Title = "Podgląd zmian",
+                    Params = new Dictionary<string, string>() { { "deleteRequestId", deleteRequestId.ToString() } }
+                }
+            };
+        }
+
         public IActionResult ApproveDeleteRequest(int deleteRequestId)
         {
             var loggedModerator = _userService.FindByIdentityUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));

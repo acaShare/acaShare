@@ -65,6 +65,10 @@
     font-size: .9rem;
 }
 
+.breadcrumb {
+    font-size: 16px !important;
+}
+
 .upper-manage-box .home-content {
     padding-bottom: .9em;
     padding-top: .9em;
