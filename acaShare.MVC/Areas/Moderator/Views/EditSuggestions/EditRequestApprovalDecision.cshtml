@@ -14,8 +14,11 @@
         <div class="data-container">
             <nav class="colornav">
                 <div class="nav-wrapper path-header-wrapper">
-                    <div class="col s12 tree-path">
-                        <p class="breadcrumb">Sugestia edycji materiału "@Model.MaterialViewModel.Name"</p>
+                    <div class="action-button back-arrow tooltipped" data-position="top" data-tooltip="Wróć do listy sugestii edycji">
+                        <a asp-action="EditSuggestions"><i class="material-icons">arrow_back</i></a>
+                    </div>
+                    <div class="summary">
+                        Podsumowanie
                     </div>
                 </div>
             </nav>

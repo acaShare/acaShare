@@ -19,6 +19,35 @@
     flex-direction: column;
 }
 
+.upper-manage-box .summary {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    text-align: center;
+}
+
+.back-arrow {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 500;
+}
+
+.back-arrow a i {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 35px;
+    font-size: 1.5rem;
+}
+
+.back-arrow a i:hover {
+    font-weight: bold;
+}
+
 .upper-manage-box .material-container {
     height: 100%;
 }
@@ -28,7 +57,7 @@
     max-height: 40vh;
 }
 
-.home-part:not(.moderator-actions-container) .colornav {
+.home-part:not(.moderator-actions-container) .colornav, .back-arrow, .back-arrow a, .back-arrow a i {
     height: 35px;
 }
 
