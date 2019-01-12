@@ -5,6 +5,7 @@
 
 html, body {
     max-height: 100vh;
+    min-width: 320px;
     height: 100%;
     width: 100%;
 }
@@ -14,7 +15,7 @@ html {
 }
 
 body {
-    overflow: scroll;
+    overflow-y: scroll;
 }
 
 .nav-wrapper {
@@ -87,7 +88,7 @@ body {
     height: 100%;
     margin: 1em;
     color: #757575;
-    overflow: auto;
+    overflow-y: auto;
 }
 
 .favourites-item-wrapper:hover {
@@ -226,6 +227,53 @@ body {
     display: none;
 }
 
+.center {
+    text-align: center !important;
+}
+
+.breadcrumb {
+    font-size: .59rem;
+}
+
+.breadcrumb:before {
+    font-size: .7rem;
+    margin: 2px 0 0 0;
+}
+
+
+@media only screen and (min-width: 350px) {
+    .breadcrumb {
+        font-size: .65rem;
+    }
+
+    .breadcrumb:before {
+        font-size: .8rem;
+        margin: 2px 0 0 0;
+    }
+}
+
+@media only screen and (min-width: 400px) {
+    .breadcrumb {
+        font-size: .75rem;
+    }
+
+    .breadcrumb:before {
+        font-size: .9rem;
+        margin: 2px 0 0 0;
+    }
+}
+
+@media only screen and (min-width: 450px) {
+    .breadcrumb {
+        font-size: .84rem;
+    }
+
+    .breadcrumb:before {
+        font-size: 1rem;
+        margin: 1px 1px 0 0;
+    }
+}
+
 @media only screen and (max-width: 600px) {
     .tabs .tab a {
         padding: 0 24px;
@@ -245,12 +293,51 @@ body {
         height: 100vh;
         border-left: 1px solid lightgrey;
     }
+   .breadcrumb {
+        font-size: .75rem;
+    }
+
+    .breadcrumb:before {
+        font-size: .9rem;
+        margin: 2px 0 0 0;
+    }
+}
+
+@media only screen and (min-width: 660px) {
+    .breadcrumb {
+        font-size: .84rem;
+    }
+
+    .breadcrumb:before {
+        font-size: 1rem;
+        margin: 1px 1px 0 0;
+    }
 }
 
 @media only screen and (min-width: 768px) {
     .tabs .tab a {
         padding: 0 5px;
         font-size: 70%;
+    }
+
+    .breadcrumb {
+        font-size: .95rem;
+    }
+
+    .breadcrumb:before {
+        font-size: 1.1rem;
+        margin: 1px 1px 0 0;
+    }
+}
+
+@media only screen and (min-width: 900px) {
+    .breadcrumb {
+        font-size: 1.1rem;
+    }
+
+    .breadcrumb:before {
+        font-size: 1.3rem;
+        margin: 1px 3px 0 2px;
     }
 }
 
@@ -275,11 +362,29 @@ body {
     .delete-button-small {
         display: none;
     }
+    .breadcrumb {
+        font-size: 1.2rem;
+    }
+
+    .breadcrumb:before {
+        font-size: 1.4rem;
+    }
 }
 
 @media only screen and (max-width: 992px) {
     .brand-logo {
         margin-left: 0;
+    }
+}
+
+@media only screen and (min-width: 1030px) {
+    .breadcrumb {
+        font-size: 18px;
+    }
+
+    .breadcrumb:before {
+        font-size: 25px;
+        margin: 0 10px 0 8px;
     }
 }
 
