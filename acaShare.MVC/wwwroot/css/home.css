@@ -281,14 +281,18 @@ body {
     }
 }
 
+@media only screen and (min-width: 700px) and (min-height: 530) {
+    body {
+        overflow: hidden;
+    }
+}
+
 @media only screen and (min-width: 600px) {
     .tabs .tab a {
         padding: 0 3px;
         font-size: 65%;
     }
-    body {
-        overflow: hidden;
-    }
+    
     .right-side-bar {
         height: 100vh;
         border-left: 1px solid lightgrey;
