@@ -1,6 +1,6 @@
 ﻿.materialize-textarea.material-edit-description-textarea {
     max-height: 6em;
-    overflow: auto;
+    overflow-y: auto;
     margin-bottom: 0;
 }
 
