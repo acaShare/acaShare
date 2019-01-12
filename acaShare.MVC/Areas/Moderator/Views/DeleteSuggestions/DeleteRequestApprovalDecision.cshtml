@@ -20,12 +20,12 @@
             </nav>
             <div class="home-content">
                 <div class="material-container">
-                    <header class="material-header">
-                        <h1 class="material-header-title">
+                    <header class="upper-box-header">
+                        <h1 class="upper-box-header-title">
                             @Html.DisplayNameFor(model => model.DeleteRequestViewModel.Reason): @Html.DisplayFor(model => model.DeleteRequestViewModel.Reason)
                         </h1>
 
-                        <div class="material-header-action-buttons">
+                        <div class="upper-box-header-action-buttons">
                             <a asp-action="ApproveDeleteRequest" asp-route-deleteRequestId="@Model.DeleteRequestViewModel.DeleteRequestId"
                                class="sep action-button tooltipped" data-position="top" data-tooltip="Zatwierdź - usuń materiał">
 

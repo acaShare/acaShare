@@ -21,8 +21,9 @@
             </nav>
             <div class="home-content">
                 <div class="material-container">
-                    <header class="material-header">
-                        <div class="material-header-action-buttons">
+                    <header class="upper-box-header">
+                        <h1 class="upper-box-header-title">@* filler *@</h1>
+                        <div class="upper-box-header-action-buttons">
                             <a asp-action="ApproveEditRequest" asp-route-editRequestId="@Model.EditRequestViewModel.EditRequestId"
                                class="sep action-button tooltipped" data-position="top" data-tooltip="Zatwierdź sugestię">
 
@@ -39,11 +40,6 @@
                         <h2>Poprzednia nazwa materiału:</h2>
                         <p class="additional-comment">
                             @Html.DisplayFor(model => model.MaterialViewModel.Name)
-                        </p>
-                        <br />
-                        <h2>Poprzedni opis materiału:</h2>
-                        <p class="additional-comment">
-                            @Html.DisplayFor(model => model.MaterialViewModel.Description)
                         </p>
                         <br />
                         <h2>@Html.DisplayNameFor(model => model.EditRequestViewModel.Summary):</h2>

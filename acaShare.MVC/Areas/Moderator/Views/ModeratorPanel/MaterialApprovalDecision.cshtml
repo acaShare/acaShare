@@ -1,5 +1,9 @@
 ﻿@model acaShare.MVC.Areas.Moderator.Models.MaterialToApproveViewModel
 
+@section UpperManageBoxStyles {
+    <link rel="stylesheet" href="~/css/moderator-panel/materials-to-approve.css" />
+}
+
 @section Scripts {
     <script src="~/js/material-images-modal.js"></script>
 }
@@ -11,14 +15,14 @@
         </h1>
 
         <div class="material-header-action-buttons">
-            <a asp-action="ApproveMaterial" asp-route-materialId="@Model.MaterialId" 
-                class="sep action-button tooltipped" data-position="top" data-tooltip="Zatwierdź">
-                
+            <a asp-action="ApproveMaterial" asp-route-materialId="@Model.MaterialId"
+               class="sep action-button tooltipped" data-position="top" data-tooltip="Zatwierdź">
+
                 <i class="material-icons lh">check</i>
             </a>
-            <a asp-action="RejectMaterial" asp-route-materialId="@Model.MaterialId" 
-                class="sep action-button tooltipped" data-position="top" data-tooltip="Odrzuć">
-                
+            <a asp-action="RejectMaterial" asp-route-materialId="@Model.MaterialId"
+               class="sep action-button tooltipped" data-position="top" data-tooltip="Odrzuć">
+
                 <i class="material-icons lh">not_interested</i>
             </a>
         </div>
