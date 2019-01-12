@@ -77,7 +77,13 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
         {
             var universityToAdd = new BLL.Models.University(vm.TitleOrFullName, vm.SubtitleOrAbbreviation);
 
-            _managementService.AddUniversity(universityToAdd);
+            var success = _managementService.AddUniversity(universityToAdd);
+
+            if (!success)
+            {
+                ModelState.AddModelError("ERROR", "Uczelnia o takiej nazwie lub skrócie istnieje już w bazie");
+                return View(vm);
+            }
 
             return RedirectToAction("Universities");
         }

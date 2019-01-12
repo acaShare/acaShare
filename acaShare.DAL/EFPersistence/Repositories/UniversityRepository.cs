@@ -21,5 +21,15 @@ namespace acaShare.DAL.EFPersistence.Repositories
             IEnumerable<Department> departments = _dbSet.Find(universityId).Departments;
             return departments;
         }
+
+        public bool DoesUniversityAlreadyExist(string name)
+        {
+            return _dbSet.Any(u => u.Name == name);
+        }
+        
+        public bool IsAbbreviationAlreadyTaken(string abbreviation)
+        {
+            return _dbSet.Any(u => u.Abbreviation == abbreviation);
+        }
     }
 }

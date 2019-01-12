@@ -79,10 +79,22 @@ namespace acaShare.ServiceLayer.Services
             return subject.SubjectDepartment.First();
         }
 
-        public void AddUniversity(University university)
+        public bool AddUniversity(University university)
         {
+            if (_uow.Universities.DoesUniversityAlreadyExist(university.Name))
+            {
+                return false;
+            }
+
+            if (_uow.Universities.IsAbbreviationAlreadyTaken(university.Abbreviation))
+            {
+                return false;
+            }
+
             _uow.Universities.Add(university);
             _uow.SaveChanges();
+
+            return true;
         }
 
         public void DeleteDepartment(Department departmentToDelete)

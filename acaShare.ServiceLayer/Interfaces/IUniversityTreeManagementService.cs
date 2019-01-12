@@ -9,7 +9,7 @@ namespace acaShare.ServiceLayer.Interfaces
     public interface IUniversityTreeManagementService
     {
         // University
-        void AddUniversity(University university);
+        bool AddUniversity(University university);
         void UpdateUniversity(University university);
         void DeleteUniversity(University university);
 
