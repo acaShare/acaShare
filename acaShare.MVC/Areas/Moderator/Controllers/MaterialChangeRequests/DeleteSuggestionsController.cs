@@ -29,6 +29,8 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
 
         public IActionResult DeleteSuggestions()
         {
+            ConfigureBreadcrumbs();
+
             var vms = _materialsService.GetPendingDeleteSuggestions().Select(ds =>
                 new DeleteRequestViewModel
                 {
@@ -44,6 +46,18 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
             return View(vms);
         }
 
+        private void ConfigureBreadcrumbs()
+        {
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "DeleteSuggestions",
+                    Action = "DeleteSuggestions",
+                    Title = "Sugestie usunięcia"
+                }
+            };
+        }
 
         public IActionResult DeleteRequestApprovalDecision(int deleteRequestId)
         {

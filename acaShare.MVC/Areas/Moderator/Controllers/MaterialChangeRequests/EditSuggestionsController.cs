@@ -1,6 +1,7 @@
 ﻿using acaShare.MVC.Areas.Moderator.Models;
 using acaShare.MVC.Areas.Moderator.Models.MaterialChangeRequests;
 using acaShare.MVC.Common;
+using acaShare.MVC.Models;
 using acaShare.ServiceLayer.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -28,6 +29,8 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
 
         public IActionResult EditSuggestions()
         {
+            ConfigureBreadcrumbs();
+
             var vms = _materialsService.GetPendingEditSuggestions().Select(es =>
                 new EditRequestViewModel
                 {
@@ -38,6 +41,19 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
             ).ToList();
 
             return View(vms);
+        }
+
+        private void ConfigureBreadcrumbs()
+        {
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "EditSuggestions",
+                    Action = "EditSuggestions",
+                    Title = "Sugestie edycji"
+                }
+            };
         }
 
         public IActionResult EditRequestApprovalDecision(int editRequestId)

@@ -27,14 +27,10 @@ namespace acaShare.MVC.Areas.Moderator.Controllers
             _filesManagement = formFilesManagement;
         }
 
-        public IActionResult Home()
-        {
-            ViewBag.IsRoot = true;
-            return View();
-        }
-
         public IActionResult MaterialsToApprove()
         {
+            ConfigureBreadcrumbs();
+
             var materialsToApprove = _materialsService.GetMaterialsToApprove();
 
             var vm = materialsToApprove.Select(m => 
@@ -49,6 +45,19 @@ namespace acaShare.MVC.Areas.Moderator.Controllers
             ).ToList();
 
             return View(vm);
+        }
+
+        private void ConfigureBreadcrumbs()
+        {
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "ModeratorPanel",
+                    Action = "MaterialsToApprove",
+                    Title = "Materiały oczekujące na zatwierdzenie"
+                }
+            };
         }
 
         public IActionResult MaterialApprovalDecision(int materialId)
