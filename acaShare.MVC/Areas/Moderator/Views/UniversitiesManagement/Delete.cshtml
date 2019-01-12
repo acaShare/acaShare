@@ -8,11 +8,12 @@
     };
 }
 
-<span class="text-danger">UWAGA! Czy na pewno chcesz usunąć uczelnię "@Model.TitleOrFullName"? Wiąże się to z usunięciem całej jej struktury.</span>
-<br /><br />
-<div>
-    <a asp-action="Delete" asp-all-route-data="parms">Usuń wszystkie dane uczelni</a>
-</div>
-<div>
-    <a asp-action="Universities">Anuluj</a>
+<div class="text-danger delete-warning">UWAGA! Czy na pewno chcesz usunąć uczelnię "@Model.TitleOrFullName"? Wiąże się to z usunięciem całej jej struktury.</div>
+<br />
+<div class="buttons">
+    <a asp-action="Delete" asp-all-route-data="parms" class="btn btn-default accept-button delete-button">
+        <span class="delete-button-large">Usuń dane uczelni</span>
+        <span class="delete-button-small">Usuń</span>
+    </a>
+    <a asp-action="Universities" class="btn btn-default back-button">Anuluj</a>
 </div>

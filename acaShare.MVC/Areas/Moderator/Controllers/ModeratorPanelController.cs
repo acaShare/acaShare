@@ -27,14 +27,10 @@ namespace acaShare.MVC.Areas.Moderator.Controllers
             _filesManagement = formFilesManagement;
         }
 
-        public IActionResult Home()
-        {
-            ViewBag.IsRoot = true;
-            return View();
-        }
-
         public IActionResult MaterialsToApprove()
         {
+            ConfigureBreadcrumbs();
+
             var materialsToApprove = _materialsService.GetMaterialsToApprove();
 
             var vm = materialsToApprove.Select(m => 
@@ -51,8 +47,23 @@ namespace acaShare.MVC.Areas.Moderator.Controllers
             return View(vm);
         }
 
+        private void ConfigureBreadcrumbs()
+        {
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "ModeratorPanel",
+                    Action = "MaterialsToApprove",
+                    Title = "Materiały oczekujące na zatwierdzenie"
+                }
+            };
+        }
+
         public IActionResult MaterialApprovalDecision(int materialId)
         {
+            ConfigureMaterialBreadcrumbs(materialId);
+
             var materialToApprove = _materialsService.GetMaterialToApprove(materialId);
 
             var vm = new MaterialToApproveViewModel
@@ -75,7 +86,27 @@ namespace acaShare.MVC.Areas.Moderator.Controllers
 
             return View(vm);
         }
-        
+
+        private void ConfigureMaterialBreadcrumbs(int materialId)
+        {
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "ModeratorPanel",
+                    Action = "MaterialsToApprove",
+                    Title = "Materiały oczekujące na zatwierdzenie"
+                },
+                new Breadcrumb
+                {
+                    Controller = "ModeratorPanel",
+                    Action = "MaterialApprovalDecision",
+                    Title = "Materiał",
+                    Params = new Dictionary<string, string> { { "materialId", materialId.ToString() } }
+                }
+            };
+        }
+
         public IActionResult ApproveMaterial(int materialId)
         {
             var loggedUser = _userService.FindByIdentityUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));

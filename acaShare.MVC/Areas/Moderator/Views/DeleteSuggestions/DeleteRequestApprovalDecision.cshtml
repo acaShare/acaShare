@@ -1,5 +1,9 @@
 ﻿@model ChangeRequestApprovalDecision
 
+@section UpperManageBoxStyles {
+    <link rel="stylesheet" href="~/css/upper-manage-box.css" />
+}
+
 @section Scripts {
     <script src="~/js/material-images-modal.js"></script>
 }
@@ -9,19 +13,22 @@
         <div class="data-container">
             <nav class="colornav">
                 <div class="nav-wrapper path-header-wrapper">
-                    <div class="col s12 tree-path">
-                        <p class="breadcrumb">Sugestia usunięcia materiału "@Model.MaterialViewModel.Name"</p>
+                    <div class="action-button back-arrow tooltipped" data-position="top" data-tooltip="Wróć do listy sugestii usunięcia">
+                        <a asp-action="DeleteSuggestions"><i class="material-icons">arrow_back</i></a>
+                    </div>
+                    <div class="summary">
+                        Podsumowanie sugestii usunięcia
                     </div>
                 </div>
             </nav>
             <div class="home-content">
                 <div class="material-container">
-                    <header class="material-header">
-                        <h1 class="material-header-title">
+                    <header class="upper-box-header">
+                        <h1 class="upper-box-header-title">
                             @Html.DisplayNameFor(model => model.DeleteRequestViewModel.Reason): @Html.DisplayFor(model => model.DeleteRequestViewModel.Reason)
                         </h1>
 
-                        <div class="material-header-action-buttons">
+                        <div class="upper-box-header-action-buttons">
                             <a asp-action="ApproveDeleteRequest" asp-route-deleteRequestId="@Model.DeleteRequestViewModel.DeleteRequestId"
                                class="sep action-button tooltipped" data-position="top" data-tooltip="Zatwierdź - usuń materiał">
 
@@ -34,7 +41,7 @@
                             </a>
                         </div>
                     </header>
-                    <section>
+                    <section class="upper-manage-box-content">
                         <h2>@Html.DisplayNameFor(model => model.DeleteRequestViewModel.AdditionalComment)</h2>:
                         <p class="additional-comment">
                             @if (string.IsNullOrEmpty(Model.DeleteRequestViewModel.AdditionalComment))

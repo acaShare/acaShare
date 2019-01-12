@@ -9,15 +9,15 @@
     <link rel="stylesheet" href="~/css/materials/material-images-modal.css">
     <link rel="stylesheet" href="~/css/moderator-panel/ModeratorManagementStyle.css" />
     <link rel="stylesheet" href="~/css/moderator-panel/change-requests.css" />
-    <link rel="stylesheet" href="~/css/upper-manage-box.css" />
+    @RenderSection("UpperManageBoxStyles", false)
 }
 
 @section Scripts {
-    @RenderSection("Scripts", false);
+    @RenderSection("Scripts", false)
 }
 
 <div class="row home-container">
-    <div class="col s12 m5 l3 home-part">
+    <div class="col s12 m5 l3 home-part moderator-actions-container">
         <div class="data-container">
             <nav class="colornav">
                 <div class="nav-wrapper path-header-wrapper">
@@ -29,29 +29,33 @@
 
             <div class="home-content">
                 <ul id="moderator-actions" class="moderator-actions">
-                    <li class="moderator-actions-item @(ViewContext.RouteData.Values["Action"].ToString() == "EditSuggestions" ? "active" : "")">
-                        <a class="moderator-actions-item-link" asp-controller="EditSuggestions" asp-action="EditSuggestions">
-                            Sugestie edycji
-                        </a>
-                    </li>
-                    <li class="moderator-actions-item @(ViewContext.RouteData.Values["Action"].ToString() == "DeleteSuggestions" ? "active" : "")">
-                        <a class="moderator-actions-item-link" asp-controller="DeleteSuggestions" asp-action="DeleteSuggestions">
-                            Sugestie usunięcia
-                        </a>
-                    </li>
-                    <li class="moderator-actions-item @(ViewContext.RouteData.Values["Action"].ToString() == "MaterialsToApprove" ? "active" : "")">
+                    @{ 
+                        var controllerName = ViewContext.RouteData.Values["Controller"].ToString();
+                    }
+
+                    <li class="moderator-actions-item @(controllerName == "ModeratorPanel" ? "moderator-actions-item-active" : "")">
                         <a class="moderator-actions-item-link" asp-controller="ModeratorPanel" asp-action="MaterialsToApprove">
                             Materiały oczekujące na zatwierdzenie
                         </a>
                     </li>
+                    <li class="moderator-actions-item @(controllerName == "EditSuggestions" ? "moderator-actions-item-active" : "")">
+                        <a class="moderator-actions-item-link" asp-controller="EditSuggestions" asp-action="EditSuggestions">
+                            Sugestie edycji
+                        </a>
+                    </li>
+                    <li class="moderator-actions-item @(controllerName == "DeleteSuggestions" ? "moderator-actions-item-active" : "")">
+                        <a class="moderator-actions-item-link" asp-controller="DeleteSuggestions" asp-action="DeleteSuggestions">
+                            Sugestie usunięcia
+                        </a>
+                    </li>
                     @if (User.IsInRole(Roles.AdministratorRole) || User.IsInRole(Roles.MainModeratorRole))
                     {
-                        <li class="moderator-actions-item @(ViewContext.RouteData.Values["Action"].ToString() == "Universities" ? "active" : "")">
+                        <li class="moderator-actions-item @(controllerName.Contains("Management") && !controllerName.Contains("Moderator") ? "moderator-actions-item-active" : "")">
                             <a class="moderator-actions-item-link" asp-controller="UniversitiesManagement" asp-action="Universities">
                                 Zarządzaj strukturą uczelni
                             </a>
                         </li>
-                        <li class="moderator-actions-item @(ViewContext.RouteData.Values["Controller"].ToString() == "ModeratorManagement" ? "active" : "")">
+                        <li class="moderator-actions-item @(controllerName == "ModeratorManagement" ? "moderator-actions-item-active" : "")">
                             <a class="moderator-actions-item-link" asp-controller="ModeratorManagement" asp-action="Home">Zarządzaj moderatorami</a>
                         </li>
                     }

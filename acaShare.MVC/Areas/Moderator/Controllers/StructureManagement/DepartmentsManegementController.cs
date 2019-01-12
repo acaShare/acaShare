@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using acaShare.MVC.Common;
 using acaShare.MVC.Models;
 using acaShare.MVC.Models.StructureTraversal;
 using acaShare.ServiceLayer.Interfaces;
@@ -16,11 +17,16 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
     {
         private readonly IUniversityTreeTraversalService _traversalService;
         private readonly IUniversityTreeManagementService _managementService;
+        private readonly IMaterialsService _materialsService;
+        private readonly IFormFilesManagement _filesManagement;
 
-        public DepartmentsManagementController(IUniversityTreeTraversalService traversalService, IUniversityTreeManagementService managementService)
+        public DepartmentsManagementController(IUniversityTreeTraversalService traversalService, IUniversityTreeManagementService managementService,
+            IMaterialsService materialsService, IFormFilesManagement formFilesManagement)
         {
             _traversalService = traversalService;
             _managementService = managementService;
+            _materialsService = materialsService;
+            _filesManagement = formFilesManagement;
         }
 
         public IActionResult Departments(int universityId)
@@ -93,7 +99,13 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
             
             var departmentToAdd = new BLL.Models.Department(vm.TitleOrFullName, vm.SubtitleOrAbbreviation, university);
             
-            _managementService.AddDepartment(departmentToAdd);
+            var success = _managementService.AddDepartment(departmentToAdd);
+
+            if (!success)
+            {
+                ModelState.AddModelError("ERROR", "Wydział o takiej nazwie lub skrócie istnieje już na tej uczelni");
+                return View(vm);
+            }
 
             return RedirectToAction("Departments", new { universityId = vm.UniversityId });
         }
@@ -145,6 +157,19 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
             }
             else
             {
+                // First - delete materials due to database constraints betwee Lesson and Material
+                foreach (var sd in departmentToDelete.SubjectDepartment)
+                {
+                    foreach (var lesson in sd.Lessons)
+                    {
+                        foreach (var materialToDelete in lesson.Materials)
+                        {
+                            _filesManagement.DeleteWholeMaterialFolder(materialToDelete.MaterialId);
+                            _materialsService.DeleteMaterial(materialToDelete);
+                        }
+                    }
+                }
+
                 // actually delete
                 _managementService.DeleteDepartment(departmentToDelete);
 

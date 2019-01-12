@@ -35,6 +35,9 @@ function handleShowPreviousMaterialVersion(materialId) {
 
                 // save prev material's content so we don't have to make a request for it every time
                 materialContainerHtml = materialContainer.innerHTML;
+
+                // resize
+                replaceMaterialHeaderClasses();
             }
         };
         request.open("GET", `/Main/Materials/Material?materialId=${materialId}`);
@@ -43,6 +46,9 @@ function handleShowPreviousMaterialVersion(materialId) {
     else {
         // switch to saved prev material's view
         thisContainer.innerHTML = materialContainerHtml;
+
+        // resize
+        replaceMaterialHeaderClasses();
     }
 }
 

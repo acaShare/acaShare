@@ -29,6 +29,8 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
 
         public IActionResult DeleteSuggestions()
         {
+            ConfigureBreadcrumbs();
+
             var vms = _materialsService.GetPendingDeleteSuggestions().Select(ds =>
                 new DeleteRequestViewModel
                 {
@@ -44,6 +46,18 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
             return View(vms);
         }
 
+        private void ConfigureBreadcrumbs()
+        {
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "DeleteSuggestions",
+                    Action = "DeleteSuggestions",
+                    Title = "Sugestie usunięcia"
+                }
+            };
+        }
 
         public IActionResult DeleteRequestApprovalDecision(int deleteRequestId)
         {
@@ -53,6 +67,8 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
             {
                 return BadRequest("Sugestia usunięcia o podanym Id nie istnieje");
             }
+
+            ConfigureSuggestionBreadcrumbs(deleteRequestId);
 
             var vm = new ChangeRequestApprovalDecision
             {
@@ -85,7 +101,21 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
 
             return View(vm);
         }
-        
+
+        private void ConfigureSuggestionBreadcrumbs(int deleteRequestId)
+        {
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "DeleteSuggestions",
+                    Action = "DeleteRequestApprovalDecision",
+                    Title = "Podgląd zmian",
+                    Params = new Dictionary<string, string>() { { "deleteRequestId", deleteRequestId.ToString() } }
+                }
+            };
+        }
+
         public IActionResult ApproveDeleteRequest(int deleteRequestId)
         {
             var loggedModerator = _userService.FindByIdentityUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));

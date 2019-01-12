@@ -22,5 +22,5 @@ th, td {
 
 .moderator-management-wrapper {
     max-height: 69vh;
-    overflow: auto;
+    overflow-y: auto;
 }

@@ -9,23 +9,22 @@ namespace acaShare.ServiceLayer.Interfaces
     public interface IUniversityTreeManagementService
     {
         // University
-        void AddUniversity(University university);
+        bool AddUniversity(University university);
         void UpdateUniversity(University university);
         void DeleteUniversity(University university);
 
         // Department
-        void AddDepartment(Department department);
+        bool AddDepartment(Department department);
         void UpdateDepartment(Department department);
         void DeleteDepartment(Department department);
 
         // Subject
-        Subject AddSubject(Subject subject);
-        int AddSubjectWithResult(Subject subject);
+        SubjectDepartment AddSubject(Subject subject);
         void UpdateSubject(Subject subject);
         void DeleteSubject(int subjectId);
 
         // Lesson
-        void AddLesson(Lesson lesson);
+        bool AddLesson(Lesson lesson, string abbreviation, SubjectDepartment subjectDepartment);
         void UpdateLesson(Lesson lesson);
         void DeleteLesson(int lessonId);
     }

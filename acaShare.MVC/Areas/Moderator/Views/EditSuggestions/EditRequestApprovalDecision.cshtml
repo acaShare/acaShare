@@ -1,5 +1,9 @@
 ﻿@model ChangeRequestApprovalDecision
 
+@section UpperManageBoxStyles {
+    <link rel="stylesheet" href="~/css/upper-manage-box.css" />
+}
+
 @section Scripts {
     <script src="~/js/material-images-modal.js"></script>
     <script src="~/js/peek-previous-material-version.js"></script>
@@ -10,15 +14,19 @@
         <div class="data-container">
             <nav class="colornav">
                 <div class="nav-wrapper path-header-wrapper">
-                    <div class="col s12 tree-path">
-                        <p class="breadcrumb">Sugestia edycji materiału "@Model.MaterialViewModel.Name"</p>
+                    <div class="action-button back-arrow tooltipped" data-position="top" data-tooltip="Wróć do listy sugestii edycji">
+                        <a asp-action="EditSuggestions"><i class="material-icons">arrow_back</i></a>
+                    </div>
+                    <div class="summary">
+                        Podsumowanie
                     </div>
                 </div>
             </nav>
             <div class="home-content">
                 <div class="material-container">
-                    <header class="material-header">
-                        <div class="material-header-action-buttons">
+                    <header class="upper-box-header">
+                        <h1 class="upper-box-header-title">@* filler *@</h1>
+                        <div class="upper-box-header-action-buttons">
                             <a asp-action="ApproveEditRequest" asp-route-editRequestId="@Model.EditRequestViewModel.EditRequestId"
                                class="sep action-button tooltipped" data-position="top" data-tooltip="Zatwierdź sugestię">
 
@@ -31,15 +39,10 @@
                             </a>
                         </div>
                     </header>
-                    <section>
+                    <section class="upper-manage-box-content">
                         <h2>Poprzednia nazwa materiału:</h2>
                         <p class="additional-comment">
                             @Html.DisplayFor(model => model.MaterialViewModel.Name)
-                        </p>
-                        <br />
-                        <h2>Poprzedni opis materiału:</h2>
-                        <p class="additional-comment">
-                            @Html.DisplayFor(model => model.MaterialViewModel.Description)
                         </p>
                         <br />
                         <h2>@Html.DisplayNameFor(model => model.EditRequestViewModel.Summary):</h2>

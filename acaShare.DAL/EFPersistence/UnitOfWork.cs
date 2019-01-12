@@ -32,7 +32,7 @@ namespace acaShare.DAL.EFPersistence
             Universities = new UniversityRepository(_db.University);
             Departments = new DepartmentRepository(_db.Department);
             Semesters = new SemesterRepository(_db.Semester);
-            Subjects = new SubjectRepository(_db.Subject);
+            Subjects = new SubjectRepository(_db.Subject, _db.SubjectDepartment);
             Lessons = new LessonRepository(_db.Lesson);
             Users = new UserRepository(_db.User);
             Materials = new MaterialRepository(_db.Material, _db.File, _db.ChangeReason, _db.DeleteRequest, _db.EditRequest);

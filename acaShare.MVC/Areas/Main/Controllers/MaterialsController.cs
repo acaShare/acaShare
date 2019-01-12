@@ -22,19 +22,15 @@ namespace acaShare.MVC.Areas.Main.Controllers
         private readonly IMaterialsService _service;
         private readonly IUniversityTreeTraversalService _traversalService;
         private readonly IUserService _userService;
-        private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IFormFilesManagement _filesManagement;
-        private readonly IFilesValidator _filesValidator;
 
         public MaterialsController(IMaterialsService service, IUniversityTreeTraversalService traversalService, IUserService userService, 
-            IHostingEnvironment hostingEnvironment, IFormFilesManagement formFilesManagement, IFilesValidator filesValidator)
+            IFormFilesManagement formFilesManagement)
         {
             _service = service;
             _traversalService = traversalService;
             _userService = userService;
-            _hostingEnvironment = hostingEnvironment;
             _filesManagement = formFilesManagement;
-            _filesValidator = filesValidator;
         }
 
         public IActionResult Materials(int lessonId)
@@ -368,7 +364,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 {
                     Controller = "Materials",
                     Action = "Material",
-                    Title = material.Name,
+                    Title = "Materiał",
                     Params = parms
                 }
             };
@@ -497,6 +493,67 @@ namespace acaShare.MVC.Areas.Main.Controllers
             };
         }
 
+        private void ConfigureEditSuggestionBreadcrumbs(BLL.Models.Lesson lesson)
+        {
+            var subjectDepartment = lesson.SubjectDepartment;
+            var department = subjectDepartment.Department;
+            var university = department.University;
+            var semester = lesson.Semester;
+
+            var parms = new Dictionary<string, string>
+            {
+                { "universityId", university.UniversityId.ToString() },
+                { "departmentId", department.DepartmentId.ToString() },
+                { "semesterId", semester.SemesterId.ToString() },
+                { "lessonId", lesson.LessonId.ToString() }
+            };
+
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "List",
+                    Action = "AvailableUniversities",
+                    Title = "Uczelnie"
+                },
+                new Breadcrumb
+                {
+                    Controller = "List",
+                    Action = "Departments",
+                    Title = university.Abbreviation,
+                    Params = parms
+                },
+                new Breadcrumb
+                {
+                    Controller = "List",
+                    Action = "Semesters",
+                    Title = department.Abbreviation,
+                    Params = parms
+                },
+                new Breadcrumb
+                {
+                    Controller = "List",
+                    Action = "Lessons",
+                    Title = semester.Number,
+                    Params = parms
+                },
+                new Breadcrumb
+                {
+                    Controller = "Materials",
+                    Action = "Materials",
+                    Title = subjectDepartment.Subject.Abbreviation,
+                    Params = parms
+                },
+                new Breadcrumb
+                {
+                    Controller = "Materials",
+                    Action = "Add",
+                    Title = "Tworzenie sugestii edycji",
+                    Params = parms
+                }
+            };
+        }
+
         private void ConfigureDeleteMaterialBreadcrumbs(BLL.Models.Lesson lesson)
         {
             var subjectDepartment = lesson.SubjectDepartment;
@@ -557,6 +614,67 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 }
             };
         }
+
+        private void ConfigureDeleteSuggestionBreadcrumbs(BLL.Models.Lesson lesson)
+        {
+            var subjectDepartment = lesson.SubjectDepartment;
+            var department = subjectDepartment.Department;
+            var university = department.University;
+            var semester = lesson.Semester;
+
+            var parms = new Dictionary<string, string>
+            {
+                { "universityId", university.UniversityId.ToString() },
+                { "departmentId", department.DepartmentId.ToString() },
+                { "semesterId", semester.SemesterId.ToString() },
+                { "lessonId", lesson.LessonId.ToString() }
+            };
+
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "List",
+                    Action = "AvailableUniversities",
+                    Title = "Uczelnie"
+                },
+                new Breadcrumb
+                {
+                    Controller = "List",
+                    Action = "Departments",
+                    Title = university.Abbreviation,
+                    Params = parms
+                },
+                new Breadcrumb
+                {
+                    Controller = "List",
+                    Action = "Semesters",
+                    Title = department.Abbreviation,
+                    Params = parms
+                },
+                new Breadcrumb
+                {
+                    Controller = "List",
+                    Action = "Lessons",
+                    Title = semester.Number,
+                    Params = parms
+                },
+                new Breadcrumb
+                {
+                    Controller = "Materials",
+                    Action = "Materials",
+                    Title = subjectDepartment.Subject.Abbreviation,
+                    Params = parms
+                },
+                new Breadcrumb
+                {
+                    Controller = "Materials",
+                    Action = "Add",
+                    Title = "Tworzenie sugestii usunięcia",
+                    Params = parms
+                }
+            };
+        }
         #endregion
 
 
@@ -583,6 +701,9 @@ namespace acaShare.MVC.Areas.Main.Controllers
 
         public IActionResult CreateDeleteSuggestion(int materialId, string materialName)
         {
+            var materialToEdit = _service.GetMaterial(materialId);
+            ConfigureDeleteSuggestionBreadcrumbs(materialToEdit.Lesson);
+
             var reasons = _service.GetChangeReasons(BLL.Models.ChangeType.DELETE);
 
             var vm = new DeleteRequestViewModel
@@ -628,7 +749,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 return Forbid("Jesteś autorem danego materiału - skorzystaj z opcji edycji"); // TODO some authorization handler like 404 not found
             }
 
-            ConfigureEditMaterialBreadcrumbs(materialToEdit.Lesson);
+            ConfigureEditSuggestionBreadcrumbs(materialToEdit.Lesson);
 
             var emvm = new EditMaterialViewModel
             {
