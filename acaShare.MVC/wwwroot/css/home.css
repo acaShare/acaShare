@@ -121,6 +121,8 @@ body {
     transform: translateY(-55%);
     padding: .7em;
     font-size: .90em;
+    max-height: 120%;
+    overflow-y: scroll;
 }
 
 .last-activity-wrapper {
