@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using acaShare.MVC.Areas.Main.Models;
 using acaShare.ServiceLayer.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,7 +28,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
             var userNotifications = _notificationService.GetUserNotifications(appUserId);
 
             var notifications = userNotifications.Select(n =>
-                new testVM
+                new NotificationViewModel
                 {
                     MaterialId = n.MaterialId,
                     UserId = n.UserId,
@@ -36,15 +37,9 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 }
             );
 
+            //notifications.OrderBy(n => n.Date).ToList();
+
             return Json(notifications);
         }
-    }
-
-    public class testVM
-    {
-        public int? MaterialId { get; set; }
-        public int UserId { get; set; }
-        public string Content { get; set; }
-        public DateTime Date { get; set; }
     }
 }

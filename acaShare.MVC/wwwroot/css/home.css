@@ -34,7 +34,6 @@ html, body {
 .data-container {
     width: 95%;
     margin: 4% auto;
-
     border-radius: 10px;
     -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
@@ -97,9 +96,9 @@ html, body {
     position: relative;
 }
 
-.last-activities-content i {
-    color: #212121;
-}
+    .last-activities-content i {
+        color: #212121;
+    }
 
 .last-activities-material-type {
     position: absolute;
@@ -176,16 +175,51 @@ html, body {
 }
 
 .notificationList {
+    margin-top: 2px;
     display: none;
     position: absolute;
     background-color: #f1f1f1;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 500;
     right: 15.5em;
-    width: 25em;
-    height: 15em;
+    width: 30em;
+    max-height: 69vh;
+    overflow-y: auto;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-style: solid;
+    border-width: 0.5px;
+    border-color: #6f6f6f;
+}
+
+.notification-list-element {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    cursor: not-allowed;
+}
+
+a.notification-list-button li {
+    color: black;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+a.notification-list-button li.clickable:hover {
+    background-color: #b6b6b6;
+}
+
+.content-div {
+    text-align: center;
+}
+
+.date-div {
+    color: cornflowerblue;
+    text-align: center;
+    font-size: 12px;
 }
 
 .show {
