@@ -179,7 +179,7 @@ html, body {
     display: none;
     position: absolute;
     background-color: #f1f1f1;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 8px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 500;
     right: 15.5em;
     width: 30em;
@@ -198,6 +198,7 @@ html, body {
     padding-top: 1em;
     padding-bottom: 1em;
     cursor: not-allowed;
+    background-color: #c4c4c4;
 }
 
 a.notification-list-button li {
@@ -206,10 +207,11 @@ a.notification-list-button li {
 
 .clickable {
     cursor: pointer;
+    background-color: #e2e2e2;
 }
 
 a.notification-list-button li.clickable:hover {
-    background-color: #b6b6b6;
+    background-color: rgba(113, 200, 192, 0.84);
 }
 
 .content-div {
@@ -217,7 +219,7 @@ a.notification-list-button li.clickable:hover {
 }
 
 .date-div {
-    color: cornflowerblue;
+    color: #4e87ed;
     text-align: center;
     font-size: 12px;
 }
