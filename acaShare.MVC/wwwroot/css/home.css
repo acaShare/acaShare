@@ -16,12 +16,13 @@ html {
 
 body {
     overflow-y: scroll;
+    /*background-color: #1d1d1d;*/
 }
-
+/*#########################################*/
 .nav-wrapper {
-    background-color: #4db6ac;
+    background-color: #4db6ac /*#4db6ac #878787*/
 }
-
+/*#########################################*/
 .brand-logo {
     margin-left: .5em;
 }
@@ -29,7 +30,11 @@ body {
 .home-container {
     height: 89%;
 }
-
+/*/*#########################################*/
+.home-container .btn { 
+    /*background-color: #5175ff;*/ /*#F44336*/
+}
+/*#########################################*/
 .home-container .home-part {
     max-height: 100%;
     display: flex;
@@ -200,7 +205,7 @@ body {
 
 .back-button {
     font-size: .7em;
-    background-color: gray;
+    background-color: gray !important;
 }
 
 .delete-button {
