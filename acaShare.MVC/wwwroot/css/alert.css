@@ -14,7 +14,6 @@
 .alert-wrapper .alert-content {
     width: 22rem;
     height: 12rem;
-    max-width: 32vw;
     max-height: 35vh;
     background-color: white;
     border-radius: 7px;
@@ -47,9 +46,9 @@
     width: 13em;    
 }
 
-.alert-wrapper .alert-button.alert-confirm-button {
+/*.alert-wrapper .alert-button.alert-confirm-button {
     
-}
+}*/
 
 .alert-wrapper.visible {
     display: flex;

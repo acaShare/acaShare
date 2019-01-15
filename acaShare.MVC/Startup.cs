@@ -45,6 +45,7 @@ namespace acaShare.MVC
             services.AddScoped<IRolesManagementService, RolesManagementService>();
             services.AddScoped<IMaterialsService, MaterialsService>();
             services.AddScoped<ISidebarService, SidebarService>();
+            services.AddScoped<IStatisticsService, StatisticsService>();
             services.AddSingleton<IFormFilesManagement>(f => new FormFilesManagement(HostingEnvironment));
             services.AddSingleton<IFilesValidator, FilesValidator>();
             services.AddScoped<ValidateMaterial>();

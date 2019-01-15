@@ -10,13 +10,6 @@
     var isAdmin = currentUser != null && await userManager.IsInRoleAsync(currentUser, Roles.AdministratorRole);
 
 <div class="moderator-management-wrapper">
-    <div class="legend">
-        <img src="~/images/cross.png" /> - Degraduj &emsp;
-        <img src="~/images/one-arrow-up.png" /> - Awansuj na moderatora &emsp;
-        @if (isAdmin)
-        {<img src="~/images/two-arrows-up.png" /> <div class="legend"> - Awansuj na moderatora głównego</div>}
-    </div>
-
     @if (isAdmin)
     {
 
@@ -61,7 +54,7 @@
                     <img style="visibility: hidden;" src="~/images/one-arrow-up.png" />
                     <img style="visibility: hidden;" src="~/images/two-arrows-up.png" />
                     <a href="@Url.Action("DemoteToMember", "ModeratorManagement", new { userId = user.Id })">
-                        <img src="~/images/cross.png" />
+                        <img src="~/images/cross.png" class="tooltipped" data-position="top" data-tooltip="Degraduj"/>
                     </a>
                 </td>
             </tr>
@@ -90,11 +83,11 @@
                     @if (isAdmin)
                     {
                         <a href="@Url.Action("PromoteToMainModerator", "ModeratorManagement", new { userId = user.Id })">
-                            <img src="~/images/two-arrows-up.png" />
+                            <img src="~/images/two-arrows-up.png" class="tooltipped" data-position="top" data-tooltip="Awansuj na moderatora głównego"/>
                         </a>
                     }
                     <a href="@Url.Action("DemoteToMember", "ModeratorManagement", new { userId = user.Id })">
-                        <img src="~/images/cross.png" />
+                        <img src="~/images/cross.png" class="tooltipped" data-position="top" data-tooltip="Degraduj"/>
                     </a>
                 </td>
             </tr>
@@ -119,12 +112,12 @@
                 <td>@user.Email</td>
                 <td>
                     <a href="@Url.Action("PromoteToModerator", "ModeratorManagement", new { userId = user.Id })">
-                        <img src="~/images/one-arrow-up.png" />
+                        <img src="~/images/one-arrow-up.png" class="tooltipped" data-position="top" data-tooltip="Awansuj na moderatora" />
                     </a>
                     @if (isAdmin)
                     {
                         <a href="@Url.Action("PromoteToMainModerator", "ModeratorManagement", new { userId = user.Id })">
-                            <img src="~/images/two-arrows-up.png" />
+                            <img src="~/images/two-arrows-up.png" class="tooltipped" data-position="top" data-tooltip="Awansuj na moderatora głównego"/>
                         </a>
                     }
                     <img style="visibility: hidden;" src="~/images/cross.png" />
