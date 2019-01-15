@@ -23,7 +23,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers
         public IActionResult Statistics()
         {
             ConfigureListBreadcrumbs();
-            return View(_statisticsService.GetAvailableStatistics());
+            return View("StatisticsList", _statisticsService.GetAvailableStatistics());
         }
 
         private void ConfigureListBreadcrumbs()
@@ -32,7 +32,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers
             {
                 new Breadcrumb
                 {
-                    Controller = "ModeratorPanel",
+                    Controller = "Statistics",
                     Action = "Statistics",
                     Title = "Statystyki"
                 }
@@ -42,7 +42,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers
         public IActionResult DeleteRequestsStatistics()
         {
             ConfigureDeleteRequestsStatisticsBreadcrumbs();
-            return View(_statisticsService.GetDeleteRequestsStatistics());
+            return View("StatisticsList", _statisticsService.GetAvailableDeleteRequestsStatistics());
         }
 
         private void ConfigureDeleteRequestsStatisticsBreadcrumbs()
@@ -51,15 +51,46 @@ namespace acaShare.MVC.Areas.Moderator.Controllers
             {
                 new Breadcrumb
                 {
-                    Controller = "ModeratorPanel",
+                    Controller = "Statistics",
                     Action = "Statistics",
                     Title = "Statystyki"
                 },
                 new Breadcrumb
                 {
-                    Controller = "ModeratorPanel",
-                    Action = "Statistics",
+                    Controller = "Statistics",
+                    Action = "DeleteRequestsStatistics",
                     Title = "Statystyki sugestii usunięcia"
+                }
+            };
+        }
+
+        public IActionResult DeleteRequestsGroupedByReason()
+        {
+            ConfigureGetDeleteRequestsGroupedByReasonBreadcrumbs();
+            return View(_statisticsService.GetDeleteRequestsGroupedByReason());
+        }
+
+        private void ConfigureGetDeleteRequestsGroupedByReasonBreadcrumbs()
+        {
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "Statistics",
+                    Action = "Statistics",
+                    Title = "Statystyki"
+                },
+                new Breadcrumb
+                {
+                    Controller = "Statistics",
+                    Action = "DeleteRequestsStatistics",
+                    Title = "Statystyki sugestii usunięcia"
+                },
+                new Breadcrumb
+                {
+                    Controller = "Statistics",
+                    Action = "DeleteRequestsGroupedByReason",
+                    Title = "Sugestie usunięcia pogrupowane według przyczyny"
                 }
             };
         }

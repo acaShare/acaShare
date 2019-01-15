@@ -76,6 +76,12 @@
     <Content Update="Areas\Moderator\Views\EditSuggestions\_ViewImports.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Areas\Moderator\Views\Statistics\StatisticsList.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\Moderator\Views\Statistics\DeleteRequestsGroupedByReason.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Areas\Moderator\Views\UniversitiesManagement\Add.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

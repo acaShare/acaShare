@@ -6,7 +6,7 @@ namespace acaShare.BLL.Models
 {
     public interface IDeleteRequestsStatisticsData : IStatisticsData
     {
-        public int RequestsCount { get; set; }
+        int RequestsCount { get; set; }
         int CountOfActuallyDeleted { get; set; }
         IDictionary<string, int> ReasonsStatistics { get; set; }
     }

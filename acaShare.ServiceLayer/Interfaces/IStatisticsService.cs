@@ -8,6 +8,7 @@ namespace acaShare.ServiceLayer.Interfaces
     public interface IStatisticsService
     {
         ICollection<Statistics> GetAvailableStatistics();
-        IDeleteRequestsStatisticsData GetDeleteRequestsStatistics();
+        ICollection<Statistics> GetAvailableDeleteRequestsStatistics();
+        IDeleteRequestsStatisticsData GetDeleteRequestsGroupedByReason();
     }
 }

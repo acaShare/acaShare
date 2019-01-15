@@ -18,10 +18,19 @@ namespace acaShare.ServiceLayer.Interfaces
 
         public ICollection<Statistics> GetAvailableStatistics()
         {
-            return new List<Statistics> { new Statistics { Name = "Statystyki sugestii usunięcia" } };
+            return new List<Statistics> {
+                new Statistics { Name = "Statystyki sugestii usunięcia", Action = "DeleteRequestsStatistics" }
+            };
         }
 
-        public IDeleteRequestsStatisticsData GetDeleteRequestsStatistics()
+        public ICollection<Statistics> GetAvailableDeleteRequestsStatistics()
+        {
+            return new List<Statistics> {
+                new Statistics { Name = "Sugestie usunięcia pogrupowane według przyczyny", Action = "DeleteRequestsGroupedByReason" }
+            };
+        }
+
+        public IDeleteRequestsStatisticsData GetDeleteRequestsGroupedByReason()
         {
             var deleteRequests = _uow.StatisticsRepository.GetDeleteRequests();
 

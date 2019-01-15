@@ -6,7 +6,7 @@
             @foreach (var statistics in Model)
             {
                 <li class="aca-collection-item path-list-item">
-                    <a asp-action="DeleteRequestsStatistics" class="item-link">
+                    <a asp-action="@statistics.Action" class="item-link">
                         <span class="path-list-item-title">@statistics.Name</span>
                         <br>
                         <span class="path-list-item-subtitle">
