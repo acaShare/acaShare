@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
 {
+    [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole + ", " + Roles.ModeratorRole)]
     [Area("Moderator")]
     public class DeleteSuggestionsController : Controller
     {

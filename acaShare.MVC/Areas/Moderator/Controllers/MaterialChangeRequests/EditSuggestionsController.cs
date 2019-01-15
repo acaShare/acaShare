@@ -3,6 +3,7 @@ using acaShare.MVC.Areas.Moderator.Models.MaterialChangeRequests;
 using acaShare.MVC.Common;
 using acaShare.MVC.Models;
 using acaShare.ServiceLayer.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
 {
+    [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole + ", " + Roles.ModeratorRole)]
     [Area("Moderator")]
     public class EditSuggestionsController : Controller
     {
