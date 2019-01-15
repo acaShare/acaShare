@@ -18,6 +18,7 @@ namespace acaShare.DAL.Core
         IMaterialRepository Materials { get; }
         IMaterialStateRepository MaterialStates { get; }
         ISidebarRepository SidebarRepository { get; }
+        IStatisticsRepository StatisticsRepository { get; }
         void SaveChanges();
     }
 }

@@ -1,0 +1,28 @@
+﻿@model ICollection<acaShare.BLL.Models.Statistics>
+
+<div class="list-view-wrapper">
+    <div class="list-container">
+        <ul class="aca-collection">
+            @foreach (var statistics in Model)
+            {
+                <li class="aca-collection-item path-list-item">
+                    <a asp-action="DeleteRequestsStatistics" class="item-link">
+                        <span class="path-list-item-title">@statistics.Name</span>
+                        <br>
+                        <span class="path-list-item-subtitle">
+                            @if (statistics.Description?.Length > 100)
+                            {
+                                @statistics.Description.Substring(0, 100);
+                                @:[...]
+                            }
+                            else
+                            {
+                                @statistics.Description;
+                            }
+                        </span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

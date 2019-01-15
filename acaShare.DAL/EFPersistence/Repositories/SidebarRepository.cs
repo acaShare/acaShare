@@ -12,21 +12,25 @@ namespace acaShare.DAL.EFPersistence.Repositories
 {
     public class SidebarRepository : ISidebarRepository
     {
-        private readonly AcaShareDbContext _db;
+        private readonly DbSet<Comment> _comments;
+        private readonly DbSet<Material> _materials;
+        private readonly DbSet<Favorites> _favorites;
 
-        public SidebarRepository(AcaShareDbContext db)
+        public SidebarRepository(DbSet<Comment> comments, DbSet<Material> materials, DbSet<Favorites> favorites)
         {
-            _db = db;
+            _comments = comments;
+            _materials = materials;
+            _favorites = favorites;
         }
         
         public ICollection<Comment> GetComments(int materialId)
         {
-            return _db.Comment.Where(c => c.MaterialId == materialId).ToList();
+            return _comments.Where(c => c.MaterialId == materialId).ToList();
         }
 
         public ICollection<LastActivity> GetLastActivities()
         {
-            var commentsActivities = _db.Comment
+            var commentsActivities = _comments
                 .Include(c => c.User)
                 .Include(c => c.Material)
                 .OrderByDescending(c => c.CommentId)
@@ -42,7 +46,7 @@ namespace acaShare.DAL.EFPersistence.Repositories
                     })
                 .ToList();
 
-            var materialsActivities = _db.Material
+            var materialsActivities = _materials
                 .Include(m => m.Creator)
                 .OrderByDescending(m => m.MaterialId)
                 .Take(10)
@@ -71,7 +75,7 @@ namespace acaShare.DAL.EFPersistence.Repositories
 
         public ICollection<Material> GetFavoriteMaterials(string loggedUserId)
         {
-            return _db.Favorites
+            return _favorites
                 .Where(f => f.User.IdentityUserId == loggedUserId)
                 .Select(f => f.Material)
                 .Include(m => m.Lesson)
