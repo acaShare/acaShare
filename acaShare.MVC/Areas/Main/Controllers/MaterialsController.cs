@@ -301,7 +301,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 {
                     Controller = "Materials",
                     Action = "Materials",
-                    Title = subjectDepartment.Subject.Abbreviation,
+                    Title = subjectDepartment.Subject.Abbreviation + " - Materiały",
                     Params = parms
                 }
             };

@@ -107,7 +107,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 {
                     Controller = "List",
                     Action = "Departments",
-                    Title = university.Abbreviation,
+                    Title = university.Abbreviation + " - Wydziały",
                     Params = parms
                 }
             };
@@ -169,7 +169,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 {
                     Controller = "List",
                     Action = "Semesters",
-                    Title = department.Abbreviation,
+                    Title = department.Abbreviation + " - Semestry",
                     Params = parms
                 }
             };
@@ -243,7 +243,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 {
                     Controller = "List",
                     Action = "Lessons",
-                    Title = semester.Number,
+                    Title = semester.Number + " - Przedmioty",
                     Params = parms
                 }
             };
