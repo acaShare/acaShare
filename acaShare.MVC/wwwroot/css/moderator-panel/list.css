@@ -31,16 +31,14 @@
     */
 }
 
-/*.icon-edit, .icon-delete {
-    display: flex;
-    margin-left: .8em;
-    transition: .3s ease-in-out;
-}*/
+.icon-edit, .icon-delete {
+    transition: .2s ease-in-out;
+}
 
 .icons-row-container a {
     display: flex;
     margin-left: 1.325em;
-    transition: .3s ease-in-out;
+    transition: .2s ease-in-out;
 }
 
 .icon-edit:hover {
