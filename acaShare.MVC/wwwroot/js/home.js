@@ -41,6 +41,8 @@ function closeOnBackgroundClick(event) {
 
 window.onload = () => {
     replaceMaterialHeaderClasses();
+    if (typeof handleListIconClick === "function")
+        handleListIconClick();
 };
 
 function replaceMaterialHeaderClasses() {
