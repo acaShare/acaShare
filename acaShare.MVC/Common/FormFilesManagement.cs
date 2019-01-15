@@ -34,7 +34,10 @@ namespace acaShare.MVC.Common
                 SharedResourcesLibrary.Properties.Resources.MaterialFilesUploadFolderName,
                 materialId.ToString());
 
-            Directory.Delete(path, true);
+            if (Directory.Exists(path))
+            {
+                Directory.Delete(path, true);
+            }
         }
 
         public ICollection<BLL.Models.File> ExtractFilesFromForm(ICollection<IFormFile> formFiles, int materialId, Guid guid, int? editRequestId = null)

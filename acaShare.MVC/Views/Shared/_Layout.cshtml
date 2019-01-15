@@ -14,6 +14,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="~/css/home.css">
     <link rel="stylesheet" href="~/css/list.css">
+    <link rel="stylesheet" href="~/css/alert.css">
     <title>acaShare</title>
     @RenderSection("ModeratorPanelCSS", false)
     @RenderSection("MaterialViewCSS", false)
@@ -105,6 +106,18 @@
         </div>
     </div>
 
+    <div id="alert-wrapper" class="alert-wrapper">
+        <div class="alert-content">
+            <div class="alert-title-wrapper">
+                <p id="alert-title" class="alert-title">Czy na pewno chcesz wykonać tę operację?</p>
+            </div>
+            <div class="alert-buttons">
+                <button id="alert-confirm-button" class="alert-button alert-confirm-button btn btn-default accept-button">Tak</button>
+                <button id="alert-decline-button" class="alert-button alert-decline-button btn btn-default back-button">Anuluj</button>`
+            </div>
+        </div>
+    </div>
+
     @RenderBody()
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -112,6 +125,7 @@
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="~/js/home.js"></script>
+    <script src="~/js/alert.js"></script>
 
     @RenderSection("Scripts", required: false)
 </body>

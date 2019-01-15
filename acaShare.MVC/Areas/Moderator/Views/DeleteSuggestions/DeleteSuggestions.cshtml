@@ -50,7 +50,7 @@
                     </a>
 
                     <div class="icons-row-container">
-                        <a asp-action="ApproveDeleteRequest" asp-route-deleteRequestId="@deleteRequest.DeleteRequestId">
+                        <a asp-action="ApproveDeleteRequest" asp-route-deleteRequestId="@deleteRequest.DeleteRequestId" class="approve-delete-request" >
                             <i class="material-icons list-icon icon-edit tooltipped" data-position="top" data-tooltip="Zatwierdź - usuń materiał">delete_forever</i>
                         </a>
                         <a asp-action="DeclineDeleteRequest" asp-route-deleteRequestId="@deleteRequest.DeleteRequestId">

@@ -38,6 +38,7 @@
     justify-content: space-between;
     align-items: center;
     padding-right: 20px; /*usunac przy zmianie wygladu listy*/
+    cursor: pointer;
 }
 
 .list-icon {

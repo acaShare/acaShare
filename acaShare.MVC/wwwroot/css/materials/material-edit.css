@@ -1,5 +1,5 @@
-﻿.materialize-textarea.material-edit-description-textarea {
-    max-height: 6em;
+﻿.materialize-textarea.material-description-textarea {
+    max-height: 7em;
     overflow-y: auto;
     margin-bottom: 0;
 }
@@ -38,19 +38,22 @@ div.file-field.input-field .btn {
     font-size: .7em;
 }
 
-.home-container .home-part {
+.row.home-container .home-part {
     max-height: none;
 }
 
 @media only screen and (min-height: 600px) {
+    .materialize-textarea.material-description-textarea {
+        max-height: 5em;
+    }
     .material-content {
-        max-height: 24vh;
+        max-height: 22vh;
     }
 }
 
 @media only screen and (min-height: 950px) {
-    .materialize-textarea.material-edit-description-textarea {
-        max-height: 10em;
+    .materialize-textarea.material-description-textarea {
+        max-height: 8em;
     }
 
     div.input-field.material-file-edit-mode-filename {
@@ -77,7 +80,7 @@ div.file-field.input-field .btn {
     }
 
     .material-content {
-        max-height: 40vh;
+        max-height: 33vh;
     }
 
     .material-container .buttons {

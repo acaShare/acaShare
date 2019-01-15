@@ -31,9 +31,15 @@
     */
 }
 
-.icon-edit, .icon-delete {
+/*.icon-edit, .icon-delete {
     display: flex;
     margin-left: .8em;
+    transition: .3s ease-in-out;
+}*/
+
+.icons-row-container a {
+    display: flex;
+    margin-left: 1.325em;
     transition: .3s ease-in-out;
 }
 
