@@ -62,7 +62,7 @@
                     }
 
                     lastActivity.Content =
-                            $"Użytkownik {lastActivity.Material.Creator.Username} {activity} materiał \"{lastActivity.Material.Name}\"";
+                            $"Użytkownik {lastActivity.Who} {activity} materiał \"{lastActivity.Material.Name}\"";
 
                     <a asp-area="Main" asp-controller="Materials" asp-action="Material" asp-route-materialId="@lastActivity.RouteValue">
                         <div class="last-activity-wrapper">
