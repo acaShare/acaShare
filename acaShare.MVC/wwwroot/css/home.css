@@ -13,10 +13,6 @@ html, body {
     background-color: #4db6ac;
 }
 
-.brand-logo {
-    margin-left: .5em;
-}
-
 .home-container {
     height: 89%;
 }
@@ -96,9 +92,9 @@ html, body {
     position: relative;
 }
 
-    .last-activities-content i {
-        color: #212121;
-    }
+.last-activities-content i {
+    color: #212121;
+}
 
 .last-activities-material-type {
     position: absolute;
@@ -165,61 +161,75 @@ html, body {
     margin-bottom: 2em;
 }
 
-#notification {
-    padding-top: .85em;
-    padding-bottom: .85em;
+.notifications-bell-mobile-wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 4em;
+    height: 100%;
 }
 
-.notificationContainer {
-    position: relative;
+.notifications-bell-mobile-wrapper .notifications-bell-mobile {
+    padding: 0 !important;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    color: white;
+    cursor: pointer;
+}
+
+.notifications-bell-mobile-wrapper .notifications-bell-mobile:hover {
+    color: #eeeeee;
 }
 
 .notificationList {
-    margin-top: 2px;
     display: none;
     position: absolute;
-    background-color: #f1f1f1;
-    box-shadow: 8px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 500;
-    right: 15.5em;
-    width: 30em;
+    right: .5em;
+    margin-top: 2px;
+    margin-left: 1.35em;
     max-height: 69vh;
     overflow-y: auto;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-style: solid;
-    border-width: 0.5px;
-    border-color: #6f6f6f;
+    background-color: white;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, .25);
+    border: 1px solid rgba(100, 100, 100, .4);
+    z-index: 500;
+    border-radius: 10px;
 }
 
 .notification-list-element {
     padding-top: 1em;
-    padding-bottom: 1em;
-    cursor: not-allowed;
-    background-color: #c4c4c4;
+    padding-bottom: .7em;
+    cursor: default;
+    background-color: white;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.notification-list-element:hover, a.notification-list-button li.clickable:hover {
+    background-color: #eeeeee;
 }
 
 a.notification-list-button li {
-    color: black;
+    font-weight: 700;
+    font-size: 14px;
+    color: #717171;
 }
 
 .clickable {
     cursor: pointer;
-    background-color: #e2e2e2;
-}
-
-a.notification-list-button li.clickable:hover {
-    background-color: rgba(113, 200, 192, 0.84);
 }
 
 .content-div {
     text-align: center;
+    padding: 0 1em;
+    margin-bottom: .3em;
 }
 
 .date-div {
-    color: #4e87ed;
+    color: #81abf8;
     text-align: center;
     font-size: 12px;
 }
@@ -228,11 +238,20 @@ a.notification-list-button li.clickable:hover {
     display: block;
 }
 
+.show-flex {
+    display: flex;
+}
 
 @media only screen and (max-width: 600px) {
     .tabs .tab a {
         padding: 0 24px;
         font-size: 14px;
+    }
+}
+
+@media only screen and (min-width: 500px) {
+    .notificationList {
+        width: 70%;
     }
 }
 
@@ -248,12 +267,25 @@ a.notification-list-button li.clickable:hover {
         padding: 0 5px;
         font-size: 70%;
     }
+
+    .notificationList {
+        width: 55%;
+    }
 }
 
 @media only screen and (min-width: 992px) {
     .tabs .tab a {
         padding: 0 5px;
         font-size: 65%;
+    }
+
+    .brand-logo {
+        margin-left: .5em;
+    }
+
+    .notificationList {
+        right: 15.5em;
+        width: 30em;
     }
 }
 

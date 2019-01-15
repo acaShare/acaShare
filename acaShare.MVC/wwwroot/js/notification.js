@@ -1,4 +1,12 @@
-﻿function dropDown() {
+﻿window.addEventListener('load', () => {
+    let notificationBell = document.getElementById('notification-bell-mobile');
+
+    if (window.innerWidth <= 992) {
+        notificationBell.classList.add('show-flex');
+    }
+});
+
+function dropDown() {
     getData();
     document.getElementById("notificationList").classList.toggle("show");
 }
@@ -10,6 +18,10 @@ function getData() {
         if (xhttp.readyState === 4 && xhttp.status === 200) {
             let data = JSON.parse(xhttp.responseText);
             var ul = document.getElementById("notificationList");
+            while (ul.firstChild) {
+                ul.removeChild(ul.firstChild);
+            }
+            
             for (var i in data)
             {
                 var li = document.createElement("li");
@@ -44,7 +56,6 @@ function getData() {
 
                 a.appendChild(li);
                 ul.appendChild(a);
-                ul.appendChild(document.createElement("hr"));
             }
         }
     };
@@ -52,10 +63,11 @@ function getData() {
     xhttp.send();
 }
 
-window.onclick = function (event) {
-        if (!Array.from(document.querySelectorAll('.notificationList *, #notification')).includes(event.target)) {
-            let notf = document.getElementById('notificationList');
-            notf.classList.remove("show");
-            document.body.onclick = null;
-        }
-}
+window.addEventListener('click', function (event) {
+    if (!Array.from(document.querySelectorAll('.notificationList *, #notification *, .notifications-bell-mobile-wrapper *')).includes(event.target)) {
+        let notf = document.getElementById('notificationList');
+        notf.scrollTo(0, 0);
+        notf.classList.remove("show");
+        document.body.onclick = null;
+    }
+});

@@ -72,26 +72,36 @@
             <a asp-area="Main" asp-controller="List" asp-action="AvailableUniversities" class="brand-logo">acaShare</a>
             @if (User.Identity.IsAuthenticated)
             {
+                <div id="notification-bell-mobile" class="notifications-bell-mobile-wrapper">
+                    <a class="notifications-bell-mobile" id="notification-mobile" onclick="dropDown()">
+                        <i class="material-icons">notifications</i>
+                    </a>
+                </div>
+
                 <a href="#" data-target="mobile-hamburger" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                 <ul class="right hide-on-med-and-down">
-                    @*<li id="notifications-button" onclick="toggleNotifications(event);"><a>aaaa</a></li>*@
-                    <li><a class="material-icons" id="notification" onclick="dropDown()">notifications</a></li>
-                        @if (User.IsInRole(Roles.AdministratorRole) || User.IsInRole(Roles.MainModeratorRole) || User.IsInRole(Roles.ModeratorRole))
-                        {
+                    <li>
+                        <a id="notification" onclick="dropDown()">
+                            <i class="material-icons">notifications</i>
+                        </a>
+                    </li>
+                    
+                    @if (User.IsInRole(Roles.AdministratorRole) || User.IsInRole(Roles.MainModeratorRole) || User.IsInRole(Roles.ModeratorRole))
+                    {
                         <li><a asp-area="Moderator" asp-controller="ModeratorPanel" asp-action="Home">Panel moderatora</a></li>
                     }
 
-                        <li>
-                            <form id="logout-form"
-                                  asp-area="Identity"
-                                  asp-page="/Account/Logout"
-                                  asp-route-returnUrl="@Url.Page("/Index", new { area = "" })"
-                                  method="post">
+                    <li>
+                        <form id="logout-form"
+                              asp-area="Identity"
+                              asp-page="/Account/Logout"
+                              asp-route-returnUrl="@Url.Page("/Index", new { area = "" })"
+                              method="post">
 
-                                <a href="javascript:{}" onclick="document.getElementById('logout-form').submit()">Wyloguj</a>
-                            </form>
-                        </li>
-                    </ul>
+                            <a href="javascript:{}" onclick="document.getElementById('logout-form').submit()">Wyloguj</a>
+                        </form>
+                    </li>
+                </ul>
             }
         </div>
     </nav>
@@ -116,19 +126,8 @@
         </ul>
     }
 
-    @*<div id="notifications-wrapper" class="notifications-wrapper" style="display: none;">
-            <div class="notifications">
-                <ul>
-                    <li>test1</li>
-                    <li>test2</li>
-                </ul>
-            </div>
-        </div>*@
-
     <div class="notificationContainer">
-        <ul class="notificationList" id="notificationList">
-
-        </ul>
+        <ul class="notificationList" id="notificationList"></ul>
     </div>
 
     @RenderBody()

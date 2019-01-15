@@ -36,9 +36,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
                     Content = n.Content
                 }
             );
-
-            //notifications.OrderBy(n => n.Date).ToList();
-
+            
             return Json(notifications);
         }
     }
