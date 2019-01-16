@@ -159,6 +159,16 @@ h2 {
     display: flex;
     align-items: center;
     color: #4db6ac;
+    border: none;
+    background-color: white;
+}
+
+.add-comment-button:hover {
+    cursor: pointer;
+}
+
+.add-comment-button:focus {
+    background-color: white;
 }
 
 .comment-wrapper {

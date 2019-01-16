@@ -190,9 +190,9 @@ body {
     margin-bottom: 1em;
 }
 
-.validation-summary-errors {
-    margin-bottom: 2em;
-}
+/*.validation-summary-errors {
+    margin-bottom: 1em;
+}*/
 
 .buttons {
     margin: 2em auto 0 auto;
@@ -252,6 +252,11 @@ body {
 .breadcrumb:before {
     font-size: .7rem;
     margin: 2px 0 0 0;
+}
+
+#comment-validation {
+    margin-top: -.9em;
+    margin-bottom: 1em;
 }
 
 
