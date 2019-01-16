@@ -36,6 +36,10 @@ namespace acaShare.MVC.Areas.Main.Controllers
         public IActionResult Materials(int lessonId)
         {
             var lesson = _traversalService.GetLesson(lessonId);
+            if (lesson == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "przedmiot o podanym Id nie istnieje." });
+            }
 
             ConfigureMaterialsBreadcrumbs(lesson);
             
@@ -69,11 +73,22 @@ namespace acaShare.MVC.Areas.Main.Controllers
         public IActionResult Material(int materialId)
         {
             var material = _service.GetMaterial(materialId);
+            if (material == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "Materiał o podanym Id nie istnieje." });
+            }
+
+            var vm = PrepareMaterialViewModel(material);
+            return View(vm);
+        }
+
+        public MaterialViewModel PrepareMaterialViewModel(BLL.Models.Material material)
+        {
             ConfigureMaterialBreadcrumbs(material);
 
             var isFavorite = _userService.IsMaterialFavorite(material, User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            var vm = new MaterialViewModel
+            return new MaterialViewModel
             {
                 MaterialId = material.MaterialId,
                 CreatorUsername = material.Creator.Username,
@@ -93,14 +108,18 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 IsFavorite = isFavorite,
                 IsAllowedToEditOrDelete = material.IsUserAllowedToEditOrDelete(User.FindFirstValue(ClaimTypes.NameIdentifier)) // TODO Change to some authorization mechanism
             };
-
-            return View(vm);
         }
 
 
         public IActionResult Add(int lessonId)
         {
-            ConfigureAddMaterialBreadcrumbs(lessonId);
+            var lesson = _traversalService.GetLesson(lessonId);
+            if (lesson == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "przedmiot o podanym Id nie istnieje." });
+            }
+
+            ConfigureAddMaterialBreadcrumbs(lesson);
 
             var vm = new AddMaterialViewModel
             {
@@ -115,7 +134,13 @@ namespace acaShare.MVC.Areas.Main.Controllers
         public IActionResult Add(AddMaterialViewModel vm)
         {
             var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var lesson = _traversalService.GetLesson(vm.LessonId);
+            if (lesson == null)
+            {
+                return BadRequest(new[] { "Przedmiot o podanym Id nie istnieje." });
+            }
+
             var creator = _userService.FindByIdentityUserId(identityUserId);
             var state = _service.GetState(MaterialStateEnum.PENDING);
 
@@ -145,14 +170,19 @@ namespace acaShare.MVC.Areas.Main.Controllers
         public IActionResult Edit(int materialId)
         {
             var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var materialToEdit = _service.GetMaterial(materialId);
+            if (materialToEdit == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "materiał o podanym Id nie istnieje." });
+            }
 
             if (identityUserId != materialToEdit.Creator.IdentityUserId)
             {
-                return Forbid("Nie masz uprawnień do tego działania"); // TODO some authorization handler like 404 not found
+                return RedirectToAction("ActionForbidden", "Error", new { error = "nie masz uprawnień do tego działania" });
             }
             
-            ConfigureEditMaterialBreadcrumbs(materialToEdit.Lesson);
+            ConfigureEditMaterialBreadcrumbs(materialToEdit.Lesson, materialId);
 
             var vm = new EditMaterialViewModel
             {
@@ -176,7 +206,12 @@ namespace acaShare.MVC.Areas.Main.Controllers
         public IActionResult Edit(EditMaterialViewModel vm)
         {
             var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var materialToEdit = _service.GetMaterial(vm.MaterialId);
+            if (materialToEdit == null)
+            {
+                return BadRequest(new[] { "Materiał o podanym Id nie istnieje." });
+            }
 
             if (identityUserId != materialToEdit.Creator.IdentityUserId)
             {
@@ -216,12 +251,17 @@ namespace acaShare.MVC.Areas.Main.Controllers
             var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var materialToDelete = _service.GetMaterial(materialId);
 
-            if (identityUserId != materialToDelete.Creator.IdentityUserId)
+            if (materialToDelete == null)
             {
-                return Forbid("Nie masz uprawnień do tego działania"); // zrobić jakiś handler do tego
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "materiał o podanym Id nie istnieje." });
             }
 
-            ConfigureDeleteMaterialBreadcrumbs(materialToDelete.Lesson);
+            if (identityUserId != materialToDelete.Creator.IdentityUserId)
+            {
+                return RedirectToAction("ActionForbidden", "Error", new { error = "nie masz uprawnień do tego działania" });
+            }
+
+            ConfigureDeleteMaterialBreadcrumbs(materialToDelete.Lesson, materialId);
 
             var vm = new DeleteMaterialViewModel
             {
@@ -240,9 +280,14 @@ namespace acaShare.MVC.Areas.Main.Controllers
             var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var materialToDelete = _service.GetMaterial(vm.MaterialId);
 
+            if (materialToDelete == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "materiał o podanym Id nie istnieje." });
+            }
+
             if (identityUserId != materialToDelete.Creator.IdentityUserId)
             {
-                return Forbid("Nie masz uprawnień do tego działania"); // zrobić jakiś handler do tego
+                return RedirectToAction("ActionForbidden", "Error", new { error = "nie masz uprawnień do tego działania" });
             }
 
             _filesManagement.DeleteWholeMaterialFolder(materialToDelete.MaterialId);
@@ -370,9 +415,8 @@ namespace acaShare.MVC.Areas.Main.Controllers
             };
         }
 
-        private void ConfigureAddMaterialBreadcrumbs(int lessonId)
+        private void ConfigureAddMaterialBreadcrumbs(BLL.Models.Lesson lesson)
         {
-            var lesson = _traversalService.GetLesson(lessonId);
             var subjectDepartment = lesson.SubjectDepartment;
             var department = subjectDepartment.Department;
             var university = department.University;
@@ -432,7 +476,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
             };
         }
 
-        private void ConfigureEditMaterialBreadcrumbs(BLL.Models.Lesson lesson)
+        private void ConfigureEditMaterialBreadcrumbs(BLL.Models.Lesson lesson, int materialId)
         {
             var subjectDepartment = lesson.SubjectDepartment;
             var department = subjectDepartment.Department;
@@ -444,7 +488,8 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 { "universityId", university.UniversityId.ToString() },
                 { "departmentId", department.DepartmentId.ToString() },
                 { "semesterId", semester.SemesterId.ToString() },
-                { "lessonId", lesson.LessonId.ToString() }
+                { "lessonId", lesson.LessonId.ToString() },
+                { "materialId", materialId.ToString() }
             };
 
             ViewBag.Breadcrumbs = new List<Breadcrumb>
@@ -486,14 +531,14 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 new Breadcrumb
                 {
                     Controller = "Materials",
-                    Action = "Add",
+                    Action = "Edit",
                     Title = "Edycja materiału",
                     Params = parms
                 }
             };
         }
 
-        private void ConfigureEditSuggestionBreadcrumbs(BLL.Models.Lesson lesson)
+        private void ConfigureEditSuggestionBreadcrumbs(BLL.Models.Lesson lesson, int materialId)
         {
             var subjectDepartment = lesson.SubjectDepartment;
             var department = subjectDepartment.Department;
@@ -505,7 +550,8 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 { "universityId", university.UniversityId.ToString() },
                 { "departmentId", department.DepartmentId.ToString() },
                 { "semesterId", semester.SemesterId.ToString() },
-                { "lessonId", lesson.LessonId.ToString() }
+                { "lessonId", lesson.LessonId.ToString() },
+                { "materialId", materialId.ToString() }
             };
 
             ViewBag.Breadcrumbs = new List<Breadcrumb>
@@ -547,14 +593,14 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 new Breadcrumb
                 {
                     Controller = "Materials",
-                    Action = "Add",
+                    Action = "CreateEditSuggestion",
                     Title = "Tworzenie sugestii edycji",
                     Params = parms
                 }
             };
         }
 
-        private void ConfigureDeleteMaterialBreadcrumbs(BLL.Models.Lesson lesson)
+        private void ConfigureDeleteMaterialBreadcrumbs(BLL.Models.Lesson lesson, int materialId)
         {
             var subjectDepartment = lesson.SubjectDepartment;
             var department = subjectDepartment.Department;
@@ -566,7 +612,8 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 { "universityId", university.UniversityId.ToString() },
                 { "departmentId", department.DepartmentId.ToString() },
                 { "semesterId", semester.SemesterId.ToString() },
-                { "lessonId", lesson.LessonId.ToString() }
+                { "lessonId", lesson.LessonId.ToString() },
+                { "materialId", materialId.ToString() }
             };
 
             ViewBag.Breadcrumbs = new List<Breadcrumb>
@@ -608,14 +655,14 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 new Breadcrumb
                 {
                     Controller = "Materials",
-                    Action = "Add",
+                    Action = "Delete",
                     Title = "Usuwanie materiału",
                     Params = parms
                 }
             };
         }
 
-        private void ConfigureDeleteSuggestionBreadcrumbs(BLL.Models.Lesson lesson)
+        private void ConfigureDeleteSuggestionBreadcrumbs(BLL.Models.Lesson lesson, int materialId)
         {
             var subjectDepartment = lesson.SubjectDepartment;
             var department = subjectDepartment.Department;
@@ -627,7 +674,8 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 { "universityId", university.UniversityId.ToString() },
                 { "departmentId", department.DepartmentId.ToString() },
                 { "semesterId", semester.SemesterId.ToString() },
-                { "lessonId", lesson.LessonId.ToString() }
+                { "lessonId", lesson.LessonId.ToString() },
+                { "materialId", materialId.ToString() }
             };
 
             ViewBag.Breadcrumbs = new List<Breadcrumb>
@@ -669,7 +717,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 new Breadcrumb
                 {
                     Controller = "Materials",
-                    Action = "Add",
+                    Action = "CreateDeleteSuggestion",
                     Title = "Tworzenie sugestii usunięcia",
                     Params = parms
                 }
@@ -683,26 +731,49 @@ namespace acaShare.MVC.Areas.Main.Controllers
             var loggedUser = _userService.FindByIdentityUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
             var material = _service.GetMaterial(materialId);
 
+            if (material == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "materiał o podanym Id nie istnieje." });
+            }
+
             _service.ToggleFavorite(material, loggedUser);
 
             return RedirectToAction("Material", new { @materialId = materialId });
         }
 
         [HttpPost]
-        public IActionResult AddComment(string newComment, int materialId)
+        public IActionResult AddComment(AddCommentViewModel vm)
         {
+            var material = _service.GetMaterial(vm.MaterialId);
+            if (material == null)
+            {
+                ModelState.AddModelError("ERROR", "Taki materiał nie istnieje");
+                RedirectToAction("Material", vm.MaterialId);
+            }
+
+            var materialViewModel = PrepareMaterialViewModel(material);
+
+            if (!ModelState.IsValid)
+            {
+                return View("Material", materialViewModel);
+            }
+
             var commentAuthor = _userService.FindByIdentityUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            var material = _service.GetMaterial(materialId);
 
-            _service.AddComment(newComment, material, commentAuthor);
+            _service.AddComment(vm.NewComment, material, commentAuthor);
 
-            return RedirectToAction("Material", new { @materialId = materialId });
+            return RedirectToAction("Material", new { @materialId = vm.MaterialId });
         }
 
         public IActionResult CreateDeleteSuggestion(int materialId, string materialName)
         {
             var materialToEdit = _service.GetMaterial(materialId);
-            ConfigureDeleteSuggestionBreadcrumbs(materialToEdit.Lesson);
+            if (materialToEdit == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "materiał o podanym Id nie istnieje." });
+            }
+
+            ConfigureDeleteSuggestionBreadcrumbs(materialToEdit.Lesson, materialId);
 
             var reasons = _service.GetChangeReasons(BLL.Models.ChangeType.DELETE);
 
@@ -732,7 +803,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
             }
             catch (ArgumentNullException e)
             {
-                return BadRequest("Materiał o podanym Id nie istnieje");
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "materiał o podanym Id nie istnieje" });
             }
 
             return RedirectToAction("Material", new { materialId = vm.MaterialId });
@@ -742,14 +813,24 @@ namespace acaShare.MVC.Areas.Main.Controllers
         public IActionResult CreateEditSuggestion(int materialId)
         {
             var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var materialToEdit = _service.GetMaterial(materialId);
+            if (materialToEdit == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "materiał o podanym Id nie istnieje." });
+            }
 
             if (identityUserId == materialToEdit.Creator.IdentityUserId)
             {
-                return Forbid("Jesteś autorem danego materiału - skorzystaj z opcji edycji"); // TODO some authorization handler like 404 not found
+                return RedirectToAction(
+                    "ActionForbidden",
+                    "Error", 
+                    new {
+                        error = "nie masz uprawnień do tego działania. Jesteś autorem danego materiału - skorzystaj z opcji edycji"
+                    });
             }
 
-            ConfigureEditSuggestionBreadcrumbs(materialToEdit.Lesson);
+            ConfigureEditSuggestionBreadcrumbs(materialToEdit.Lesson, materialId);
 
             var emvm = new EditMaterialViewModel
             {
@@ -779,11 +860,22 @@ namespace acaShare.MVC.Areas.Main.Controllers
         public IActionResult CreateEditSuggestion(EditRequestViewModel vm)
         {
             var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var materialToEdit = _service.GetMaterial(vm.EditMaterialViewModel.MaterialId);
-            
+            if (materialToEdit == null)
+            {
+                return BadRequest(new[] { "Materiał o podanym Id nie istnieje."});
+            }
+
             if (identityUserId == materialToEdit.Creator.IdentityUserId)
             {
-                return Forbid(new[] { "Jesteś autorem danego materiału - skorzystaj z opcji edycji" }); // TODO some authorization handler like 404 not found
+                return RedirectToAction(
+                    "ActionForbidden",
+                    "Error",
+                    new
+                    {
+                        error = "nie masz uprawnień do tego działania. Jesteś autorem danego materiału - skorzystaj z opcji edycji"
+                    });
             }
 
             var updater = _userService.FindByIdentityUserId(identityUserId);
