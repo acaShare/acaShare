@@ -1,4 +1,4 @@
-@using Microsoft.AspNetCore.Identity
+﻿@using Microsoft.AspNetCore.Identity
 @using acaShare.MVC.Models
 
 <!DOCTYPE html>
@@ -68,7 +68,7 @@
 
                     @if (User.IsInRole(Roles.AdministratorRole) || User.IsInRole(Roles.MainModeratorRole) || User.IsInRole(Roles.ModeratorRole))
                     {
-                    <li><a asp-area="Moderator" asp-controller="ModeratorPanel" asp-action="MaterialsToApprove">Panel moderatora</a></li>
+                        <li><a asp-area="Moderator" asp-controller="ModeratorPanel" asp-action="MaterialsToApprove">Panel moderatora</a></li>
                     }
 
                     <li>
@@ -76,9 +76,9 @@
                               asp-area="Identity"
                               asp-page="/Account/Logout"
                               asp-route-returnUrl="@Url.Page("/Index", new { area = "" })"
-                        method="post">
+                              method="post">
 
-                        <a href="javascript:{}" onclick="document.getElementById('logout-form').submit()">Wyloguj</a>
+                            <a href="javascript:{}" onclick="document.getElementById('logout-form').submit()">Wyloguj</a>
                         </form>
                     </li>
                 </ul>
@@ -93,7 +93,7 @@
 
             @if (User.IsInRole(Roles.AdministratorRole) || User.IsInRole(Roles.MainModeratorRole) || User.IsInRole(Roles.ModeratorRole))
             {
-            <li><a asp-area="Moderator" asp-controller="ModeratorPanel" asp-action="MaterialsToApprove">Panel moderatora</a></li>
+                <li><a asp-area="Moderator" asp-controller="ModeratorPanel" asp-action="MaterialsToApprove">Panel moderatora</a></li>
             }
 
             <li>
@@ -101,7 +101,7 @@
                       asp-area="Identity"
                       asp-page="/Account/Logout"
                       asp-route-returnUrl="@Url.Page("/Index", new { area = "" })"
-                method="post"></form>
+                      method="post"></form>
 
                 <a href="javascript:{}" onclick="document.getElementById('logout-form').submit()">Wyloguj</a>
             </li>
