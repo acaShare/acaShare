@@ -1,6 +1,6 @@
-﻿
+﻿@model string
+
 @{
-    ViewData["Title"] = "PageNotFound";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -8,8 +8,8 @@
 
 <div class="main-container">
     <h1>UPS!</h1>
-    <h3>Wygląda na to że taka strona nie istnieje :(</h3>
+    <h3>Wygląda na to że @Model</h3>
     <div><img src="~/images/PageNotFound.png" /></div>
-    <h3>BŁĄD 404</h3>
+    <h3>BŁĄD</h3>
     <h4>Wróć na <a asp-area="Main" asp-controller="List" asp-action="AvailableUniversities">STRONĘ GŁÓWNĄ</a> i spróbuj ponownie</h4>
 </div>
