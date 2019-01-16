@@ -31,7 +31,13 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
 
         public IActionResult Departments(int universityId)
         {
-            ConfigureListBreadcrumbs(universityId);
+            var university = _traversalService.GetUniversity(universityId);
+            if (university == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "uczelnia o podanym Id nie istnieje." });
+            }
+
+            ConfigureListBreadcrumbs(university);
 
             var departments = _traversalService.GetDepartmentsFromUniversity(universityId);
 
@@ -54,13 +60,11 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
             return View(vm);
         }
 
-        private void ConfigureListBreadcrumbs(int universityId)
+        private void ConfigureListBreadcrumbs(BLL.Models.University university)
         {
-            var university = _traversalService.GetUniversity(universityId);
-
             var parms = new Dictionary<string, string>
             {
-                { "universityId", universityId.ToString() }
+                { "universityId", university.UniversityId.ToString() }
             };
 
             ViewBag.Breadcrumbs = new List<Breadcrumb>
@@ -81,13 +85,11 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
             };
         }
 
-        private void ConfigureAddBreadcrumbs(int universityId)
+        private void ConfigureAddBreadcrumbs(BLL.Models.University university)
         {
-            var university = _traversalService.GetUniversity(universityId);
-
             var parms = new Dictionary<string, string>
             {
-                { "universityId", universityId.ToString() }
+                { "universityId", university.UniversityId.ToString() }
             };
 
             ViewBag.Breadcrumbs = new List<Breadcrumb>
@@ -185,7 +187,13 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
 
         public IActionResult Add(int universityId)
         {
-            ConfigureAddBreadcrumbs(universityId);
+            var university = _traversalService.GetUniversity(universityId);
+            if (university == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "uczelnia o podanym Id nie istnieje." });
+            }
+
+            ConfigureAddBreadcrumbs(university);
 
             var vm = new DepartmentViewModel
             {
@@ -198,8 +206,17 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
         [HttpPost]
         public IActionResult Add(DepartmentViewModel vm)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+
             var university = _traversalService.GetUniversity(vm.UniversityId);
-            
+            if (university == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "uczelnia o podanym Id nie istnieje." });
+            }
+
             var departmentToAdd = new BLL.Models.Department(vm.TitleOrFullName, vm.SubtitleOrAbbreviation, university);
             
             var success = _managementService.AddDepartment(departmentToAdd);
@@ -217,6 +234,10 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
         public IActionResult Edit(int departmentId)
         {
             var departmentToEdit = _traversalService.GetDepartment(departmentId);
+            if (departmentToEdit == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "wydział o podanym Id nie istnieje." });
+            }
 
             ConfigureEditBreadcrumbs(departmentId, departmentToEdit.UniversityId);
 
@@ -234,9 +255,23 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
         [HttpPost]
         public IActionResult Edit(DepartmentViewModel vm)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+
             var university = _traversalService.GetUniversity(vm.UniversityId);
+            if (university == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "uczelnia o podanym Id nie istnieje." });
+            }
 
             var departmentToEdit = _traversalService.GetDepartment(vm.Id);
+            if (departmentToEdit == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "wydział o podanym Id nie istnieje." });
+            }
+
             departmentToEdit.Update(vm.TitleOrFullName, vm.SubtitleOrAbbreviation, university);
 
             _managementService.UpdateDepartment(departmentToEdit);
@@ -248,6 +283,10 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
         public IActionResult Delete(int departmentId, bool confirmation = false)
         {
             var departmentToDelete = _traversalService.GetDepartment(departmentId);
+            if (departmentToDelete == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "wydział o podanym Id nie istnieje." });
+            }
 
             ConfigureDeleteBreadcrumbs(departmentId, departmentToDelete.UniversityId);
 

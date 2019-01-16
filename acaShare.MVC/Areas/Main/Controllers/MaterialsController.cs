@@ -153,7 +153,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
             {
                 _filesManagement.SaveFilesToFileSystem(vm.FormFiles, materialToAdd.MaterialId, guid);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest(new[] { "Somethig went wrong while saving files to the file system. Try again." });
             }
@@ -234,7 +234,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
             {
                 _filesManagement.SaveFilesToFileSystem(vm.FormFiles, vm.MaterialId, guid);
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 return BadRequest(new[] { "Coś poszło nie tak przy zapisywaniu plików do systemu plików. Spróbuj ponownie." });
             }
@@ -249,8 +249,8 @@ namespace acaShare.MVC.Areas.Main.Controllers
         public IActionResult Delete(int materialId)
         {
             var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var materialToDelete = _service.GetMaterial(materialId);
 
+            var materialToDelete = _service.GetMaterial(materialId);
             if (materialToDelete == null)
             {
                 return RedirectToAction("ResourceNotFound", "Error", new { error = "materiał o podanym Id nie istnieje." });
@@ -277,9 +277,14 @@ namespace acaShare.MVC.Areas.Main.Controllers
         [HttpPost]
         public IActionResult Delete(DeleteMaterialViewModel vm)
         {
-            var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var materialToDelete = _service.GetMaterial(vm.MaterialId);
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
 
+            var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var materialToDelete = _service.GetMaterial(vm.MaterialId);
             if (materialToDelete == null)
             {
                 return RedirectToAction("ResourceNotFound", "Error", new { error = "materiał o podanym Id nie istnieje." });
@@ -801,7 +806,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
             {
                 _service.CreateDeleteRequest(deleter, vm.MaterialId, vm.ReasonId, vm.AdditionalComment);
             }
-            catch (ArgumentNullException e)
+            catch (ArgumentNullException)
             {
                 return RedirectToAction("ResourceNotFound", "Error", new { error = "materiał o podanym Id nie istnieje" });
             }
@@ -911,11 +916,11 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 editRequest.AddFiles(newFiles);
                 _service.UpdateEditRequest(editRequest);
             }
-            catch (ArgumentNullException e)
+            catch (ArgumentNullException)
             {
                 return BadRequest(new[] { "Materiał o podanym Id nie istnieje" });
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 _filesManagement.RemoveFilesFromFileSystem(filesFromForm);
                 return BadRequest(new[] { "Coś poszło nie tak podczas zapisywania plików. Spróbuj ponownie." });
