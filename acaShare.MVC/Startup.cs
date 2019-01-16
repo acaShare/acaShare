@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -46,6 +46,7 @@ namespace acaShare.MVC
             services.AddScoped<IMaterialsService, MaterialsService>();
             services.AddScoped<ISidebarService, SidebarService>();
             services.AddScoped<IStatisticsService, StatisticsService>();
+            services.AddScoped<INotificationService, NotificationService>();
             services.AddSingleton<IFormFilesManagement>(f => new FormFilesManagement(HostingEnvironment));
             services.AddSingleton<IFilesValidator, FilesValidator>();
             services.AddScoped<ValidateMaterial>();

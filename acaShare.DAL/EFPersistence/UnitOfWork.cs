@@ -1,4 +1,4 @@
-﻿using acaShare.BLL.Models;
+using acaShare.BLL.Models;
 using acaShare.DAL.Configuration;
 using acaShare.DAL.Core;
 using acaShare.DAL.Core.Repositories;
@@ -26,6 +26,7 @@ namespace acaShare.DAL.EFPersistence
         public IMaterialStateRepository MaterialStates { get; }
         public ISidebarRepository SidebarRepository { get; }
         public IStatisticsRepository StatisticsRepository { get; }
+        public INotificationRepository NotificationRepository { get; }
 
         public UnitOfWork(AcaShareDbContext dbContext)
         {
@@ -40,6 +41,7 @@ namespace acaShare.DAL.EFPersistence
             MaterialStates = new MaterialStatesRepository(_db.MaterialState);
             SidebarRepository = new SidebarRepository(_db.Comment, _db.Material, _db.Favorites);
             StatisticsRepository = new StatisticsRepository(_db.DeleteRequest);
+            NotificationRepository = new NotificationRepository(_db.Notification);
         }
 
         public void SaveChanges()

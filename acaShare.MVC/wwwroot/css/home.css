@@ -30,17 +30,17 @@ body {
 .home-container {
     height: 89%;
 }
-/*/*#########################################*/
-.home-container .btn { 
-    /*background-color: #5175ff;*/ /*#F44336*/
-}
-/*#########################################*/
-.home-container .home-part {
-    max-height: 100%;
-    display: flex;
-    justify-content: center;
-    padding: 3em .75rem;
-}
+    /*/*#########################################*/
+    .home-container .btn {
+        /*background-color: #5175ff;*/ /*#F44336*/
+    }
+    /*#########################################*/
+    .home-container .home-part {
+        max-height: 100%;
+        display: flex;
+        justify-content: center;
+        padding: 3em .75rem;
+    }
 
 .right-side-bar {
     margin-top: 4px;
@@ -50,7 +50,6 @@ body {
     width: 95%;
     display: flex;
     flex-direction: column;
-
     border-radius: 10px;
     -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
@@ -116,9 +115,9 @@ body {
     position: relative;
 }
 
-.last-activities-content i {
-    color: #212121;
-}
+    .last-activities-content i {
+        color: #212121;
+    }
 
 .last-activities-material-type {
     position: absolute;
@@ -140,11 +139,11 @@ body {
     transition: .2s;
 }
 
-.last-activity-wrapper:not(.comment-wrapper):hover {
-    background-color: #f1f1f1;
-    border-radius: 6px;
-    transition: .2s;
-}
+    .last-activity-wrapper:not(.comment-wrapper):hover {
+        background-color: #f1f1f1;
+        border-radius: 6px;
+        transition: .2s;
+    }
 
 .no-content {
     padding: 1em;
@@ -220,9 +219,9 @@ body {
     background-color: #F44336;
 }
 
-.delete-button:hover {
-    background-color: #fa1d0d;
-}
+    .delete-button:hover {
+        background-color: #fa1d0d;
+    }
 
 .delete-warning {
     font-weight: bold;
@@ -249,10 +248,10 @@ body {
     font-size: .59rem;
 }
 
-.breadcrumb:before {
-    font-size: .7rem;
-    margin: 2px 0 0 0;
-}
+    .breadcrumb:before {
+        font-size: .7rem;
+        margin: 2px 0 0 0;
+    }
 
 #comment-validation {
     margin-top: -.9em;
@@ -271,10 +270,91 @@ body {
         font-size: .65rem;
     }
 
-    .breadcrumb:before {
-        font-size: .8rem;
-        margin: 2px 0 0 0;
+        .breadcrumb:before {
+            font-size: .8rem;
+            margin: 2px 0 0 0;
+        }
+}
+
+.notifications-bell-mobile-wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 4em;
+    height: 100%;
+}
+
+    .notifications-bell-mobile-wrapper .notifications-bell-mobile {
+        padding: 0 !important;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        color: white;
+        cursor: pointer;
     }
+
+        .notifications-bell-mobile-wrapper .notifications-bell-mobile:hover {
+            color: #eeeeee;
+        }
+
+.notificationList {
+    display: none;
+    position: absolute;
+    right: .5em;
+    margin-top: 2px;
+    margin-left: 1.35em;
+    max-height: 69vh;
+    overflow-y: auto;
+    background-color: white;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, .25);
+    border: 1px solid rgba(100, 100, 100, .4);
+    z-index: 500;
+    border-radius: 10px;
+}
+
+.notification-list-element {
+    padding-top: 1em;
+    padding-bottom: .7em;
+    cursor: default;
+    background-color: white;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+    .notification-list-element:hover, a.notification-list-button li.clickable:hover {
+        background-color: #eeeeee;
+    }
+
+a.notification-list-button li {
+    font-weight: 700;
+    font-size: 14px;
+    color: #717171;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.content-div {
+    text-align: center;
+    padding: 0 1em;
+    margin-bottom: .3em;
+}
+
+.date-div {
+    color: #81abf8;
+    text-align: center;
+    font-size: 12px;
+}
+
+.show {
+    display: block;
+}
+
+.show-flex {
+    display: flex;
 }
 
 @media only screen and (min-width: 400px) {
@@ -282,10 +362,10 @@ body {
         font-size: .75rem;
     }
 
-    .breadcrumb:before {
-        font-size: .9rem;
-        margin: 2px 0 0 0;
-    }
+        .breadcrumb:before {
+            font-size: .9rem;
+            margin: 2px 0 0 0;
+        }
 }
 
 @media only screen and (min-width: 450px) {
@@ -293,16 +373,22 @@ body {
         font-size: .84rem;
     }
 
-    .breadcrumb:before {
-        font-size: 1rem;
-        margin: 1px 1px 0 0;
-    }
+        .breadcrumb:before {
+            font-size: 1rem;
+            margin: 1px 1px 0 0;
+        }
 }
 
 @media only screen and (max-width: 600px) {
     .tabs .tab a {
         padding: 0 24px;
         font-size: 14px;
+    }
+}
+
+@media only screen and (min-width: 500px) {
+    .notificationList {
+        width: 70%;
     }
 }
 
@@ -317,19 +403,20 @@ body {
         padding: 0 3px;
         font-size: 65%;
     }
-    
+
     .right-side-bar {
         height: 100vh;
         border-left: 1px solid lightgrey;
     }
-   .breadcrumb {
+
+    .breadcrumb {
         font-size: .75rem;
     }
 
-    .breadcrumb:before {
-        font-size: .9rem;
-        margin: 2px 0 0 0;
-    }
+        .breadcrumb:before {
+            font-size: .9rem;
+            margin: 2px 0 0 0;
+        }
 }
 
 @media only screen and (min-width: 660px) {
@@ -337,10 +424,10 @@ body {
         font-size: .84rem;
     }
 
-    .breadcrumb:before {
-        font-size: 1rem;
-        margin: 1px 1px 0 0;
-    }
+        .breadcrumb:before {
+            font-size: 1rem;
+            margin: 1px 1px 0 0;
+        }
 }
 
 @media only screen and (min-width: 768px) {
@@ -353,9 +440,13 @@ body {
         font-size: .95rem;
     }
 
-    .breadcrumb:before {
-        font-size: 1.1rem;
-        margin: 1px 1px 0 0;
+        .breadcrumb:before {
+            font-size: 1.1rem;
+            margin: 1px 1px 0 0;
+        }
+
+    .notificationList {
+        width: 55%;
     }
 }
 
@@ -364,10 +455,10 @@ body {
         font-size: 1.1rem;
     }
 
-    .breadcrumb:before {
-        font-size: 1.3rem;
-        margin: 1px 3px 0 2px;
-    }
+        .breadcrumb:before {
+            font-size: 1.3rem;
+            margin: 1px 3px 0 2px;
+        }
 }
 
 @media only screen and (min-width: 992px) {
@@ -391,12 +482,22 @@ body {
     .delete-button-small {
         display: none;
     }
+
     .breadcrumb {
         font-size: 1.2rem;
     }
 
-    .breadcrumb:before {
-        font-size: 1.4rem;
+        .breadcrumb:before {
+            font-size: 1.4rem;
+        }
+
+    .brand-logo {
+        margin-left: .5em;
+    }
+
+    .notificationList {
+        right: 15.5em;
+        width: 30em;
     }
 }
 
@@ -411,10 +512,10 @@ body {
         font-size: 18px;
     }
 
-    .breadcrumb:before {
-        font-size: 25px;
-        margin: 0 10px 0 8px;
-    }
+        .breadcrumb:before {
+            font-size: 25px;
+            margin: 0 10px 0 8px;
+        }
 }
 
 @media only screen and (min-width: 1200px) {
