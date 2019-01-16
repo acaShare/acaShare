@@ -1,0 +1,23 @@
+﻿@model acaShare.BLL.Models.IDeleteRequestsStatisticsData
+
+@section ModeratorPanelStyles {
+    <link rel="stylesheet" href="~/css/delete-requests-chart.css" />
+}
+
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+    <script src="~/js/statistics/statistics.js"></script>
+    <script src="~/js/statistics/delete-requests-chart.js"></script>
+    <script>
+        createChart(@Json.Serialize(Model.ReasonsStatistics))
+    </script>
+}
+
+<div class="additional-info">
+    Liczba zaakceptowanych sugestii usunięcia w stosunku do wszyskich:
+    @Html.DisplayFor(model => model.CountOfActuallyDeleted)/@Html.DisplayFor(model => model.RequestsCount)
+</div>
+
+<div class="chart-wrapper">
+    <canvas id="myChart" class="chart-canvas"></canvas>
+</div>

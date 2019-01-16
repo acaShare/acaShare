@@ -26,6 +26,13 @@
     <Compile Remove="EFPersistence\Migrations\20181219011029_ChangedOnDeleteActionsToClientSetNullOnFileForeignKeys.cs" />
     <Compile Remove="EFPersistence\Migrations\20181219012541_ChangedOnDeleteActions.cs" />
     <Compile Remove="EFPersistence\Migrations\20181219012808_ChangedOnDeleteActions.cs" />
+    <Compile Remove="EFPersistence\Migrations\20190111114832_ShortenedMaterialNameTo80Chars.cs" />
+    <Compile Remove="EFPersistence\Migrations\20190111120258_ShortenedMaterialNameTo80Chars.cs" />
+    <Compile Remove="EFPersistence\Migrations\20190111121137_test.cs" />
+    <Compile Remove="EFPersistence\Migrations\20190111121609_test.cs" />
+    <Compile Remove="EFPersistence\Migrations\20190111122000_test.cs" />
+    <Compile Remove="EFPersistence\Migrations\20190111202857_ReducedAbbreviationsLengths.cs" />
+    <Compile Remove="EFPersistence\Migrations\20190112161253_ShortenedUsernames.cs" />
   </ItemGroup>
 
   <ItemGroup>

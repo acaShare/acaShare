@@ -28,6 +28,8 @@ namespace acaShare.MVC.Areas.Moderator.Models.MaterialChangeRequests
         [Display(Name = "Sugestia utworzona przez")]
         public string DeleterName { get; set; }
 
+        [Required(ErrorMessage = "{0} jest wymagany")]
+        [MaxLength(1000, ErrorMessage = "Maksymalna długość pola \"{0}\" to {1} znaków")]
         [Display(Name = "Powód odrzucenia sugestii")]
         public string DeclineReason { get; set; }
     }

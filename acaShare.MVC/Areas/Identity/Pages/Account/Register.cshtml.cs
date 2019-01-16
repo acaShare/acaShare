@@ -46,8 +46,8 @@ namespace acaShare.MVC.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required(ErrorMessage = "Pole {0} jest wymagane.")]
-            [StringLength(100, ErrorMessage = "Pole {0} musi mieć przynajmniej {2} i maksymalnie {1} znaków.", MinimumLength = 6)]
-            [Display(Name = "Użytkownik")]
+            [StringLength(22, ErrorMessage = "Pole {0} musi mieć przynajmniej {2} i maksymalnie {1} znaków.", MinimumLength = 6)]
+            [Display(Name = "Nazwa użytkownika")]
             public string UserName { get; set; }
 
             [Required(ErrorMessage = "Pole {0} jest wymagane.")]
@@ -61,9 +61,10 @@ namespace acaShare.MVC.Areas.Identity.Pages.Account
             [Display(Name = "Hasło")]
             public string Password { get; set; }
 
+            [Required(ErrorMessage = "Pole {0} jest wymagane.")]
             [DataType(DataType.Password)]
             [Display(Name = "Potwierdź hasło")]
-            [Compare("Password", ErrorMessage = "Pola hasło i potwierdź hasło różnią się.")]
+            [Compare("Password", ErrorMessage = "Wpisane hasła nie są takie same.")]
             public string ConfirmPassword { get; set; }
         }
 

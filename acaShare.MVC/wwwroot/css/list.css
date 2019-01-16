@@ -1,11 +1,10 @@
 ﻿.list-container {
     display: flex;
-    margin-bottom: 1em;
+    width: 100%;
 }
 
 .aca-collection {
-    max-height: 62vh;
-    overflow: auto;
+    overflow-y: auto;
     width: 100%;
     margin: .5em 0 .5em 0;
     border-radius: 2px;
@@ -39,6 +38,7 @@
     justify-content: space-between;
     align-items: center;
     padding-right: 20px; /*usunac przy zmianie wygladu listy*/
+    cursor: pointer;
 }
 
 .list-icon {
@@ -50,6 +50,8 @@
     position: relative;
     height: 100%;
     width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .add-material-button {
@@ -60,7 +62,7 @@
     background-color: #4db6ac;
     padding: .15em;
     color: white;
-    margin: 0 auto;
+    margin: 1em auto 0 auto;
     border-radius: 3px;
 }
 

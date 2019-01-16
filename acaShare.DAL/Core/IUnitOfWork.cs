@@ -1,4 +1,4 @@
-﻿using acaShare.DAL.Core.Repositories;
+using acaShare.DAL.Core.Repositories;
 using acaShare.DAL.Core.Repositories.UniversityRelated;
 using acaShare.DAL.Core.Repositories.UserRelated;
 using System;
@@ -18,6 +18,7 @@ namespace acaShare.DAL.Core
         IMaterialRepository Materials { get; }
         IMaterialStateRepository MaterialStates { get; }
         ISidebarRepository SidebarRepository { get; }
+        IStatisticsRepository StatisticsRepository { get; }
         INotificationRepository NotificationRepository { get; }
         void SaveChanges();
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using acaShare.MVC.Common;
 using acaShare.MVC.Models;
 using acaShare.MVC.Models.StructureTraversal;
 using acaShare.ServiceLayer.Interfaces;
@@ -20,11 +21,16 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
         /// </summary>
         private readonly IUniversityTreeTraversalService _traversalService;
         private readonly IUniversityTreeManagementService _managementService;
+        private readonly IMaterialsService _materialsService;
+        private readonly IFormFilesManagement _filesManagement;
 
-        public LessonsManagementController(IUniversityTreeTraversalService traversalService, IUniversityTreeManagementService managementService)
+        public LessonsManagementController(IUniversityTreeTraversalService traversalService, IUniversityTreeManagementService managementService,
+            IMaterialsService materialsService, IFormFilesManagement formFilesManagement)
         {
             _traversalService = traversalService;
             _managementService = managementService;
+            _materialsService = materialsService;
+            _filesManagement = formFilesManagement;
         }
 
         public IActionResult Lessons(int semesterId, int departmentId)
@@ -277,13 +283,17 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
 
             var subjectToAdd = new BLL.Models.Subject(vm.TitleOrFullName, vm.SubtitleOrAbbreviation, department);
 
-            var addedSubject = _managementService.AddSubject(subjectToAdd);
+            var subjectDepartment = _managementService.AddSubject(subjectToAdd);
 
-            var subjectDepartmentId = addedSubject.SubjectDepartment.Max(s => s.SubjectDepartmentId);
+            var lesson = new BLL.Models.Lesson(vm.SemesterId, subjectDepartment.SubjectDepartmentId);
 
-            var lesson = new BLL.Models.Lesson(vm.SemesterId, subjectDepartmentId);
+            var success = _managementService.AddLesson(lesson, subjectToAdd.Abbreviation, subjectDepartment);
 
-            _managementService.AddLesson(lesson);
+            if (!success)
+            {
+                ModelState.AddModelError("ERROR", "Przedmiot o takiej nazwie lub skrócie istnieje już na tym semestrze w tym wydziale");
+                return View(vm);
+            }
 
             return RedirectToAction("Lessons", new { semesterId = vm.SemesterId, departmentId = department.DepartmentId });
         }
@@ -340,6 +350,13 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
             }
             else
             {
+                // First - delete materials due to database constraints betwee Lesson and Material
+                foreach (var material in lessonToDelete.Materials)
+                {
+                    _filesManagement.DeleteWholeMaterialFolder(material.MaterialId);
+                    _materialsService.DeleteMaterial(material);
+                }
+
                 // actually delete
                 _managementService.DeleteLesson(lessonToDelete.LessonId);
 

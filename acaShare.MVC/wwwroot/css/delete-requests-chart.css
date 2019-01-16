@@ -1,0 +1,83 @@
+﻿.additional-info {
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+/*.chart-canvas {    
+}
+
+.chart-wrapper {
+}*/
+
+.breadcrumb {
+    font-size: .8rem;
+}
+
+@media only screen and (min-width: 350px) {
+    .breadcrumb {
+        font-size: .85rem;
+    }
+
+    .breadcrumb:before {
+        font-size: .8rem;
+        margin: 2px 0 0 0;
+    }
+}
+
+@media only screen and (min-width: 400px) {
+    .breadcrumb {
+        font-size: 1rem;
+    }
+}
+
+@media only screen and (min-width: 450px) {
+    .breadcrumb {
+        font-size: 1.1rem;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+    .breadcrumb {
+        font-size: .9rem;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .breadcrumb {
+        font-size: .95rem;
+    }
+}
+
+@media only screen and (min-width: 900px) {
+    .breadcrumb {
+        font-size: 1.1rem;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .breadcrumb {
+        font-size: .9rem;
+    }
+}
+
+@media only screen and (min-width: 1100px) {
+    .breadcrumb {
+        font-size: 1rem;
+    }
+
+        .breadcrumb:before {
+            font-size: 25px;
+            margin: 0 10px 0 8px;
+        }
+}
+
+@media only screen and (min-width: 1280px) {
+    .breadcrumb {
+        font-size: 18px;
+    }
+
+    .breadcrumb:before {
+        font-size: 25px;
+        margin: 0 10px 0 8px;
+    }
+}

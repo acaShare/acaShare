@@ -40,11 +40,11 @@ namespace acaShare.MVC.Areas.Main.ViewComponents
                 LastActivities = lastActivities.Select(a =>
                     new LastActivityViewModel
                     {
-                        //Content = a.Content,
                         When = FormatCreatedDate(a.Date),
                         RouteValue = a.Material.MaterialId,
                         Type = a.ActivityType,
                         Material = a.Material,
+                        Who = a.Username
                     }
                 ).ToList(),
 

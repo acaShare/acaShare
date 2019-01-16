@@ -1,4 +1,5 @@
 ﻿body {
+    overflow-y: auto;
 }
 
 .row {
@@ -6,11 +7,53 @@
 }
 
 .main-container {
-    margin: 0 auto;
-    width: 30%;
+    margin: 3em auto 0 auto;
+    width: 85%;
 }
 
 #box {
     opacity: 1;
     position: relative;
+    margin-bottom: 1rem;
+}
+
+.wide {
+    width: 100%;
+}
+
+.short {
+    width: 50%;
+}
+
+.signin-button {
+    margin: 1rem 0 2rem 0;
+}
+
+.signup-button {
+    margin-top: .7rem;
+    margin-bottom: 1em;
+}
+
+@media only screen and (min-width: 600px) {
+    .main-container {
+        width: 60%;
+    }
+}
+
+@media only screen and (min-width: 800px) {
+    .main-container {
+        width: 50%;
+    }
+}
+
+@media only screen and (min-width: 1000px) {
+    .main-container {
+        width: 40%;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+     .main-container {
+         width: 30%;
+     }
 }

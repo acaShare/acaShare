@@ -60,7 +60,7 @@ namespace acaShare.WebAPI.Controllers.v1.UniversityRelated
         [HttpPost]
         public void Post(Lesson lesson)
         {
-            _managementService.AddLesson(lesson);
+            //_managementService.AddLesson(lesson);
         }
 
         [HttpDelete]

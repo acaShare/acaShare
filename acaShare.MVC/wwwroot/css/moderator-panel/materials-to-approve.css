@@ -1,0 +1,9 @@
+﻿.home-part {
+    max-height: 150% !important;
+}
+
+@media only screen and (min-width: 500px) {
+    .home-part {
+        max-height: 100% !important;
+    }    
+}

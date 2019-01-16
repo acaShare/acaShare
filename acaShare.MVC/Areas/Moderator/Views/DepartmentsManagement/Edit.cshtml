@@ -1,6 +1,6 @@
 ﻿@model DepartmentViewModel
 
-<div class="row">
+<div class="material-container">
     <form method="post" class="col s12">
         <div asp-validation-summary="All" class="text-danger"></div>
         <div>
@@ -20,7 +20,12 @@
         <input asp-for="Id" type="hidden" />
         <input asp-for="UniversityId" type="hidden" />
 
-        <button type="submit">Aktualizuj</button>
-        <a asp-action="Departments" asp-route-universityId="@Model.UniversityId">Wróć do listy wydziałów</a>
+        <div class="buttons">
+            <button type="submit" class="btn btn-default accept-button">Aktualizuj</button>
+            <a asp-action="Departments" asp-route-universityId="@Model.UniversityId" class="btn btn-default back-button">
+                <span class="back-button-large">Wróć do listy wydziałów</span>
+                <span class="back-button-small">Cofnij</span>
+            </a>
+        </div>
     </form>
 </div>

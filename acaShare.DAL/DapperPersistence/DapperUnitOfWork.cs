@@ -19,7 +19,7 @@ namespace acaShare.DAL.DapperPersistence
 
         // Repositories
         private ILessonRepository _lessons;
-        public ILessonRepository Lessons => _lessons ?? new LessonRepository(_transaction);
+        //public ILessonRepository Lessons => _lessons ?? new LessonRepository(_transaction);
 
         public DapperUnitOfWork(IOptions<AcaShareConfiguration> options)
         {

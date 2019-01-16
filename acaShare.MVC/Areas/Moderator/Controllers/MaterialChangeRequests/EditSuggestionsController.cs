@@ -1,7 +1,9 @@
 ﻿using acaShare.MVC.Areas.Moderator.Models;
 using acaShare.MVC.Areas.Moderator.Models.MaterialChangeRequests;
 using acaShare.MVC.Common;
+using acaShare.MVC.Models;
 using acaShare.ServiceLayer.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
 {
+    [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole + ", " + Roles.ModeratorRole)]
     [Area("Moderator")]
     public class EditSuggestionsController : Controller
     {
@@ -28,6 +31,8 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
 
         public IActionResult EditSuggestions()
         {
+            ConfigureBreadcrumbs();
+
             var vms = _materialsService.GetPendingEditSuggestions().Select(es =>
                 new EditRequestViewModel
                 {
@@ -40,14 +45,28 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
             return View(vms);
         }
 
+        private void ConfigureBreadcrumbs()
+        {
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "EditSuggestions",
+                    Action = "EditSuggestions",
+                    Title = "Sugestie edycji"
+                }
+            };
+        }
+
         public IActionResult EditRequestApprovalDecision(int editRequestId)
         {
-            BLL.Models.EditRequest editRequest = _materialsService.GetEditRequest(editRequestId);
-
+            var editRequest = _materialsService.GetEditRequest(editRequestId);
             if (editRequest == null)
             {
-                return BadRequest("Sugestia edycji o podanym Id nie istnieje");
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "sugestia edycji o podanym Id nie istnieje." });
             }
+
+            ConfigureSuggestionBreadcrumbs(editRequestId);
 
             var vm = new ChangeRequestApprovalDecision
             {
@@ -82,10 +101,29 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
             return View(vm);
         }
 
+        private void ConfigureSuggestionBreadcrumbs(int editRequestId)
+        {
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "EditSuggestions",
+                    Action = "EditRequestApprovalDecision",
+                    Title = "Podgląd zmian",
+                    Params = new Dictionary<string, string>() { { "editRequestId", editRequestId.ToString() } }
+                }
+            };
+        }
+
         public IActionResult ApproveEditRequest(int editRequestId)
         {
             var loggedModerator = _userService.FindByIdentityUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
             var editRequest = _materialsService.GetEditRequest(editRequestId);
+            if (editRequest == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "sugestia edycji o podanym Id nie istnieje." });
+            }
 
             try
             {
@@ -93,11 +131,11 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
                 _materialsService.ApproveEditRequest(editRequest);
                 _filesManagement.ReplaceMaterialFilesWithEditRequestFiles(materialToUpdateId, editRequest.EditRequestId, editRequest.Files);
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
-                return BadRequest("Sugestia edycji o podanym Id nie istnieje");
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "sugestia edycji o podanym Id nie istnieje." });
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 _filesManagement.RemoveFilesFromFileSystem(editRequest.Files);
                 return BadRequest("Coś poszło nie tak podczas zapisywania plików. Spróbuj ponownie.");
@@ -108,11 +146,10 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
 
         public IActionResult DeclineEditRequest(int editRequestId)
         {
-            BLL.Models.EditRequest editRequest = _materialsService.GetEditRequest(editRequestId);
-
+            var editRequest = _materialsService.GetEditRequest(editRequestId);
             if (editRequest == null)
             {
-                return BadRequest("Sugestia edycji o podanym Id nie istnieje");
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "sugestia edycji o podanym Id nie istnieje." });
             }
 
             var vm = new EditRequestViewModel
@@ -138,9 +175,9 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
             {
                 _materialsService.DeclineEditRequest(vm.EditRequestId, vm.DeclineReason);
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
-                return BadRequest("Sugestia edycji o podanym Id nie istnieje");
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "sugestia edycji o podanym Id nie istnieje." });
             }
 
             return RedirectToAction("EditSuggestions");

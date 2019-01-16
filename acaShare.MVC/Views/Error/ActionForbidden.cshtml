@@ -1,0 +1,19 @@
+﻿@model string
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/css/errors/PageNotFound.css" rel="stylesheet" />
+
+<div class="main-container">
+    <h1>UPS!</h1>
+    <h3>Wygląda na to, że @Model</h3>
+    <div><img src="~/images/PageNotFound.png" /></div>
+    <h3>BŁĄD</h3>
+    <h4>Wróć na <a href="javascript:void(0)" onclick="window.history.back()">poprzednią</a> stronę i spróbuj ponownie</h4>
+    <h4>
+        lub wróć na
+        <a asp-area="Main" asp-controller="List" asp-action="AvailableUniversities">STRONĘ GŁÓWNĄ</a>
+    </h4>
+</div>

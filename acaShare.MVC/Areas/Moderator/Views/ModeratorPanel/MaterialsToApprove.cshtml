@@ -23,13 +23,20 @@
                     </a>
 
                     <div class="icons-row-container">
-                        <a asp-action="ApproveMaterial" asp-route-materialId="@material.MaterialId">
+                        <a asp-action="ApproveMaterial" asp-route-materialId="@material.MaterialId" class="approve-material">
                             <i class="material-icons list-icon icon-edit tooltipped" data-position="top" data-tooltip="Zatwierdź">check</i>
                         </a>
-                        <a asp-action="RejectMaterial" asp-route-materialId="@material.MaterialId">
+                        <a asp-action="RejectMaterial" asp-route-materialId="@material.MaterialId" class="reject-material">
                             <i class="material-icons list-icon icon-delete tooltipped" data-position="top" data-tooltip="Odrzuć">not_interested</i>
                         </a>
                     </div>
+                </li>
+            }
+
+            @if (@Model.Count == 0)
+            {
+                <li class="aca-collection-item path-list-item">
+                    <p class="empty-list">~ Pusto ~</p>
                 </li>
             }
         </ul>

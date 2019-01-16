@@ -1,6 +1,6 @@
 ﻿@model UniversityViewModel
 
-<div class="row">
+<div class="material-container">
     <form method="post" class="col s12">
         <div asp-validation-summary="All" class="text-danger"></div>
         <div>
@@ -17,7 +17,13 @@
                 <span asp-validation-for="SubtitleOrAbbreviation" class="text-danger input-error-small"></span>
             </div>
         </div>
-        <button type="submit">Dodaj</button>
-        <a asp-action="Universities">Wróć do listy uczelni</a>
+
+        <div class="buttons">
+            <button type="submit" class="btn btn-default accept-button">Dodaj</button>
+            <a asp-action="Universities" class="btn btn-default back-button">
+                <span class="back-button-large">Wróć do listy uczelni</span>
+                <span class="back-button-small">Cofnij</span>
+            </a>
+        </div>
     </form>
 </div>

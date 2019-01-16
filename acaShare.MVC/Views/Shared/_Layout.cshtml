@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity
 @using acaShare.MVC.Models
 
 <!DOCTYPE html>
@@ -10,10 +10,11 @@
     <noscript>
         <meta http-equiv="refresh" content="60;url=/" />
     </noscript>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="~/css/home.css">
     <link rel="stylesheet" href="~/css/list.css">
+    <link rel="stylesheet" href="~/css/alert.css">
     <title>acaShare</title>
     @RenderSection("ModeratorPanelCSS", false)
     @RenderSection("MaterialViewCSS", false)
@@ -22,34 +23,13 @@
 <body>
     <noscript class="no-script">
         <style>
-            body *:not(.no-script) {
-                display: none;
-            }
-
-            .no-script {
-                text-align: center;
-            }
-
-            .no-script-data {
-                padding: 1em;
-            }
-
-            .brand-logo {
-                margin: 0;
-                position: static !important;
-            }
-
-            .no-script h1 {
-                font-size: 3.4rem;
-            }
-
-            .no-script h3 {
-                font-size: 2rem;
-            }
-
-            .no-script img {
-                margin-top: 1em;
-            }
+            body *:not(.no-script) { display: none; }
+            .no-script { text-align: center; }
+            .no-script-data { padding: 1em; }
+            .brand-logo { margin: 0; position: static !important; }
+            .no-script h1 { font-size: 3.4rem; }
+            .no-script h3 { font-size: 2rem; }
+            .no-script img { margin-top: 1em; }
         </style>
 
         <nav class="no-script">
@@ -85,10 +65,10 @@
                             <i class="material-icons">notifications</i>
                         </a>
                     </li>
-                    
+
                     @if (User.IsInRole(Roles.AdministratorRole) || User.IsInRole(Roles.MainModeratorRole) || User.IsInRole(Roles.ModeratorRole))
                     {
-                        <li><a asp-area="Moderator" asp-controller="ModeratorPanel" asp-action="Home">Panel moderatora</a></li>
+                    <li><a asp-area="Moderator" asp-controller="ModeratorPanel" asp-action="MaterialsToApprove">Panel moderatora</a></li>
                     }
 
                     <li>
@@ -96,9 +76,9 @@
                               asp-area="Identity"
                               asp-page="/Account/Logout"
                               asp-route-returnUrl="@Url.Page("/Index", new { area = "" })"
-                              method="post">
+                        method="post">
 
-                            <a href="javascript:{}" onclick="document.getElementById('logout-form').submit()">Wyloguj</a>
+                        <a href="javascript:{}" onclick="document.getElementById('logout-form').submit()">Wyloguj</a>
                         </form>
                     </li>
                 </ul>
@@ -109,9 +89,11 @@
     @if (User.Identity.IsAuthenticated)
     {
         <ul class="sidenav" id="mobile-hamburger">
+            <li><a asp-area="Main" asp-controller="List" asp-action="AvailableUniversities">Strona główna</a></li>
+
             @if (User.IsInRole(Roles.AdministratorRole) || User.IsInRole(Roles.MainModeratorRole) || User.IsInRole(Roles.ModeratorRole))
             {
-                <li><a asp-area="Moderator" asp-controller="ModeratorPanel" asp-action="Home">Panel moderatora</a></li>
+            <li><a asp-area="Moderator" asp-controller="ModeratorPanel" asp-action="MaterialsToApprove">Panel moderatora</a></li>
             }
 
             <li>
@@ -119,7 +101,7 @@
                       asp-area="Identity"
                       asp-page="/Account/Logout"
                       asp-route-returnUrl="@Url.Page("/Index", new { area = "" })"
-                      method="post"></form>
+                method="post"></form>
 
                 <a href="javascript:{}" onclick="document.getElementById('logout-form').submit()">Wyloguj</a>
             </li>
@@ -130,14 +112,28 @@
         <ul class="notificationList" id="notificationList"></ul>
     </div>
 
+    <div id="alert-wrapper" class="alert-wrapper">
+        <div class="alert-content">
+            <div class="alert-title-wrapper">
+                <p id="alert-title" class="alert-title">Czy na pewno chcesz wykonać tę operację?</p>
+            </div>
+            <div class="alert-buttons">
+                <button id="alert-confirm-button" class="alert-button alert-confirm-button btn btn-default accept-button">Tak</button>
+                <button id="alert-decline-button" class="alert-button alert-decline-button btn btn-default back-button">Anuluj</button>`
+            </div>
+        </div>
+    </div>
+
     @RenderBody()
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="~/js/home.js"></script>
     <script src="~/js/notification.js"></script>
+    <script src="~/js/alert.js"></script>
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

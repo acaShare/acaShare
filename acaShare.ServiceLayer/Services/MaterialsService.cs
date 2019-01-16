@@ -89,16 +89,14 @@ namespace acaShare.ServiceLayer.Services
             return _uow.Materials.GetMaterialsToApprove();
         }
 
-        public void ApproveMaterial(int materialId, User approver)
+        public void ApproveMaterial(Material material, User approver)
         {
-            var material = GetMaterial(materialId);
             material.Approve(approver);
             UpdateMaterial(material);
         }
 
-        public void RejectMaterial(int materialId)
+        public void RejectMaterial(Material material)
         {
-            var material = GetMaterial(materialId);
             DeleteMaterial(material);
             // If something in the future related to materials rejection was made, this code will be used
             //var material = GetMaterial(materialId);
@@ -141,7 +139,6 @@ namespace acaShare.ServiceLayer.Services
         public void DeclineDeleteRequest(int deleteRequestId, User loggedModerator, string declineReason)
         {
             var deleteRequest = _uow.Materials.GetDeleteRequest(deleteRequestId);
-
             if (deleteRequest == null)
             {
                 throw new ArgumentException("Provided deleteRequestId is not valid");

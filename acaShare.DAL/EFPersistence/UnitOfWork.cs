@@ -1,4 +1,4 @@
-﻿using acaShare.BLL.Models;
+using acaShare.BLL.Models;
 using acaShare.DAL.Configuration;
 using acaShare.DAL.Core;
 using acaShare.DAL.Core.Repositories;
@@ -25,6 +25,7 @@ namespace acaShare.DAL.EFPersistence
         public IMaterialRepository Materials { get; }
         public IMaterialStateRepository MaterialStates { get; }
         public ISidebarRepository SidebarRepository { get; }
+        public IStatisticsRepository StatisticsRepository { get; }
         public INotificationRepository NotificationRepository { get; }
 
         public UnitOfWork(AcaShareDbContext dbContext)
@@ -33,12 +34,13 @@ namespace acaShare.DAL.EFPersistence
             Universities = new UniversityRepository(_db.University);
             Departments = new DepartmentRepository(_db.Department);
             Semesters = new SemesterRepository(_db.Semester);
-            Subjects = new SubjectRepository(_db.Subject);
+            Subjects = new SubjectRepository(_db.Subject, _db.SubjectDepartment);
             Lessons = new LessonRepository(_db.Lesson);
             Users = new UserRepository(_db.User);
             Materials = new MaterialRepository(_db.Material, _db.File, _db.ChangeReason, _db.DeleteRequest, _db.EditRequest);
             MaterialStates = new MaterialStatesRepository(_db.MaterialState);
-            SidebarRepository = new SidebarRepository(_db);
+            SidebarRepository = new SidebarRepository(_db.Comment, _db.Material, _db.Favorites);
+            StatisticsRepository = new StatisticsRepository(_db.DeleteRequest);
             NotificationRepository = new NotificationRepository(_db.Notification);
         }
 

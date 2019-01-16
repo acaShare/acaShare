@@ -1,14 +1,14 @@
 ﻿body {
 }
 
-.table {
+.table:not(:last-child) {
     table-layout: fixed;
+    margin-bottom: 3.5rem;
 }
 
 .title {
     text-align: center;
     font-size: 1.8rem;
-    margin: 3.5rem 0 0 0;
 }
 
 th, td {
@@ -22,5 +22,5 @@ th, td {
 
 .moderator-management-wrapper {
     max-height: 69vh;
-    overflow: auto;
+    overflow-y: auto;
 }

@@ -1,7 +1,13 @@
-﻿.list-view-wrapper {
+﻿.moderator-actions {
+    width: 100%;
+}
+
+.list-view-wrapper {
     position: relative;
     height: 100%;
     width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .add-button {
@@ -26,9 +32,13 @@
 }
 
 .icon-edit, .icon-delete {
+    transition: .2s ease-in-out;
+}
+
+.icons-row-container a {
     display: flex;
-    margin-left: .8em;
-    transition: .3s ease-in-out;
+    margin-left: 1.325em;
+    transition: .2s ease-in-out;
 }
 
 .icon-edit:hover {

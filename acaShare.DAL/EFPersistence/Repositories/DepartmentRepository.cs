@@ -19,5 +19,20 @@ namespace acaShare.DAL.EFPersistence.Repositories
         {
             return _dbSet.Find(departmentId).SubjectDepartment;
         }
+
+        public Department GetDepartmentByName(string deptName)
+        {
+            return _dbSet.FirstOrDefault(d => d.Name == deptName);
+        }
+
+        public bool DoesDepartmentAlreadyExistInUniversity(string deptName, string univName)
+        {
+            return _dbSet.Include(d => d.University).Any(d => d.Name == deptName && d.University.Name == univName);
+        }
+
+        public bool IsAbbreviationAlreadyTaken(string univName, string abbreviation)
+        {
+            return _dbSet.Include(d => d.University).Any(d => d.Abbreviation == abbreviation && d.University.Name == univName);
+        }
     }
 }

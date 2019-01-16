@@ -12,7 +12,7 @@ namespace acaShare.MVC.Areas.Main.Models.Materials
         public int MaterialId { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane")]
-        [MaxLength(255, ErrorMessage = "{0} materiału nie może przekraczać {1} znaków")]
+        [MaxLength(80, ErrorMessage = "{0} materiału nie może przekraczać {1} znaków")]
         [Display(Name = "Nazwa")]
         public string Name { get; set; }
 

@@ -119,7 +119,7 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
                     b.Property<string>("Abbreviation")
                         .IsRequired()
-                        .HasMaxLength(15);
+                        .HasMaxLength(5);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -129,11 +129,15 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
                     b.HasKey("DepartmentId");
 
-                    b.HasIndex("Name")
+                    b.HasIndex("UniversityId");
+
+                    b.HasIndex("Abbreviation", "UniversityId")
+                        .IsUnique()
+                        .HasName("UQ_Department_Abbreviation");
+
+                    b.HasIndex("Name", "UniversityId")
                         .IsUnique()
                         .HasName("UQ_Department_Name");
-
-                    b.HasIndex("UniversityId");
 
                     b.ToTable("Department");
                 });
@@ -255,7 +259,7 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(255);
+                        .HasMaxLength(80);
 
                     b.Property<int>("StateId");
 
@@ -354,7 +358,7 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
                     b.Property<string>("Abbreviation")
                         .IsRequired()
-                        .HasMaxLength(15);
+                        .HasMaxLength(5);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -398,7 +402,7 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
                     b.Property<string>("Abbreviation")
                         .IsRequired()
-                        .HasMaxLength(15);
+                        .HasMaxLength(5);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -427,7 +431,7 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasMaxLength(100);
+                        .HasMaxLength(22);
 
                     b.HasKey("UserId");
 
@@ -506,10 +510,10 @@ namespace acaShare.DAL.EFPersistence.Migrations
                     b.ToTable("AspNetRoles");
 
                     b.HasData(
-                        new { Id = "c44b3819-4779-4fc4-bb34-c8c3a53b288c", ConcurrencyStamp = "211e2e67-458f-4b1f-a918-5452a50e044f", Name = "Administrator", NormalizedName = "ADMINISTRATOR" },
-                        new { Id = "bd0553b5-bf3a-432a-a50c-1020ca9604ca", ConcurrencyStamp = "bd8c88ab-39e4-4428-983e-585824af5213", Name = "MainModerator", NormalizedName = "MAINMODERATOR" },
-                        new { Id = "7614cd25-8006-485d-8045-695cf6421cfd", ConcurrencyStamp = "8ae3cd42-286c-4fe7-a1a0-805ad9cbbdf9", Name = "Moderator", NormalizedName = "MODERATOR" },
-                        new { Id = "276988ca-214e-45db-b73b-b05a2a74c750", ConcurrencyStamp = "81639d5c-f172-4a7f-866b-beed6b0901f3", Name = "Member", NormalizedName = "MEMBER" }
+                        new { Id = "51825ef9-7c53-41c0-88a2-53768f3fdb4b", ConcurrencyStamp = "c6f86064-ac00-4fa1-9e51-9c8c1ea6fce9", Name = "Administrator", NormalizedName = "ADMINISTRATOR" },
+                        new { Id = "b1f6687c-5bff-425f-af5c-5341b44c64c0", ConcurrencyStamp = "178c3ef7-ad05-44a6-93c4-a28c9bf72571", Name = "MainModerator", NormalizedName = "MAINMODERATOR" },
+                        new { Id = "2eb6a235-de89-4d75-9ef7-3f44b352fb58", ConcurrencyStamp = "4b976fc9-50fa-4c24-9544-d7fad5f7ab5a", Name = "Moderator", NormalizedName = "MODERATOR" },
+                        new { Id = "b64c4ab9-b764-49ba-aff9-8d5cf733751c", ConcurrencyStamp = "4284daa1-3427-48d3-8732-885b0c63addf", Name = "Member", NormalizedName = "MEMBER" }
                     );
                 });
 
@@ -569,7 +573,7 @@ namespace acaShare.DAL.EFPersistence.Migrations
                     b.Property<bool>("TwoFactorEnabled");
 
                     b.Property<string>("UserName")
-                        .HasMaxLength(256);
+                        .HasMaxLength(22);
 
                     b.HasKey("Id");
 

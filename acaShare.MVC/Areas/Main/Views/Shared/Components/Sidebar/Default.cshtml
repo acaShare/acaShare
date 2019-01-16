@@ -62,7 +62,7 @@
                     }
 
                     lastActivity.Content =
-                            $"Użytkownik {lastActivity.Material.Creator.Username} {activity} materiał \"{lastActivity.Material.Name}\"";
+                            $"Użytkownik {lastActivity.Who} {activity} materiał \"{lastActivity.Material.Name}\"";
 
                     <a asp-area="Main" asp-controller="Materials" asp-action="Material" asp-route-materialId="@lastActivity.RouteValue">
                         <div class="last-activity-wrapper">
@@ -85,10 +85,11 @@
                 <div class="add-comment-wrapper">
                     <input asp-for="NewComment" placeholder="Dodaj komentarz" />
                     <input asp-for="MaterialId" type="hidden" />
-                    <a href="javascript:{}" onclick="document.getElementById('new-comment-form').submit()" class="add-comment-button">
+                    <button type="submit" class="add-comment-button">
                         <i class="material-icons">send</i>
-                    </a>
+                    </button>
                 </div>
+                <div id="comment-validation" asp-validation-summary="All" class="text-danger"></div>
             </form>
             
             @if (Model.Comments.Count == 0)

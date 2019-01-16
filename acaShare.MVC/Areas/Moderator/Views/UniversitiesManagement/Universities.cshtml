@@ -18,13 +18,20 @@
                     </a>
 
                     <div class="icons-row-container">
-                        <a asp-action="Edit" asp-route-universityId="@university.Id"> @*class="tooltipped" data-position="top" data-tooltip="Edytuj">*@
+                        <a asp-action="Edit" asp-route-universityId="@university.Id" class="tooltipped" data-position="top" data-tooltip="Edytuj">
                             <i class="material-icons list-icon icon-edit">edit</i>
                         </a>
-                        <a asp-action="Delete" asp-route-universityId="@university.Id"> @*class="tooltipped" data-position="top" data-tooltip="Usuń">*@
-                            <i class="material-icons list-icon icon-delete">delete</i>
+                        <a asp-action="Delete" asp-route-universityId="@university.Id" class="tooltipped" data-position="top" data-tooltip="Usuń">
+                            <i class="material-icons list-icon icon-delete tooltipped" data-position="top" data-tooltip="Odrzuć sugestię">delete</i>
                         </a>
                     </div>
+                </li>
+            }
+
+            @if (@Model.Items.Count == 0)
+            {
+                <li class="aca-collection-item path-list-item">
+                    <p class="empty-list">~ Pusto ~</p>
                 </li>
             }
         </ul>

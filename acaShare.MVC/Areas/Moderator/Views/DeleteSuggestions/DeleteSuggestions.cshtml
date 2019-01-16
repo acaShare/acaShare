@@ -50,13 +50,20 @@
                     </a>
 
                     <div class="icons-row-container">
-                        <a asp-action="ApproveDeleteRequest" asp-route-deleteRequestId="@deleteRequest.DeleteRequestId">
+                        <a asp-action="ApproveDeleteRequest" asp-route-deleteRequestId="@deleteRequest.DeleteRequestId" class="approve-delete-request">
                             <i class="material-icons list-icon icon-edit tooltipped" data-position="top" data-tooltip="Zatwierdź - usuń materiał">delete_forever</i>
                         </a>
                         <a asp-action="DeclineDeleteRequest" asp-route-deleteRequestId="@deleteRequest.DeleteRequestId">
                             <i class="material-icons list-icon icon-delete tooltipped" data-position="top" data-tooltip="Odrzuć sugestię">not_interested</i>
                         </a>
                     </div>
+                </li>
+            }
+
+            @if (@Model.Count == 0)
+            {
+                <li class="aca-collection-item path-list-item">
+                    <p class="empty-list">~ Pusto ~</p>
                 </li>
             }
         </ul>

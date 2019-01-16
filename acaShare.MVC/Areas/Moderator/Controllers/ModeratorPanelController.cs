@@ -27,14 +27,10 @@ namespace acaShare.MVC.Areas.Moderator.Controllers
             _filesManagement = formFilesManagement;
         }
 
-        public IActionResult Home()
-        {
-            ViewBag.IsRoot = true;
-            return View();
-        }
-
         public IActionResult MaterialsToApprove()
         {
+            ConfigureBreadcrumbs();
+
             var materialsToApprove = _materialsService.GetMaterialsToApprove();
 
             var vm = materialsToApprove.Select(m => 
@@ -51,9 +47,28 @@ namespace acaShare.MVC.Areas.Moderator.Controllers
             return View(vm);
         }
 
+        private void ConfigureBreadcrumbs()
+        {
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "ModeratorPanel",
+                    Action = "MaterialsToApprove",
+                    Title = "Materiały oczekujące na zatwierdzenie"
+                }
+            };
+        }
+
         public IActionResult MaterialApprovalDecision(int materialId)
         {
             var materialToApprove = _materialsService.GetMaterialToApprove(materialId);
+            if (materialToApprove == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "materiał o podanym Id nie istnieje." });
+            }
+
+            ConfigureMaterialBreadcrumbs(materialId);
 
             var vm = new MaterialToApproveViewModel
             {
@@ -75,19 +90,52 @@ namespace acaShare.MVC.Areas.Moderator.Controllers
 
             return View(vm);
         }
-        
+
+        private void ConfigureMaterialBreadcrumbs(int materialId)
+        {
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "ModeratorPanel",
+                    Action = "MaterialsToApprove",
+                    Title = "Materiały oczekujące na zatwierdzenie"
+                },
+                new Breadcrumb
+                {
+                    Controller = "ModeratorPanel",
+                    Action = "MaterialApprovalDecision",
+                    Title = "Materiał",
+                    Params = new Dictionary<string, string> { { "materialId", materialId.ToString() } }
+                }
+            };
+        }
+
         public IActionResult ApproveMaterial(int materialId)
         {
             var loggedUser = _userService.FindByIdentityUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            _materialsService.ApproveMaterial(materialId, loggedUser);
+
+            var material = _materialsService.GetMaterial(materialId);
+            if (material == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "materiał o podanym Id nie istnieje." });
+            }
+
+            _materialsService.ApproveMaterial(material, loggedUser);
 
             return RedirectToAction("MaterialsToApprove");
         }
         
         public IActionResult RejectMaterial(int materialId)
         {
+            var materialToReject = _materialsService.GetMaterial(materialId);
+            if (materialToReject == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "materiał o podanym Id nie istnieje." });
+            }
+
             _filesManagement.DeleteWholeMaterialFolder(materialId);
-            _materialsService.RejectMaterial(materialId);
+            _materialsService.RejectMaterial(materialToReject);
             return RedirectToAction("MaterialsToApprove");
         }
     }

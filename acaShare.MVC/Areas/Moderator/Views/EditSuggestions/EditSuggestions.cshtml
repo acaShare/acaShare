@@ -23,13 +23,20 @@
                     </a>
 
                     <div class="icons-row-container">
-                        <a asp-action="ApproveEditRequest" asp-route-editRequestId="@editRequest.EditRequestId">
+                        <a asp-action="ApproveEditRequest" asp-route-editRequestId="@editRequest.EditRequestId" class="approve-edit-request">
                             <i class="material-icons list-icon icon-edit tooltipped" data-position="top" data-tooltip="Zatwierdź sugestię">check</i>
                         </a>
                         <a asp-action="DeclineEditRequest" asp-route-editRequestId="@editRequest.EditRequestId">
                             <i class="material-icons list-icon icon-delete tooltipped" data-position="top" data-tooltip="Odrzuć sugestię">not_interested</i>
                         </a>
                     </div>
+                </li>
+            }
+
+            @if (@Model.Count == 0)
+            {
+                <li class="aca-collection-item path-list-item">
+                    <p class="empty-list">~ Pusto ~</p>
                 </li>
             }
         </ul>

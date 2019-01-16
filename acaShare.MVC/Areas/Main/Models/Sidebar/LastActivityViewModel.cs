@@ -8,6 +8,7 @@ namespace acaShare.MVC.Areas.Main.Models.Sidebar
 {
     public class LastActivityViewModel : ISidebarContentViewModel
     {
+        public string Who { get; set; }
         public string Content { get; set; }
         public string When { get; set; }
         public int RouteValue { get; set; }

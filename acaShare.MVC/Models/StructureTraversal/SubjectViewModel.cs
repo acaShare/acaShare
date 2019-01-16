@@ -8,10 +8,12 @@ namespace acaShare.MVC.Models.StructureTraversal
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane")]
+        [MaxLength(200, ErrorMessage = "Maksymalna długość pola \"{0}\" to {1} znaków")]
         [Display(Name = "Nazwa przedmiotu")]
         public string TitleOrFullName { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane")]
+        [MaxLength(5, ErrorMessage = "Maksymalna długość pola \"{0}\" to {1} znaków")]
         [Display(Name = "Skrót")]
         public string SubtitleOrAbbreviation { get; set; }
 

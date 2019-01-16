@@ -8,8 +8,8 @@
     <script src="~/js/delete-request.js"></script>
 }
 
-<div class="row">
-    <form id="delete-suggestion-form" method="post" class="col s12">
+<div class="material-container">
+    <form id="delete-suggestion-form" method="post">
         <div asp-validation-summary="All" id="validation-summary" class="text-danger"></div>
 
         <div>
@@ -25,7 +25,8 @@
         <div>
             <div class="input-field">
                 <label for="AdditionalComment" id="additional-comment-label">Wyjaśnienie (opcjonalnie)</label>
-                <textarea id="additional-comment" class="validate materialize-textarea" data-length="255" type="text" name="AdditionalComment"
+                <textarea id="additional-comment" class="validate materialize-textarea delete-request-reason" 
+                          data-length="255" type="text" name="AdditionalComment"
                           data-val="true" data-val-maxlength="Maksymalna długość wyjaśnienia to 500 znaków."
                           data-val-maxlength-max="500"></textarea>
                 <span asp-validation-for="AdditionalComment" class="text-danger input-error-small"></span>
@@ -38,7 +39,15 @@
             <input asp-for="Reasons[i].Reason" type="hidden" />
         }
 
-        <input type="submit" value="Wyślij sugestię" />
-        <a asp-action="Material" asp-route-MaterialId="@Model.MaterialId">Wróć do materiału</a>
+        <div class="buttons">
+            <button type="submit" class="btn btn-default accept-button">
+                <span class="accept-button-large">Wyślij sugestię</span>
+                <span class="accept-button-small">Wyślij</span>
+            </button>
+            <a asp-action="Material" asp-route-MaterialId="@Model.MaterialId" class="btn btn-default back-button">
+                <span class="back-button-large">Wróć do widoku materiału</span>
+                <span class="back-button-small">Cofnij</span>
+            </a>
+        </div>
     </form>
 </div>
