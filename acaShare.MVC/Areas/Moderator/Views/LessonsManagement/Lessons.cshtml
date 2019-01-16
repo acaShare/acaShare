@@ -35,6 +35,13 @@
                     </div>
                 </li>
             }
+
+            @if (@Model.Items.Count == 0)
+            {
+                <li class="aca-collection-item path-list-item">
+                    <p class="empty-list">~ Pusto ~</p>
+                </li>
+            }
         </ul>
     </div>
     <a asp-action="Add" asp-all-route-data="@parms" class="add-button">

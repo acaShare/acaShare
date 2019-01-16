@@ -152,7 +152,7 @@ body {
     font-size: .8em;
 }
 
-.path-list-item-title {
+.path-list-item-title, .empty-list {
     font-weight: 700;
     color: #757575;
 }
@@ -257,6 +257,12 @@ body {
 #comment-validation {
     margin-top: -.9em;
     margin-bottom: 1em;
+}
+
+.empty-list {
+    margin: 1em auto;
+    font-weight: 700;
+    cursor: default;
 }
 
 
