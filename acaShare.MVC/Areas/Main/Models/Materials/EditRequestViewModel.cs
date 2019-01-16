@@ -13,6 +13,7 @@ namespace acaShare.MVC.Areas.Main.Models.Materials
         public EditMaterialViewModel EditMaterialViewModel { get; set; }
 
         [Required(ErrorMessage = "Pole {0} jest wymagane")]
+        [MaxLength(500, ErrorMessage = "Maksymalna długość komentarza to {1} znaków")]
         [Display(Name = "Podsumowanie zmian")]
         public string Summary { get; set; }
 
