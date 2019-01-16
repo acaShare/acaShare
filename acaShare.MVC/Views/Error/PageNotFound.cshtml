@@ -8,8 +8,12 @@
 
 <div class="main-container">
     <h1>UPS!</h1>
-    <h3>Wygląda na to że taka strona nie istnieje :(</h3>
+    <h3>Wygląda na to, że taka strona nie istnieje :(</h3>
     <div><img src="~/images/PageNotFound.png" /></div>
     <h3>BŁĄD 404</h3>
-    <h4>Wróć na <a asp-area="Main" asp-controller="List" asp-action="AvailableUniversities">STRONĘ GŁÓWNĄ</a> i spróbuj ponownie</h4>
+    <h4>Wróć na <a href="javascript:void(0)" onclick="window.history.back()">poprzednią</a> stronę i spróbuj ponownie</h4>
+    <h4>
+        lub wróć na
+        <a asp-area="Main" asp-controller="List" asp-action="AvailableUniversities">STRONĘ GŁÓWNĄ</a>
+    </h4>
 </div>
