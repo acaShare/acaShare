@@ -800,6 +800,12 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 return View(vm);
             }
 
+            if(vm.ReasonId == 4 && string.IsNullOrEmpty(vm.AdditionalComment))
+            {
+                ModelState.AddModelError("AdditionalComment", "Wybranie przyczyny \"Inne\" wymaga podania dodatkowego wyjaśnienia");
+                return View(vm);
+            }
+
             var deleter = _userService.FindByIdentityUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
             try
