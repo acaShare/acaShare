@@ -78,7 +78,7 @@ namespace acaShare.DAL.EFPersistence.Repositories
         public Material GetMaterialToApprove(int materialId)
         {
             return GetMaterialToApproveWithIncludes()
-                .First(m => m.MaterialId == materialId);
+                .FirstOrDefault(m => m.MaterialId == materialId);
         }
 
         private IQueryable<Material> GetMaterialToApproveWithIncludes()

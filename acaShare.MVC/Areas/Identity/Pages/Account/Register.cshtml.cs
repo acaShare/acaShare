@@ -64,7 +64,7 @@ namespace acaShare.MVC.Areas.Identity.Pages.Account
             [Required(ErrorMessage = "Pole {0} jest wymagane.")]
             [DataType(DataType.Password)]
             [Display(Name = "Potwierdź hasło")]
-            [Compare("Password", ErrorMessage = "Pola hasło i potwierdź hasło różnią się.")]
+            [Compare("Password", ErrorMessage = "Wpisane hasła nie są takie same.")]
             public string ConfirmPassword { get; set; }
         }
 

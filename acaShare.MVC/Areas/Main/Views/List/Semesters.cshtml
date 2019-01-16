@@ -5,10 +5,10 @@
         @foreach (var semester in @Model.Items)
         {
             var parms = new Dictionary<string, string>
-            {
-                { "semesterId", @semester.Id.ToString() },
-                { "departmentId", Model.HelperId.ToString() }
-            };
+        {
+            { "semesterId", @semester.Id.ToString() },
+            { "departmentId", Model.HelperId.ToString() }
+        };
 
             <li class="aca-collection-item path-list-item">
                 <a asp-action="Lessons" asp-all-route-data="@parms" class="item-link item-small">
@@ -18,6 +18,13 @@
                 <div class="icons-row-container">
                     <i class="material-icons list-icon">send</i>
                 </div>
+            </li>
+        }
+
+        @if (@Model.Items.Count == 0)
+        {
+            <li class="aca-collection-item path-list-item">
+                <p class="empty-list">~ Pusto ~</p>
             </li>
         }
     </ul>

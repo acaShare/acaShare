@@ -63,7 +63,14 @@ namespace acaShare.MVC.Areas.Main.Controllers
 
         public IActionResult Departments(int universityId)
         {
-            ConfigureDepartmentsBreadcrumbs(universityId);
+            var university = _service.GetUniversity(universityId);
+
+            if (university == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "uczelnia o takim Id nie istnieje." });
+            }
+
+            ConfigureDepartmentsBreadcrumbs(university);
 
             var departments = _service.GetDepartmentsFromUniversity(universityId);
 
@@ -86,13 +93,11 @@ namespace acaShare.MVC.Areas.Main.Controllers
             return View(vm);
         }
 
-        private void ConfigureDepartmentsBreadcrumbs(int universityId)
+        private void ConfigureDepartmentsBreadcrumbs(BLL.Models.University university)
         {
-            var university = _service.GetUniversity(universityId);
-
             var parms = new Dictionary<string, string>
             {
-                { "universityId", universityId.ToString() }
+                { "universityId", university.UniversityId.ToString() }
             };
 
             ViewBag.Breadcrumbs = new List<Breadcrumb>
@@ -116,7 +121,13 @@ namespace acaShare.MVC.Areas.Main.Controllers
 
         public IActionResult Semesters(int departmentId)
         {
-            ConfigureSemestersBreadcrumbs(departmentId);
+            var department = _service.GetDepartment(departmentId);
+            if (department == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "wydział o takim Id nie istnieje." });
+            }
+
+            ConfigureSemestersBreadcrumbs(department);
 
             var semesters = _service.GetSemesters();
 
@@ -139,9 +150,8 @@ namespace acaShare.MVC.Areas.Main.Controllers
             return View(vm);
         }
 
-        private void ConfigureSemestersBreadcrumbs(int departmentId)
+        private void ConfigureSemestersBreadcrumbs(BLL.Models.Department department)
         {
-            var department = _service.GetDepartment(departmentId);
             var university = _service.GetUniversity(department.University.UniversityId);
 
             var parms = new Dictionary<string, string>
@@ -178,7 +188,19 @@ namespace acaShare.MVC.Areas.Main.Controllers
 
         public IActionResult Lessons(int semesterId, int departmentId)
         {
-            ConfigureLessonsBreadcrumbs(semesterId, departmentId);
+            var semester = _service.GetSemester(semesterId);
+            if (semester == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "semestr o takim Id nie istnieje." });
+            }
+
+            var department = _service.GetDepartment(departmentId);
+            if (department == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "wydział o takim Id nie istnieje." });
+            }
+
+            ConfigureLessonsBreadcrumbs(semester, department);
 
             var subjectDepartmentAssociationResults = _service.GetSubjectDepartmentAssociationResultsForDepartment(departmentId);
 
@@ -204,11 +226,9 @@ namespace acaShare.MVC.Areas.Main.Controllers
             return View(vm);
         }
 
-        private void ConfigureLessonsBreadcrumbs(int semesterId, int departmentId)
+        private void ConfigureLessonsBreadcrumbs(BLL.Models.Semester semester, BLL.Models.Department department)
         {
-            var department = _service.GetDepartment(departmentId);
             var university = _service.GetUniversity(department.University.UniversityId);
-            var semester = _service.GetSemester(semesterId);
 
             var parms = new Dictionary<string, string>
             {

@@ -17,5 +17,17 @@ namespace acaShare.MVC
         {
             return View();
         }
+
+        [Route("ResourceNotFound")]
+        public IActionResult ResourceNotFound(string error)
+        {
+            return View("ResourceNotFound", error);
+        }
+
+        [Route("ActionForbidden")]
+        public IActionResult ActionForbidden(string error)
+        {
+            return View("ActionForbidden", error);
+        }
     }
 }

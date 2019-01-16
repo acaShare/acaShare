@@ -23,7 +23,7 @@ namespace acaShare.DAL.EFPersistence.Repositories
                 .Include(l => l.SubjectDepartment.Subject)
                 .Include(l => l.SubjectDepartment.Department)
                 .Include(l => l.SubjectDepartment.Department.University)
-                .First(l => l.LessonId == lessonId);
+                .FirstOrDefault(l => l.LessonId == lessonId);
         }
 
         public bool DoesLessonAlreadyExist(int subjectDepartmentId, int semesterId)

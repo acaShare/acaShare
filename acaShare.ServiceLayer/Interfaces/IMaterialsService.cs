@@ -21,9 +21,9 @@ namespace acaShare.ServiceLayer.Interfaces
         ICollection<EditRequest> GetPendingEditSuggestions();
         void DeleteMaterial(Material materialToDelete);
         ICollection<Material> GetMaterialsToApprove();
-        void RejectMaterial(int materialId);
+        void RejectMaterial(Material material);
         Material GetMaterialToApprove(int materialId);
-        void ApproveMaterial(int materialId, User approver);
+        void ApproveMaterial(Material material, User approver);
         ICollection<ChangeReason> GetChangeReasons(ChangeType changeType);
         DeleteRequest GetDeleteRequest(int deleteRequestId);
         void ApproveDeleteRequest(DeleteRequest deleteRequest, User loggedModerator);

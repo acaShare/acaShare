@@ -25,7 +25,8 @@
         <div>
             <div class="input-field">
                 <label for="AdditionalComment" id="additional-comment-label">Wyjaśnienie (opcjonalnie)</label>
-                <textarea id="additional-comment" class="validate materialize-textarea" data-length="255" type="text" name="AdditionalComment"
+                <textarea id="additional-comment" class="validate materialize-textarea delete-request-reason" 
+                          data-length="255" type="text" name="AdditionalComment"
                           data-val="true" data-val-maxlength="Maksymalna długość wyjaśnienia to 500 znaków."
                           data-val-maxlength-max="500"></textarea>
                 <span asp-validation-for="AdditionalComment" class="text-danger input-error-small"></span>

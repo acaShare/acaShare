@@ -33,6 +33,13 @@
                     </div>
                 </li>
             }
+
+            @if (@Model.Materials.Count == 0)
+            {
+                <li class="aca-collection-item path-list-item">
+                    <p class="empty-list">~ Pusto ~</p>
+                </li>
+            }
         </ul>
     </div>
     <a asp-action="Add" asp-route-lessonId="@Model.LessonId" class="add-material-button">

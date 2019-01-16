@@ -10,6 +10,7 @@ namespace acaShare.MVC.Areas.Main.Models.Materials
     public class DeleteRequestViewModel
     {
         [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "Coś poszło nie tak przy wykonywaniu zapytania. Spróbuj ponownie.")]
         public int MaterialId { get; set; }
 
         [Required]

@@ -134,6 +134,11 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
         [HttpPost]
         public IActionResult Add(UniversityViewModel vm)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
             var universityToAdd = new BLL.Models.University(vm.TitleOrFullName, vm.SubtitleOrAbbreviation);
 
             var success = _managementService.AddUniversity(universityToAdd);
@@ -150,10 +155,14 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
 
         public IActionResult Edit(int universityId)
         {
-            ConfigureEditBreadcrumbs(universityId);
-
             var universityToEdit = _traversalService.GetUniversity(universityId);
+            if (universityToEdit == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "uczelnia o podanym Id nie istnieje." });
+            }
 
+            ConfigureEditBreadcrumbs(universityId);
+            
             var vm = new UniversityViewModel
             {
                 Id = universityToEdit.UniversityId,
@@ -167,7 +176,17 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
         [HttpPost]
         public IActionResult Edit(UniversityViewModel vm)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+
             var universityToEdit = _traversalService.GetUniversity(vm.Id);
+            if (universityToEdit == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "uczelnia o podanym Id nie istnieje." });
+            }
+
             universityToEdit.Update(vm.TitleOrFullName, vm.SubtitleOrAbbreviation);
 
             _managementService.UpdateUniversity(universityToEdit);
@@ -178,9 +197,13 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
 
         public IActionResult Delete(int universityId, bool confirmation = false)
         {
-            ConfigureDeleteBreadcrumbs(universityId);
-
             var universityToDelete = _traversalService.GetUniversity(universityId);
+            if (universityToDelete == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "uczelnia o podanym Id nie istnieje." });
+            }
+
+            ConfigureDeleteBreadcrumbs(universityId);
 
             if (!confirmation)
             {
