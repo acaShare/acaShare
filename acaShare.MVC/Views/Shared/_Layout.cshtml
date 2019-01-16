@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity
 @using acaShare.MVC.Models
 
 <!DOCTYPE html>
@@ -52,12 +52,23 @@
             <a asp-area="Main" asp-controller="List" asp-action="AvailableUniversities" class="brand-logo">acaShare</a>
             @if (User.Identity.IsAuthenticated)
             {
+                <div id="notification-bell-mobile" class="notifications-bell-mobile-wrapper">
+                    <a class="notifications-bell-mobile" id="notification-mobile" onclick="dropDown()">
+                        <i class="material-icons">notifications</i>
+                    </a>
+                </div>
+
                 <a href="#" data-target="mobile-hamburger" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                 <ul class="right hide-on-med-and-down">
-                    <li id="notifications-button" onclick="toggleNotifications(event);"><a>aaaa</a></li>
+                    <li>
+                        <a id="notification" onclick="dropDown()">
+                            <i class="material-icons">notifications</i>
+                        </a>
+                    </li>
+
                     @if (User.IsInRole(Roles.AdministratorRole) || User.IsInRole(Roles.MainModeratorRole) || User.IsInRole(Roles.ModeratorRole))
                     {
-                        <li><a asp-area="Moderator" asp-controller="ModeratorPanel" asp-action="MaterialsToApprove">Panel moderatora</a></li>
+                    <li><a asp-area="Moderator" asp-controller="ModeratorPanel" asp-action="MaterialsToApprove">Panel moderatora</a></li>
                     }
 
                     <li>
@@ -65,9 +76,9 @@
                               asp-area="Identity"
                               asp-page="/Account/Logout"
                               asp-route-returnUrl="@Url.Page("/Index", new { area = "" })"
-                              method="post">
+                        method="post">
 
-                            <a href="javascript:{}" onclick="document.getElementById('logout-form').submit()">Wyloguj</a>
+                        <a href="javascript:{}" onclick="document.getElementById('logout-form').submit()">Wyloguj</a>
                         </form>
                     </li>
                 </ul>
@@ -82,7 +93,7 @@
 
             @if (User.IsInRole(Roles.AdministratorRole) || User.IsInRole(Roles.MainModeratorRole) || User.IsInRole(Roles.ModeratorRole))
             {
-                <li><a asp-area="Moderator" asp-controller="ModeratorPanel" asp-action="MaterialsToApprove">Panel moderatora</a></li>
+            <li><a asp-area="Moderator" asp-controller="ModeratorPanel" asp-action="MaterialsToApprove">Panel moderatora</a></li>
             }
 
             <li>
@@ -90,20 +101,15 @@
                       asp-area="Identity"
                       asp-page="/Account/Logout"
                       asp-route-returnUrl="@Url.Page("/Index", new { area = "" })"
-                      method="post"></form>
+                method="post"></form>
 
                 <a href="javascript:{}" onclick="document.getElementById('logout-form').submit()">Wyloguj</a>
             </li>
         </ul>
     }
 
-    <div id="notifications-wrapper" class="notifications-wrapper" style="display: none;">
-        <div class="notifications">
-            <ul>
-                <li>test1</li>
-                <li>test2</li>
-            </ul>
-        </div>
+    <div class="notificationContainer">
+        <ul class="notificationList" id="notificationList"></ul>
     </div>
 
     <div id="alert-wrapper" class="alert-wrapper">
@@ -125,6 +131,7 @@
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="~/js/home.js"></script>
+    <script src="~/js/notification.js"></script>
     <script src="~/js/alert.js"></script>
 
     @RenderSection("Scripts", required: false)
