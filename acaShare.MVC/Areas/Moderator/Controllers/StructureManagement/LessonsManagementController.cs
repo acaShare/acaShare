@@ -35,18 +35,28 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
 
         public IActionResult Lessons(int semesterId, int departmentId)
         {
-            ConfigureBreadcrumbs(semesterId, departmentId);
+            var semester = _traversalService.GetSemester(semesterId);
+            if (semester == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "semestr o takim Id nie istnieje." });
+            }
 
-            var subjectDepartmentAssociationResults = _traversalService.GetSubjectDepartmentAssociationResultsForDepartment(departmentId);
+            var department = _traversalService.GetDepartment(departmentId);
+            if (department == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "wydział o takim Id nie istnieje." });
+            }
 
-            var lessons = _traversalService.GetLessons(semesterId, subjectDepartmentAssociationResults);
+            ConfigureListBreadcrumbs(semester, department, department.University);
+
+            var lessons = _traversalService.GetLessons(semester, department);
 
             var viewModels = lessons.Select(l =>
                 new LessonViewModel
                 {
                     Id = l.LessonId,
-                    TitleOrFullName = l.SubjectDepartment.Subject.Name,
-                    SubtitleOrAbbreviation = l.SubjectDepartment.Subject.Abbreviation
+                    TitleOrFullName = l.Subject.Name,
+                    SubtitleOrAbbreviation = l.Subject.Abbreviation
                 }
             ).ToList();
 
@@ -61,211 +71,22 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
             return View(vm);
         }
 
-        private void ConfigureBreadcrumbs(int semesterId, int departmentId)
-        {
-            var department = _traversalService.GetDepartment(departmentId);
-            var university = department.University;
-            var semester = _traversalService.GetSemester(semesterId);
-
-            var parms = new Dictionary<string, string>
-            {
-                { "universityId", university.UniversityId.ToString() },
-                { "departmentId", department.DepartmentId.ToString() },
-                { "semesterId", semester.SemesterId.ToString() },
-            };
-
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "UniversitiesManagement",
-                    Action = "Universities",
-                    Title = "Uczelnie"
-                },
-                new Breadcrumb
-                {
-                    Controller = "DepartmentsManagement",
-                    Action = "Departments",
-                    Title = university.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "SemestersManagement",
-                    Action = "Semesters",
-                    Title = department.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "LessonsManagement",
-                    Action = "Lessons",
-                    Title = semester.Number,
-                    Params = parms
-                }
-            };
-        }
-        private void ConfigureAddBreadcrumbs(int semesterId, int departmentId)
-        {
-            var department = _traversalService.GetDepartment(departmentId);
-            var university = department.University;
-            var semester = _traversalService.GetSemester(semesterId);
-
-            var parms = new Dictionary<string, string>
-            {
-                { "universityId", university.UniversityId.ToString() },
-                { "departmentId", department.DepartmentId.ToString() },
-                { "semesterId", semester.SemesterId.ToString() },
-            };
-
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "UniversitiesManagement",
-                    Action = "Universities",
-                    Title = "Uczelnie"
-                },
-                new Breadcrumb
-                {
-                    Controller = "DepartmentsManagement",
-                    Action = "Departments",
-                    Title = university.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "SemestersManagement",
-                    Action = "Semesters",
-                    Title = department.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "LessonsManagement",
-                    Action = "Lessons",
-                    Title = semester.Number,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "LessonsManagement",
-                    Action = "Add",
-                    Title = "Dodawanie przedmiotu",
-                    Params = parms
-                }
-            };
-        }
-        private void ConfigureEditBreadcrumbs(BLL.Models.Lesson lesson)
-        {
-            var department = lesson.SubjectDepartment.Department;
-            var university = department.University;
-            var semester = lesson.Semester;
-
-            var parms = new Dictionary<string, string>
-            {
-                { "universityId", university.UniversityId.ToString() },
-                { "departmentId", department.DepartmentId.ToString() },
-                { "semesterId", semester.SemesterId.ToString() },
-                { "lessonId", lesson.LessonId.ToString() },
-            };
-
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "UniversitiesManagement",
-                    Action = "Universities",
-                    Title = "Uczelnie"
-                },
-                new Breadcrumb
-                {
-                    Controller = "DepartmentsManagement",
-                    Action = "Departments",
-                    Title = university.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "SemestersManagement",
-                    Action = "Semesters",
-                    Title = department.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "LessonsManagement",
-                    Action = "Lessons",
-                    Title = semester.Number,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "LessonsManagement",
-                    Action = "Edit",
-                    Title = "Edycja przedmiotu",
-                    Params = parms
-                }
-            };
-        }
-        private void ConfigureDeleteBreadcrumbs(BLL.Models.Lesson lesson)
-        {
-            var department = lesson.SubjectDepartment.Department;
-            var university = department.University;
-            var semester = lesson.Semester;
-
-            var parms = new Dictionary<string, string>
-            {
-                { "universityId", university.UniversityId.ToString() },
-                { "departmentId", department.DepartmentId.ToString() },
-                { "semesterId", semester.SemesterId.ToString() },
-                { "lessonId", lesson.LessonId.ToString() },
-            };
-
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "UniversitiesManagement",
-                    Action = "Universities",
-                    Title = "Uczelnie"
-                },
-                new Breadcrumb
-                {
-                    Controller = "DepartmentsManagement",
-                    Action = "Departments",
-                    Title = university.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "SemestersManagement",
-                    Action = "Semesters",
-                    Title = department.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "LessonsManagement",
-                    Action = "Lessons",
-                    Title = semester.Number,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "LessonsManagement",
-                    Action = "Delete",
-                    Title = "Usuwanie przedmiotu",
-                    Params = parms
-                }
-            };
-        }
-
-
         // Create new subject and add it to the department
         public IActionResult Add(int semesterId, int departmentId)
         {
-            ConfigureAddBreadcrumbs(semesterId, departmentId);
+            var semester = _traversalService.GetSemester(semesterId);
+            if (semester == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "semestr o takim Id nie istnieje." });
+            }
+
+            var department = _traversalService.GetDepartment(departmentId);
+            if (department == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "wydział o takim Id nie istnieje." });
+            }
+
+            ConfigureAddBreadcrumbs(semester, department, department.University);
 
             var vm = new SubjectDepartmentViewModel // treat this as subject view model
             {
@@ -279,15 +100,20 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
         [HttpPost]
         public IActionResult Add(SubjectDepartmentViewModel vm)
         {
+            var semester = _traversalService.GetSemester(vm.SemesterId);
+            if (semester == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "semestr o takim Id nie istnieje." });
+            }
+
             var department = _traversalService.GetDepartment(vm.DepartmentId);
-
-            var subjectToAdd = new BLL.Models.Subject(vm.TitleOrFullName, vm.SubtitleOrAbbreviation, department);
-
-            var subjectDepartment = _managementService.AddSubject(subjectToAdd);
-
-            var lesson = new BLL.Models.Lesson(vm.SemesterId, subjectDepartment.SubjectDepartmentId);
-
-            var success = _managementService.AddLesson(lesson, subjectToAdd.Abbreviation, subjectDepartment);
+            if (department == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "wydział o takim Id nie istnieje." });
+            }
+            
+            var lesson = new BLL.Models.Lesson(vm.SemesterId, department, vm.TitleOrFullName, vm.SubtitleOrAbbreviation);
+            var success = _managementService.AddLesson(lesson);
 
             if (!success)
             {
@@ -302,16 +128,20 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
         public IActionResult Edit(int lessonId)
         {
             var lessonToEdit = _traversalService.GetLesson(lessonId);
+            if (lessonToEdit == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "przedmiot o takim Id nie istnieje." });
+            }
 
-            ConfigureEditBreadcrumbs(lessonToEdit);
+            ConfigureEditBreadcrumbs(lessonToEdit.Semester, lessonToEdit.Department, lessonToEdit.Department.University);
 
             var vm = new LessonViewModel
             {
                 Id = lessonToEdit.LessonId,
-                TitleOrFullName = lessonToEdit.SubjectDepartment.Subject.Name,
-                SubtitleOrAbbreviation = lessonToEdit.SubjectDepartment.Subject.Abbreviation,
+                TitleOrFullName = lessonToEdit.Subject.Name,
+                SubtitleOrAbbreviation = lessonToEdit.Subject.Abbreviation,
                 SemesterId = lessonToEdit.SemesterId,
-                DepartmentId = lessonToEdit.SubjectDepartment.DepartmentId
+                DepartmentId = lessonToEdit.DepartmentId
             };
 
             return View(vm);
@@ -321,6 +151,11 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
         public IActionResult Edit(LessonViewModel vm)
         {
             var lessonToEdit = _traversalService.GetLesson(vm.Id);
+            if (lessonToEdit == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "przedmiot o takim Id nie istnieje." });
+            }
+
             lessonToEdit.Update(vm.TitleOrFullName, vm.SubtitleOrAbbreviation);
 
             _managementService.UpdateLesson(lessonToEdit);
@@ -333,16 +168,16 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
         {
             var lessonToDelete = _traversalService.GetLesson(lessonId);
 
-            ConfigureDeleteBreadcrumbs(lessonToDelete);
+            ConfigureDeleteBreadcrumbs(lessonToDelete.Semester, lessonToDelete.Department, lessonToDelete.Department.University);
 
             if (!confirmation)
             {
                 var vm = new LessonViewModel
                 {
                     Id = lessonId,
-                    TitleOrFullName = lessonToDelete.SubjectDepartment.Subject.Name,
+                    TitleOrFullName = lessonToDelete.Subject.Name,
                     SemesterId = lessonToDelete.SemesterId,
-                    DepartmentId = lessonToDelete.SubjectDepartment.DepartmentId,
+                    DepartmentId = lessonToDelete.DepartmentId,
                     MaterialsCount = lessonToDelete.MaterialsCount
                 };
 
@@ -360,8 +195,111 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
                 // actually delete
                 _managementService.DeleteLesson(lessonToDelete.LessonId);
 
-                return RedirectToAction("Lessons", new { semesterId = lessonToDelete.SemesterId, departmentId = lessonToDelete.SubjectDepartment.DepartmentId });
+                return RedirectToAction("Lessons", new { semesterId = lessonToDelete.SemesterId, departmentId = lessonToDelete.DepartmentId });
             }
         }
+
+        #region breadcrumbs
+        private void ConfigureListBreadcrumbs(BLL.Models.Semester semester, BLL.Models.Department department, BLL.Models.University university)
+        {
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "UniversitiesManagement",
+                    Action = "Universities",
+                    Title = "Uczelnie"
+                },
+                new Breadcrumb
+                {
+                    Controller = "DepartmentsManagement",
+                    Action = "Departments",
+                    Title = university.Abbreviation,
+                    Params = new Dictionary<string, string>
+                    {
+                        { "universityId", university.UniversityId.ToString() }
+                    }
+                },
+                new Breadcrumb
+                {
+                    Controller = "SemestersManagement",
+                    Action = "Semesters",
+                    Title = department.Abbreviation,
+                    Params = new Dictionary<string, string>
+                    {
+                        { "departmentId", department.DepartmentId.ToString() },
+                    }
+                },
+                new Breadcrumb
+                {
+                    Controller = "LessonsManagement",
+                    Action = "Lessons",
+                    Title = semester.Number,
+                    Params = new Dictionary<string, string>
+                    {
+                        { "semesterId", semester.SemesterId.ToString() },
+                        { "departmentId", department.DepartmentId.ToString() }
+                    }
+                }
+            };
+        }
+
+        private void ConfigureAddBreadcrumbs(BLL.Models.Semester semester, BLL.Models.Department department, BLL.Models.University university)
+        {
+            ConfigureListBreadcrumbs(semester, department, university);
+
+            ViewBag.Breadcrumbs.Add(
+                new Breadcrumb
+                {
+                    Controller = "LessonsManagement",
+                    Action = "Add",
+                    Title = "Dodawanie przedmiotu",
+                    Params = new Dictionary<string, string>
+                    {
+                        { "semesterId", semester.SemesterId.ToString() },
+                        { "departmentId", department.DepartmentId.ToString() }
+                    }
+                }
+            );
+        }
+
+        private void ConfigureEditBreadcrumbs(BLL.Models.Semester semester, BLL.Models.Department department, BLL.Models.University university)
+        {
+            ConfigureListBreadcrumbs(semester, department, university);
+
+            ViewBag.Breadcrumbs.Add(
+                new Breadcrumb
+                {
+                    Controller = "LessonsManagement",
+                    Action = "Edit",
+                    Title = "Edycja przedmiotu",
+                    Params = new Dictionary<string, string>
+                    {
+                        { "semesterId", semester.SemesterId.ToString() },
+                        { "departmentId", department.DepartmentId.ToString() }
+                    }
+                }
+            );
+        }
+
+        private void ConfigureDeleteBreadcrumbs(BLL.Models.Semester semester, BLL.Models.Department department, BLL.Models.University university)
+        {
+            ConfigureListBreadcrumbs(semester, department, university);
+
+            ViewBag.Breadcrumbs.Add(
+                new Breadcrumb
+                {
+                    Controller = "LessonsManagement",
+                    Action = "Delete",
+                    Title = "Usuwanie przedmiotu",
+                    Params = new Dictionary<string, string>
+                    {
+                        { "semesterId", semester.SemesterId.ToString() },
+                        { "departmentId", department.DepartmentId.ToString() }
+                    }
+                }
+            );
+        }
+        #endregion
     }
 }

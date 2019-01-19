@@ -97,13 +97,13 @@ namespace acaShare.MVC.Areas.Main.ViewComponents
         private string GetFavoriteMaterialBreadcrumbsPath(Material material)
         {
             var lesson = material.Lesson;
-            var subjectDepartment = lesson.SubjectDepartment;
-            var department = subjectDepartment.Department;
+            var subject = lesson.Subject;
+            var department = lesson.Department;
             var university = department.University;
             var semester = lesson.Semester;
             
             return $"{university.Abbreviation} -> {department.Abbreviation} -> {semester.Number} -> " +
-                   $"{subjectDepartment.Subject.Abbreviation} -> {material.Name}";
+                   $"{subject.Abbreviation} -> {material.Name}";
         }
     }
 }

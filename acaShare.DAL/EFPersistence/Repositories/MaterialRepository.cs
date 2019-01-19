@@ -43,10 +43,9 @@ namespace acaShare.DAL.EFPersistence.Repositories
                 .Include(m => m.Approver)
                 .Include(m => m.Lesson)
                 .Include(m => m.Lesson.Semester)
-                .Include(m => m.Lesson.SubjectDepartment)
-                .Include(m => m.Lesson.SubjectDepartment.Subject)
-                .Include(m => m.Lesson.SubjectDepartment.Department)
-                .Include(m => m.Lesson.SubjectDepartment.Department.University)
+                .Include(m => m.Lesson.Subject)
+                .Include(m => m.Lesson.Department)
+                    .ThenInclude(m => m.University)
                 .FirstOrDefault(m => m.MaterialId == materialId);
         }
 
@@ -87,10 +86,9 @@ namespace acaShare.DAL.EFPersistence.Repositories
                 .Include(m => m.Creator)
                 .Include(m => m.Lesson)
                 .Include(m => m.Lesson.Semester)
-                .Include(m => m.Lesson.SubjectDepartment)
-                .Include(m => m.Lesson.SubjectDepartment.Subject)
-                .Include(m => m.Lesson.SubjectDepartment.Department)
-                .Include(m => m.Lesson.SubjectDepartment.Department.University);
+                .Include(m => m.Lesson.Subject)
+                .Include(m => m.Lesson.Department)
+                .Include(m => m.Lesson.Department.University);
         }
 
         public ICollection<ChangeReason> GetChangeReasons(ChangeType changeType)

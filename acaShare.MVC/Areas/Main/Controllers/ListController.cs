@@ -200,18 +200,16 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 return RedirectToAction("ResourceNotFound", "Error", new { error = "wydział o takim Id nie istnieje." });
             }
 
-            ConfigureLessonsBreadcrumbs(semester, department);
-
-            var subjectDepartmentAssociationResults = _service.GetSubjectDepartmentAssociationResultsForDepartment(departmentId);
-
-            var lessons = _service.GetLessons(semesterId, subjectDepartmentAssociationResults);
+            ConfigureLessonsBreadcrumbs(semester, department, department.University);
+            
+            var lessons = _service.GetLessons(semester, department);
 
             var viewModels = lessons.Select(l =>
                 new LessonViewModel
                 {
                     Id = l.LessonId,
-                    TitleOrFullName = l.SubjectDepartment.Subject.Name,
-                    SubtitleOrAbbreviation = l.SubjectDepartment.Subject.Abbreviation
+                    TitleOrFullName = l.Subject.Name,
+                    SubtitleOrAbbreviation = l.Subject.Abbreviation
                 }
             ).ToList();
 
@@ -226,10 +224,8 @@ namespace acaShare.MVC.Areas.Main.Controllers
             return View(vm);
         }
 
-        private void ConfigureLessonsBreadcrumbs(BLL.Models.Semester semester, BLL.Models.Department department)
+        private void ConfigureLessonsBreadcrumbs(BLL.Models.Semester semester, BLL.Models.Department department, BLL.Models.University university)
         {
-            var university = _service.GetUniversity(department.University.UniversityId);
-
             var parms = new Dictionary<string, string>
             {
                 { "universityId", university.UniversityId.ToString() },

@@ -22,14 +22,9 @@ namespace acaShare.DAL.EFPersistence.Repositories
             return departments;
         }
 
-        public bool DoesUniversityAlreadyExist(string name)
+        public bool DoesUniversityAlreadyExist(University university)
         {
-            return _dbSet.Any(u => u.Name == name);
-        }
-        
-        public bool IsAbbreviationAlreadyTaken(string abbreviation)
-        {
-            return _dbSet.Any(u => u.Abbreviation == abbreviation);
+            return _dbSet.Any(u => (u.Name == university.Name || u.Abbreviation == university.Abbreviation) && u.UniversityId != university.UniversityId);
         }
     }
 }

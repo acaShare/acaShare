@@ -48,7 +48,7 @@ namespace acaShare.WebAPI.Controllers.v1.UniversityRelated
         [HttpGet]
         public ActionResult<IEnumerable<Lesson>> Get()
         {
-            return _traversalService.GetLessons().ToList();
+            return null;// _traversalService.GetLessons().ToList();
         }
 
         [HttpGet("{id}")]

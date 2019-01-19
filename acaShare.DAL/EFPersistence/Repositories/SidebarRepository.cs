@@ -80,10 +80,9 @@ namespace acaShare.DAL.EFPersistence.Repositories
                 .Select(f => f.Material)
                 .Include(m => m.Lesson)
                 .Include(m => m.Lesson.Semester)
-                .Include(m => m.Lesson.SubjectDepartment)
-                .Include(m => m.Lesson.SubjectDepartment.Subject)
-                .Include(m => m.Lesson.SubjectDepartment.Department)
-                .Include(m => m.Lesson.SubjectDepartment.Department.University)
+                .Include(m => m.Lesson.Subject)
+                .Include(m => m.Lesson.Department)
+                .Include(m => m.Lesson.Department.University)
                 .ToList();
         }
     }

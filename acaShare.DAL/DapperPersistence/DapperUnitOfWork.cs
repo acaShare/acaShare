@@ -18,7 +18,7 @@ namespace acaShare.DAL.DapperPersistence
         private IDbTransaction _transaction;
 
         // Repositories
-        private ILessonRepository _lessons;
+        //private ILessonRepository _lessons;
         //public ILessonRepository Lessons => _lessons ?? new LessonRepository(_transaction);
 
         public DapperUnitOfWork(IOptions<AcaShareConfiguration> options)
@@ -37,7 +37,7 @@ namespace acaShare.DAL.DapperPersistence
             {
                 _transaction.Commit();
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 _transaction.Rollback();
                 throw;
@@ -52,7 +52,7 @@ namespace acaShare.DAL.DapperPersistence
 
         private void ResetRepositories()
         {
-            _lessons = null;
+            //_lessons = null;
         }
 
         public void Dispose()

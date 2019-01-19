@@ -24,31 +24,31 @@ namespace acaShare.WebAPI.Controllers.v1.UniversityRelated
         [HttpGet]
         public ActionResult<IEnumerable<Subject>> Get()
         {
-            return _traversalService.GetSubjects();
+            return null;// _traversalService.GetSubjects();
         }
 
         [HttpGet("{id}")]
         public ActionResult<Subject> Get(int id)
         {
-            return _traversalService.GetSubject(id);
+            return null;//_traversalService.GetSubject(id);
         }
 
         [HttpPost]
         public void Post(Subject subject)
         {
-            _managementService.AddSubject(subject);
+            //_managementService.AddSubjectIfNotExistsOrGetOtherwise(subject);
         }
 
         [HttpDelete]
         public void Delete(int id)
         {
-            _managementService.DeleteSubject(id);
+            //_managementService.DeleteSubject(id);
         }
 
         [HttpPut]
         public void Update(Subject subject)
         {
-            _managementService.UpdateSubject(subject);
+           // _managementService.UpdateSubject(subject);
         }
     }
 }
