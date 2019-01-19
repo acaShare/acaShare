@@ -30,7 +30,7 @@ namespace acaShare.DAL.EFPersistence.Repositories
         {
             return _dbSet
                 .Include(l => l.Subject)
-                .Where(l => l.DepartmentId == lesson.DepartmentId && l.SemesterId == lesson.SemesterId)
+                .Where(l => l.DepartmentId == lesson.DepartmentId)
                 .Any(l => l.Subject.Name == lesson.Subject.Name || l.Subject.Abbreviation == lesson.Subject.Abbreviation);
         }
 

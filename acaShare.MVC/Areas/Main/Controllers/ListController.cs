@@ -25,7 +25,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
 
         public IActionResult AvailableUniversities()
         {
-            ConfigureUniversitiesBreadcrumbs();
+            ConfigureListBreadcrumbs();
 
             var universities = _service.GetUniversities();
 
@@ -47,30 +47,15 @@ namespace acaShare.MVC.Areas.Main.Controllers
             return View(vm);
         }
 
-        private void ConfigureUniversitiesBreadcrumbs()
-        {
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "AvailableUniversities",
-                    Title = "Uczelnie"
-                }
-            };
-        }
-
-
         public IActionResult Departments(int universityId)
         {
             var university = _service.GetUniversity(universityId);
-
             if (university == null)
             {
                 return RedirectToAction("ResourceNotFound", "Error", new { error = "uczelnia o takim Id nie istnieje." });
             }
 
-            ConfigureDepartmentsBreadcrumbs(university);
+            ConfigureDepartmentsBreadcrumbs(university, includeTitleDescription: true);
 
             var departments = _service.GetDepartmentsFromUniversity(universityId);
 
@@ -93,32 +78,6 @@ namespace acaShare.MVC.Areas.Main.Controllers
             return View(vm);
         }
 
-        private void ConfigureDepartmentsBreadcrumbs(BLL.Models.University university)
-        {
-            var parms = new Dictionary<string, string>
-            {
-                { "universityId", university.UniversityId.ToString() }
-            };
-
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "AvailableUniversities",
-                    Title = "Uczelnie"
-                },
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "Departments",
-                    Title = university.Abbreviation + " - Wydziały",
-                    Params = parms
-                }
-            };
-        }
-
-
         public IActionResult Semesters(int departmentId)
         {
             var department = _service.GetDepartment(departmentId);
@@ -127,7 +86,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 return RedirectToAction("ResourceNotFound", "Error", new { error = "wydział o takim Id nie istnieje." });
             }
 
-            ConfigureSemestersBreadcrumbs(department);
+            ConfigureSemestersBreadcrumbs(department, includeTitleDescription: true);
 
             var semesters = _service.GetSemesters();
 
@@ -149,42 +108,6 @@ namespace acaShare.MVC.Areas.Main.Controllers
 
             return View(vm);
         }
-
-        private void ConfigureSemestersBreadcrumbs(BLL.Models.Department department)
-        {
-            var university = _service.GetUniversity(department.University.UniversityId);
-
-            var parms = new Dictionary<string, string>
-            {
-                { "universityId", university.UniversityId.ToString() },
-                { "departmentId", department.DepartmentId.ToString() },
-            };
-
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "AvailableUniversities",
-                    Title = "Uczelnie"
-                },
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "Departments",
-                    Title = university.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "Semesters",
-                    Title = department.Abbreviation + " - Semestry",
-                    Params = parms
-                }
-            };
-        }
-
 
         public IActionResult Lessons(int semesterId, int departmentId)
         {
@@ -223,16 +146,16 @@ namespace acaShare.MVC.Areas.Main.Controllers
 
             return View(vm);
         }
-
-        private void ConfigureLessonsBreadcrumbs(BLL.Models.Semester semester, BLL.Models.Department department, BLL.Models.University university)
+        
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
         {
-            var parms = new Dictionary<string, string>
-            {
-                { "universityId", university.UniversityId.ToString() },
-                { "departmentId", department.DepartmentId.ToString() },
-                { "semesterId", semester.SemesterId.ToString() },
-            };
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
 
+        #region breadcrumbs
+        private void ConfigureListBreadcrumbs()
+        {
             ViewBag.Breadcrumbs = new List<Breadcrumb>
             {
                 new Breadcrumb
@@ -240,36 +163,64 @@ namespace acaShare.MVC.Areas.Main.Controllers
                     Controller = "List",
                     Action = "AvailableUniversities",
                     Title = "Uczelnie"
-                },
+                }
+            };
+        }
+
+        private void ConfigureDepartmentsBreadcrumbs(BLL.Models.University university, bool includeTitleDescription)
+        {
+            ConfigureListBreadcrumbs();
+
+            ViewBag.Breadcrumbs.Add(
                 new Breadcrumb
                 {
                     Controller = "List",
                     Action = "Departments",
-                    Title = university.Abbreviation,
-                    Params = parms
-                },
+                    Title = university.Abbreviation + (includeTitleDescription ? " - Semestry" : ""),
+                    Params = new Dictionary<string, string>
+                    {
+                        { "universityId", university.UniversityId.ToString() }
+                    }
+                }
+            );
+        }
+
+        private void ConfigureSemestersBreadcrumbs(BLL.Models.Department department, bool includeTitleDescription)
+        {
+            ConfigureDepartmentsBreadcrumbs(department.University, includeTitleDescription: false);
+
+            ViewBag.Breadcrumbs.Add(
                 new Breadcrumb
                 {
                     Controller = "List",
                     Action = "Semesters",
-                    Title = department.Abbreviation,
-                    Params = parms
-                },
+                    Title = department.Abbreviation + (includeTitleDescription ? " - Semestry" : ""),
+                    Params = new Dictionary<string, string>
+                    {
+                        { "departmentId", department.DepartmentId.ToString() }
+                    }
+                }
+            );
+        }
+
+        private void ConfigureLessonsBreadcrumbs(BLL.Models.Semester semester, BLL.Models.Department department, BLL.Models.University university)
+        {
+            ConfigureSemestersBreadcrumbs(department, includeTitleDescription: false);
+
+            ViewBag.Breadcrumbs.Add(
                 new Breadcrumb
                 {
                     Controller = "List",
                     Action = "Lessons",
                     Title = semester.Number + " - Przedmioty",
-                    Params = parms
+                    Params = new Dictionary<string, string>
+                    {
+                        { "semesterId", semester.SemesterId.ToString() },
+                        { "departmentId", department.DepartmentId.ToString() }
+                    }
                 }
-            };
+            );
         }
-
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        #endregion
     }
 }

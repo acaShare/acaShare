@@ -60,130 +60,6 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
             return View(vm);
         }
 
-        private void ConfigureListBreadcrumbs(BLL.Models.University university)
-        {
-            var parms = new Dictionary<string, string>
-            {
-                { "universityId", university.UniversityId.ToString() }
-            };
-
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "UniversitiesManagement",
-                    Action = "Universities",
-                    Title = "Uczelnie"
-                },
-                new Breadcrumb
-                {
-                    Controller = "DepartmentsManagement",
-                    Action = "Departments",
-                    Title = university.Abbreviation,
-                    Params = parms
-                }
-            };
-        }
-
-        private void ConfigureAddBreadcrumbs(BLL.Models.University university)
-        {
-            var parms = new Dictionary<string, string>
-            {
-                { "universityId", university.UniversityId.ToString() }
-            };
-
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "UniversitiesManagement",
-                    Action = "Universities",
-                    Title = "Uczelnie"
-                },
-                new Breadcrumb
-                {
-                    Controller = "DepartmentsManagement",
-                    Action = "Departments",
-                    Title = university.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "DepartmentsManagement",
-                    Action = "Add",
-                    Title = "Dodawanie wydziału",
-                    Params = parms
-                }
-            };
-        }
-
-        private void ConfigureEditBreadcrumbs(int departmentId, int universityId)
-        {
-            var university = _traversalService.GetUniversity(universityId);
-
-            var parms = new Dictionary<string, string>
-            {
-                { "universityId", universityId.ToString() }
-            };
-
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "UniversitiesManagement",
-                    Action = "Universities",
-                    Title = "Uczelnie"
-                },
-                new Breadcrumb
-                {
-                    Controller = "DepartmentsManagement",
-                    Action = "Departments",
-                    Title = university.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "DepartmentsManagement",
-                    Action = "Edit",
-                    Title = "Edycja wydziału",
-                    Params = new Dictionary<string, string>() { { "departmentId", departmentId.ToString() } }
-                }
-            };
-        }
-
-        private void ConfigureDeleteBreadcrumbs(int departmentId, int universityId)
-        {
-            var university = _traversalService.GetUniversity(universityId);
-
-            var parms = new Dictionary<string, string>
-            {
-                { "universityId", universityId.ToString() }
-            };
-
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "UniversitiesManagement",
-                    Action = "Universities",
-                    Title = "Uczelnie"
-                },
-                new Breadcrumb
-                {
-                    Controller = "DepartmentsManagement",
-                    Action = "Departments",
-                    Title = university.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "DepartmentsManagement",
-                    Action = "Delete",
-                    Title = "Usuwanie wydziału",
-                    Params = new Dictionary<string, string>() { { "departmentId", departmentId.ToString() } }
-                }
-            };
-        }
 
         public IActionResult Add(int universityId)
         {
@@ -239,7 +115,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
                 return RedirectToAction("ResourceNotFound", "Error", new { error = "wydział o podanym Id nie istnieje." });
             }
 
-            ConfigureEditBreadcrumbs(departmentId, departmentToEdit.UniversityId);
+            ConfigureEditBreadcrumbs(departmentToEdit);
 
             var vm = new DepartmentViewModel
             {
@@ -274,7 +150,13 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
 
             departmentToEdit.Update(vm.TitleOrFullName, vm.SubtitleOrAbbreviation, university);
 
-            _managementService.UpdateDepartment(departmentToEdit);
+            bool success = _managementService.UpdateDepartment(departmentToEdit);
+
+            if (!success)
+            {
+                ModelState.AddModelError("ERROR", "Wydział o takiej nazwie lub skrócie istnieje już na tej uczelni");
+                return View(vm);
+            }
 
             return RedirectToAction("Departments", new { universityId = vm.UniversityId });
         }
@@ -288,7 +170,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
                 return RedirectToAction("ResourceNotFound", "Error", new { error = "wydział o podanym Id nie istnieje." });
             }
 
-            ConfigureDeleteBreadcrumbs(departmentId, departmentToDelete.UniversityId);
+            ConfigureDeleteBreadcrumbs(departmentToDelete);
 
             if (!confirmation)
             {
@@ -304,23 +186,99 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
             else
             {
                 // First - delete materials due to database constraints betwee Lesson and Material
-                foreach (var sd in departmentToDelete.SubjectDepartment)
+                foreach (var lesson in departmentToDelete.Lessons)
                 {
-                    foreach (var lesson in sd.Lessons)
+                    foreach (var materialToDelete in lesson.Materials)
                     {
-                        foreach (var materialToDelete in lesson.Materials)
-                        {
-                            _filesManagement.DeleteWholeMaterialFolder(materialToDelete.MaterialId);
-                            _materialsService.DeleteMaterial(materialToDelete);
-                        }
+                        _filesManagement.DeleteWholeMaterialFolder(materialToDelete.MaterialId);
+                        _materialsService.DeleteMaterial(materialToDelete);
                     }
                 }
-
+                
                 // actually delete
                 _managementService.DeleteDepartment(departmentToDelete);
 
                 return RedirectToAction("Departments", new { universityId = departmentToDelete.UniversityId });
             }
         }
+
+        #region breadcrumbs
+        private void ConfigureListBreadcrumbs(BLL.Models.University university)
+        {
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "UniversitiesManagement",
+                    Action = "Universities",
+                    Title = "Uczelnie"
+                },
+                new Breadcrumb
+                {
+                    Controller = "DepartmentsManagement",
+                    Action = "Departments",
+                    Title = university.Abbreviation,
+                    Params = new Dictionary<string, string>
+                    {
+                        { "universityId", university.UniversityId.ToString() }
+                    }
+                }
+            };
+        }
+
+        private void ConfigureAddBreadcrumbs(BLL.Models.University university)
+        {
+            ConfigureListBreadcrumbs(university);
+
+            ViewBag.Breadcrumbs.Add(
+                new Breadcrumb
+                {
+                    Controller = "DepartmentsManagement",
+                    Action = "Add",
+                    Title = "Dodawanie wydziału",
+                    Params = new Dictionary<string, string>
+                    {
+                        { "universityId", university.UniversityId.ToString() }
+                    }
+                }
+            );
+        }
+
+        private void ConfigureEditBreadcrumbs(BLL.Models.Department department)
+        {
+            ConfigureListBreadcrumbs(department.University);
+
+            ViewBag.Breadcrumbs.Add(
+                new Breadcrumb
+                {
+                    Controller = "DepartmentsManagement",
+                    Action = "Edit",
+                    Title = "Edycja wydziału",
+                    Params = new Dictionary<string, string>
+                    {
+                        { "departmentId", department.DepartmentId.ToString() }
+                    }
+                }
+            );
+        }
+
+        private void ConfigureDeleteBreadcrumbs(BLL.Models.Department department)
+        {
+            ConfigureListBreadcrumbs(department.University);
+
+            ViewBag.Breadcrumbs.Add(
+                new Breadcrumb
+                {
+                    Controller = "DepartmentsManagement",
+                    Action = "Delete",
+                    Title = "Usuwanie wydziału",
+                    Params = new Dictionary<string, string>
+                    {
+                        { "departmentId", department.DepartmentId.ToString() }
+                    }
+                }
+            );
+        }
+        #endregion
     }
 }

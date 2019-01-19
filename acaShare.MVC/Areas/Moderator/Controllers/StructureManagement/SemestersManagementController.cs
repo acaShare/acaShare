@@ -23,7 +23,13 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
 
         public IActionResult Semesters(int departmentId)
         {
-            ConfigureBreadcrumbs(departmentId);
+            var department = _traversalService.GetDepartment(departmentId);
+            if (department == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "wydział o podanym Id nie istnieje." });
+            }
+
+            ConfigureBreadcrumbs(department);
 
             var semesters = _traversalService.GetSemesters();
 
@@ -46,16 +52,9 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
             return View(vm);
         }
 
-        private void ConfigureBreadcrumbs(int departmentId)
+        private void ConfigureBreadcrumbs(BLL.Models.Department department)
         {
-            var department = _traversalService.GetDepartment(departmentId);
-            var university = _traversalService.GetUniversity(department.University.UniversityId);
-
-            var parms = new Dictionary<string, string>
-            {
-                { "universityId", university.UniversityId.ToString() },
-                { "departmentId", department.DepartmentId.ToString() },
-            };
+            var university = department.University;
 
             ViewBag.Breadcrumbs = new List<Breadcrumb>
             {
@@ -70,14 +69,20 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
                     Controller = "DepartmentsManagement",
                     Action = "Departments",
                     Title = university.Abbreviation,
-                    Params = parms
+                    Params = new Dictionary<string, string>
+                    {
+                        { "universityId", university.UniversityId.ToString() }
+                    }
                 },
                 new Breadcrumb
                 {
                     Controller = "SemestersManagement",
                     Action = "Semesters",
                     Title = department.Abbreviation,
-                    Params = parms
+                    Params = new Dictionary<string, string>
+                    {
+                        { "departmentId", department.DepartmentId.ToString() }
+                    }
                 }
             };
         }

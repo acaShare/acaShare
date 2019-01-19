@@ -117,7 +117,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
 
             if (!success)
             {
-                ModelState.AddModelError("ERROR", "Przedmiot o takiej nazwie lub skrócie istnieje już na tym semestrze w tym wydziale");
+                ModelState.AddModelError("ERROR", "Przedmiot o takiej nazwie lub skrócie istnieje już na tym wydziale");
                 return View(vm);
             }
 
@@ -133,7 +133,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
                 return RedirectToAction("ResourceNotFound", "Error", new { error = "przedmiot o takim Id nie istnieje." });
             }
 
-            ConfigureEditBreadcrumbs(lessonToEdit.Semester, lessonToEdit.Department, lessonToEdit.Department.University);
+            ConfigureEditBreadcrumbs(lessonToEdit);
 
             var vm = new LessonViewModel
             {
@@ -157,8 +157,14 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
             }
 
             lessonToEdit.Update(vm.TitleOrFullName, vm.SubtitleOrAbbreviation);
+            
+            bool success = _managementService.UpdateLesson(lessonToEdit);
 
-            _managementService.UpdateLesson(lessonToEdit);
+            if (!success)
+            {
+                ModelState.AddModelError("ERROR", "Przedmiot o takiej nazwie lub skrócie istnieje już na tym wydziale");
+                return View(vm);
+            }
 
             return RedirectToAction("Lessons", new { semesterId = vm.SemesterId, departmentId = vm.DepartmentId });
         }
@@ -168,7 +174,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
         {
             var lessonToDelete = _traversalService.GetLesson(lessonId);
 
-            ConfigureDeleteBreadcrumbs(lessonToDelete.Semester, lessonToDelete.Department, lessonToDelete.Department.University);
+            ConfigureDeleteBreadcrumbs(lessonToDelete);
 
             if (!confirmation)
             {
@@ -263,9 +269,9 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
             );
         }
 
-        private void ConfigureEditBreadcrumbs(BLL.Models.Semester semester, BLL.Models.Department department, BLL.Models.University university)
+        private void ConfigureEditBreadcrumbs(BLL.Models.Lesson lesson)
         {
-            ConfigureListBreadcrumbs(semester, department, university);
+            ConfigureListBreadcrumbs(lesson.Semester, lesson.Department, lesson.Department.University);
 
             ViewBag.Breadcrumbs.Add(
                 new Breadcrumb
@@ -275,16 +281,15 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
                     Title = "Edycja przedmiotu",
                     Params = new Dictionary<string, string>
                     {
-                        { "semesterId", semester.SemesterId.ToString() },
-                        { "departmentId", department.DepartmentId.ToString() }
+                        { "lessonId", lesson.LessonId.ToString() }
                     }
                 }
             );
         }
 
-        private void ConfigureDeleteBreadcrumbs(BLL.Models.Semester semester, BLL.Models.Department department, BLL.Models.University university)
+        private void ConfigureDeleteBreadcrumbs(BLL.Models.Lesson lesson)
         {
-            ConfigureListBreadcrumbs(semester, department, university);
+            ConfigureListBreadcrumbs(lesson.Semester, lesson.Department, lesson.Department.University);
 
             ViewBag.Breadcrumbs.Add(
                 new Breadcrumb
@@ -294,8 +299,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
                     Title = "Usuwanie przedmiotu",
                     Params = new Dictionary<string, string>
                     {
-                        { "semesterId", semester.SemesterId.ToString() },
-                        { "departmentId", department.DepartmentId.ToString() }
+                        { "lessonId", lesson.LessonId.ToString() }
                     }
                 }
             );

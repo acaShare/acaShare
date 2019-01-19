@@ -13,12 +13,10 @@ namespace acaShare.MVC.Areas.Main.ViewComponents
     public class SidebarViewComponent : ViewComponent
     {
         private readonly ISidebarService _sidebarService;
-        private readonly IUserService _userService;
 
-        public SidebarViewComponent(ISidebarService sidebarService, IUserService userService)
+        public SidebarViewComponent(ISidebarService sidebarService)
         {
             _sidebarService = sidebarService;
-            _userService = userService;
         }
 
         public IViewComponentResult Invoke(int? materialId, string loggedUserId)

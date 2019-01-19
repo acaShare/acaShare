@@ -25,7 +25,7 @@ namespace acaShare.DAL.EFPersistence.Repositories
         
         public ICollection<Comment> GetComments(int materialId)
         {
-            return _comments.Where(c => c.MaterialId == materialId).ToList();
+            return _comments.Include(c => c.User).Where(c => c.MaterialId == materialId).ToList();
         }
 
         public ICollection<LastActivity> GetLastActivities()
