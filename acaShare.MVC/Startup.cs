@@ -49,6 +49,7 @@ namespace acaShare.MVC
             services.AddSingleton<IFormFilesManagement>(f => new FormFilesManagement(HostingEnvironment));
             services.AddSingleton<IFilesValidator, FilesValidator>();
             services.AddScoped<ValidateMaterial>();
+            services.AddScoped<IMainModeratorService, MainModeratorService>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {

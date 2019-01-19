@@ -33,8 +33,7 @@ namespace acaShare.DAL.Configuration
         public virtual DbSet<SubjectDepartment> SubjectDepartment { get; set; }
         public virtual DbSet<University> University { get; set; }
         public virtual DbSet<User> User { get; set; }
-        public virtual DbSet<UserInUniversity> UserInUniversity { get; set; }
-        public virtual DbSet<UserType> UserType { get; set; }
+        public virtual DbSet<UniversityMainModerator> UniversityMainModerator { get; set; }
        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -421,47 +420,25 @@ namespace acaShare.DAL.Configuration
                     .IsUnique();
             });
 
-            modelBuilder.Entity<UserInUniversity>(entity =>
+            modelBuilder.Entity<UniversityMainModerator>(entity =>
             {
                 entity.HasKey(e => new { e.UserId, e.UniversityId });
 
                 entity.HasIndex(e => new { e.UserId, e.UniversityId })
-                    .HasName("UQ_UserInUniversity")
+                    .HasName("UQ_UniversityMainModerator")
                     .IsUnique();
-
-                entity.Property(e => e.JoinDate).HasColumnType("datetime");
-
-                entity.HasOne(d => d.Type)
-                    .WithMany(p => p.UsersInUniversity)
-                    .HasForeignKey(d => d.TypeId)
-                    .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("UserUniversity_UserType");
 
                 entity.HasOne(d => d.University)
                     .WithMany(p => p.UsersInUniversity)
                     .HasForeignKey(d => d.UniversityId)
                     .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("UserUniversity_University");
+                    .HasConstraintName("UniversityMainModerator_University");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UsersInUniversity)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("UserUniversity_User");
-            });
-
-            modelBuilder.Entity<UserType>(entity =>
-            {
-                entity.HasKey(e => e.TypeId);
-
-                entity.HasIndex(e => e.Name)
-                    .HasName("UQ_UserType_Name")
-                    .IsUnique();
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasConstraintName("UniversityMainModerator_User");
             });
 
             modelBuilder.Entity<IdentityRole>().HasData(
