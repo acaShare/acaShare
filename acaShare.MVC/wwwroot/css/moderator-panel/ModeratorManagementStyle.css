@@ -24,3 +24,7 @@ th, td {
     max-height: 69vh;
     overflow-y: auto;
 }
+
+select {
+    display: block;
+}

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using acaShare.BLL.Models;
+using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 
 namespace acaShare.MVC.Areas.Moderator.Models
 {
@@ -11,6 +13,14 @@ namespace acaShare.MVC.Areas.Moderator.Models
         public IdentityUser[] Moderators { get; set; }
 
         public IdentityUser[] Members { get; set; }
+
+        public IList<University> Universities { get; set; }
+
+        public IList<UniversityMainModerator> UniversitiesMainModerators { get; set; }
+
+        public int UniversityId { get; set; }
+
+        public string UserId { get; set; }
 
         public DisplayUserViewModel DefaultUser => new DisplayUserViewModel();
     }

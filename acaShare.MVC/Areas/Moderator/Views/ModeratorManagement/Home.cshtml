@@ -4,6 +4,9 @@
 
 @inject UserManager<IdentityUser> userManager
 
+@section ModeratorManagementScripts {
+    <script src="~/js/moderator-management.js"></script>
+}
 @{
     ViewData["Title"] = "Zarządzanie Moderatorami";
     var currentUser = await userManager.GetUserAsync(User);
@@ -41,6 +44,7 @@
             <tr>
                 <th>@Html.DisplayNameFor(model => model.DefaultUser.UserName)</th>
                 <th>@Html.DisplayNameFor(model => model.DefaultUser.Email)</th>
+                <th>Uni</th>
                 <th>Opcje</th>
             </tr>
         </thead>
@@ -50,6 +54,20 @@
             <tr>
                 <td>@user.UserName</td>
                 <td>@user.Email</td>
+                <td>
+                    <form asp-action="AssignModeratorToUniversity" method="post">
+                            <select asp-for="UniversityId"
+                                    asp-items="@(new SelectList(Model.Universities, "UniversityId", "Name"))">
+                                <option value="0">Wybierz Uczelnię...</option>
+                            </select>
+                            <input name="userId"  asp-for="@user.Id" type="hidden" />
+                            @*@for (int i = 0; i < Model.Universities.Count; i++)
+                            {
+                                <input asp-for="Universities[i].UniversityId" type="hidden" />
+                            }*@
+                            <button type="submit">Wybierz Uczelnię</button>
+                    </form>
+                </td>
                 <td>
                     <img style="visibility: hidden;" src="~/images/one-arrow-up.png" />
                     <img style="visibility: hidden;" src="~/images/two-arrows-up.png" />
@@ -61,6 +79,23 @@
         }
     </table>
     }
+
+    @*<script type="text/javascript">
+        @foreach(var a in Model.UniversitiesMainModerators)
+        {
+            @: var b = @a.UserId;
+            @: console.log(b);
+        }
+
+        SelectedElement("dropdown", 4);
+        function SelectedElement(id, valueToSelect) {
+            var model = '@Model.UniversitiesMainModerators';
+            var elements = document.getElementsByName(id);
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].value = valueToSelect;
+            }
+        }
+    </script>*@
 
     <h4 class="title">Moderatorzy</h4>
 

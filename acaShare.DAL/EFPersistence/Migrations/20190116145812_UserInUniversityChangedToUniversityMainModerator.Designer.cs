@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using acaShare.DAL.Configuration;
 
 namespace acaShare.DAL.EFPersistence.Migrations
 {
     [DbContext(typeof(AcaShareDbContext))]
-    partial class AcaShareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190116145812_UserInUniversityChangedToUniversityMainModerator")]
+    partial class UserInUniversityChangedToUniversityMainModerator
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -223,19 +225,15 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("DepartmentId");
-
                     b.Property<int>("SemesterId");
 
-                    b.Property<int>("SubjectId");
+                    b.Property<int>("SubjectDepartmentId");
 
                     b.HasKey("LessonId");
 
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex("SubjectDepartmentId");
 
-                    b.HasIndex("SubjectId");
-
-                    b.HasIndex("SemesterId", "SubjectId", "DepartmentId")
+                    b.HasIndex("SemesterId", "SubjectDepartmentId")
                         .IsUnique()
                         .HasName("UQ_Lesson");
 
@@ -370,11 +368,32 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
                     b.HasKey("SubjectId");
 
-                    b.HasIndex("Name", "Abbreviation")
+                    b.HasIndex("Name")
                         .IsUnique()
-                        .HasName("UQ_Subject_Name_Abbreviation");
+                        .HasName("UQ_Subject_Name");
 
                     b.ToTable("Subject");
+                });
+
+            modelBuilder.Entity("acaShare.BLL.Models.SubjectDepartment", b =>
+                {
+                    b.Property<int>("SubjectDepartmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("DepartmentId");
+
+                    b.Property<int>("SubjectId");
+
+                    b.HasKey("SubjectDepartmentId");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("SubjectId", "DepartmentId")
+                        .IsUnique()
+                        .HasName("UQ_SubjectDepartment");
+
+                    b.ToTable("SubjectDepartment");
                 });
 
             modelBuilder.Entity("acaShare.BLL.Models.University", b =>
@@ -393,10 +412,6 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
                     b.HasKey("UniversityId");
 
-                    b.HasIndex("Abbreviation")
-                        .IsUnique()
-                        .HasName("UQ_University_Abbreviation");
-
                     b.HasIndex("Name")
                         .IsUnique()
                         .HasName("UQ_University_Name");
@@ -410,13 +425,17 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
                     b.Property<int>("UniversityId");
 
+                    b.Property<int?>("UserTypeTypeId");
+
                     b.HasKey("UserId", "UniversityId");
 
                     b.HasIndex("UniversityId");
 
+                    b.HasIndex("UserTypeTypeId");
+
                     b.HasIndex("UserId", "UniversityId")
                         .IsUnique()
-                        .HasName("UQ_UniversityMainModerator");
+                        .HasName("UQ_UserInUniversity");
 
                     b.ToTable("UniversityMainModerator");
                 });
@@ -444,6 +463,26 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .HasName("UQ_AspNetUsers_IdentityUserId");
 
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("acaShare.BLL.Models.UserType", b =>
+                {
+                    b.Property<int>("TypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
+
+                    b.HasKey("TypeId");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasName("UQ_UserType_Name");
+
+                    b.ToTable("UserType");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -711,22 +750,16 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
             modelBuilder.Entity("acaShare.BLL.Models.Lesson", b =>
                 {
-                    b.HasOne("acaShare.BLL.Models.Department", "Department")
-                        .WithMany("Lessons")
-                        .HasForeignKey("DepartmentId")
-                        .HasConstraintName("Lesson_Department")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("acaShare.BLL.Models.Semester", "Semester")
                         .WithMany("Lessons")
                         .HasForeignKey("SemesterId")
                         .HasConstraintName("Subject_Semester")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("acaShare.BLL.Models.Subject", "Subject")
+                    b.HasOne("acaShare.BLL.Models.SubjectDepartment", "SubjectDepartment")
                         .WithMany("Lessons")
-                        .HasForeignKey("SubjectId")
-                        .HasConstraintName("Lesson_Subject")
+                        .HasForeignKey("SubjectDepartmentId")
+                        .HasConstraintName("Lesson_SubjectDepartment")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -776,19 +809,38 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("acaShare.BLL.Models.SubjectDepartment", b =>
+                {
+                    b.HasOne("acaShare.BLL.Models.Department", "Department")
+                        .WithMany("SubjectDepartment")
+                        .HasForeignKey("DepartmentId")
+                        .HasConstraintName("SubjectDepartment_Department")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("acaShare.BLL.Models.Subject", "Subject")
+                        .WithMany("SubjectDepartment")
+                        .HasForeignKey("SubjectId")
+                        .HasConstraintName("SubjectDepartment_Subject")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("acaShare.BLL.Models.UniversityMainModerator", b =>
                 {
                     b.HasOne("acaShare.BLL.Models.University", "University")
                         .WithMany("UsersInUniversity")
                         .HasForeignKey("UniversityId")
-                        .HasConstraintName("UniversityMainModerator_University")
+                        .HasConstraintName("UserUniversity_University")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("acaShare.BLL.Models.User", "User")
                         .WithMany("UsersInUniversity")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("UniversityMainModerator_User")
+                        .HasConstraintName("UserUniversity_User")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("acaShare.BLL.Models.UserType")
+                        .WithMany("UsersInUniversity")
+                        .HasForeignKey("UserTypeTypeId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
