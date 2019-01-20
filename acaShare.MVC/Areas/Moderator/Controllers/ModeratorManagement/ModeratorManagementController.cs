@@ -54,6 +54,25 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.ModeratorManagement
             var universitiesMainModerators = _mainModeratorService
                 .GetAllUniversitiesMainModerators();
 
+            var universitiesMainModeratorsWithIdentityId = new List<MainModeratorAppIdIdentityIdViewModel>();
+
+            for (int i = 0; i < mainModerators.Length; i++)
+            {
+                var appUser = _userService.FindByIdentityUserId(mainModerators[i].Id);
+
+                foreach (var item in universitiesMainModerators)
+                {
+                    if(appUser.UserId == item.UserId)
+                    {
+                        universitiesMainModeratorsWithIdentityId.Add(new MainModeratorAppIdIdentityIdViewModel
+                        {
+                            IdentityId = appUser.IdentityUserId,
+                            UniversityId = item.UniversityId
+                        });
+                    }
+                }
+            }
+
             var model = new ModeratorManagementViewModel
             {
                 Administrators = admins,
@@ -61,7 +80,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.ModeratorManagement
                 Moderators = moderators,
                 Members = members,
                 Universities = universities,
-                UniversitiesMainModerators = universitiesMainModerators
+                UniversitiesMainModeratorsWithIdentityId = universitiesMainModeratorsWithIdentityId
             };
 
             ViewBag.Breadcrumbs = new List<Breadcrumb>

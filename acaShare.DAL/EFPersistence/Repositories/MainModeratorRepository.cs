@@ -29,7 +29,7 @@ namespace acaShare.DAL.EFPersistence.Repositories
 
         public UniversityMainModerator GetUniversityMainModerator(int userId)
         {
-            return _mainModerators.Where(x => x.UserId == userId).First();
+            return _mainModerators.Where(x => x.UserId == userId).FirstOrDefault();
         }
 
         public void EditMainModeratorAssignement(UniversityMainModerator universityMainModerator)

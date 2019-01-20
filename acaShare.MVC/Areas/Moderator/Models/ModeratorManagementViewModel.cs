@@ -16,7 +16,7 @@ namespace acaShare.MVC.Areas.Moderator.Models
 
         public IList<University> Universities { get; set; }
 
-        public IList<UniversityMainModerator> UniversitiesMainModerators { get; set; }
+        public IList<MainModeratorAppIdIdentityIdViewModel> UniversitiesMainModeratorsWithIdentityId { get; set; }
 
         public int UniversityId { get; set; }
 
