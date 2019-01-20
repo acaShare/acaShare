@@ -413,10 +413,6 @@ namespace acaShare.DAL.Configuration
             {
                 entity.HasKey(e => new { e.UserId, e.UniversityId });
 
-                entity.HasIndex(e => new { e.UserId, e.UniversityId })
-                    .HasName("UQ_UniversityMainModerator")
-                    .IsUnique();
-
                 entity.HasOne(d => d.University)
                     .WithMany(p => p.UsersInUniversity)
                     .HasForeignKey(d => d.UniversityId)

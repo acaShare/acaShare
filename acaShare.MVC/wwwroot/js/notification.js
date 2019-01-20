@@ -7,8 +7,11 @@
 });
 
 function dropDown() {
-    getData();
-    document.getElementById("notificationList").classList.toggle("show");
+    let classList = document.getElementById("notificationList").classList;
+    if (!classList.contains("show")) {
+        getData();
+    }
+    classList.toggle("show");
 }
 
 function getData() {
