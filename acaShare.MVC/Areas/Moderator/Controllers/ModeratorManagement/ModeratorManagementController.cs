@@ -100,6 +100,11 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.ModeratorManagement
         {
             var userToPromote = await _roleService.FindByIdAsync(userId);
 
+            if (userToPromote == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "użytkownik o podanym Id nie istnieje." });
+            }
+
             var userRoles = (await _roleService.GetRolesAsync(userToPromote)).ToArray();
             await _roleService.RemoveFromRolesAsync(userToPromote, userRoles);
             await _roleService.AddToRoleAsync(userToPromote, Roles.MainModeratorRole);
@@ -111,6 +116,11 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.ModeratorManagement
         {
             var userToPromote = await _roleService.FindByIdAsync(userId);
 
+            if (userToPromote == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "użytkownik o podanym Id nie istnieje." });
+            }
+
             var userRoles = (await _roleService.GetRolesAsync(userToPromote)).ToArray();
             await _roleService.RemoveFromRolesAsync(userToPromote, userRoles);
             await _roleService.AddToRoleAsync(userToPromote, Roles.ModeratorRole);
@@ -121,6 +131,11 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.ModeratorManagement
         public async Task<IActionResult> DemoteToMember(string userId)
         {
             var userToDemote = await _roleService.FindByIdAsync(userId);
+
+            if (userToDemote == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "użytkownik o podanym Id nie istnieje." });
+            }
 
             var userRoles = (await _roleService.GetRolesAsync(userToDemote)).ToArray();
             await _roleService.RemoveFromRolesAsync(userToDemote, userRoles);
@@ -137,10 +152,16 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.ModeratorManagement
             return RedirectToAction("Home");
         }
 
+        [Authorize(Roles = Roles.AdministratorRole)]
         [HttpPost]
         public IActionResult AssignModeratorToUniversity(string userId, int UniversityId)
         {
             var appUser = _userService.FindByIdentityUserId(userId);
+
+            if (appUser == null)
+            {
+                return RedirectToAction("ResourceNotFound", "Error", new { error = "użytkownik o podanym Id nie istnieje." });
+            }
 
             var newMainModInUniversity = new UniversityMainModerator {
                 UserId = appUser.UserId,

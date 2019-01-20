@@ -3,10 +3,6 @@
 @model ModeratorManagementViewModel
 
 @inject UserManager<IdentityUser> userManager
-
-@section ModeratorManagementScripts {
-    <script src="~/js/moderator-management.js"></script>
-}
 @{
     ViewData["Title"] = "Zarządzanie Moderatorami";
     var currentUser = await userManager.GetUserAsync(User);
@@ -76,12 +72,15 @@
         }
     </table>
 
+    @section ModeratorManagementScripts {
     <script type="text/javascript">
         @foreach(var umm in Model.UniversitiesMainModeratorsWithIdentityId)
         {
             @:document.getElementById('@umm.IdentityId').value = @umm.UniversityId;
         }
     </script>
+    }
+
     }
     <h4 class="title">Moderatorzy</h4>
 
