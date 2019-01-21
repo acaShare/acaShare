@@ -117,7 +117,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
 
             if (!success)
             {
-                ModelState.AddModelError("ERROR", "Przedmiot o takiej nazwie lub skrócie istnieje już na tym wydziale");
+                ModelState.AddModelError("ERROR", "Przedmiot o takiej nazwie lub skrócie istnieje już na tym wydziale w tym semestrze");
                 return View(vm);
             }
 
@@ -162,7 +162,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
 
             if (!success)
             {
-                ModelState.AddModelError("ERROR", "Przedmiot o takiej nazwie lub skrócie istnieje już na tym wydziale");
+                ModelState.AddModelError("ERROR", "Przedmiot o takiej nazwie lub skrócie istnieje już na tym wydziale w tym semestrze");
                 return View(vm);
             }
 
