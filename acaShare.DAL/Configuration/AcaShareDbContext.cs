@@ -60,7 +60,7 @@ namespace acaShare.DAL.Configuration
                     new ChangeReason
                     {
                         ChangeReasonId = 2,
-                        Reason = "Naruszenie praw własności",
+                        Reason = "Naruszenie praw autorskich",
                         ChangeType = ChangeType.DELETE
                     },
                     new ChangeReason
@@ -72,6 +72,12 @@ namespace acaShare.DAL.Configuration
                     new ChangeReason
                     {
                         ChangeReasonId = 4,
+                        Reason = "Nieprawidłowa lokalizacja",
+                        ChangeType = ChangeType.DELETE
+                    },
+                    new ChangeReason
+                    {
+                        ChangeReasonId = 5,
                         Reason = "Inne",
                         ChangeType = ChangeType.DELETE
                     }
