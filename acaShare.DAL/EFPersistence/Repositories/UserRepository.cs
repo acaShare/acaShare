@@ -16,7 +16,7 @@ namespace acaShare.DAL.EFPersistence.Repositories
 
         public User FindByIdentityUserId(string identityUserId)
         {
-            return _dbSet.First(u => u.IdentityUserId == identityUserId);
+            return _dbSet.FirstOrDefault(u => u.IdentityUserId == identityUserId);
         }
         
         public bool IsMaterialFavorite(string identityUserId, int materialId)
