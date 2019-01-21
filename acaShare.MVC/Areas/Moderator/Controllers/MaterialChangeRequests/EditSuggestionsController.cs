@@ -38,7 +38,8 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
                 {
                     EditRequestId = es.EditRequestId,
                     MaterialName = es.MaterialToUpdate.Name,
-                    Summary = es.Summary
+                    Summary = es.Summary,
+                    RequestDate = es.RequestDate
                 }
             ).ToList();
 

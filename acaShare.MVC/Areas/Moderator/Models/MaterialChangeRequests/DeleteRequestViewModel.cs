@@ -11,6 +11,7 @@ namespace acaShare.MVC.Areas.Moderator.Models.MaterialChangeRequests
     {
         [Required]
         public int DeleteRequestId { get; set; }
+        public DateTime RequestDate { get; set; }
 
         [Display(Name = "Nazwa materiału")]
         public string MaterialName { get; set; }

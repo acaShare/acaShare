@@ -21,6 +21,9 @@
                         deleteReasonIcon = "receipt"; // thumb_down thumbs_up_down
                         break;
                     case 4:
+                        deleteReasonIcon = "location_off";
+                        break;
+                    case 5:
                         deleteReasonIcon = "feedback";
                         break;
                 }
@@ -33,6 +36,8 @@
                         <span class="path-list-item-title">@deleteRequest.MaterialName</span>
                         <br>
                         <span class="path-list-item-subtitle">
+                            @deleteRequest.RequestDate.ToString("d.MM.yyyy, HH:mm") &nbsp;&nbsp;~&nbsp;&nbsp;
+
                             @if (deleteRequest.AdditionalComment?.Length > 100)
                             {
                                 @deleteRequest.AdditionalComment.Substring(0, 100);
