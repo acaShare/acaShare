@@ -90,7 +90,7 @@ namespace acaShare.DAL.Configuration
                     .IsRequired()
                     .HasMaxLength(512);
 
-                entity.Property(e => e.CreatedDate)
+                entity.Property(e => e.CreateDate)
                     .IsRequired()
                     .HasColumnType("datetime");
 
@@ -171,9 +171,9 @@ namespace acaShare.DAL.Configuration
 
             modelBuilder.Entity<EditRequest>(entity =>
             {
-                entity.Property(e => e.NewDescription).HasMaxLength(4000);
+                entity.Property(e => e.NewDescription).HasMaxLength(10000);
 
-                entity.Property(e => e.NewName).HasMaxLength(255);
+                entity.Property(e => e.NewName).HasMaxLength(80);
 
                 entity.Property(e => e.RequestDate).HasColumnType("datetime");
 
@@ -270,7 +270,7 @@ namespace acaShare.DAL.Configuration
             modelBuilder.Entity<Material>(entity =>
             {
                 entity.Property(e => e.Description)
-                    .HasMaxLength(4000)
+                    .HasMaxLength(10000)
                     .IsRequired();
 
                 entity.Property(e => e.ModificationDate).HasColumnType("datetime");
@@ -325,8 +325,7 @@ namespace acaShare.DAL.Configuration
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<Notification>(entity =>
@@ -336,6 +335,7 @@ namespace acaShare.DAL.Configuration
                     .HasMaxLength(1000);
 
                 entity.Property(e => e.Date)
+                    .HasColumnType("datetime")
                     .IsRequired();
 
                 entity.HasOne(d => d.User)
@@ -360,8 +360,7 @@ namespace acaShare.DAL.Configuration
 
                 entity.Property(e => e.Number)
                     .IsRequired()
-                    .HasMaxLength(3)
-                    .IsUnicode(false);
+                    .HasColumnType("char(3)");
             });
 
             modelBuilder.Entity<Subject>(entity =>
@@ -407,6 +406,10 @@ namespace acaShare.DAL.Configuration
                 entity.Property(e => e.Username)
                     .IsRequired()
                     .HasMaxLength(22);
+
+                entity.HasIndex(e => e.Username )
+                    .HasName("UQ_User_Username")
+                    .IsUnique();
 
                 entity.Property(e => e.IdentityUserId)
                     .IsRequired();

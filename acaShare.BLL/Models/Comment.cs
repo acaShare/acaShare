@@ -13,12 +13,12 @@ namespace acaShare.BLL.Models
         {
             Content = newComment;
             User = commentAuthor;
-            CreatedDate = DateTime.Now;
+            CreateDate = DateTime.Now;
         }
 
         public int CommentId { get; private set; }
         public string Content { get; private set; }
-        public DateTime CreatedDate { get; private set; }
+        public DateTime CreateDate { get; private set; }
 
         public int MaterialId { get; private set; }
         public virtual Material Material { get; private set; }

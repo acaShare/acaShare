@@ -32,7 +32,7 @@ namespace acaShare.BLL.Models
         public DateTime RegisterDate { get; private set; }
         public string IdentityUserId { get; private set; }
         public string Username { get; private set; }
-
+        
         public virtual ICollection<Comment> Comments { get; private set; }
         public virtual ICollection<DeleteRequest> DeleteRequests { get; private set; }
         public virtual ICollection<EditRequest> EditRequests { get; private set; }
