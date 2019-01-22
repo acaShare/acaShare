@@ -357,6 +357,10 @@ a.notification-list-button li {
     display: flex;
 }
 
+.sidebar-spinner {
+    width: 100%;
+}
+
 @media only screen and (min-width: 400px) {
     .breadcrumb {
         font-size: .75rem;

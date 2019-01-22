@@ -15,7 +15,32 @@
     @{
         int materialId = Model.MaterialId;
     }
-    @await Component.InvokeAsync("Sidebar", new { @materialId = materialId, @loggedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier) })
+
+    <div id="sidebar" class="col s12 m4 l3 right-side-bar">
+        <ul id="tabs-swipe-demo" class="tabs tabs-fixed-width">
+            <li class="tab"><a href="#test-swipe-1">Ulubione</a></li>
+            <li class="tab"><a href="#test-swipe-2">Ostatnia aktywność</a></li>
+            <li class="tab"><a class="active" href="#test-swipe-3">Komentarze</a></li>
+        </ul>
+    </div>
+    <script>
+            window.addEventListener('load', () => {
+                let xhr = new XMLHttpRequest();
+                xhr.onload = () => {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        let div = document.createElement('div');
+                        div.innerHTML = xhr.responseText;
+                        document.getElementById('sidebar').appendChild(div);
+                        $('.tabs').tabs();
+                    }
+                };
+
+                xhr.open("GET", `/Main/Test/Invoke?materialId=@materialId&loggedUserId=@User.FindFirstValue(ClaimTypes.NameIdentifier)`, true);
+                xhr.send();
+            });
+    </script>
+
+    @*@await Component.InvokeAsync("Sidebar", new { @materialId = materialId, @loggedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier) })*@
 }
 
 <div class="material-container">
@@ -33,30 +58,30 @@
                 }
             }
 
-            <a asp-action="ToggleFavorites" asp-route-materialId="@Model.MaterialId" 
-                class="sep action-button tooltipped" data-position="top" data-tooltip="Dodaj do ulubionych">
+            <a asp-action="ToggleFavorites" asp-route-materialId="@Model.MaterialId"
+               class="sep action-button tooltipped" data-position="top" data-tooltip="Dodaj do ulubionych">
                 <i class="material-icons lh">@favoriteIcon</i>
             </a>
 
             @if (Model.IsAllowedToEditOrDelete)
             {
-                <a asp-action="Edit" asp-route-materialId="@Model.MaterialId" 
-                    class="sep action-button tooltipped" data-position="top" data-tooltip="Edytuj">
+                <a asp-action="Edit" asp-route-materialId="@Model.MaterialId"
+                   class="sep action-button tooltipped" data-position="top" data-tooltip="Edytuj">
                     <i class="material-icons lh">edit</i>
                 </a>
-                <a asp-action="Delete" asp-route-materialId="@Model.MaterialId" 
-                    class="sep action-button tooltipped" data-position="top" data-tooltip="Usuń">
+                <a asp-action="Delete" asp-route-materialId="@Model.MaterialId"
+                   class="sep action-button tooltipped" data-position="top" data-tooltip="Usuń">
                     <i class="material-icons lh">delete</i>
                 </a>
             }
             else
             {
-                <a asp-action="CreateEditSuggestion" asp-route-materialId="@Model.MaterialId" 
-                    class="sep action-button tooltipped" data-position="top" data-tooltip="Sporządź sugestię edycji">
+                <a asp-action="CreateEditSuggestion" asp-route-materialId="@Model.MaterialId"
+                   class="sep action-button tooltipped" data-position="top" data-tooltip="Sporządź sugestię edycji">
                     <i class="material-icons lh">tune</i>
                 </a>
-                <a asp-action="CreateDeleteSuggestion" asp-route-materialId="@Model.MaterialId" 
-                    class="sep action-button tooltipped" data-position="top" data-tooltip="Sporządź sugestię usunięcia">
+                <a asp-action="CreateDeleteSuggestion" asp-route-materialId="@Model.MaterialId"
+                   class="sep action-button tooltipped" data-position="top" data-tooltip="Sporządź sugestię usunięcia">
                     <i class="material-icons lh">delete_sweep</i>
                 </a>
             }
@@ -66,7 +91,7 @@
     <div class="material-content">
         <section class="material-content-files">
             <h2 class="material-content-files-header">Pliki</h2>
-            
+
             <div class="files-wrapper">
                 @{
                     int i = 1;

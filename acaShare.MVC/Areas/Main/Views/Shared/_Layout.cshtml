@@ -51,6 +51,40 @@
     }
     else
     {
-        @await Component.InvokeAsync("Sidebar", new { @loggedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier) })
+        <div id="sidebar" class="col s12 m4 l3 right-side-bar">
+            <ul id="tabs-swipe-demo" class="tabs tabs-fixed-width">
+                <li class="tab"><a href="#test-swipe-1">Ulubione</a></li>
+                <li class="tab"><a class="active" href="">Ostatnia aktywność</a></li>
+            </ul>
+        </div>
+        <script>
+            window.addEventListener('load', () => {
+                let xhr = new XMLHttpRequest();
+                let sidebar = document.getElementById('sidebar');
+                let div = document.createElement('div');
+
+                xhr.onloadstart = () => {
+                    div.innerHTML = '<img src="/images/spinner1.gif" alt="loading-spinner" class="sidebar-spinner" />';
+                    sidebar.appendChild(div);
+                };
+
+                xhr.onloadend = () => {
+                    sidebar.removeChild(div);
+                };
+
+                xhr.onload = () => {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        let div = document.createElement('div');
+                        div.innerHTML = xhr.responseText;
+                        sidebar.appendChild(div);
+                        $('.tabs').tabs();
+                    }
+                };
+
+                xhr.open("GET", `/Main/Test/Invoke?loggedUserId=@User.FindFirstValue(ClaimTypes.NameIdentifier)`, true);
+                xhr.send();
+            });
+        </script>
+        @*@await Component.InvokeAsync("Sidebar", new { @loggedUserId = User.FindFirstValue(ClaimTypes.NameIdentifier) })*@
     }
 </div>
