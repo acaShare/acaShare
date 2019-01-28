@@ -176,7 +176,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 {
                     Controller = "List",
                     Action = "Departments",
-                    Title = university.Abbreviation + (includeTitleDescription ? " - Semestry" : ""),
+                    Title = university.Abbreviation + (includeTitleDescription ? " - Wydziały" : ""),
                     Params = new Dictionary<string, string>
                     {
                         { "universityId", university.UniversityId.ToString() }
