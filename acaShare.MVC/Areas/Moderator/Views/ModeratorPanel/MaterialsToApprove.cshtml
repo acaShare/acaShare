@@ -10,6 +10,8 @@
                         <span class="path-list-item-title">@material.Name</span>
                         <br>
                         <span class="path-list-item-subtitle">
+                            @material.UploadDate.ToString("d.MM.yyyy, HH:mm") &nbsp;&nbsp;~&nbsp;&nbsp;
+
                             @if (material.Description?.Length > 100)
                             {
                                 @material.Description.Substring(0, 100);

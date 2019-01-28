@@ -10,6 +10,8 @@
                         <span class="path-list-item-title">@editRequest.MaterialName</span>
                         <br>
                         <span class="path-list-item-subtitle">
+                            @editRequest.RequestDate.ToString("d.MM.yyyy, HH:mm") &nbsp;&nbsp;~&nbsp;&nbsp;
+
                             @if (editRequest.Summary.Length > 100)
                             {
                                 @editRequest.Summary.Substring(0, 100);

@@ -15,11 +15,18 @@
         </h1>
 
         <div class="material-header-action-buttons">
-            <a asp-action="ApproveMaterial" asp-route-materialId="@Model.MaterialId"
+            <a asp-action="ApproveMaterial" asp-all-route-data="@(new Dictionary<string, string> { { "materialId", Model.MaterialId.ToString() }, { "isRedirectToMaterial", false.ToString() } })"
                class="sep action-button tooltipped approve-material" data-position="top" data-tooltip="Zatwierdź">
 
                 <i class="material-icons lh">check</i>
             </a>
+
+            <a asp-action="ApproveMaterial" asp-all-route-data="@(new Dictionary<string, string> { { "materialId", Model.MaterialId.ToString() }, { "isRedirectToMaterial", true.ToString() } })"
+               class="sep action-button tooltipped approve-material" data-position="top" data-tooltip="Zatwierdź i przejdź do materiału">
+
+                <i class="material-icons lh">subdirectory_arrow_right</i>
+            </a>
+
             <a asp-action="RejectMaterial" asp-route-materialId="@Model.MaterialId"
                class="sep action-button tooltipped reject-material" data-position="top" data-tooltip="Odrzuć">
 

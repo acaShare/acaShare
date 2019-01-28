@@ -46,11 +46,11 @@ namespace acaShare.MVC.Areas.Main.ViewComponents
                     }
                 ).ToList(),
 
-                Comments = comments?.OrderByDescending(c => c.CreatedDate).Select(c =>
+                Comments = comments?.OrderByDescending(c => c.CreateDate).Select(c =>
                     new CommentViewModel
                     {
                         Content = c.Content,
-                        When = FormatCreatedDate(c.CreatedDate),
+                        When = FormatCreatedDate(c.CreateDate),
                         CommentId = c.CommentId,
                         Author = c.User.Username
                     }

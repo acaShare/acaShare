@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using acaShare.DAL.Configuration;
 
 namespace acaShare.DAL.EFPersistence.Migrations
 {
     [DbContext(typeof(AcaShareDbContext))]
-    partial class AcaShareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190120165947_AddedDeleteReason")]
+    partial class AddedDeleteReason
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,7 +60,7 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .IsRequired()
                         .HasMaxLength(512);
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime");
 
                     b.Property<int>("MaterialId");
@@ -152,10 +154,10 @@ namespace acaShare.DAL.EFPersistence.Migrations
                     b.Property<int>("MaterialToUpdateId");
 
                     b.Property<string>("NewDescription")
-                        .HasMaxLength(10000);
+                        .HasMaxLength(4000);
 
                     b.Property<string>("NewName")
-                        .HasMaxLength(80);
+                        .HasMaxLength(255);
 
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("datetime");
@@ -255,7 +257,7 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(10000);
+                        .HasMaxLength(4000);
 
                     b.Property<int>("LessonId");
 
@@ -296,7 +298,8 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
 
                     b.HasKey("StateId");
 
@@ -317,8 +320,7 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .IsRequired()
                         .HasMaxLength(1000);
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime");
+                    b.Property<DateTime>("Date");
 
                     b.Property<bool>("IsRead");
 
@@ -343,7 +345,8 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
                     b.Property<string>("Number")
                         .IsRequired()
-                        .HasColumnType("char(3)");
+                        .HasMaxLength(3)
+                        .IsUnicode(false);
 
                     b.HasKey("SemesterId");
 
@@ -404,23 +407,6 @@ namespace acaShare.DAL.EFPersistence.Migrations
                     b.ToTable("University");
                 });
 
-            modelBuilder.Entity("acaShare.BLL.Models.UniversityMainModerator", b =>
-                {
-                    b.Property<int>("UserId");
-
-                    b.Property<int>("UniversityId");
-
-                    b.HasKey("UserId", "UniversityId");
-
-                    b.HasIndex("UniversityId");
-
-                    b.HasIndex("UserId", "UniversityId")
-                        .IsUnique()
-                        .HasName("UQ_UniversityMainModerator");
-
-                    b.ToTable("UniversityMainModerator");
-                });
-
             modelBuilder.Entity("acaShare.BLL.Models.User", b =>
                 {
                     b.Property<int>("UserId")
@@ -444,6 +430,50 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .HasName("UQ_AspNetUsers_IdentityUserId");
 
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("acaShare.BLL.Models.UserInUniversity", b =>
+                {
+                    b.Property<int>("UserId");
+
+                    b.Property<int>("UniversityId");
+
+                    b.Property<DateTime>("JoinDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("TypeId");
+
+                    b.HasKey("UserId", "UniversityId");
+
+                    b.HasIndex("TypeId");
+
+                    b.HasIndex("UniversityId");
+
+                    b.HasIndex("UserId", "UniversityId")
+                        .IsUnique()
+                        .HasName("UQ_UserInUniversity");
+
+                    b.ToTable("UserInUniversity");
+                });
+
+            modelBuilder.Entity("acaShare.BLL.Models.UserType", b =>
+                {
+                    b.Property<int>("TypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false);
+
+                    b.HasKey("TypeId");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasName("UQ_UserType_Name");
+
+                    b.ToTable("UserType");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -776,18 +806,24 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("acaShare.BLL.Models.UniversityMainModerator", b =>
+            modelBuilder.Entity("acaShare.BLL.Models.UserInUniversity", b =>
                 {
+                    b.HasOne("acaShare.BLL.Models.UserType", "Type")
+                        .WithMany("UsersInUniversity")
+                        .HasForeignKey("TypeId")
+                        .HasConstraintName("UserUniversity_UserType")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("acaShare.BLL.Models.University", "University")
                         .WithMany("UsersInUniversity")
                         .HasForeignKey("UniversityId")
-                        .HasConstraintName("UniversityMainModerator_University")
+                        .HasConstraintName("UserUniversity_University")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("acaShare.BLL.Models.User", "User")
                         .WithMany("UsersInUniversity")
                         .HasForeignKey("UserId")
-                        .HasConstraintName("UniversityMainModerator_User")
+                        .HasConstraintName("UserUniversity_User")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

@@ -70,6 +70,17 @@ namespace acaShare.MVC
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
 
+            services.ConfigureApplicationCookie(options => {
+                options.Events = new Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationEvents
+                {
+                    OnRedirectToLogin = ctx =>
+                    {
+                        ctx.Response.Redirect("/Identity/WelcomePage/WelcomePage");
+                        return Task.CompletedTask;
+                    }
+                };
+            });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

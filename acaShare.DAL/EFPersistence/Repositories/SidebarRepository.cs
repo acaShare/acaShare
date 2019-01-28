@@ -40,7 +40,7 @@ namespace acaShare.DAL.EFPersistence.Repositories
                     {
                         Username = c.User.Username,
                         Content = c.Content,
-                        Date = c.CreatedDate,
+                        Date = c.CreateDate,
                         Material = c.Material,
                         ActivityType = LastActivityType.COMMENT
                     })

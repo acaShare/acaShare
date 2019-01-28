@@ -111,7 +111,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers
             };
         }
 
-        public IActionResult ApproveMaterial(int materialId)
+        public IActionResult ApproveMaterial(int materialId, bool isRedirectToMaterial)
         {
             var loggedUser = _userService.FindByIdentityUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
@@ -122,6 +122,11 @@ namespace acaShare.MVC.Areas.Moderator.Controllers
             }
 
             _materialsService.ApproveMaterial(material, loggedUser);
+
+            if (isRedirectToMaterial)
+            {
+                return RedirectToAction("Material", "Materials", new { area = "Main", materialId });
+            }
 
             return RedirectToAction("MaterialsToApprove");
         }

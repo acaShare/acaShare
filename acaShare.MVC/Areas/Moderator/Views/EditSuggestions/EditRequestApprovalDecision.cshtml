@@ -27,11 +27,19 @@
                     <header class="upper-box-header">
                         <h1 class="upper-box-header-title">@* filler *@</h1>
                         <div class="upper-box-header-action-buttons">
-                            <a asp-action="ApproveEditRequest" asp-route-editRequestId="@Model.EditRequestViewModel.EditRequestId"
+                            <a asp-action="ApproveEditRequest" asp-all-route-data="@(new Dictionary<string, string> { { "editRequestId", Model.EditRequestViewModel.EditRequestId.ToString() }, { "isRedirectToMaterial", false.ToString() } })"
                                class="sep action-button tooltipped approve-edit-request" data-position="top" data-tooltip="Zatwierdź sugestię">
 
                                 <i class="material-icons lh">check</i>
                             </a>
+
+
+                            <a asp-action="ApproveEditRequest" asp-all-route-data="@(new Dictionary<string, string> { { "editRequestId", Model.EditRequestViewModel.EditRequestId.ToString() }, { "isRedirectToMaterial", true.ToString() } })"
+                               class="sep action-button tooltipped approve-material" data-position="top" data-tooltip="Zatwierdź i przejdź do materiału">
+
+                                <i class="material-icons lh">subdirectory_arrow_right</i>
+                            </a>
+
                             <a asp-action="DeclineEditRequest" asp-route-editRequestId="@Model.EditRequestViewModel.EditRequestId"
                                class="sep action-button tooltipped" data-position="top" data-tooltip="Odrzuć sugestię">
 

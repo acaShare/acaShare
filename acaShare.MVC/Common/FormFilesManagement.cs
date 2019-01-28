@@ -175,15 +175,18 @@ namespace acaShare.MVC.Common
 
         private void RemoveOldFiles(string materialFolderAbsolutePath, ICollection<BLL.Models.File> newFiles)
         {
-            var existingFilesPaths = Directory.GetFiles(materialFolderAbsolutePath);
-
-            foreach (var existingFilePath in existingFilesPaths)
+            if (Directory.Exists(materialFolderAbsolutePath))
             {
-                var existingFile = newFiles.FirstOrDefault(ef => existingFilePath.EndsWith(ef.RelativePath));
+                var existingFilesPaths = Directory.GetFiles(materialFolderAbsolutePath);
 
-                if (existingFile == null)
+                foreach (var existingFilePath in existingFilesPaths)
                 {
-                    System.IO.File.Delete(existingFilePath);
+                    var existingFile = newFiles.FirstOrDefault(ef => existingFilePath.EndsWith(ef.RelativePath));
+
+                    if (existingFile == null)
+                    {
+                        System.IO.File.Delete(existingFilePath);
+                    }
                 }
             }
         }
