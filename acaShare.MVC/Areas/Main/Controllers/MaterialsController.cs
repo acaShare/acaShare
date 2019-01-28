@@ -106,7 +106,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
                     ContentType = f.ContentType
                 }).ToList(),
                 IsFavorite = isFavorite,
-                IsAllowedToEditOrDelete = material.IsUserAllowedToEditOrDelete(User.FindFirstValue(ClaimTypes.NameIdentifier)) // TODO Change to some authorization mechanism
+                IsAllowedToEditOrDelete = material.IsUserAllowedToEditOrDelete(User.FindFirstValue(ClaimTypes.NameIdentifier)) || !User.IsInRole(Roles.MemberRole)
             };
         }
 
@@ -177,11 +177,11 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 return RedirectToAction("ResourceNotFound", "Error", new { error = "materiał o podanym Id nie istnieje." });
             }
 
-            if (identityUserId != materialToEdit.Creator.IdentityUserId)
+            if (IsUserAllowedToEditOrDelete(identityUserId, materialToEdit))
             {
                 return RedirectToAction("ActionForbidden", "Error", new { error = "nie masz uprawnień do tego działania" });
             }
-            
+
             ConfigureEditMaterialBreadcrumbs(materialToEdit.Lesson, materialId);
 
             var vm = new EditMaterialViewModel
@@ -201,6 +201,11 @@ namespace acaShare.MVC.Areas.Main.Controllers
             return View(vm);
         }
 
+        private bool IsUserAllowedToEditOrDelete(string identityUserId, BLL.Models.Material materialToEdit)
+        {
+            return (identityUserId != materialToEdit.Creator.IdentityUserId) && User.IsInRole(Roles.MemberRole);
+        }
+
         [ValidateMaterial(ViewModelName = "vm")]
         [HttpPost] // AJAX request
         public IActionResult Edit(EditMaterialViewModel vm)
@@ -213,7 +218,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 return BadRequest(new[] { "Materiał o podanym Id nie istnieje." });
             }
 
-            if (identityUserId != materialToEdit.Creator.IdentityUserId)
+            if (IsUserAllowedToEditOrDelete(identityUserId, materialToEdit))
             {
                 return Forbid(new[] { "Nie masz uprawnień do tego działania" }); // TODO some authorization handler
             }
@@ -256,12 +261,12 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 return RedirectToAction("ResourceNotFound", "Error", new { error = "materiał o podanym Id nie istnieje." });
             }
 
-            if (identityUserId != materialToDelete.Creator.IdentityUserId)
+            if (IsUserAllowedToEditOrDelete(identityUserId, materialToDelete))
             {
                 return RedirectToAction("ActionForbidden", "Error", new { error = "nie masz uprawnień do tego działania" });
             }
 
-            ConfigureDeleteMaterialBreadcrumbs(materialToDelete.Lesson, materialId);
+            ConfigureDeleteMaterialBreadcrumbs(materialToDelete);
 
             var vm = new DeleteMaterialViewModel
             {
@@ -290,7 +295,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 return RedirectToAction("ResourceNotFound", "Error", new { error = "materiał o podanym Id nie istnieje." });
             }
 
-            if (identityUserId != materialToDelete.Creator.IdentityUserId)
+            if (IsUserAllowedToEditOrDelete(identityUserId, materialToDelete))
             {
                 return RedirectToAction("ActionForbidden", "Error", new { error = "nie masz uprawnień do tego działania" });
             }
@@ -300,436 +305,6 @@ namespace acaShare.MVC.Areas.Main.Controllers
 
             return RedirectToAction("Materials", new { @lessonId = vm.LessonId });
         }
-
-
-        #region breadcrumbs
-        private void ConfigureMaterialsBreadcrumbs(BLL.Models.Lesson lesson)
-        {
-            var subjectDepartment = lesson.SubjectDepartment;
-            var department = subjectDepartment.Department;
-            var university = department.University;
-            var semester = lesson.Semester;
-
-            var parms = new Dictionary<string, string>
-            {
-                { "universityId", university.UniversityId.ToString() },
-                { "departmentId", department.DepartmentId.ToString() },
-                { "semesterId", semester.SemesterId.ToString() },
-                { "lessonId", lesson.LessonId.ToString() }
-            };
-
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "AvailableUniversities",
-                    Title = "Uczelnie"
-                },
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "Departments",
-                    Title = university.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "Semesters",
-                    Title = department.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "Lessons",
-                    Title = semester.Number,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "Materials",
-                    Action = "Materials",
-                    Title = subjectDepartment.Subject.Abbreviation + " - Materiały",
-                    Params = parms
-                }
-            };
-        }
-
-        private void ConfigureMaterialBreadcrumbs(BLL.Models.Material material)
-        {
-            var lesson = material.Lesson;
-            var subjectDepartment = lesson.SubjectDepartment;
-            var department = subjectDepartment.Department;
-            var university = department.University;
-            var semester = lesson.Semester;
-
-            var parms = new Dictionary<string, string>
-            {
-                { "universityId", university.UniversityId.ToString() },
-                { "departmentId", department.DepartmentId.ToString() },
-                { "semesterId", semester.SemesterId.ToString() },
-                { "lessonId", lesson.LessonId.ToString() },
-                { "materialId", material.MaterialId.ToString() }
-            };
-
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "AvailableUniversities",
-                    Title = "Uczelnie"
-                },
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "Departments",
-                    Title = university.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "Semesters",
-                    Title = department.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "Lessons",
-                    Title = semester.Number,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "Materials",
-                    Action = "Materials",
-                    Title = subjectDepartment.Subject.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "Materials",
-                    Action = "Material",
-                    Title = "Materiał",
-                    Params = parms
-                }
-            };
-        }
-
-        private void ConfigureAddMaterialBreadcrumbs(BLL.Models.Lesson lesson)
-        {
-            var subjectDepartment = lesson.SubjectDepartment;
-            var department = subjectDepartment.Department;
-            var university = department.University;
-            var semester = lesson.Semester;
-
-            var parms = new Dictionary<string, string>
-            {
-                { "universityId", university.UniversityId.ToString() },
-                { "departmentId", department.DepartmentId.ToString() },
-                { "semesterId", semester.SemesterId.ToString() },
-                { "lessonId", lesson.LessonId.ToString() }
-            };
-
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "AvailableUniversities",
-                    Title = "Uczelnie"
-                },
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "Departments",
-                    Title = university.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "Semesters",
-                    Title = department.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "Lessons",
-                    Title = semester.Number,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "Materials",
-                    Action = "Materials",
-                    Title = subjectDepartment.Subject.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "Materials",
-                    Action = "Add",
-                    Title = "Dodawanie materiału",
-                    Params = parms
-                }
-            };
-        }
-
-        private void ConfigureEditMaterialBreadcrumbs(BLL.Models.Lesson lesson, int materialId)
-        {
-            var subjectDepartment = lesson.SubjectDepartment;
-            var department = subjectDepartment.Department;
-            var university = department.University;
-            var semester = lesson.Semester;
-
-            var parms = new Dictionary<string, string>
-            {
-                { "universityId", university.UniversityId.ToString() },
-                { "departmentId", department.DepartmentId.ToString() },
-                { "semesterId", semester.SemesterId.ToString() },
-                { "lessonId", lesson.LessonId.ToString() },
-                { "materialId", materialId.ToString() }
-            };
-
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "AvailableUniversities",
-                    Title = "Uczelnie"
-                },
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "Departments",
-                    Title = university.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "Semesters",
-                    Title = department.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "Lessons",
-                    Title = semester.Number,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "Materials",
-                    Action = "Materials",
-                    Title = subjectDepartment.Subject.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "Materials",
-                    Action = "Edit",
-                    Title = "Edycja materiału",
-                    Params = parms
-                }
-            };
-        }
-
-        private void ConfigureEditSuggestionBreadcrumbs(BLL.Models.Lesson lesson, int materialId)
-        {
-            var subjectDepartment = lesson.SubjectDepartment;
-            var department = subjectDepartment.Department;
-            var university = department.University;
-            var semester = lesson.Semester;
-
-            var parms = new Dictionary<string, string>
-            {
-                { "universityId", university.UniversityId.ToString() },
-                { "departmentId", department.DepartmentId.ToString() },
-                { "semesterId", semester.SemesterId.ToString() },
-                { "lessonId", lesson.LessonId.ToString() },
-                { "materialId", materialId.ToString() }
-            };
-
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "AvailableUniversities",
-                    Title = "Uczelnie"
-                },
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "Departments",
-                    Title = university.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "Semesters",
-                    Title = department.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "Lessons",
-                    Title = semester.Number,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "Materials",
-                    Action = "Materials",
-                    Title = subjectDepartment.Subject.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "Materials",
-                    Action = "CreateEditSuggestion",
-                    Title = "Tworzenie sugestii edycji",
-                    Params = parms
-                }
-            };
-        }
-
-        private void ConfigureDeleteMaterialBreadcrumbs(BLL.Models.Lesson lesson, int materialId)
-        {
-            var subjectDepartment = lesson.SubjectDepartment;
-            var department = subjectDepartment.Department;
-            var university = department.University;
-            var semester = lesson.Semester;
-
-            var parms = new Dictionary<string, string>
-            {
-                { "universityId", university.UniversityId.ToString() },
-                { "departmentId", department.DepartmentId.ToString() },
-                { "semesterId", semester.SemesterId.ToString() },
-                { "lessonId", lesson.LessonId.ToString() },
-                { "materialId", materialId.ToString() }
-            };
-
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "AvailableUniversities",
-                    Title = "Uczelnie"
-                },
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "Departments",
-                    Title = university.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "Semesters",
-                    Title = department.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "Lessons",
-                    Title = semester.Number,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "Materials",
-                    Action = "Materials",
-                    Title = subjectDepartment.Subject.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "Materials",
-                    Action = "Delete",
-                    Title = "Usuwanie materiału",
-                    Params = parms
-                }
-            };
-        }
-
-        private void ConfigureDeleteSuggestionBreadcrumbs(BLL.Models.Lesson lesson, int materialId)
-        {
-            var subjectDepartment = lesson.SubjectDepartment;
-            var department = subjectDepartment.Department;
-            var university = department.University;
-            var semester = lesson.Semester;
-
-            var parms = new Dictionary<string, string>
-            {
-                { "universityId", university.UniversityId.ToString() },
-                { "departmentId", department.DepartmentId.ToString() },
-                { "semesterId", semester.SemesterId.ToString() },
-                { "lessonId", lesson.LessonId.ToString() },
-                { "materialId", materialId.ToString() }
-            };
-
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "AvailableUniversities",
-                    Title = "Uczelnie"
-                },
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "Departments",
-                    Title = university.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "Semesters",
-                    Title = department.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "List",
-                    Action = "Lessons",
-                    Title = semester.Number,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "Materials",
-                    Action = "Materials",
-                    Title = subjectDepartment.Subject.Abbreviation,
-                    Params = parms
-                },
-                new Breadcrumb
-                {
-                    Controller = "Materials",
-                    Action = "CreateDeleteSuggestion",
-                    Title = "Tworzenie sugestii usunięcia",
-                    Params = parms
-                }
-            };
-        }
-        #endregion
-
 
         public IActionResult ToggleFavorites(int materialId)
         {
@@ -778,7 +353,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 return RedirectToAction("ResourceNotFound", "Error", new { error = "materiał o podanym Id nie istnieje." });
             }
 
-            ConfigureDeleteSuggestionBreadcrumbs(materialToEdit.Lesson, materialId);
+            ConfigureDeleteSuggestionBreadcrumbs(materialToEdit);
 
             var reasons = _service.GetChangeReasons(BLL.Models.ChangeType.DELETE);
 
@@ -800,7 +375,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 return View(vm);
             }
 
-            if(vm.ReasonId == 4 && string.IsNullOrEmpty(vm.AdditionalComment))
+            if(vm.ReasonId == 5 && string.IsNullOrEmpty(vm.AdditionalComment))
             {
                 ModelState.AddModelError("AdditionalComment", "Wybranie przyczyny \"Inne\" wymaga podania dodatkowego wyjaśnienia");
                 return View(vm);
@@ -841,7 +416,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
                     });
             }
 
-            ConfigureEditSuggestionBreadcrumbs(materialToEdit.Lesson, materialId);
+            ConfigureEditSuggestionBreadcrumbs(materialToEdit);
 
             var emvm = new EditMaterialViewModel
             {
@@ -934,5 +509,177 @@ namespace acaShare.MVC.Areas.Main.Controllers
 
             return Json(vm.EditMaterialViewModel.MaterialId);
         }
+
+        #region breadcrumbs
+        private void ConfigureListBreadcrumbs(BLL.Models.Semester semester, BLL.Models.Department department, BLL.Models.University university)
+        {
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "List",
+                    Action = "AvailableUniversities",
+                    Title = "Uczelnie"
+                },
+                new Breadcrumb
+                {
+                    Controller = "List",
+                    Action = "Departments",
+                    Title = university.Abbreviation,
+                    Params = new Dictionary<string, string>
+                    {
+                        { "universityId", university.UniversityId.ToString() }
+                    }
+                },
+                new Breadcrumb
+                {
+                    Controller = "List",
+                    Action = "Semesters",
+                    Title = department.Abbreviation,
+                    Params = new Dictionary<string, string>
+                    {
+                        { "departmentId", department.DepartmentId.ToString() },
+                    }
+                },
+                new Breadcrumb
+                {
+                    Controller = "List",
+                    Action = "Lessons",
+                    Title = semester.Number,
+                    Params = new Dictionary<string, string>
+                    {
+                        { "semesterId", semester.SemesterId.ToString() },
+                        { "departmentId", department.DepartmentId.ToString() }
+                    }
+                }
+            };
+        }
+
+        private void ConfigureMaterialsBreadcrumbs(BLL.Models.Lesson lesson)
+        {
+            ConfigureListBreadcrumbs(lesson.Semester, lesson.Department, lesson.Department.University);
+
+            ViewBag.Breadcrumbs.Add(
+                new Breadcrumb
+                {
+                    Controller = "Materials",
+                    Action = "Materials",
+                    Title = lesson.Subject.Abbreviation,
+                    Params = new Dictionary<string, string>
+                    {
+                        { "lessonId", lesson.LessonId.ToString() }
+                    }
+                }
+            );
+        }
+
+        private void ConfigureMaterialBreadcrumbs(BLL.Models.Material material)
+        {
+            ConfigureMaterialsBreadcrumbs(material.Lesson);
+
+            ViewBag.Breadcrumbs.Add(
+                new Breadcrumb
+                {
+                    Controller = "Materials",
+                    Action = "Material",
+                    Title = "Materiał",
+                    Params = new Dictionary<string, string>
+                    {
+                        { "materialId", material.MaterialId.ToString() }
+                    }
+                }
+            );
+        }
+
+        private void ConfigureAddMaterialBreadcrumbs(BLL.Models.Lesson lesson)
+        {
+            ConfigureMaterialsBreadcrumbs(lesson);
+
+            ViewBag.Breadcrumbs.Add(
+                new Breadcrumb
+                {
+                    Controller = "Materials",
+                    Action = "Add",
+                    Title = "Dodawanie materiału",
+                    Params = new Dictionary<string, string>
+                    {
+                        { "lessonId", lesson.LessonId.ToString() }
+                    }
+                }
+            );
+        }
+
+        private void ConfigureEditMaterialBreadcrumbs(BLL.Models.Lesson lesson, int materialId)
+        {
+            ConfigureMaterialsBreadcrumbs(lesson);
+
+            ViewBag.Breadcrumbs.Add(
+                new Breadcrumb
+                {
+                    Controller = "Materials",
+                    Action = "Edit",
+                    Title = "Edycja materiału",
+                    Params = new Dictionary<string, string>
+                    {
+                        { "lessonId", lesson.LessonId.ToString() }
+                    }
+                }
+            );
+        }
+
+        private void ConfigureDeleteMaterialBreadcrumbs(BLL.Models.Material material)
+        {
+            ConfigureMaterialsBreadcrumbs(material.Lesson);
+
+            ViewBag.Breadcrumbs.Add(
+                new Breadcrumb
+                {
+                    Controller = "Materials",
+                    Action = "Delete",
+                    Title = "Usuwanie materiału",
+                    Params = new Dictionary<string, string>
+                    {
+                        { "materialId", material.MaterialId.ToString() }
+                    }
+                }
+            );
+        }
+
+        private void ConfigureEditSuggestionBreadcrumbs(BLL.Models.Material material)
+        {
+            ConfigureMaterialsBreadcrumbs(material.Lesson);
+
+            ViewBag.Breadcrumbs.Add(
+                new Breadcrumb
+                {
+                    Controller = "Materials",
+                    Action = "CreateEditSuggestion",
+                    Title = "Tworzenie sugestii edycji",
+                    Params = new Dictionary<string, string>
+                    {
+                        { "materialId", material.MaterialId.ToString() }
+                    }
+                }
+            );
+        }
+
+        private void ConfigureDeleteSuggestionBreadcrumbs(BLL.Models.Material material)
+        {
+            ConfigureMaterialsBreadcrumbs(material.Lesson);
+
+            ViewBag.Breadcrumbs.Add(
+                new Breadcrumb
+                {
+                    Controller = "Materials",
+                    Action = "CreateDeleteSuggestion",
+                    Title = "Tworzenie sugestii usunięcia",
+                    Params = new Dictionary<string, string>
+                    {
+                        { "materialId", material.MaterialId.ToString() }
+                    }
+                }
+            );
+        }
+        #endregion
     }
 }

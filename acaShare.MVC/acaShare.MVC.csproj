@@ -125,6 +125,7 @@
     <Folder Include="Areas\Administrator\Models\" />
     <Folder Include="Areas\Administrator\Views\" />
     <Folder Include="Areas\Identity\Views\WelcomePage\" />
+    <Folder Include="_Uploads\Materials\" />
   </ItemGroup>
 
 </Project>

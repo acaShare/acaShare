@@ -40,7 +40,8 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
                     ReasonId = ds.DeleteReasonId,
                     Reason = ds.DeleteReason.Reason,
                     AdditionalComment = ds.AdditionalComment,
-                    DeleterName = ds.Deleter.Username
+                    DeleterName = ds.Deleter.Username,
+                    RequestDate = ds.RequestDate
                 }
             ).ToList();
 

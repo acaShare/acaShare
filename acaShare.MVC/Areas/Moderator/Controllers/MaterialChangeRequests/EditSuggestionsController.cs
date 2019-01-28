@@ -38,7 +38,8 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
                 {
                     EditRequestId = es.EditRequestId,
                     MaterialName = es.MaterialToUpdate.Name,
-                    Summary = es.Summary
+                    Summary = es.Summary,
+                    RequestDate = es.RequestDate
                 }
             ).ToList();
 
@@ -115,7 +116,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
             };
         }
 
-        public IActionResult ApproveEditRequest(int editRequestId)
+        public IActionResult ApproveEditRequest(int editRequestId, bool isRedirectToMaterial)
         {
             var loggedModerator = _userService.FindByIdentityUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
@@ -140,7 +141,12 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
                 _filesManagement.RemoveFilesFromFileSystem(editRequest.Files);
                 return BadRequest("Coś poszło nie tak podczas zapisywania plików. Spróbuj ponownie.");
             }
-            
+
+            if (isRedirectToMaterial)
+            {
+                return RedirectToAction("Material", "Materials", new { area = "Main", materialId = editRequest.MaterialToUpdateId });
+            }
+
             return RedirectToAction("EditSuggestions");
         }
 

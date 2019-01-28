@@ -8,7 +8,6 @@ namespace acaShare.DAL.Core.Repositories.UniversityRelated
     public interface IUniversityRepository : IRepository<University>
     {
         IEnumerable<Department> GetDepartmentsFromUniversity(int universityId);
-        bool DoesUniversityAlreadyExist(string name);
-        bool IsAbbreviationAlreadyTaken(string abbreviation);
+        bool DoesUniversityAlreadyExist(University university);
     }
 }

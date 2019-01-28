@@ -13,12 +13,10 @@ namespace acaShare.MVC.Areas.Main.ViewComponents
     public class SidebarViewComponent : ViewComponent
     {
         private readonly ISidebarService _sidebarService;
-        private readonly IUserService _userService;
 
-        public SidebarViewComponent(ISidebarService sidebarService, IUserService userService)
+        public SidebarViewComponent(ISidebarService sidebarService)
         {
             _sidebarService = sidebarService;
-            _userService = userService;
         }
 
         public IViewComponentResult Invoke(int? materialId, string loggedUserId)
@@ -48,11 +46,11 @@ namespace acaShare.MVC.Areas.Main.ViewComponents
                     }
                 ).ToList(),
 
-                Comments = comments?.OrderByDescending(c => c.CreatedDate).Select(c =>
+                Comments = comments?.OrderByDescending(c => c.CreateDate).Select(c =>
                     new CommentViewModel
                     {
                         Content = c.Content,
-                        When = FormatCreatedDate(c.CreatedDate),
+                        When = FormatCreatedDate(c.CreateDate),
                         CommentId = c.CommentId,
                         Author = c.User.Username
                     }
@@ -97,13 +95,13 @@ namespace acaShare.MVC.Areas.Main.ViewComponents
         private string GetFavoriteMaterialBreadcrumbsPath(Material material)
         {
             var lesson = material.Lesson;
-            var subjectDepartment = lesson.SubjectDepartment;
-            var department = subjectDepartment.Department;
+            var subject = lesson.Subject;
+            var department = lesson.Department;
             var university = department.University;
             var semester = lesson.Semester;
             
             return $"{university.Abbreviation} -> {department.Abbreviation} -> {semester.Number} -> " +
-                   $"{subjectDepartment.Subject.Abbreviation} -> {material.Name}";
+                   $"{subject.Abbreviation} -> {material.Name}";
         }
     }
 }

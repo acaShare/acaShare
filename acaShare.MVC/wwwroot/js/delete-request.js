@@ -2,7 +2,7 @@
     let additionalCommentElement = document.getElementById('additional-comment');
     let additionalCommentLabel = document.getElementById('additional-comment-label');
     
-    if (selectList.value === "4") {
+    if (selectList.value === "5") {
         additionalCommentElement.setAttribute('data-val-required', 'Przy wyborze "Innej" przyczyny należy załączyć dodatkowy komentarz (wyjaśnienie).');
         additionalCommentLabel.innerHTML = "Wyjaśnienie";    
     }

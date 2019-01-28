@@ -25,7 +25,7 @@ namespace acaShare.DAL.EFPersistence.Repositories
         
         public ICollection<Comment> GetComments(int materialId)
         {
-            return _comments.Where(c => c.MaterialId == materialId).ToList();
+            return _comments.Include(c => c.User).Where(c => c.MaterialId == materialId).ToList();
         }
 
         public ICollection<LastActivity> GetLastActivities()
@@ -40,7 +40,7 @@ namespace acaShare.DAL.EFPersistence.Repositories
                     {
                         Username = c.User.Username,
                         Content = c.Content,
-                        Date = c.CreatedDate,
+                        Date = c.CreateDate,
                         Material = c.Material,
                         ActivityType = LastActivityType.COMMENT
                     })
@@ -80,10 +80,9 @@ namespace acaShare.DAL.EFPersistence.Repositories
                 .Select(f => f.Material)
                 .Include(m => m.Lesson)
                 .Include(m => m.Lesson.Semester)
-                .Include(m => m.Lesson.SubjectDepartment)
-                .Include(m => m.Lesson.SubjectDepartment.Subject)
-                .Include(m => m.Lesson.SubjectDepartment.Department)
-                .Include(m => m.Lesson.SubjectDepartment.Department.University)
+                .Include(m => m.Lesson.Subject)
+                .Include(m => m.Lesson.Department)
+                .Include(m => m.Lesson.Department.University)
                 .ToList();
         }
     }

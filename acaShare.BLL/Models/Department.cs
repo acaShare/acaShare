@@ -13,7 +13,7 @@ namespace acaShare.BLL.Models
 
         protected Department()
         {
-            SubjectDepartment = new HashSet<SubjectDepartment>();
+            Lessons = new HashSet<Lesson>();
         }
 
         public int DepartmentId { get; private set; }
@@ -22,13 +22,14 @@ namespace acaShare.BLL.Models
         public int UniversityId { get; private set; }
 
         public virtual University University { get; private set; }
-        public virtual ICollection<SubjectDepartment> SubjectDepartment { get; private set; }
+        public virtual ICollection<Lesson> Lessons { get; private set; }
 
         public void Update(string name, string abbreviation, University university)
         {
             Name = name;
             Abbreviation = abbreviation;
             University = university;
+            UniversityId = university.UniversityId;
         }
     }
 }
