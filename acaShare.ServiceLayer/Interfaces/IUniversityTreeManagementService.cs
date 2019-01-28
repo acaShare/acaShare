@@ -10,22 +10,20 @@ namespace acaShare.ServiceLayer.Interfaces
     {
         // University
         bool AddUniversity(University university);
-        void UpdateUniversity(University university);
+        bool UpdateUniversity(University university);
         void DeleteUniversity(University university);
 
         // Department
         bool AddDepartment(Department department);
-        void UpdateDepartment(Department department);
+        bool UpdateDepartment(Department department);
         void DeleteDepartment(Department department);
 
         // Subject
-        SubjectDepartment AddSubject(Subject subject);
-        void UpdateSubject(Subject subject);
-        void DeleteSubject(int subjectId);
+        Subject AddSubjectIfNotExistsOrGetOtherwise(Subject subject);
 
         // Lesson
-        bool AddLesson(Lesson lesson, string abbreviation, SubjectDepartment subjectDepartment);
-        void UpdateLesson(Lesson lesson);
+        bool AddLesson(Lesson lesson);
+        bool UpdateLesson(Lesson lesson);
         void DeleteLesson(int lessonId);
     }
 }

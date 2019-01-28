@@ -3,7 +3,6 @@
 @model ModeratorManagementViewModel
 
 @inject UserManager<IdentityUser> userManager
-
 @{
     ViewData["Title"] = "Zarządzanie Moderatorami";
     var currentUser = await userManager.GetUserAsync(User);
@@ -41,6 +40,7 @@
             <tr>
                 <th>@Html.DisplayNameFor(model => model.DefaultUser.UserName)</th>
                 <th>@Html.DisplayNameFor(model => model.DefaultUser.Email)</th>
+                <th>Uczelnia</th>
                 <th>Opcje</th>
             </tr>
         </thead>
@@ -51,6 +51,17 @@
                 <td>@user.UserName</td>
                 <td>@user.Email</td>
                 <td>
+                    <form asp-action="AssignModeratorToUniversity" method="post">
+                            <select asp-for="UniversityId"
+                                    asp-items="@(new SelectList(Model.Universities, "UniversityId", "Name"))"
+                                    id="@user.Id">
+                                <option value="0">Wybierz Uczelnię...</option>
+                            </select>
+                            <input name="userId"  asp-for="@user.Id" type="hidden" />
+                            <button class="add-button" type="submit">Wybierz Uczelnię</button>
+                    </form>
+                </td>
+                <td>
                     <img style="visibility: hidden;" src="~/images/one-arrow-up.png" />
                     <img style="visibility: hidden;" src="~/images/two-arrows-up.png" />
                     <a href="@Url.Action("DemoteToMember", "ModeratorManagement", new { userId = user.Id })">
@@ -60,8 +71,17 @@
             </tr>
         }
     </table>
+
+    @section ModeratorManagementScripts {
+    <script type="text/javascript">
+        @foreach(var umm in Model.UniversitiesMainModeratorsWithIdentityId)
+        {
+            @:document.getElementById('@umm.IdentityId').value = @umm.UniversityId;
+        }
+    </script>
     }
 
+    }
     <h4 class="title">Moderatorzy</h4>
 
     <table class="table">

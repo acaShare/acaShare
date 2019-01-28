@@ -19,32 +19,27 @@ namespace acaShare.DAL.EFPersistence.Repositories
             return _dbSet
                 .Include(l => l.Materials)
                 .Include(l => l.Semester)
-                .Include(l => l.SubjectDepartment)
-                .Include(l => l.SubjectDepartment.Subject)
-                .Include(l => l.SubjectDepartment.Department)
-                .Include(l => l.SubjectDepartment.Department.University)
+                .Include(l => l.Subject)
+                .Include(l => l.Department)
+                    .ThenInclude(d => d.University)
+                //.Include(l => l.Department.University)
                 .FirstOrDefault(l => l.LessonId == lessonId);
         }
 
-        public bool DoesLessonAlreadyExist(int subjectDepartmentId, int semesterId)
+        public bool IsSubjectWithSameNameOrAbbreviationExistInDepartment(Lesson lesson)
         {
-            return _dbSet.Any(l => l.SubjectDepartmentId == subjectDepartmentId && l.SemesterId == semesterId);
+            return _dbSet
+                .Include(l => l.Subject)
+                .Where(l => l.DepartmentId == lesson.DepartmentId)
+                .Any(l => l.Subject.Name == lesson.Subject.Name || l.Subject.Abbreviation == lesson.Subject.Abbreviation);
         }
 
-        public bool IsAbbreviationAlreadyTaken(int deptId, int semesterId, string abbreviation)
+        public ICollection<Lesson> GetLessonsFromSemesterInDepartment(Semester semester, Department department)
         {
-            foreach (var lesson in _dbSet)
-            {
-                if (lesson.SubjectDepartment.DepartmentId == deptId && lesson.SemesterId == semesterId)
-                {
-                    if (lesson.SubjectDepartment.Subject.Abbreviation == abbreviation)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
+            return _dbSet
+                .Include(l => l.Subject)
+                .Where(l => l.SemesterId == semester.SemesterId && l.DepartmentId == department.DepartmentId)
+                .ToList();
         }
     }
 }

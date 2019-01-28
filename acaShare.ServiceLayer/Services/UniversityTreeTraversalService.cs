@@ -17,7 +17,6 @@ namespace acaShare.ServiceLayer.Services
             _uow = uow;
         }
 
-
         public University GetUniversity(int id)
         {
             return _uow.Universities.FindById(id);
@@ -49,41 +48,16 @@ namespace acaShare.ServiceLayer.Services
         {
             return _uow.Semesters.GetAll();
         }
+        
 
-
-
-        public IEnumerable<SubjectDepartment> GetSubjectDepartmentAssociationResultsForDepartment(int departmentId)
+        public IEnumerable<Lesson> GetLessons(Semester semester, Department department)
         {
-            return _uow.Departments.FindSubjectDepartmentAssociations(departmentId);
+            return _uow.Lessons.GetLessonsFromSemesterInDepartment(semester, department);
         }
-
-
-        public IEnumerable<Lesson> GetLessons(int semesterId, IEnumerable<SubjectDepartment> subjectDepartmentAssociationResults)
-        {
-            return _uow.Lessons.GetAll().Where(l => l.SemesterId == semesterId && subjectDepartmentAssociationResults.Contains(l.SubjectDepartment));
-        }
-
 
         public Lesson GetLesson(int id)
         {
             return _uow.Lessons.FindById(id);
-        }
-
-        public IEnumerable<Lesson> GetLessons()
-        {
-            throw new NotImplementedException();
-        }
-
-      
-
-        public Subject GetSubject(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Subject> GetSubjects()
-        {
-            throw new NotImplementedException();
         }
     }
 }

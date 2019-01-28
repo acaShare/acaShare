@@ -7,7 +7,6 @@ namespace acaShare.DAL.Core.Repositories.UniversityRelated
 {
     public interface ISubjectRepository : IRepository<Subject>
     {
-        Subject GetByName(string name);
-        SubjectDepartment GetSubDept(Subject subject);
+        Subject GetByNaming(string name, string abbreviation);
     }
 }

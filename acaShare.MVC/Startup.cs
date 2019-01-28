@@ -50,6 +50,7 @@ namespace acaShare.MVC
             services.AddSingleton<IFormFilesManagement>(f => new FormFilesManagement(HostingEnvironment));
             services.AddSingleton<IFilesValidator, FilesValidator>();
             services.AddScoped<ValidateMaterial>();
+            services.AddScoped<IMainModeratorService, MainModeratorService>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -93,11 +94,12 @@ namespace acaShare.MVC
 
             app.UseStaticFiles(); // For the wwwroot folder
 
+            var uploadsFolder = SharedResourcesLibrary.Properties.Resources.UploadsFolderName;
+            Directory.CreateDirectory(uploadsFolder);
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(Directory.GetCurrentDirectory(), SharedResourcesLibrary.Properties.Resources.UploadsFolderName)),
-                RequestPath = "/" + SharedResourcesLibrary.Properties.Resources.UploadsFolderName
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), uploadsFolder)),
+                RequestPath = "/" + uploadsFolder
             });
 
             app.Use(async (ctx, next) =>

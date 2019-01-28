@@ -30,11 +30,9 @@ namespace acaShare.DAL.Configuration
         public virtual DbSet<Notification> Notification { get; set; }
         public virtual DbSet<Semester> Semester { get; set; }
         public virtual DbSet<Subject> Subject { get; set; }
-        public virtual DbSet<SubjectDepartment> SubjectDepartment { get; set; }
         public virtual DbSet<University> University { get; set; }
         public virtual DbSet<User> User { get; set; }
-        public virtual DbSet<UserInUniversity> UserInUniversity { get; set; }
-        public virtual DbSet<UserType> UserType { get; set; }
+        public virtual DbSet<UniversityMainModerator> UniversityMainModerator { get; set; }
        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -236,7 +234,7 @@ namespace acaShare.DAL.Configuration
 
             modelBuilder.Entity<Lesson>(entity =>
             {
-                entity.HasIndex(e => new { e.SemesterId, e.SubjectDepartmentId })
+                entity.HasIndex(e => new { e.SemesterId, e.SubjectId, e.DepartmentId })
                     .HasName("UQ_Lesson")
                     .IsUnique();
 
@@ -247,11 +245,18 @@ namespace acaShare.DAL.Configuration
                     .HasConstraintName("Subject_Semester")
                     .IsRequired();
 
-                entity.HasOne(d => d.SubjectDepartment)
+                entity.HasOne(d => d.Subject)
                     .WithMany(p => p.Lessons)
-                    .HasForeignKey(d => d.SubjectDepartmentId)
+                    .HasForeignKey(d => d.SubjectId)
                     .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("Lesson_SubjectDepartment")
+                    .HasConstraintName("Lesson_Subject")
+                    .IsRequired();
+
+                entity.HasOne(d => d.Department)
+                    .WithMany(p => p.Lessons)
+                    .HasForeignKey(d => d.DepartmentId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("Lesson_Department")
                     .IsRequired();
             });
 
@@ -354,9 +359,9 @@ namespace acaShare.DAL.Configuration
 
             modelBuilder.Entity<Subject>(entity =>
             {
-                entity.HasIndex(e => e.Name)
-                    .HasName("UQ_Subject_Name")
-                    .IsUnique();
+                entity.HasIndex(e => new { e.Name, e.Abbreviation })
+                   .HasName("UQ_Subject_Name_Abbreviation")
+                   .IsUnique();
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -367,32 +372,15 @@ namespace acaShare.DAL.Configuration
                     .HasMaxLength(5);
             });
 
-            modelBuilder.Entity<SubjectDepartment>(entity =>
-            {
-                entity.HasIndex(e => new { e.SubjectId, e.DepartmentId })
-                    .HasName("UQ_SubjectDepartment")
-                    .IsUnique();
-
-                entity.HasOne(d => d.Department)
-                    .WithMany(p => p.SubjectDepartment)
-                    .HasForeignKey(d => d.DepartmentId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("SubjectDepartment_Department")
-                    .IsRequired();
-
-                entity.HasOne(d => d.Subject)
-                    .WithMany(p => p.SubjectDepartment)
-                    .HasForeignKey(d => d.SubjectId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("SubjectDepartment_Subject")
-                    .IsRequired();
-            });
-
             modelBuilder.Entity<University>(entity =>
             {
                 entity.HasIndex(e => e.Name)
                     .HasName("UQ_University_Name")
                     .IsUnique();
+
+                entity.HasIndex(e => e.Abbreviation)
+                    .HasName("UQ_University_Abbreviation")
+                    .IsUnique(); 
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -421,47 +409,21 @@ namespace acaShare.DAL.Configuration
                     .IsUnique();
             });
 
-            modelBuilder.Entity<UserInUniversity>(entity =>
+            modelBuilder.Entity<UniversityMainModerator>(entity =>
             {
                 entity.HasKey(e => new { e.UserId, e.UniversityId });
-
-                entity.HasIndex(e => new { e.UserId, e.UniversityId })
-                    .HasName("UQ_UserInUniversity")
-                    .IsUnique();
-
-                entity.Property(e => e.JoinDate).HasColumnType("datetime");
-
-                entity.HasOne(d => d.Type)
-                    .WithMany(p => p.UsersInUniversity)
-                    .HasForeignKey(d => d.TypeId)
-                    .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("UserUniversity_UserType");
 
                 entity.HasOne(d => d.University)
                     .WithMany(p => p.UsersInUniversity)
                     .HasForeignKey(d => d.UniversityId)
                     .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("UserUniversity_University");
+                    .HasConstraintName("UniversityMainModerator_University");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.UsersInUniversity)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("UserUniversity_User");
-            });
-
-            modelBuilder.Entity<UserType>(entity =>
-            {
-                entity.HasKey(e => e.TypeId);
-
-                entity.HasIndex(e => e.Name)
-                    .HasName("UQ_UserType_Name")
-                    .IsUnique();
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .HasConstraintName("UniversityMainModerator_User");
             });
 
             modelBuilder.Entity<IdentityRole>().HasData(

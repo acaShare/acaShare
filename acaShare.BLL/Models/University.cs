@@ -14,7 +14,7 @@ namespace acaShare.BLL.Models
         protected University()
         {
             Departments = new HashSet<Department>();
-            UsersInUniversity = new HashSet<UserInUniversity>();
+            UsersInUniversity = new HashSet<UniversityMainModerator>();
         }
 
         public int UniversityId { get; private set; }
@@ -22,7 +22,7 @@ namespace acaShare.BLL.Models
         public string Abbreviation { get; private set; }
 
         public virtual ICollection<Department> Departments { get; private set; }
-        public virtual ICollection<UserInUniversity> UsersInUniversity { get; private set; }
+        public virtual ICollection<UniversityMainModerator> UsersInUniversity { get; private set; }
 
         public void Update(string name, string abbreviation)
         {

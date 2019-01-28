@@ -23,7 +23,7 @@ namespace acaShare.BLL.Models
             ApprovedMaterials = new HashSet<Material>();
             CreatedMaterials = new HashSet<Material>();
             UpdatedMaterials = new HashSet<Material>();
-            UsersInUniversity = new HashSet<UserInUniversity>();
+            UsersInUniversity = new HashSet<UniversityMainModerator>();
             Notifications = new HashSet<Notification>();
             HandledDeleteRequests = new HashSet<DeleteRequest>();
         }
@@ -40,7 +40,7 @@ namespace acaShare.BLL.Models
         public virtual ICollection<Material> ApprovedMaterials { get; private set; }
         public virtual ICollection<Material> CreatedMaterials { get; private set; }
         public virtual ICollection<Material> UpdatedMaterials { get; private set; }
-        public virtual ICollection<UserInUniversity> UsersInUniversity { get; private set; }
+        public virtual ICollection<UniversityMainModerator> UsersInUniversity { get; private set; }
         public virtual ICollection<Notification> Notifications { get; private set; }
         public virtual ICollection<DeleteRequest> HandledDeleteRequests { get; private set; }
 
