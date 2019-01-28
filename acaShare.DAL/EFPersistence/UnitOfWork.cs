@@ -27,6 +27,7 @@ namespace acaShare.DAL.EFPersistence
         public ISidebarRepository SidebarRepository { get; }
         public IStatisticsRepository StatisticsRepository { get; }
         public INotificationRepository NotificationRepository { get; }
+        public IMainModeratorRepository MainModeratorRepository { get; }
 
         public UnitOfWork(AcaShareDbContext dbContext)
         {
@@ -42,6 +43,7 @@ namespace acaShare.DAL.EFPersistence
             SidebarRepository = new SidebarRepository(_db.Comment, _db.Material, _db.Favorites);
             StatisticsRepository = new StatisticsRepository(_db.DeleteRequest);
             NotificationRepository = new NotificationRepository(_db.Notification);
+            MainModeratorRepository = new MainModeratorRepository(_db.UniversityMainModerator);
         }
 
         public void SaveChanges()

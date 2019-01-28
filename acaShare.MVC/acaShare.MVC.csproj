@@ -23,6 +23,7 @@
   <ItemGroup>
     <Compile Include="Areas\Moderator\Models\DisplayUserViewModel.cs" />
     <Compile Include="Areas\Moderator\Models\FileViewModel.cs" />
+    <Compile Include="Areas\Moderator\Models\MainModeratorAppIdIdentityIdViewModel.cs" />
     <Compile Include="Areas\Moderator\Models\MaterialChangeRequests\ChangeRequestApprovalDecision.cs" />
     <Compile Include="Areas\Moderator\Models\MaterialChangeRequests\DeleteRequestViewModel.cs" />
     <Compile Include="Areas\Moderator\Models\MaterialChangeRequests\EditRequestViewModel.cs" />

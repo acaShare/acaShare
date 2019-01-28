@@ -1,10 +1,18 @@
 ﻿@page
-@model AccessDeniedModel
 @{
-    ViewData["Title"] = "Access denied";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<header>
-    <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">You do not have access to this resource.</p>
-</header>
+<link href="~/css/errors/PageNotFound.css" rel="stylesheet" />
+
+<div class="main-container">
+    <h1>UPS!</h1>
+    <h3>Wygląda na to, że nie masz uprawnień do tego działania!</h3>
+    <div><img src="~/images/PageNotFound.png" /></div>
+    <h3>BŁĄD</h3>
+    <h4>Wróć na <a href="javascript:void(0)" onclick="window.history.back()">poprzednią</a> stronę i spróbuj ponownie</h4>
+    <h4>
+        lub wróć na
+        <a asp-area="Main" asp-controller="List" asp-action="AvailableUniversities">STRONĘ GŁÓWNĄ</a>
+    </h4>
+</div>

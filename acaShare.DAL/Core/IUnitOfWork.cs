@@ -20,6 +20,7 @@ namespace acaShare.DAL.Core
         ISidebarRepository SidebarRepository { get; }
         IStatisticsRepository StatisticsRepository { get; }
         INotificationRepository NotificationRepository { get; }
+        IMainModeratorRepository MainModeratorRepository { get; }
         void SaveChanges();
     }
 }
