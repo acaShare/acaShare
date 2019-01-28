@@ -6,15 +6,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Identity\Views\**" />
     <Compile Remove="Areas\Main\Models\List\**" />
     <Compile Remove="Areas\Moderator\Models\**" />
     <Compile Remove="Areas\Universities\**" />
+    <Content Remove="Areas\Identity\Views\**" />
     <Content Remove="Areas\Main\Models\List\**" />
     <Content Remove="Areas\Moderator\Models\**" />
     <Content Remove="Areas\Universities\**" />
+    <EmbeddedResource Remove="Areas\Identity\Views\**" />
     <EmbeddedResource Remove="Areas\Main\Models\List\**" />
     <EmbeddedResource Remove="Areas\Moderator\Models\**" />
     <EmbeddedResource Remove="Areas\Universities\**" />
+    <None Remove="Areas\Identity\Views\**" />
     <None Remove="Areas\Main\Models\List\**" />
     <None Remove="Areas\Moderator\Models\**" />
     <None Remove="Areas\Universities\**" />
@@ -122,10 +126,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Administrator\Controllers\" />
-    <Folder Include="Areas\Administrator\Models\" />
-    <Folder Include="Areas\Administrator\Views\" />
-    <Folder Include="Areas\Identity\Views\WelcomePage\" />
     <Folder Include="_Uploads\Materials\" />
   </ItemGroup>
 
