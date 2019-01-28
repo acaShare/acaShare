@@ -163,6 +163,11 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.ModeratorManagement
                 return RedirectToAction("ResourceNotFound", "Error", new { error = "użytkownik o podanym Id nie istnieje." });
             }
 
+            if (UniversityId == 0)
+            {
+                return RedirectToAction("Home");
+            }
+
             var newMainModInUniversity = new UniversityMainModerator {
                 UserId = appUser.UserId,
                 UniversityId = UniversityId
