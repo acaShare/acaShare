@@ -1,5 +1,15 @@
 ﻿.main-container{
     text-align: center;
+    padding: 1em;
+}
+
+.welcome {
+    font-size: 2.5em;
+}
+
+.description {
+    font-size: 1.5em;
+    margin-bottom: .8em;
 }
 
 .card {
@@ -12,6 +22,7 @@
     background-color: #546e7a;
     border-radius: 10px;
     padding-top: 5px;
+    padding-bottom: 10px;
     color: white;
 }
 
@@ -21,4 +32,15 @@
 
 .container {
     padding: 2px 16px;
+}
+
+@media only screen and (min-width: 600px) {
+    .welcome {
+        font-size: 3em;
+    }
+
+    .description {
+        font-size: 2em;
+        margin-bottom: 1em;
+    }
 }
