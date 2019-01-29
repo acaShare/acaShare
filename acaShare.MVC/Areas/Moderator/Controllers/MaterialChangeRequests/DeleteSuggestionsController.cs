@@ -111,7 +111,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.MaterialChangeRequests
                 {
                     Controller = "DeleteSuggestions",
                     Action = "DeleteRequestApprovalDecision",
-                    Title = "Podgląd zmian",
+                    Title = "Podgląd materiału",
                     Params = new Dictionary<string, string>() { { "deleteRequestId", deleteRequestId.ToString() } }
                 }
             };
