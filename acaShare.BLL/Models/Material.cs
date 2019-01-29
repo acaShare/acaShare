@@ -44,14 +44,17 @@ namespace acaShare.BLL.Models
         {
             Comments.Add(comment);
             
-            Creator.Notify(
-                NotificationType.MATERIAL_COMMENTED,
-                new Dictionary<string, string>
-                {
-                    { "MaterialName", this.Name },
-                    { "Commenter", comment.User.Username },
-                    { "MaterialId", this.MaterialId.ToString() }
-                });
+            if (this.Creator != comment.User)
+            {
+                Creator.Notify(
+                    NotificationType.MATERIAL_COMMENTED,
+                    new Dictionary<string, string>
+                    {
+                        { "MaterialName", this.Name },
+                        { "Commenter", comment.User.Username },
+                        { "MaterialId", this.MaterialId.ToString() }
+                    });
+            }
         }
 
         public int MaterialId { get; private set; }
