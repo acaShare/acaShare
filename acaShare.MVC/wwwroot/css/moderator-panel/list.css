@@ -1,5 +1,7 @@
 ﻿.moderator-actions {
     width: 100%;
+    height: 100%;
+    overflow: auto;
 }
 
 .list-view-wrapper {

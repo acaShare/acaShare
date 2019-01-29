@@ -50,6 +50,7 @@
     <nav>
         <div class="nav-wrapper">
             <a asp-area="Main" asp-controller="List" asp-action="AvailableUniversities" class="brand-logo">acaShare</a>
+
             @if (User.Identity.IsAuthenticated)
             {
                 <div id="notification-bell-mobile" class="notifications-bell-mobile-wrapper">
@@ -69,6 +70,10 @@
                     @if (User.IsInRole(Roles.AdministratorRole) || User.IsInRole(Roles.MainModeratorRole) || User.IsInRole(Roles.ModeratorRole))
                     {
                         <li><a asp-area="Moderator" asp-controller="ModeratorPanel" asp-action="MaterialsToApprove">Panel moderatora</a></li>
+                    }
+                    else
+                    {
+                        <li><a asp-area="Main" asp-controller="List" asp-action="Regulations">Regulamin strony</a></li>
                     }
 
                     <li>

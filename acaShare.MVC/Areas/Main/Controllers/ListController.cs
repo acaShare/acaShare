@@ -146,6 +146,21 @@ namespace acaShare.MVC.Areas.Main.Controllers
 
             return View(vm);
         }
+
+        public IActionResult Regulations()
+        {
+            ViewBag.Breadcrumbs = new List<Breadcrumb>
+            {
+                new Breadcrumb
+                {
+                    Controller = "List",
+                    Action = "Regulations",
+                    Title = "Regulamin"
+                }
+            };
+
+            return View();
+        }
         
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
