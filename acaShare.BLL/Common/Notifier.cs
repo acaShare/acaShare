@@ -37,6 +37,10 @@ namespace acaShare.BLL.Common
                     content = $"Twoja sugestia edycji materiału \"{data["MaterialName"]}\" została odrzucona. Powód: {reason2}.";
                     break;
 
+                case NotificationType.MATERIAL_COMMENTED:
+                    content = $"Użytkownik {data["Commenter"]} skomentował Twój materiał \"{data["MaterialName"]}\".";
+                    break;
+
                 default:
                     content = "Wystąpił błąd w module powiadomień. Skontaktuj się z administratorem serwisu.";
                     break;

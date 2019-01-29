@@ -43,6 +43,15 @@ namespace acaShare.BLL.Models
         public void AddComment(Comment comment)
         {
             Comments.Add(comment);
+            
+            Creator.Notify(
+                NotificationType.MATERIAL_COMMENTED,
+                new Dictionary<string, string>
+                {
+                    { "MaterialName", this.Name },
+                    { "Commenter", comment.User.Username },
+                    { "MaterialId", this.MaterialId.ToString() }
+                });
         }
 
         public int MaterialId { get; private set; }
