@@ -28,6 +28,7 @@
 }
 
 .checkbox {
+    margin-top: 1.5em;
     position: initial !important;
     opacity: 1 !important;
     pointer-events: all !important;
