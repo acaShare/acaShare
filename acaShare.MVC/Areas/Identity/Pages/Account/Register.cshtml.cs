@@ -66,6 +66,9 @@ namespace acaShare.MVC.Areas.Identity.Pages.Account
             [Display(Name = "Potwierdź hasło")]
             [Compare("Password", ErrorMessage = "Wpisane hasła nie są takie same.")]
             public string ConfirmPassword { get; set; }
+            
+            [Required(ErrorMessage = "Aby założyć konto konieczna jest akceptacja regulaminu!")]
+            public bool AcceptRegulations { get; set; }
         }
 
         public void OnGet(string returnUrl = null)
@@ -75,6 +78,12 @@ namespace acaShare.MVC.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            if (!Input.AcceptRegulations)
+            {
+                ModelState.AddModelError("AcceptRegulations", "Aby założyć konto konieczna jest akceptacja regulaminu!");
+                return Page();
+            }
+
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {

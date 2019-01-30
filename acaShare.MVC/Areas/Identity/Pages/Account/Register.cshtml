@@ -35,6 +35,11 @@
                 <label asp-for="Input.ConfirmPassword">@Html.DisplayNameFor(m => m.Input.ConfirmPassword)</label><br />
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <input type="checkbox" asp-for="Input.AcceptRegulations" class="checkbox" />
+                <label asp-for="Input.AcceptRegulations">Oświadczam, że zapoznałem się z <a asp-area="Main" asp-controller="List" asp-action="Regulations">regulaminem</a> strony</label><br />
+                <span asp-validation-for="Input.AcceptRegulations" class="text-danger"></span>
+            </div>
 
             <button type="submit" class="btn btn-default signup-button wide">Zarejestruj się</button>
             Masz już konto?

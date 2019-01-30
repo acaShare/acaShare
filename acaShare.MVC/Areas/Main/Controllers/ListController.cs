@@ -147,6 +147,7 @@ namespace acaShare.MVC.Areas.Main.Controllers
             return View(vm);
         }
 
+        [AllowAnonymous]
         public IActionResult Regulations()
         {
             ViewBag.Breadcrumbs = new List<Breadcrumb>
@@ -159,7 +160,14 @@ namespace acaShare.MVC.Areas.Main.Controllers
                 }
             };
 
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+                return View();
+            }
+            else
+            {
+                return View("~/Views/Shared/RegulationsNotAuthenticated.cshtml");
+            }
         }
         
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
