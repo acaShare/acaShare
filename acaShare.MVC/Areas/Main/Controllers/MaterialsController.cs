@@ -42,9 +42,8 @@ namespace acaShare.MVC.Areas.Main.Controllers
             }
 
             ConfigureMaterialsBreadcrumbs(lesson);
-            
-            var materials = lesson.Materials;
 
+            var materials = _traversalService.GetMaterialsFromLesson(lessonId);
             var materialViewModels = materials.Select(m =>
                 new MaterialViewModel
                 {

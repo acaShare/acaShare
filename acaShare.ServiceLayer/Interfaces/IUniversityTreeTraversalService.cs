@@ -18,5 +18,7 @@ namespace acaShare.ServiceLayer.Interfaces
 
         Lesson GetLesson(int id);
         IEnumerable<Lesson> GetLessons(Semester semester, Department department);
+
+        IEnumerable<Material> GetMaterialsFromLesson(int lessonId);
     }
 }

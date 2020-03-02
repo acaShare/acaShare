@@ -1,22 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
-using acaShare.DAL.Configuration;
+﻿using acaShare.DAL.Configuration;
 using acaShare.DAL.Core;
 using acaShare.DAL.EFPersistence;
 using acaShare.ServiceLayer.Interfaces;
 using acaShare.ServiceLayer.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace acaShare.WebAPI
@@ -38,9 +30,6 @@ namespace acaShare.WebAPI
             services.AddScoped<IMainPanelService, MainPanelService>();
             services.AddScoped<IUniversityTreeManagementService, UniversityTreeManagementService>();
             services.AddCors();
-            services.AddMvc()
-                .AddJsonOptions(options =>  options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore)
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddDbContext<AcaShareDbContext>(options =>
             {

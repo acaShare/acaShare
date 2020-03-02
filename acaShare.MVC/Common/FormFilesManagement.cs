@@ -1,19 +1,17 @@
-﻿using acaShare.BLL.Models;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace acaShare.MVC.Common
 {
     public class FormFilesManagement : IFormFilesManagement
     {
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public FormFilesManagement(IHostingEnvironment hostingEnvironment)
+        public FormFilesManagement(IWebHostEnvironment hostingEnvironment)
         {
             _hostingEnvironment = hostingEnvironment;
         }
@@ -70,7 +68,7 @@ namespace acaShare.MVC.Common
                             {
                                 throw new ArgumentOutOfRangeException("Provided EditRequestId is not valid");
                             }
-                            
+
                             relativePath = Path.Combine(
                                 SharedResourcesLibrary.Properties.Resources.MaterialFilesUploadFolderName,
                                 materialId.ToString(),
@@ -137,7 +135,7 @@ namespace acaShare.MVC.Common
                 }
             }
         }
-        
+
         public string GetUploadFolderAbsolutePath()
         {
             return Path.Combine(_hostingEnvironment.ContentRootPath, SharedResourcesLibrary.Properties.Resources.UploadsFolderName);
@@ -190,7 +188,7 @@ namespace acaShare.MVC.Common
                 }
             }
         }
-        
+
         private void MoveNewFilesFromEditRequestToMaterial(string materialFolderAbsolutePath, string editRequestsFolder, int editRequestId)
         {
             var editRequestFolderAbsolutePath = Path.Combine(editRequestsFolder, editRequestId.ToString());
