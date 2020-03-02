@@ -62,6 +62,7 @@ namespace acaShare.MVC
             services.AddDbContext<AcaShareDbContext>(options =>
             {
                 options.UseLazyLoadingProxies();
+                //options.UseSqlServer(Environment.GetEnvironmentVariable("SQLCONNSTR_ConnectionString"));
                 options.UseSqlServer(Configuration["AcaShareConfiguration:ConnectionString"]);
             });
 
