@@ -18,11 +18,19 @@ body {
     overflow-y: scroll;
     /*background-color: #1d1d1d;*/
 }
+
 /*#########################################*/
-.nav-wrapper {
-    background-color: #4db6ac; /*#4db6ac #878787*/
+.nav-wrapper, .btn, .add-button, .add-material-button {
+    background-color: #ffab00 !important;
 }
+
+    .btn:hover, .add-button:hover, .add-material-button:hover {
+        background-color: #ff6d00 !important;
+        cursor: pointer;
+    }
 /*#########################################*/
+
+
 .brand-logo {
     margin-left: .5em;
 }
@@ -30,11 +38,7 @@ body {
 .home-container {
     height: 89%;
 }
-/*/*#########################################*/
-.home-container .btn {
-    /*background-color: #5175ff;*/ /*#F44336*/
-}
-/*#########################################*/
+
 .home-container .home-part {
     max-height: 100%;
     display: flex;

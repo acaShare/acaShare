@@ -158,7 +158,6 @@ h2 {
 .add-comment-button {
     display: flex;
     align-items: center;
-    color: #4db6ac;
     border: none;
     background-color: white;
 }
