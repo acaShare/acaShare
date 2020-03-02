@@ -1,8 +1,5 @@
 ﻿using acaShare.BLL.Models;
-using Microsoft.AspNetCore.Http;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace acaShare.ServiceLayer.Interfaces
 {

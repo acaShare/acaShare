@@ -159,5 +159,16 @@ namespace acaShare.DAL.EFPersistence.Repositories
         {
             _files.RemoveRange(filesToRemove);
         }
+
+        public ICollection<Material> GetMaterialsFromLesson(int lessonId)
+        {
+            return _dbSet
+                .AsNoTracking()
+                .Include(m => m.Creator)
+                .Include(m => m.Updater)
+                .Include(m => m.State)
+                .Where(m => m.LessonId == lessonId)
+                .ToList();
+        }
     }
 }

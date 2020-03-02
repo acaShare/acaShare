@@ -75,14 +75,17 @@ namespace acaShare.DAL.EFPersistence.Repositories
 
         public ICollection<Material> GetFavoriteMaterials(string loggedUserId)
         {
-            return _favorites
-                .Where(f => f.User.IdentityUserId == loggedUserId)
-                .Select(f => f.Material)
+            return _materials
+                .AsNoTracking()
+                .Include(m => m.Favorites)
+                    .ThenInclude(m => m.User)
                 .Include(m => m.Lesson)
+                .Include(m => m.Favorites)
                 .Include(m => m.Lesson.Semester)
                 .Include(m => m.Lesson.Subject)
                 .Include(m => m.Lesson.Department)
                 .Include(m => m.Lesson.Department.University)
+                .Where(m => m.Favorites.All(f => f.User.IdentityUserId == loggedUserId))
                 .ToList();
         }
     }

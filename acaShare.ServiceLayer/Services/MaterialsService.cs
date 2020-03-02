@@ -1,11 +1,9 @@
 ﻿using acaShare.BLL.Models;
 using acaShare.DAL.Core;
 using acaShare.ServiceLayer.Interfaces;
-using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace acaShare.ServiceLayer.Services
 {
@@ -71,7 +69,7 @@ namespace acaShare.ServiceLayer.Services
             _uow.Users.Update(loggedUser);
             _uow.SaveChanges();
         }
-        
+
         public void UpdateMaterial(Material material)
         {
             _uow.Materials.Update(material);
@@ -179,7 +177,7 @@ namespace acaShare.ServiceLayer.Services
         {
             return _uow.Materials.GetEditRequest(editRequestId);
         }
-        
+
         public void ApproveEditRequest(EditRequest editRequest)
         {
             if (editRequest == null)
@@ -197,7 +195,7 @@ namespace acaShare.ServiceLayer.Services
 
             // since onDelete action on File_Material FK constraint is RESTRICT - we have to delete these files manually before the material
             _uow.Materials.RemoveFiles(oldMaterialFilesToRemove);
-            
+
             _uow.Materials.Update(materialToUpdate);
             _uow.SaveChanges();
         }

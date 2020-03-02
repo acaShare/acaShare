@@ -59,5 +59,10 @@ namespace acaShare.ServiceLayer.Services
         {
             return _uow.Lessons.FindById(id);
         }
+
+        public IEnumerable<Material> GetMaterialsFromLesson(int lessonId)
+        {
+            return _uow.Materials.GetMaterialsFromLesson(lessonId);
+        }
     }
 }
