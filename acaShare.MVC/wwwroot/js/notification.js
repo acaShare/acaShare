@@ -41,10 +41,12 @@ function getData() {
 
                 let date = new Date(data[i].date);
 
-                contentDiv.appendChild(document.createTextNode(data[i].content));
+                let fullContent = data[i].content;
+                let maxLength = 100;
+                fillContentDiv(contentDiv, li, fullContent, maxLength);
 
                 dateDiv.appendChild(document.createTextNode(("0" + date.getHours()).slice(-2) + ":" +
-                                                      ("0" + date.getMinutes()).slice(-2) + "  " +
+                                                      ("0" + date.getMinutes()).slice(-2) + ",  " +
                                                       ("0" + date.getDate()).slice(-2) + "-" +
                                                       ("0" + (date.getMonth() + 1)).slice(-2) + "-" +
                                                       date.getFullYear() + " "));
@@ -68,6 +70,33 @@ function getData() {
     };
     xhttp.open("GET", "/Main/Notification/NotificationData");
     xhttp.send();
+}
+
+function fillContentDiv(contentDiv, wrapper, fullContent, maxLength) {
+    let isFullTextShownAttributeName = "data-is-full-text-shown";
+
+    let visibleContent;
+    if (fullContent.length > maxLength) {
+        visibleContent = fullContent.substr(0, maxLength) + " [...]";
+        wrapper.setAttribute('title', 'Pokaż więcej');
+        wrapper.style.cursor = "pointer";
+    }
+    else {
+        visibleContent = fullContent;
+    }
+
+    contentDiv.appendChild(document.createTextNode(visibleContent));
+    contentDiv.dataset.fullText = fullContent;
+    contentDiv.addEventListener('click', function () {
+        if (this.hasAttribute(isFullTextShownAttributeName)) {
+            this.innerHTML = visibleContent;
+            this.removeAttribute(isFullTextShownAttributeName);
+        }
+        else {
+            this.innerHTML = fullContent;
+            contentDiv.setAttribute(isFullTextShownAttributeName, '');
+        }
+    });
 }
 
 function fillWithEmptyMessage(ul) {
