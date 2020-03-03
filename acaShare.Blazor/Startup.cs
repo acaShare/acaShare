@@ -32,6 +32,13 @@ namespace acaShare.Blazor
             services.AddScoped<IUniversityTreeTraversalService, UniversityTreeTraversalService>();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddSingleton<WeatherForecastService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRolesManagementService, RolesManagementService>();
+            services.AddScoped<IMaterialsService, MaterialsService>();
+            services.AddScoped<ISidebarService, SidebarService>();
+            services.AddScoped<IStatisticsService, StatisticsService>();
+            services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IMainModeratorService, MainModeratorService>();
 
             services.AddDbContext<AcaShareDbContext>(options =>
             {

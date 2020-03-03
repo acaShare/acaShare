@@ -1,0 +1,14 @@
+﻿@using ServiceLayer.Interfaces;
+@page "/MaterialsToApprove"
+@inject IMaterialsService _service
+
+<AcaCollection MaterialsToApprove="_materials" />
+
+@code {
+    private ICollection<BLL.Models.Material> _materials;
+
+    protected override void OnInitialized()
+    {
+        _materials = _service.GetMaterialsToApprove();
+    }
+}

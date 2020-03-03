@@ -1,0 +1,24 @@
+﻿<div class="list-view-wrapper">
+    <div class="list-container">
+        <ul class="aca-collection">
+            <li class="aca-collection-item path-list-item">
+                @if (MaterialsToApprove.Count == 0)
+                {
+                    @foreach (var material in MaterialsToApprove)
+                    {
+                        <MaterialToApproveListItem Material="material" />
+                    }
+                }
+                else
+                {
+                    <p class="empty-list">~ Pusto ~</p>
+                }
+            </li>
+        </ul>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public ICollection<BLL.Models.Material> MaterialsToApprove { get; set; }
+}
