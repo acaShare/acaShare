@@ -1,4 +1,5 @@
-﻿<a class="item-link" href="/Moderator/ModeratorPanel/MaterialApprovalDecision?materialId=@Material.MaterialId">
+﻿<a class="item-link" href="/Moderator/ModeratorPanel/MaterialApprovalDecision/@(Material.MaterialId)"
+         @onclick="@(() => ChangeBreadcrumb("Materiał"))">
     <span class="path-list-item-title">@Material.Name</span>
     <br>
     <span class="path-list-item-subtitle">
@@ -17,10 +18,10 @@
 </a>
 
 <div class="icons-row-container">
-    <a class="approve-material" href="/Moderator/ModeratorPanel/ApproveMaterial?materialId=@Material.MaterialId">
+    <a class="approve-material" @onclick="() => OnApproveMaterialClickCallback.InvokeAsync(new MaterialCallbackArgs(Material.MaterialId))">
         <i class="material-icons list-icon icon-edit tooltipped" data-position="top" data-tooltip="Zatwierdź">check</i>
     </a>
-    <a class="reject-material" href="/Moderator/ModeratorPanel/RejectMaterial?materialId=@Material.MaterialId">
+    <a class="reject-material" @onclick="() => OnRejectMaterialClickCallback.InvokeAsync(new MaterialCallbackArgs(Material.MaterialId))">
         <i class="material-icons list-icon icon-delete tooltipped" data-position="top" data-tooltip="Odrzuć">not_interested</i>
     </a>
 </div>
@@ -30,4 +31,14 @@
     public BLL.Models.Material Material { get; set; }
 
     private const int maxDescriptionLength = 100;
+
+    //Callbacks
+    [Parameter]
+    public EventCallback<MaterialCallbackArgs> OnApproveMaterialClickCallback { get; set; }
+
+    [Parameter]
+    public EventCallback<MaterialCallbackArgs> OnRejectMaterialClickCallback { get; set; }
+
+    [CascadingParameter]
+    public Action<string> ChangeBreadcrumb { get; set; }
 }

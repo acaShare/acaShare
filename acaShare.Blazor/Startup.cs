@@ -1,5 +1,6 @@
+using acaShare.Blazor.ApplicationServices.Implementations;
+using acaShare.Blazor.ApplicationServices.Interfaces;
 using acaShare.Blazor.Areas.Identity;
-using acaShare.Blazor.Data;
 using acaShare.DAL.Configuration;
 using acaShare.DAL.Core;
 using acaShare.DAL.EFPersistence;
@@ -19,19 +20,20 @@ namespace acaShare.Blazor
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             Configuration = configuration;
+            WebHostEnvironment = webHostEnvironment;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment WebHostEnvironment { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUniversityTreeTraversalService, UniversityTreeTraversalService>();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-            services.AddSingleton<WeatherForecastService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRolesManagementService, RolesManagementService>();
             services.AddScoped<IMaterialsService, MaterialsService>();
@@ -39,6 +41,7 @@ namespace acaShare.Blazor
             services.AddScoped<IStatisticsService, StatisticsService>();
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IMainModeratorService, MainModeratorService>();
+            services.AddSingleton<IFormFilesManagement>(f => new FormFilesManagement(WebHostEnvironment));
 
             services.AddDbContext<AcaShareDbContext>(options =>
             {
@@ -52,7 +55,7 @@ namespace acaShare.Blazor
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
 
-            services.AddRazorPages().AddRazorRuntimeCompilation();
+            services.AddRazorPages();
             services.AddServerSideBlazor();
 
             services.ConfigureApplicationCookie(options =>

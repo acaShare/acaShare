@@ -1,4 +1,4 @@
-﻿<nav class="navbar navbar-expand-lg navbar-light bg-light mb-2">
+﻿@*<nav class="navbar navbar-expand-lg navbar-light bg-light mb-2">
     <a class="navbar-brand" href="">acaShare</a>
     <button class="navbar-toggler navbar-toggler-right" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
@@ -9,7 +9,7 @@
                 <Notifications />
             </li>
             <li class="nav-item">
-                <NavLink class="nav-link" href="MaterialsToApprove">
+                <NavLink class="nav-link" href="/Moderator/ModeratorPanel/MaterialsToApprove">
                     Panel moderatora
                 </NavLink>
             </li>
@@ -18,9 +18,57 @@
             </li>
         </ul>
     </div>
+</nav>*@
+
+<nav>
+    <div class="nav-wrapper">
+        <a href="" class="brand-logo">acaShare</a>
+        <div id="notification-bell-mobile" class="notifications-bell-mobile-wrapper">
+            <a class="notifications-bell-mobile" id="notification-mobile" onclick="dropDown()">
+                <i class="material-icons">notifications</i>
+            </a>
+        </div>
+
+        <a href="#" data-target="mobile-hamburger" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+            <li id="notifications-li">
+                <a id="notification" onclick="dropDown()">
+                    <i class="material-icons">notifications</i>
+                </a>
+            </li>
+
+            <li>
+                <NavLink class="nav-link" href="/Moderator/ModeratorPanel/MaterialsToApprove">
+                    Panel moderatora
+                </NavLink>
+            </li>
+               
+            <li>
+                <LoginDisplay />
+            </li>
+        </ul>
+    </div>
 </nav>
 
-@code {
+<ul class="sidenav" id="mobile-hamburger">
+    <li><a href="">Strona główna</a></li>
+
+    <li>
+        <NavLink class="nav-link" href="/Moderator/ModeratorPanel/MaterialsToApprove">
+            Panel moderatora
+        </NavLink>
+    </li>
+    
+    <li>
+        <LoginDisplay />
+    </li>
+</ul>
+
+<div class="notificationContainer">
+    <ul class="notificationList" id="notificationList"></ul>
+</div>
+
+@*@code {
     private bool showMobileMenu = false;
 
     private string NavMenuCssClass => showMobileMenu ? "show" : null;
@@ -29,4 +77,4 @@
     {
         showMobileMenu = !showMobileMenu;
     }
-}
+}*@

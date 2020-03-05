@@ -1,7 +1,7 @@
 ﻿<AuthorizeView>
     <Authorized>
-        <form method="post" action="Identity/Account/LogOut">
-            <button type="submit" class="nav-link btn btn-link">Log out</button>
+        <form id="logout-form" method="post" action="Identity/Account/LogOut">
+            <a href="javascript:{}" onclick="document.getElementById('logout-form').submit()">Wyloguj</a>
         </form>
     </Authorized>
 </AuthorizeView>

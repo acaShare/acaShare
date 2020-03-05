@@ -1,0 +1,73 @@
+﻿.list-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.aca-collection {
+    overflow-y: auto;
+    width: 100%;
+    margin: .5em 0 .5em 0;
+    border-radius: 2px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.aca-collection-item {
+    display: flex;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: none;
+}
+
+.item-link {
+    padding: 10px 20px;
+    color: black;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.item-small {
+    padding: 13px 20px;
+}
+
+.item-big {
+    margin: 1.5rem 0 1.4rem 0;
+}
+
+.icons-row-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 20px; /*usunac przy zmianie wygladu listy*/
+    cursor: pointer;
+}
+
+.list-icon {
+    color: #444444;
+    cursor: pointer;
+}
+
+.materials-container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.add-material-button {
+    height: 2em;
+    width: 12em;
+    display: block;
+    text-align: center;
+    background-color: #4db6ac;
+    padding: .15em;
+    color: white;
+    margin: 1em auto 0 auto;
+    border-radius: 3px;
+}
+
+.breadcrumb:hover {
+    color: white;
+}

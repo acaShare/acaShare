@@ -1,0 +1,18 @@
+﻿@page "/Moderator/ModeratorPanel/DeleteSuggestions"
+@inject IMaterialsService _service
+@attribute [Authorize]
+
+<AcaCollection Items="_materials" TItem="BLL.Models.Material">
+    <ListItemTemplate>
+        <MaterialToApproveListItem Material="context" />
+    </ListItemTemplate>
+</AcaCollection>
+
+@code {
+    private List<BLL.Models.Material> _materials;
+
+    protected override void OnInitialized()
+    {
+        _materials = _service.GetMaterialsToApprove().ToList();
+    }
+}

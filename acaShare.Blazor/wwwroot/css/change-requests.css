@@ -1,0 +1,11 @@
+﻿select {
+    display: block;
+    border-color: rgb(195, 195, 195);
+    margin-bottom: 2em;
+}
+
+.delete-request-reason {
+    max-height: 7em;
+    overflow-y: auto;
+    margin-bottom: 0;
+}
