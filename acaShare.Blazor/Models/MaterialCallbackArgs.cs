@@ -1,14 +1,14 @@
 ﻿namespace acaShare.Blazor.Models
 {
-    public class MaterialCallbackArgs
+    public class CallbackArgs
     {
-        public int MaterialId { get; }
-        public bool ShouldRedirectToMaterial { get; }
+        public int Id { get; }
+        public bool ShouldRedirect { get; }
 
-        public MaterialCallbackArgs(int materialId, bool shouldRedirectToMaterial = false)
+        public CallbackArgs(int id, bool shouldRedirect = false)
         {
-            MaterialId = materialId;
-            ShouldRedirectToMaterial = shouldRedirectToMaterial;
+            Id = id;
+            ShouldRedirect = shouldRedirect;
         }
     }
 }

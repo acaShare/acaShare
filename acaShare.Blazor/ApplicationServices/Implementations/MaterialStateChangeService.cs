@@ -13,32 +13,29 @@ namespace acaShare.Blazor.ApplicationServices.Implementations
     {
         private IMaterialsService _materialsService;
         private IUserService _userService;
-        private IFormFilesManagement _filesManagement;
         private NavigationManager _navigationManager;
         private AuthenticationStateProvider _authenticationStateProvider;
 
         public MaterialStateChangeService(
             IMaterialsService materialsService, 
             IUserService userService, 
-            IFormFilesManagement filesManagement,
             NavigationManager navigationManager,
             AuthenticationStateProvider authenticationStateProvider)
         {
             _materialsService = materialsService;
             _userService = userService;
-            _filesManagement = filesManagement;
             _navigationManager = navigationManager;
             _authenticationStateProvider = authenticationStateProvider;
         }
 
         public event Action OnEndProcessing;
 
-        public async void OnApproveMaterialClickCallback(MaterialCallbackArgs materialCallbackArgs)
+        public async void OnApproveMaterialClickCallback(CallbackArgs materialCallbackArgs)
         {
             var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
             var loggedUser = _userService.FindByIdentityUserId(authState.User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            var material = _materialsService.GetMaterialToApprove(materialCallbackArgs.MaterialId);
+            var material = _materialsService.GetMaterialToApprove(materialCallbackArgs.Id);
             if (material == null)
             {
                 _navigationManager.NavigateTo($"ResourceNotFound/{Errors.MaterialToApproveNotValid}");
@@ -46,9 +43,9 @@ namespace acaShare.Blazor.ApplicationServices.Implementations
 
             _materialsService.ApproveMaterial(material, loggedUser);
 
-            if (materialCallbackArgs.ShouldRedirectToMaterial)
+            if (materialCallbackArgs.ShouldRedirect)
             {
-                _navigationManager.NavigateTo($"Material/{materialCallbackArgs.MaterialId}");
+                _navigationManager.NavigateTo($"Material/{materialCallbackArgs.Id}");
             }
             else
             {
@@ -58,9 +55,9 @@ namespace acaShare.Blazor.ApplicationServices.Implementations
             OnEndProcessing?.Invoke();
         }
 
-        public void OnRejectMaterialClickCallback(MaterialCallbackArgs materialCallbackArgs)
+        public void OnRejectMaterialClickCallback(CallbackArgs materialCallbackArgs)
         {
-            var materialToReject = _materialsService.GetMaterialToApprove(materialCallbackArgs.MaterialId);
+            var materialToReject = _materialsService.GetMaterialToApprove(materialCallbackArgs.Id);
             if (materialToReject == null)
             {
                 _navigationManager.NavigateTo($"ResourceNotFound/{Errors.MaterialToApproveNotValid}");

@@ -361,6 +361,33 @@ a.notification-list-button li {
     display: flex;
 }
 
+.modal-open {
+    z-index: 1003;
+    display: block;
+    opacity: 1;
+    transform: scaleX(1) scaleY(1);
+}
+
+.modal {
+    animation-name: zoom;
+    animation-duration: .6s;
+}
+
+    .modal .modal-content {
+        animation-name: none;
+        animation-duration: unset;
+    }
+
+    .modal .modal-footer .modal-button:hover {
+        background-color: rgba(0,0,0,0.1);
+    }
+
+.modal-overlay.modal-open {
+    z-index: 1002;
+    display: block;
+    opacity: 0.4;
+}
+
 @media only screen and (min-width: 400px) {
     .breadcrumb {
         font-size: .75rem;

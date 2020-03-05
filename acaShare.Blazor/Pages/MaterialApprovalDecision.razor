@@ -1,108 +1,125 @@
-﻿@page "/Moderator/ModeratorPanel/MaterialApprovalDecision/{MaterialId:int}"
+﻿@page "/Moderator/ModeratorPanel/MaterialsToApprove/MaterialApprovalDecision/{MaterialId:int}"
 @inject IMaterialsService _service
 @inject IMaterialStateChangeService MaterialStateChangeService
 @inject NavigationManager NavigationManager
 @attribute [Authorize]
 
-<div class="material-container">
-    <header class="material-header">
-        <h1 class="material-header-title">
-            @_model.Name
-        </h1>
-
-        <div class="material-header-action-buttons">
-            <a @onclick="() => MaterialStateChangeService.OnApproveMaterialClickCallback(new MaterialCallbackArgs(_model.MaterialId))"
-               class="sep action-button tooltipped approve-material" data-position="top" data-tooltip="Zatwierdź">
-
-                <i class="material-icons lh">check</i>
-            </a>
-
-            <a @onclick="() => MaterialStateChangeService.OnApproveMaterialClickCallback(new MaterialCallbackArgs(_model.MaterialId, true))"
-               class="sep action-button tooltipped approve-material" data-position="top" data-tooltip="Zatwierdź i przejdź do materiału">
-
-                <i class="material-icons lh">subdirectory_arrow_right</i>
-            </a>
-
-            <a @onclick="() => MaterialStateChangeService.OnRejectMaterialClickCallback(new MaterialCallbackArgs(_model.MaterialId))"
-               class="sep action-button tooltipped reject-material" data-position="top" data-tooltip="Odrzuć">
-
-                <i class="material-icons lh">not_interested</i>
-            </a>
+<div class="data-container">
+    <nav class="colornav">
+        <div class="nav-wrapper path-header-wrapper">
+            <div class="col s12 tree-path">
+                <NavLink class="breadcrumb" href="/Moderator/ModeratorPanel/MaterialsToApprove" Match="NavLinkMatch.All">
+                    Materiały oczekujące na zatwierdzenie
+                </NavLink>
+                <a class="breadcrumb">
+                    Materiał
+                </a>
+            </div>
         </div>
-    </header>
+    </nav>
 
-    <div class="material-content material-to-approve-content">
-        <section class="material-content-files">
-            <h2 class="material-content-files-header">Pliki</h2>
+    <div class="home-content">
+        <div class="material-container">
+            <header class="material-header">
+                <h1 class="material-header-title">
+                    @_model.Name
+                </h1>
 
-            <div class="files-wrapper">
-                @{
-                    int i = 1;
-                    foreach (var file in _model.Files)
-                    {
-                        if (file.IsImage)
-                        {
-                            <div class="material-file material-image" onclick="openModal();currentSlide(@(i++))">
-                                <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName-thumbnail" />
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="material-file">
-                                <a href="_Uploads/@file.RelativePath" download="@file.FileName" class="material-file-download">
-                                    <i class="material-icons">description</i>
-                                </a>
-                            </div>
-                        }
-                    }
-                }
-            </div>
+                <div class="material-header-action-buttons">
+                    <a @onclick="() => MaterialStateChangeService.OnApproveMaterialClickCallback(new CallbackArgs(_model.MaterialId))"
+                       class="sep action-button tooltipped approve-material" data-position="top" data-tooltip="Zatwierdź">
 
-            <!-- The Modal/Lightbox -->
-            <div id="gallery-modal" class="gallery-modal" onclick="closeModalOnBackgroundClick(event)">
-                <div id="current-slide-info" class="current-slide-info"></div>
-                <span class="close" onclick="closeModal()">&times;</span>
-                <div class="modal-content">
-                    @foreach (var file in _model.Files)
-                    {
-                        if (file.IsImage)
-                        {
-                            <div class="gallery-item">
-                                <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName" />
-                            </div>
-                        }
-                    }
+                        <i class="material-icons lh">check</i>
+                    </a>
+
+                    <a @onclick="() => MaterialStateChangeService.OnApproveMaterialClickCallback(new CallbackArgs(_model.MaterialId, true))"
+                       class="sep action-button tooltipped approve-material" data-position="top" data-tooltip="Zatwierdź i przejdź do materiału">
+
+                        <i class="material-icons lh">subdirectory_arrow_right</i>
+                    </a>
+
+                    <a @onclick="() => MaterialStateChangeService.OnRejectMaterialClickCallback(new CallbackArgs(_model.MaterialId))"
+                       class="sep action-button tooltipped reject-material" data-position="top" data-tooltip="Odrzuć">
+
+                        <i class="material-icons lh">not_interested</i>
+                    </a>
                 </div>
+            </header>
 
-                <!-- Next/previous controls -->
-                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+            <div class="material-content material-to-approve-content">
+                <section class="material-content-files">
+                    <h2 class="material-content-files-header">Pliki</h2>
+
+                    <div class="files-wrapper">
+                        @{
+                            int i = 1;
+                            foreach (var file in _model.Files)
+                            {
+                                if (file.IsImage)
+                                {
+                                    <div class="material-file material-image" onclick="openModal();currentSlide(@(i++))">
+                                        <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName-thumbnail" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="material-file">
+                                        <a href="_Uploads/@file.RelativePath" download="@file.FileName" class="material-file-download">
+                                            <i class="material-icons">description</i>
+                                        </a>
+                                    </div>
+                                }
+                            }
+                        }
+                    </div>
+
+                    <!-- The Modal/Lightbox -->
+                    <div id="gallery-modal" class="gallery-modal" onclick="closeModalOnBackgroundClick(event)">
+                        <div id="current-slide-info" class="current-slide-info"></div>
+                        <span class="close" onclick="closeModal()">&times;</span>
+                        <div class="modal-content">
+                            @foreach (var file in _model.Files)
+                            {
+                                if (file.IsImage)
+                                {
+                                    <div class="gallery-item">
+                                        <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName" />
+                                    </div>
+                                }
+                            }
+                        </div>
+
+                        <!-- Next/previous controls -->
+                        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="material-content-description-header">
+                        Opis
+                    </h2>
+
+                    <div class="material-content-description">
+                        @_model.Description
+                    </div>
+                </section>
             </div>
-        </section>
 
-        <section>
-            <h2 class="material-content-description-header">
-                @_model.Description
-            </h2>
+            <footer class="material-footer">
+                <p class="material-footer-content">
+                    <span>
+                        Autor: @_model.CreatorUsername
+                    </span>
 
-            <div class="material-content-description">
-                @_model.Description
-            </div>
-        </section>
+                    <span>
+                        @{ var uploadDate = _model.UploadDate.ToString("d MMMM yyyy, HH:mm");}
+                        Dodano: @uploadDate
+                    </span>
+                </p>
+            </footer>
+        </div>
     </div>
-
-    <footer class="material-footer">
-        <p class="material-footer-content">
-            <span>
-                Autor: @_model.CreatorUsername
-            </span>
-
-            <span>
-                @{ var uploadDate = _model.UploadDate.ToString("d MMMM yyyy, HH:mm");}
-                Dodano: @uploadDate
-            </span>
-        </p>
-    </footer>
 </div>
 
 @code {

@@ -1,0 +1,253 @@
+﻿@page "/Moderator/ModeratorPanel/DeleteSuggestions/DeleteRequestApprovalDecision/{DeleteSuggestionId:int}"
+@inject IMaterialsService _service
+@inject ISuggestionsService SuggestionsService
+@inject NavigationManager NavigationManager
+@attribute [Authorize]
+
+<div class="upper-manage-box">
+    <div class="data-container">
+        <nav class="colornav">
+            <div class="nav-wrapper path-header-wrapper">
+                <div class="action-button back-arrow tooltipped" data-position="top" data-tooltip="Wróć do listy sugestii usunięcia">
+                    <NavLink href="/Moderator/ModeratorPanel/DeleteSuggestions"><i class="material-icons">arrow_back</i></NavLink>
+                </div>
+                <div class="summary">
+                    Podsumowanie sugestii usunięcia
+                </div>
+            </div>
+        </nav>
+        <div class="home-content">
+            <div class="material-container">
+                <header class="upper-box-header">
+                    <h1 class="upper-box-header-title">
+                        Powód: @Decision.DeleteSuggestion.Reason
+                    </h1>
+
+                    <div class="upper-box-header-action-buttons">
+                        <a @onclick="() => SuggestionsService.OnApproveSuggestionClickCallback(new CallbackArgs(Decision.DeleteSuggestion.DeleteRequestId))"
+                           class="sep action-button tooltipped approve-delete-request" data-position="top" data-tooltip="Zatwierdź - usuń materiał">
+
+                            <i class="material-icons lh">delete_forever</i>
+                        </a>
+                        <a @onclick="ToggleModal"
+                           class="sep action-button tooltipped" data-position="top" data-tooltip="Odrzuć sugestię">
+
+                            <i class="material-icons lh">not_interested</i>
+                        </a>
+                    </div>
+                </header>
+                <section class="upper-manage-box-content">
+                    <h2>Dodatkowy komentarz</h2>:
+                    <p class="additional-comment">
+                        @if (string.IsNullOrEmpty(Decision.DeleteSuggestion.AdditionalComment))
+                        {
+                            @:Brak
+                        }
+                        else
+                        {
+                            @Decision.DeleteSuggestion.AdditionalComment
+                        }
+                    </p>
+                </section>
+            </div>
+
+            <footer class="material-footer upper-manage-box-footer">
+                <p class="material-footer-content">
+                    <span>
+                        Sugestia utworzona przez: @Decision.DeleteSuggestion.DeleterName
+                    </span>
+                </p>
+            </footer>
+        </div>
+    </div>
+</div>
+
+<div class="data-container">
+    <nav class="colornav">
+        <div class="nav-wrapper path-header-wrapper">
+            <div class="col s12 tree-path">
+                <a class="breadcrumb">
+                    Podgląd materiału
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="home-content">
+        <div class="material-container">
+            <header class="material-header">
+                <h1 class="material-header-title">
+                    @Decision.Material.Name
+                </h1>
+            </header>
+
+            <div class="material-content material-to-approve-content">
+                <section class="material-content-files">
+                    <h2 class="material-content-files-header">Pliki</h2>
+
+                    <div class="files-wrapper">
+                        @{
+                            int i = 1;
+                            foreach (var file in Decision.Material.Files)
+                            {
+                                if (file.IsImage)
+                                {
+                                    <div class="material-file material-image" onclick="openModal();currentSlide(@(i++))">
+                                        <img src="/_Uploads/@file.RelativePath" alt="@file.FileName-thumbnail" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="material-file">
+                                        <a href="_Uploads/@file.RelativePath" download="@file.FileName" class="material-file-download">
+                                            <i class="material-icons">description</i>
+                                        </a>
+                                    </div>
+                                }
+                            }
+                        }
+                    </div>
+
+                    <!-- The Modal/Lightbox -->
+                    <div id="gallery-modal" class="gallery-modal" onclick="closeModalOnBackgroundClick(event)">
+                        <div id="current-slide-info" class="current-slide-info"></div>
+                        <span class="close" onclick="closeModal()">&times;</span>
+                        <div class="modal-content">
+                            @foreach (var file in Decision.Material.Files)
+                            {
+                                if (file.IsImage)
+                                {
+                                    <div class="gallery-item">
+                                        <img src="/_Uploads/@file.RelativePath" alt="@file.FileName" />
+                                    </div>
+                                }
+                            }
+                        </div>
+
+                        <!-- Next/previous controls -->
+                        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="material-content-description-header">
+                        @Decision.Material.Description
+                    </h2>
+
+                    <div class="material-content-description">
+                        @Decision.Material.Description
+                    </div>
+                </section>
+            </div>
+
+            <footer class="material-footer">
+                <p class="material-footer-content">
+                    <span>
+                        Autor: @Decision.Material.CreatorUsername
+                    </span>
+
+                    <span>
+                        @{ var uploadDate = Decision.Material.UploadDate.ToString("d MMMM yyyy, HH:mm");}
+                        Dodano: @uploadDate
+                    </span>
+                </p>
+            </footer>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="reject-confirmation" class="modal confirmation-modal @_openModalClass">
+    <EditForm Model="Decision.DeleteSuggestion" OnValidSubmit="OnRejectClicked">
+        <DataAnnotationsValidator />
+
+        <div class="modal-content" style="display:block;">
+            <div class="row">
+                <div class="col s12">
+                    <div>
+                        <label for="Suggestion.DeclineReason">Powód odrzucenia sugestii</label>
+                        <div class="input-field">
+                            <InputText @bind-Value="Decision.DeleteSuggestion.DeclineReason" class="validate" />
+                            <ValidationMessage For="@(() => Decision.DeleteSuggestion.DeclineReason)" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="modal-button waves-effect waves-green btn-flat">Odrzuć sugestię usunięcia</button>
+            <a class="modal-button waves-effect waves-green btn-flat" @onclick="ToggleModal">Anuluj</a>
+        </div>
+    </EditForm>
+</div>
+
+<div class="modal-overlay @_openModalClass"></div>
+
+@code {
+    [Parameter]
+    public int DeleteSuggestionId { get; set; }
+
+    private ChangeRequestApprovalDecision Decision;
+
+    protected override void OnInitialized()
+    {
+        var deleteSuggestion = _service.GetDeleteRequest(DeleteSuggestionId);
+
+        if (deleteSuggestion == null)
+        {
+            NavigationManager.NavigateTo($"ResourceNotFound/{Errors.DeleteSuggestionNotFound}");
+        }
+        else
+        {
+            Decision = new ChangeRequestApprovalDecision
+            {
+                Material = new MaterialToApproveViewModel
+                {
+                    MaterialId = deleteSuggestion.MaterialToDeleteId.Value,
+                    CreatorUsername = deleteSuggestion.MaterialToDelete.Creator.Username,
+                    Name = deleteSuggestion.MaterialToDelete.Name,
+                    Description = deleteSuggestion.MaterialToDelete.Description,
+                    UploadDate = deleteSuggestion.MaterialToDelete.UploadDate,
+                    Files = deleteSuggestion.MaterialToDelete.Files.Select(f =>
+                        new FileViewModel
+                        {
+                            FileId = f.FileId,
+                            FileName = f.FileName,
+                            RelativePath = f.RelativePath,
+                            ContentType = f.ContentType
+                        }
+                    ).ToList()
+                },
+                DeleteSuggestion = new DeleteRequestViewModel
+                {
+                    DeleteRequestId = deleteSuggestion.DeleteRequestId,
+                    ReasonId = deleteSuggestion.DeleteReasonId,
+                    Reason = deleteSuggestion.DeleteReason.Reason,
+                    AdditionalComment = deleteSuggestion.AdditionalComment,
+                    DeleterName = deleteSuggestion.Deleter.Username
+                }
+            };
+        }
+    }
+
+    private string _openModalClass = string.Empty;
+
+    private void OnRejectClicked()
+    {
+        SuggestionsService.OnRejectSuggestionClickCallback(new RejectSuggestionCallbackArgs(Decision.DeleteSuggestion.DeleteRequestId, Decision.DeleteSuggestion.DeclineReason));
+    }
+
+    private void ToggleModal()
+    {
+        if (string.IsNullOrWhiteSpace(_openModalClass))
+        {
+            _openModalClass = "modal-open";
+        }
+        else
+        {
+            _openModalClass = string.Empty;
+            Decision.DeleteSuggestion.DeclineReason = string.Empty;
+        }
+    }
+}

@@ -5,8 +5,8 @@ namespace acaShare.Blazor.ApplicationServices.Interfaces
 {
     public interface IMaterialStateChangeService
     {
-        void OnApproveMaterialClickCallback(MaterialCallbackArgs materialCallbackArgs);
-        void OnRejectMaterialClickCallback(MaterialCallbackArgs materialCallbackArgs);
+        void OnApproveMaterialClickCallback(CallbackArgs materialCallbackArgs);
+        void OnRejectMaterialClickCallback(CallbackArgs materialCallbackArgs);
         event Action OnEndProcessing;
     }
 }

@@ -4,20 +4,36 @@
 @inject IMaterialsService MaterialsService
 @inject IMaterialStateChangeService MaterialStateChangeService
 
-    <AcaCollection Items="_materials" TItem="BLL.Models.Material">
-        <ListItemTemplate>
-            <MaterialToApproveListItem Material="context"
-                                       OnApproveMaterialClickCallback="MaterialStateChangeService.OnApproveMaterialClickCallback"
-                                       OnRejectMaterialClickCallback="MaterialStateChangeService.OnRejectMaterialClickCallback" />
-        </ListItemTemplate>
-    </AcaCollection>
+    <div class="data-container">
+        <nav class="colornav">
+            <div class="nav-wrapper path-header-wrapper">
+                <div class="col s12 tree-path">
+                    <a class="breadcrumb">
+                        @pageTitle
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="home-content">
+            <AcaCollection Items="_materials" TItem="BLL.Models.Material">
+                <ListItemTemplate>
+                    <MaterialToApproveListItem Material="context"
+                                               OnApproveMaterialClickCallback="MaterialStateChangeService.OnApproveMaterialClickCallback"
+                                               OnRejectMaterialClickCallback="MaterialStateChangeService.OnRejectMaterialClickCallback" />
+                </ListItemTemplate>
+            </AcaCollection>
+        </div>
+    </div>
+
 
 @code {
     private IReadOnlyCollection<BLL.Models.Material> _materials;
+    private const string pageTitle = "Materiały oczekujące na zatwierdzenie";
 
     protected override void OnInitialized()
     {
-        ChangePageTitle("Materiały oczekujące na zatwierdzenie");
+        ChangePageTitle(pageTitle);
         RefreshData();
         MaterialStateChangeService.OnEndProcessing += RefreshData;
     }

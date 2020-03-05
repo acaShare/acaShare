@@ -1,18 +1,58 @@
 ﻿@page "/Moderator/ModeratorPanel/DeleteSuggestions"
-@inject IMaterialsService _service
-@attribute [Authorize]
+@attribute [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole + ", " + Roles.ModeratorRole)]
+@inject IMaterialsService MaterialsService
+@inject ISuggestionsService SuggestionsService
 
-<AcaCollection Items="_materials" TItem="BLL.Models.Material">
-    <ListItemTemplate>
-        <MaterialToApproveListItem Material="context" />
-    </ListItemTemplate>
-</AcaCollection>
+    <div class="data-container">
+        <nav class="colornav">
+            <div class="nav-wrapper path-header-wrapper">
+                <div class="col s12 tree-path">
+                    <a class="breadcrumb">
+                        @pageTitle
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="home-content">
+            <AcaCollection Items="_deleteSuggestions">
+                <ListItemTemplate>
+                    <DeleteSuggestionListItem Suggestion="context"
+                                              OnApproveSuggestionClickCallback="SuggestionsService.OnApproveSuggestionClickCallback"
+                                              OnRejectSuggestionClickCallback="SuggestionsService.OnRejectSuggestionClickCallback" />
+                </ListItemTemplate>
+            </AcaCollection>
+        </div>
+    </div>
 
 @code {
-    private List<BLL.Models.Material> _materials;
+    private IReadOnlyCollection<DeleteRequestViewModel> _deleteSuggestions;
+    private const string pageTitle = "Sugestie usunięcia";
 
     protected override void OnInitialized()
     {
-        _materials = _service.GetMaterialsToApprove().ToList();
+        ChangePageTitle(pageTitle);
+        RefreshData();
+        SuggestionsService.OnEndProcessing += RefreshData;
     }
+
+    private void RefreshData()
+    {
+        _deleteSuggestions = MaterialsService.GetPendingDeleteSuggestions()
+            .Select(ds =>
+                new DeleteRequestViewModel
+                {
+                    DeleteRequestId = ds.DeleteRequestId,
+                    MaterialName = ds.MaterialToDelete.Name,
+                    ReasonId = ds.DeleteReasonId,
+                    Reason = ds.DeleteReason.Reason,
+                    AdditionalComment = ds.AdditionalComment,
+                    DeleterName = ds.Deleter.Username,
+                    RequestDate = ds.RequestDate
+                }
+            ).ToList();
+    }
+
+    [CascadingParameter]
+    public Action<string> ChangePageTitle { get; set; }
 }

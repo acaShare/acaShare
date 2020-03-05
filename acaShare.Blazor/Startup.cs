@@ -43,6 +43,7 @@ namespace acaShare.Blazor
             services.AddScoped<IMainModeratorService, MainModeratorService>();
             services.AddSingleton<IFormFilesManagement>(f => new FormFilesManagement(WebHostEnvironment));
             services.AddScoped<IMaterialStateChangeService, MaterialStateChangeService>();
+            services.AddScoped<ISuggestionsService, SuggestionsService>();
 
             services.AddDbContext<AcaShareDbContext>(options =>
             {
