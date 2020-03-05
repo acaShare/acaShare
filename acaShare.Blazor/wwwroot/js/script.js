@@ -2,6 +2,6 @@
 
 JsFunctions = {
     setDocumentTitle: function (title) {
-        document.title = title;
+        document.title = `${title} | acaShare.Blazor`;
     }
 };

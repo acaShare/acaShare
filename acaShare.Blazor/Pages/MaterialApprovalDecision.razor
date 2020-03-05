@@ -1,5 +1,7 @@
 ﻿@page "/Moderator/ModeratorPanel/MaterialApprovalDecision/{MaterialId:int}"
 @inject IMaterialsService _service
+@inject IMaterialStateChangeService MaterialStateChangeService
+@inject NavigationManager NavigationManager
 @attribute [Authorize]
 
 <div class="material-container">
@@ -9,19 +11,19 @@
         </h1>
 
         <div class="material-header-action-buttons">
-            <a @onclick="() => OnApproveMaterialClickCallback.InvokeAsync(new MaterialCallbackArgs(_model.MaterialId))"
+            <a @onclick="() => MaterialStateChangeService.OnApproveMaterialClickCallback(new MaterialCallbackArgs(_model.MaterialId))"
                class="sep action-button tooltipped approve-material" data-position="top" data-tooltip="Zatwierdź">
 
                 <i class="material-icons lh">check</i>
             </a>
 
-            <a @onclick="() => OnRejectMaterialClickCallback.InvokeAsync(new MaterialCallbackArgs(_model.MaterialId, true))"
+            <a @onclick="() => MaterialStateChangeService.OnApproveMaterialClickCallback(new MaterialCallbackArgs(_model.MaterialId, true))"
                class="sep action-button tooltipped approve-material" data-position="top" data-tooltip="Zatwierdź i przejdź do materiału">
 
                 <i class="material-icons lh">subdirectory_arrow_right</i>
             </a>
 
-            <a asp-action="RejectMaterial" asp-route-materialId="@_model.MaterialId"
+            <a @onclick="() => MaterialStateChangeService.OnRejectMaterialClickCallback(new MaterialCallbackArgs(_model.MaterialId))"
                class="sep action-button tooltipped reject-material" data-position="top" data-tooltip="Odrzuć">
 
                 <i class="material-icons lh">not_interested</i>
@@ -112,29 +114,30 @@
     protected override void OnInitialized()
     {
         var materialToApprove = _service.GetMaterialToApprove(MaterialId);
-        _model = new MaterialToApproveViewModel
+
+        if (materialToApprove == null)
         {
-            MaterialId = materialToApprove.MaterialId,
-            Name = materialToApprove.Name,
-            Description = materialToApprove.Description,
-            CreatorUsername = materialToApprove.Creator.Username,
-            UploadDate = materialToApprove.UploadDate,
-            Files = materialToApprove.Files.Select(f =>
-                new FileViewModel
-                {
-                    FileId = f.FileId,
-                    FileName = f.FileName,
-                    RelativePath = f.RelativePath,
-                    ContentType = f.ContentType
-                }
-            ).ToList()
-        };
+            NavigationManager.NavigateTo($"ResourceNotFound/{Errors.MaterialToApproveNotValid}");
+        }
+        else
+        {
+            _model = new MaterialToApproveViewModel
+            {
+                MaterialId = materialToApprove.MaterialId,
+                Name = materialToApprove.Name,
+                Description = materialToApprove.Description,
+                CreatorUsername = materialToApprove.Creator.Username,
+                UploadDate = materialToApprove.UploadDate,
+                Files = materialToApprove.Files.Select(f =>
+                    new FileViewModel
+                    {
+                        FileId = f.FileId,
+                        FileName = f.FileName,
+                        RelativePath = f.RelativePath,
+                        ContentType = f.ContentType
+                    }
+                ).ToList()
+            };
+        }
     }
-
-    //Callbacks
-    [Parameter]
-    public EventCallback<MaterialCallbackArgs> OnApproveMaterialClickCallback { get; set; }
-
-    [Parameter]
-    public EventCallback<MaterialCallbackArgs> OnRejectMaterialClickCallback { get; set; }
 }

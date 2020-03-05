@@ -1,5 +1,5 @@
 ﻿<a class="item-link" href="/Moderator/ModeratorPanel/MaterialApprovalDecision/@(Material.MaterialId)"
-         @onclick="@(() => ChangeBreadcrumb("Materiał"))">
+            @onclick="@(() => ChangePageTitle("Materiał"))">
     <span class="path-list-item-title">@Material.Name</span>
     <br>
     <span class="path-list-item-subtitle">
@@ -40,5 +40,5 @@
     public EventCallback<MaterialCallbackArgs> OnRejectMaterialClickCallback { get; set; }
 
     [CascadingParameter]
-    public Action<string> ChangeBreadcrumb { get; set; }
+    public Action<string> ChangePageTitle { get; set; }
 }

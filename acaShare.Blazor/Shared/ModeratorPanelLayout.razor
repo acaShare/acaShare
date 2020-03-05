@@ -14,49 +14,16 @@
 
         <div class="home-content">
             <ul id="moderator-actions" class="moderator-actions">
-
-                <li class="moderator-actions-item moderator-actions-item-active">
-                    <NavLink class="moderator-actions-item-link" href="/Moderator/ModeratorPanel/MaterialsToApprove"
-                             @onclick="@(() => ChangeBreadcrumbAndTitle(_pages["MaterialsToApprove"]))">
-                        @_pages["MaterialsToApprove"]
-                    </NavLink>
-                </li>
-                <li class="moderator-actions-item ">
-                    <NavLink class="moderator-actions-item-link" href="/Moderator/ModeratorPanel/EditSuggestions"
-                             @onclick="@(() => ChangeBreadcrumbAndTitle(_pages["EditSuggestions"]))">
-                        @_pages["EditSuggestions"]
-                    </NavLink>
-                </li>
-                <li class="moderator-actions-item ">
-                    <NavLink class="moderator-actions-item-link" href="/Moderator/ModeratorPanel/DeleteSuggestions"
-                             @onclick="@(() => ChangeBreadcrumbAndTitle(_pages["DeleteSuggestions"]))">
-                        @_pages["DeleteSuggestions"]
-                    </NavLink>
-                </li>
-                <li class="moderator-actions-item ">
-                    <NavLink class="moderator-actions-item-link" href="/Moderator/ModeratorPanel/Universities"
-                             @onclick="@(() => ChangeBreadcrumbAndTitle(_pages["Universities"]))">
-                        @_pages["Universities"]
-                    </NavLink>
-                </li>
-                <li class="moderator-actions-item ">
-                    <NavLink class="moderator-actions-item-link" href="/Moderator/ModeratorPanel/ModeratorManagement"
-                             @onclick="@(() => ChangeBreadcrumbAndTitle(_pages["ModeratorManagement"]))">
-                        @_pages["ModeratorManagement"]
-                    </NavLink>
-                </li>
-                <li class="moderator-actions-item ">
-                    <NavLink class="moderator-actions-item-link" href="/Moderator/ModeratorPanel/Statistics"
-                             @onclick="@(() => ChangeBreadcrumbAndTitle(_pages["Statistics"]))">
-                        @_pages["Statistics"]
-                    </NavLink>
-                </li>
-                <li class="moderator-actions-item ">
-                    <NavLink class="moderator-actions-item-link" href="/Moderator/ModeratorPanel/Regulations"
-                             @onclick="@(() => ChangeBreadcrumbAndTitle(_pages["Regulations"]))">
-                        @_pages["Regulations"]
-                    </NavLink>
-                </li>
+                @foreach (var page in _pages)
+                {
+                    <li class="moderator-actions-item">
+                        <NavLink class="moderator-actions-item-link" href=@($"/Moderator/ModeratorPanel/{page.Key}")
+                                 @onclick="@(() => ChangePageTitle(page.Value))"
+                                 ActiveClass="moderator-actions-item-active">
+                            @(page.Value)
+                        </NavLink>
+                    </li>
+                }
             </ul>
         </div>
     </div>
@@ -75,7 +42,7 @@
         </nav>
 
         <div class="home-content">
-            <CascadingValue Value="ChangeBreadcrumbAndTitle" TValue="Action<string>">
+            <CascadingValue Value="ChangePageTitle" TValue="Action<string>">
                 @Body
             </CascadingValue>
         </div>
@@ -84,7 +51,7 @@
 
 @code {
     private static readonly IDictionary<string, string> _pages = new Dictionary<string, string>
-{
+    {
         { "MaterialsToApprove", "Materiały oczekujące na zatwierdzenie" },
         { "EditSuggestions", "Sugestie edycji" },
         { "DeleteSuggestions", "Sugestie usunięcia" },
@@ -96,7 +63,7 @@
 
     private static string _currentPageName = _pages["MaterialsToApprove"];
 
-    public void ChangeBreadcrumbAndTitle(string pageName)
+    public void ChangePageTitle(string pageName)
     {
         _currentPageName = pageName;
         JsRuntime.InvokeVoidAsync(JsFunctions.SetDocumentTitle, pageName);

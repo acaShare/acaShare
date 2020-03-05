@@ -1,65 +1,32 @@
-﻿@using System.Security.Claims
-@*@attribute [Microsoft.AspNetCore.Components.RouteAttribute(RouteConstants.ModeratorPanelRoute + "/MaterialsToApprove")]*@
+﻿@*@attribute [Microsoft.AspNetCore.Components.RouteAttribute(RouteConstants.ModeratorPanelRoute + "/MaterialsToApprove")]*@
 @page "/Moderator/ModeratorPanel/MaterialsToApprove"
 @attribute [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole + ", " + Roles.ModeratorRole)]
-@inject IMaterialsService _materialsService
-@inject IUserService _userService
-@inject IFormFilesManagement _filesManagement
-@inject NavigationManager NavigationManager
-@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IMaterialsService MaterialsService
+@inject IMaterialStateChangeService MaterialStateChangeService
 
-<AcaCollection Items="_materials" TItem="BLL.Models.Material">
-    <ListItemTemplate>
-        <MaterialToApproveListItem Material="context"
-                                   OnApproveMaterialClickCallback="OnApproveMaterialClickCallback"
-                                   OnRejectMaterialClickCallback="OnRejectMaterialClickCallback" />
-    </ListItemTemplate>
-</AcaCollection>
+    <AcaCollection Items="_materials" TItem="BLL.Models.Material">
+        <ListItemTemplate>
+            <MaterialToApproveListItem Material="context"
+                                       OnApproveMaterialClickCallback="MaterialStateChangeService.OnApproveMaterialClickCallback"
+                                       OnRejectMaterialClickCallback="MaterialStateChangeService.OnRejectMaterialClickCallback" />
+        </ListItemTemplate>
+    </AcaCollection>
 
 @code {
     private IReadOnlyCollection<BLL.Models.Material> _materials;
 
     protected override void OnInitialized()
     {
+        ChangePageTitle("Materiały oczekujące na zatwierdzenie");
         RefreshData();
-    }
-
-    private async void OnApproveMaterialClickCallback(MaterialCallbackArgs materialCallbackArgs)
-    {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var loggedUser = _userService.FindByIdentityUserId(authState.User.FindFirstValue(ClaimTypes.NameIdentifier));
-
-        var material = _materialsService.GetMaterial(materialCallbackArgs.MaterialId);
-        if (material == null)
-        {
-            NavigationManager.NavigateTo($"ResourceNotFound/{Errors.MaterialNotFound}");
-        }
-
-        _materialsService.ApproveMaterial(material, loggedUser);
-
-        if (materialCallbackArgs.ShouldRedirectToMaterial)
-        {
-            NavigationManager.NavigateTo($"Material/{materialCallbackArgs.MaterialId}");
-        }
-
-        RefreshData();
-    }
-
-    private void OnRejectMaterialClickCallback(MaterialCallbackArgs materialCallbackArgs)
-    {
-        var materialToReject = _materialsService.GetMaterial(materialCallbackArgs.MaterialId);
-        if (materialToReject == null)
-        {
-            NavigationManager.NavigateTo($"ResourceNotFound/{Errors.MaterialNotFound}");
-        }
-
-        _filesManagement.DeleteWholeMaterialFolder(materialCallbackArgs.MaterialId);
-        _materialsService.RejectMaterial(materialToReject);
-        RefreshData();
+        MaterialStateChangeService.OnEndProcessing += RefreshData;
     }
 
     private void RefreshData()
     {
-        _materials = _materialsService.GetMaterialsToApprove() as IReadOnlyCollection<BLL.Models.Material>;
+        _materials = MaterialsService.GetMaterialsToApprove() as IReadOnlyCollection<BLL.Models.Material>;
     }
+
+    [CascadingParameter]
+    public Action<string> ChangePageTitle { get; set; }
 }
