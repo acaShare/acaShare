@@ -1,0 +1,36 @@
+﻿<!-- BEGIN: Modal -->
+<div class="modal @_currentModalClass">
+    <CascadingValue Value="ToggleModal" TValue="Action">
+        @ChildContent
+    </CascadingValue>
+</div>
+
+<div class="modal-overlay @_currentModalClass"></div>
+<!-- END: Modal -->
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public string OpenModalClass { get; set; }
+
+    // State management
+    private string _defaultOpenModalClass = "modal-open";
+    private string _currentModalClass = string.Empty;
+    private bool _isOpen = false;
+
+    private void ToggleModal()
+    {
+        if (_isOpen)
+        {
+            _currentModalClass = string.Empty;
+        }
+        else
+        {
+            _currentModalClass = OpenModalClass ?? _defaultOpenModalClass;
+        }
+
+        _isOpen = !_isOpen;
+    }
+}

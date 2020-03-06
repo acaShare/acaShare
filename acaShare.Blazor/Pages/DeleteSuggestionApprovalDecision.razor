@@ -29,7 +29,7 @@
 
                             <i class="material-icons lh">delete_forever</i>
                         </a>
-                        <a @onclick="ToggleModal"
+                        <a @*@onclick="ToggleModal"*@
                            class="sep action-button tooltipped" data-position="top" data-tooltip="Odrzuć sugestię">
 
                             <i class="material-icons lh">not_interested</i>
@@ -157,32 +157,19 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div id="reject-confirmation" class="modal confirmation-modal @_openModalClass">
-    <EditForm Model="Decision.DeleteSuggestion" OnValidSubmit="OnRejectClicked">
-        <DataAnnotationsValidator />
-
-        <div class="modal-content" style="display:block;">
-            <div class="row">
-                <div class="col s12">
-                    <div>
-                        <label for="Suggestion.DeclineReason">Powód odrzucenia sugestii</label>
-                        <div class="input-field">
-                            <InputText @bind-Value="Decision.DeleteSuggestion.DeclineReason" class="validate" />
-                            <ValidationMessage For="@(() => Decision.DeleteSuggestion.DeclineReason)" />
-                        </div>
-                    </div>
+<EditModelModal Model="Decision.DeleteSuggestion" OnValidSubmit="OnRejectClicked">
+    <div class="row">
+        <div class="col s12">
+            <div>
+                <label for="Suggestion.DeclineReason">Powód odrzucenia sugestii</label>
+                <div class="input-field">
+                    <InputText @bind-Value="Decision.DeleteSuggestion.DeclineReason" class="validate" />
+                    <ValidationMessage For="@(() => Decision.DeleteSuggestion.DeclineReason)" />
                 </div>
             </div>
         </div>
-        <div class="modal-footer">
-            <button type="submit" class="modal-button waves-effect waves-green btn-flat">Odrzuć sugestię usunięcia</button>
-            <a class="modal-button waves-effect waves-green btn-flat" @onclick="ToggleModal">Anuluj</a>
-        </div>
-    </EditForm>
-</div>
-
-<div class="modal-overlay @_openModalClass"></div>
+    </div>
+</EditModelModal>
 
 @code {
     [Parameter]
@@ -231,23 +218,8 @@
         }
     }
 
-    private string _openModalClass = string.Empty;
-
     private void OnRejectClicked()
     {
         SuggestionsService.OnRejectSuggestionClickCallback(new RejectSuggestionCallbackArgs(Decision.DeleteSuggestion.DeleteRequestId, Decision.DeleteSuggestion.DeclineReason));
-    }
-
-    private void ToggleModal()
-    {
-        if (string.IsNullOrWhiteSpace(_openModalClass))
-        {
-            _openModalClass = "modal-open";
-        }
-        else
-        {
-            _openModalClass = string.Empty;
-            Decision.DeleteSuggestion.DeclineReason = string.Empty;
-        }
     }
 }

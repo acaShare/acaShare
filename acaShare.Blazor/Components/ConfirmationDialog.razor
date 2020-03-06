@@ -1,0 +1,22 @@
+﻿<ModalTemplate OpenModalClass="@OpenModalClass">
+    <div class="modal-content" style="display:block;">
+        @InnerText
+    </div>
+    <div class="modal-footer">
+        <a class="modal-button waves-effect waves-green btn-flat" @onclick="ToggleModal">@CloseButtonText</a>
+    </div>
+</ModalTemplate>
+
+@code {
+    [Parameter]
+    public string OpenModalClass { get; set; }
+
+    [Parameter]
+    public string InnerText { get; set; }
+
+    [Parameter]
+    public string CloseButtonText { get; set; }
+
+    [CascadingParameter]
+    public EventCallback ToggleModal { get; set; }
+}

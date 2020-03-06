@@ -1,0 +1,38 @@
+﻿@typeparam TModel
+
+<ModalTemplate OpenModalClass="@OpenModalClass">
+    <EditForm Model="Model" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator />
+
+        <div class="modal-content" style="display:block;">
+            @ChildContent
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="modal-button waves-effect waves-green btn-flat">@SubmitButtonText</button>
+            <a class="modal-button waves-effect waves-green btn-flat" @onclick="ToggleModal">@CancelButtonText</a>
+        </div>
+    </EditForm>
+</ModalTemplate>
+
+@code {
+    [Parameter]
+    public string OpenModalClass { get; set; }
+
+    [Parameter]
+    public string SubmitButtonText { get; set; }
+
+    [Parameter]
+    public string CancelButtonText { get; set; } = "Anuluj";
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public TModel Model { get; set; }
+
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+
+    [CascadingParameter]
+    public EventCallback ToggleModal { get; set; }
+}
