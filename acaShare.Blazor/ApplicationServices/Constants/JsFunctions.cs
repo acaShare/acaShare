@@ -6,6 +6,8 @@ namespace acaShare.Blazor.ApplicationServices.Constants
     {
         private const string _prefix = "JsFunctions";
 
+        public static readonly string InitializeJs = CreateAbsoluteIdentifier("initializeJs");
+        public static readonly string InitializeNotifications = CreateAbsoluteIdentifier("initializeNotifications");
         public static readonly string SetDocumentTitle = CreateAbsoluteIdentifier("setDocumentTitle");
         public static readonly string OpenModal = CreateAbsoluteIdentifier("openModal");
         private static string CreateAbsoluteIdentifier(string v)

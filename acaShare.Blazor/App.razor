@@ -1,3 +1,5 @@
+@inject IJSRuntime JsRuntime
+
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(Program).Assembly">
         <Found Context="routeData">
@@ -17,3 +19,10 @@
         </NotFound>
     </Router>
 </CascadingAuthenticationState>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JsRuntime.InvokeVoidAsync(JsFunctions.InitializeJs);
+    }
+}
