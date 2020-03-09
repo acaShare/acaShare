@@ -18,6 +18,7 @@
             <AcaCollection Items="_deleteSuggestions">
                 <ListItemTemplate>
                     <DeleteSuggestionListItem Suggestion="context"
+                                              ConfirmationModal="ConfirmationModal"
                                               OnApproveSuggestionClickCallback="SuggestionsService.OnApproveSuggestionClickCallback"
                                               OnRejectSuggestionClickCallback="SuggestionsService.OnRejectSuggestionClickCallback" />
                 </ListItemTemplate>
@@ -25,9 +26,14 @@
         </div>
     </div>
 
+    <ConfirmationDialog @ref="ConfirmationModal">
+        Czy na pewno chcesz zatwierdzić tę sugestię usunięcia?
+    </ConfirmationDialog>
+
 @code {
     private IReadOnlyCollection<DeleteRequestViewModel> _deleteSuggestions;
     private const string pageTitle = "Sugestie usunięcia";
+    private ConfirmationDialog ConfirmationModal { get; set; }
 
     protected override void OnInitialized()
     {

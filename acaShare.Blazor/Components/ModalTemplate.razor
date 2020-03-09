@@ -1,11 +1,9 @@
 ﻿<!-- BEGIN: Modal -->
 <div class="modal @_currentModalClass">
-    <CascadingValue Value="ToggleModal" TValue="Action">
-        @ChildContent
-    </CascadingValue>
+    @ChildContent
 </div>
 
-<div class="modal-overlay @_currentModalClass"></div>
+<div class="modal-overlay @_currentModalClass" @onclick="OnBackgroundClick"></div>
 <!-- END: Modal -->
 
 @code {
@@ -20,7 +18,7 @@
     private string _currentModalClass = string.Empty;
     private bool _isOpen = false;
 
-    private void ToggleModal()
+    public void ToggleModal()
     {
         if (_isOpen)
         {
@@ -32,5 +30,11 @@
         }
 
         _isOpen = !_isOpen;
+        StateHasChanged();
+    }
+
+    private void OnBackgroundClick()
+    {
+        ToggleModal();
     }
 }

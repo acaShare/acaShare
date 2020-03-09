@@ -26,19 +26,19 @@
                 </h1>
 
                 <div class="material-header-action-buttons">
-                    <a @onclick="() => MaterialStateChangeService.OnApproveMaterialClickCallback(new CallbackArgs(_model.MaterialId))"
+                    <a @onclick="OnApproveClick"
                        class="sep action-button tooltipped approve-material" data-position="top" data-tooltip="Zatwierdź">
 
                         <i class="material-icons lh">check</i>
                     </a>
 
-                    <a @onclick="() => MaterialStateChangeService.OnApproveMaterialClickCallback(new CallbackArgs(_model.MaterialId, true))"
+                    <a @onclick="OnApproveClick"
                        class="sep action-button tooltipped approve-material" data-position="top" data-tooltip="Zatwierdź i przejdź do materiału">
 
                         <i class="material-icons lh">subdirectory_arrow_right</i>
                     </a>
 
-                    <a @onclick="() => MaterialStateChangeService.OnRejectMaterialClickCallback(new CallbackArgs(_model.MaterialId))"
+                    <a @onclick="OnRejectClick"
                        class="sep action-button tooltipped reject-material" data-position="top" data-tooltip="Odrzuć">
 
                         <i class="material-icons lh">not_interested</i>
@@ -122,11 +122,17 @@
     </div>
 </div>
 
+<ConfirmationDialog @ref="Modal">
+    @_confirmationModalText
+</ConfirmationDialog>
+
 @code {
     [Parameter]
     public int MaterialId { get; set; }
 
     private MaterialToApproveViewModel _model;
+    private ConfirmationDialog Modal { get; set; }
+    private string _confirmationModalText;
 
     protected override void OnInitialized()
     {
@@ -156,5 +162,23 @@
                 ).ToList()
             };
         }
+    }
+
+    private void OnApproveClick()
+    {
+        _confirmationModalText = "Czy na pewno chcesz zatwierdzić ten materiał?";
+        ActionClick(() => MaterialStateChangeService.OnApproveMaterialClickCallback(new CallbackArgs(_model.MaterialId)));
+    }
+
+    private void OnRejectClick()
+    {
+        _confirmationModalText = "Czy na pewno chcesz odrzucić ten materiał?";
+        ActionClick(() => MaterialStateChangeService.OnRejectMaterialClickCallback(new CallbackArgs(_model.MaterialId)));
+    }
+
+    private void ActionClick(Action handler)
+    {
+        Modal.OnSubmit += handler;
+        Modal.ToggleModal();
     }
 }

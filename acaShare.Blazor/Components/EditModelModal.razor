@@ -1,16 +1,12 @@
 ﻿@typeparam TModel
 
-<ModalTemplate OpenModalClass="@OpenModalClass">
+<ModalTemplate OpenModalClass="@OpenModalClass" @ref="ModalTemplate">
     <EditForm Model="Model" OnValidSubmit="OnValidSubmit">
         <DataAnnotationsValidator />
 
-        <div class="modal-content" style="display:block;">
+        <ModalContent SubmitButtonText="@SubmitButtonText" CloseButtonText="@CancelButtonText" ToggleModal="ToggleModal">
             @ChildContent
-        </div>
-        <div class="modal-footer">
-            <button type="submit" class="modal-button waves-effect waves-green btn-flat">@SubmitButtonText</button>
-            <a class="modal-button waves-effect waves-green btn-flat" @onclick="ToggleModal">@CancelButtonText</a>
-        </div>
+        </ModalContent>
     </EditForm>
 </ModalTemplate>
 
@@ -19,7 +15,7 @@
     public string OpenModalClass { get; set; }
 
     [Parameter]
-    public string SubmitButtonText { get; set; }
+    public string SubmitButtonText { get; set; } = "Zatwierdź";
 
     [Parameter]
     public string CancelButtonText { get; set; } = "Anuluj";
@@ -33,6 +29,11 @@
     [Parameter]
     public EventCallback OnValidSubmit { get; set; }
 
-    [CascadingParameter]
-    public EventCallback ToggleModal { get; set; }
+
+    private ModalTemplate ModalTemplate { get; set; }
+
+    public void ToggleModal()
+    {
+        ModalTemplate.ToggleModal();
+    }
 }

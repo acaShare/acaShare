@@ -1,6 +1,7 @@
 ﻿@page "/Moderator/ModeratorPanel/DeleteSuggestions/DeleteRequestApprovalDecision/{DeleteSuggestionId:int}"
 @inject IMaterialsService _service
 @inject ISuggestionsService SuggestionsService
+@inject IMaterialStateChangeService MaterialStateChangeService
 @inject NavigationManager NavigationManager
 @attribute [Authorize]
 
@@ -24,12 +25,12 @@
                     </h1>
 
                     <div class="upper-box-header-action-buttons">
-                        <a @onclick="() => SuggestionsService.OnApproveSuggestionClickCallback(new CallbackArgs(Decision.DeleteSuggestion.DeleteRequestId))"
+                        <a @onclick="OnApproveClick"
                            class="sep action-button tooltipped approve-delete-request" data-position="top" data-tooltip="Zatwierdź - usuń materiał">
 
                             <i class="material-icons lh">delete_forever</i>
                         </a>
-                        <a @*@onclick="ToggleModal"*@
+                        <a @onclick="ToggleModal"
                            class="sep action-button tooltipped" data-position="top" data-tooltip="Odrzuć sugestię">
 
                             <i class="material-icons lh">not_interested</i>
@@ -157,7 +158,7 @@
     </div>
 </div>
 
-<EditModelModal Model="Decision.DeleteSuggestion" OnValidSubmit="OnRejectClicked">
+<EditModelModal Model="Decision.DeleteSuggestion" SubmitButtonText="Odrzuć sugestię usunięcia" OnValidSubmit="OnRejectClicked" @ref="Modal">
     <div class="row">
         <div class="col s12">
             <div>
@@ -171,11 +172,17 @@
     </div>
 </EditModelModal>
 
+<ConfirmationDialog @ref="ConfirmationModal">
+    Czy na pewno chcesz zatwierdzić tę sugestię usunięcia?
+</ConfirmationDialog>
+
 @code {
     [Parameter]
     public int DeleteSuggestionId { get; set; }
 
     private ChangeRequestApprovalDecision Decision;
+    private EditModelModal<DeleteRequestViewModel> Modal { get; set; }
+    private ConfirmationDialog ConfirmationModal { get; set; }
 
     protected override void OnInitialized()
     {
@@ -218,8 +225,19 @@
         }
     }
 
+    private void OnApproveClick()
+    {
+        ConfirmationModal.OnSubmit += () => MaterialStateChangeService.OnApproveMaterialClickCallback(new CallbackArgs(Decision.DeleteSuggestion.DeleteRequestId));
+        ConfirmationModal.ToggleModal();
+    }
+
     private void OnRejectClicked()
     {
         SuggestionsService.OnRejectSuggestionClickCallback(new RejectSuggestionCallbackArgs(Decision.DeleteSuggestion.DeleteRequestId, Decision.DeleteSuggestion.DeclineReason));
+    }
+
+    private void ToggleModal() {
+        Decision.DeleteSuggestion.DeclineReason = null;
+        Modal.ToggleModal();
     }
 }

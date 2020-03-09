@@ -18,19 +18,40 @@
 </a>
 
 <div class="icons-row-container">
-    <a class="approve-material" @onclick="() => OnApproveMaterialClickCallback.InvokeAsync(new CallbackArgs(Material.MaterialId))">
+    <a class="approve-material" @onclick="OnApproveClick">
         <i class="material-icons list-icon icon-edit tooltipped" data-position="top" data-tooltip="Zatwierdź">check</i>
     </a>
-    <a class="reject-material" @onclick="() => OnRejectMaterialClickCallback.InvokeAsync(new CallbackArgs(Material.MaterialId))">
+    <a class="reject-material" @onclick="OnRejectClick">
         <i class="material-icons list-icon icon-delete tooltipped" data-position="top" data-tooltip="Odrzuć">not_interested</i>
     </a>
 </div>
 
 @code {
+    private const int maxDescriptionLength = 100;
+
     [Parameter]
     public BLL.Models.Material Material { get; set; }
+    
+    [Parameter]
+    public ConfirmationDialog Modal { get; set; }
 
-    private const int maxDescriptionLength = 100;
+    private void OnApproveClick()
+    {
+        Modal.InnerText = "Czy na pewno chcesz zatwierdzić ten materiał?";
+        ActionClick(() => OnApproveMaterialClickCallback.InvokeAsync(new CallbackArgs(Material.MaterialId)));
+    }
+
+    private void OnRejectClick()
+    {
+        Modal.InnerText = "Czy na pewno chcesz odrzucić ten materiał?";
+        ActionClick(() => OnRejectMaterialClickCallback.InvokeAsync(new CallbackArgs(Material.MaterialId)));
+    }
+
+    private void ActionClick(Action handler)
+    {
+        Modal.OnSubmit += handler;
+        Modal.ToggleModal();
+    }
 
     //Callbacks
     [Parameter]

@@ -51,15 +51,15 @@
 </NavLink>
 
 <div class="icons-row-container">
-    <a class="approve-delete-request" @onclick="() => OnApproveSuggestionClickCallback.InvokeAsync(new CallbackArgs(Suggestion.DeleteRequestId))">
+    <a class="approve-delete-request" @onclick="OnApproveClick">
         <i class="material-icons list-icon icon-edit tooltipped" data-position="top" data-tooltip="Zatwierdź - usuń materiał">delete_forever</i>
     </a>
-    <a @*@onclick="ToggleModal"*@>
+    <a @onclick="ToggleModal">
         <i class="material-icons list-icon icon-delete tooltipped" data-position="top" data-tooltip="Odrzuć sugestię">not_interested</i>
     </a>
 </div>
 
-<EditModelModal Model="Suggestion" SubmitButtonText="Odrzuć sugestię usunięcia" OnValidSubmit="OnRejectClicked">
+<EditModelModal Model="Suggestion" SubmitButtonText="Odrzuć sugestię usunięcia" OnValidSubmit="OnRejectClicked" @ref="EditModal">
     <div class="row">
         <div class="col s12">
             <div>
@@ -77,14 +77,10 @@
     [Parameter]
     public DeleteRequestViewModel Suggestion { get; set; }
 
-    private const int maxCommentLength = 100;
+    [Parameter]
+    public ConfirmationDialog ConfirmationModal { get; set; }
 
-    private void OnRejectClicked()
-    {
-        OnRejectSuggestionClickCallback.InvokeAsync(new RejectSuggestionCallbackArgs(Suggestion.DeleteRequestId, Suggestion.DeclineReason));
-    }
 
-    //Callbacks
     [Parameter]
     public EventCallback<CallbackArgs> OnApproveSuggestionClickCallback { get; set; }
 
@@ -93,4 +89,24 @@
 
     [CascadingParameter]
     public Action<string> ChangePageTitle { get; set; }
+
+    private EditModelModal<DeleteRequestViewModel> EditModal { get; set; }
+    private const int maxCommentLength = 100;
+
+    private void OnApproveClick()
+    {
+        ConfirmationModal.OnSubmit += () => OnApproveSuggestionClickCallback.InvokeAsync(new CallbackArgs(Suggestion.DeleteRequestId));
+        ConfirmationModal.ToggleModal();
+    }
+
+    private void OnRejectClicked()
+    {
+        OnRejectSuggestionClickCallback.InvokeAsync(new RejectSuggestionCallbackArgs(Suggestion.DeleteRequestId, Suggestion.DeclineReason));
+    }
+
+    private void ToggleModal()
+    {
+        Suggestion.DeclineReason = null;
+        EditModal.ToggleModal();
+    }
 }
