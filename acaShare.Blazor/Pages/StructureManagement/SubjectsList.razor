@@ -1,0 +1,48 @@
+﻿@*@attribute [Microsoft.AspNetCore.Components.RouteAttribute(RouteConstants.ModeratorPanelRoute + "/MaterialsToApprove")]*@
+@page "/Moderator/ModeratorPanel/UniversitiesStructureManagement/Subjects"
+@attribute [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole + ", " + Roles.ModeratorRole)]
+@inject IUniversityTreeTraversalService TraversalService
+@inject IUniversityTreeManagementService ManagementService
+
+<div class="data-container">
+    <Breadcrumbs BreadcrumbsItems="@_breadcrumbsItems" />
+
+    <div class="home-content">
+        <AcaCollection Items="_universities">
+            <ListItemTemplate>
+                <UniversityListItem Model="context" />
+            </ListItemTemplate>
+        </AcaCollection>
+    </div>
+</div>
+
+
+@code {
+    private IReadOnlyCollection<UniversityViewModel> _universities;
+    private const string pageTitle = "Uczelnie";
+    private IReadOnlyCollection<BreadcrumbViewModel> _breadcrumbsItems = new List<BreadcrumbViewModel>
+{
+        new BreadcrumbViewModel(pageTitle)
+    };
+
+    protected override void OnInitialized()
+    {
+        ChangePageTitle(pageTitle);
+        RefreshData();
+    }
+
+    private void RefreshData()
+    {
+        _universities = TraversalService.GetUniversities()
+            .Select(u => new UniversityViewModel 
+            {
+                Id = u.UniversityId,
+                TitleOrFullName = u.Name,
+                SubtitleOrAbbreviation = u.Abbreviation
+            })
+            .ToList();
+    }
+
+    [CascadingParameter]
+    public Action<string> ChangePageTitle { get; set; }
+}

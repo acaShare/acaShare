@@ -1,0 +1,96 @@
+﻿@page "/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities/{UniversityId:int}/Edit"
+@inject IUniversityTreeTraversalService TraversalService
+@inject IUniversityTreeManagementService ManagementService
+@inject NavigationManager NavigationManager
+
+<div class="data-container">
+    <Breadcrumbs BreadcrumbsItems="@_breadcrumbsItems" />
+
+    <div class="home-content">
+        <div class="material-container">
+            <EditForm Model="_university" OnValidSubmit="OnEdit" class="col s12">
+                <DataAnnotationsValidator />
+                <div class="text-danger @_display">Uczelnia o takiej nazwie lub skrócie już istnieje</div>
+
+                <div>
+                    <label for="Model.TitleOrFullName">Pełna nazwa uczelni</label>
+                    <div class="input-field">
+                        <InputText @bind-Value="_university.TitleOrFullName" class="validate" />
+                        <ValidationMessage For="@(() => _university.TitleOrFullName)" />
+                    </div>
+                </div>
+                <div>
+                    <label for="Model.SubtitleOrAbbreviation">Skrót</label>
+                    <div class="input-field">
+                        <InputText @bind-Value="_university.SubtitleOrAbbreviation" class="validate" />
+                        <ValidationMessage For="@(() => _university.TitleOrFullName)" />
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <button type="submit" class="btn btn-default accept-button">Aktualizuj</button>
+                    <NavLink href="/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities" class="btn btn-default back-button">
+                        <span class="back-button-large">Wróć do listy uczelni</span>
+                        <span class="back-button-small">Cofnij</span>
+                    </NavLink>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int UniversityId { get; set; }
+
+    private IReadOnlyCollection<BreadcrumbViewModel> _breadcrumbsItems = new List<BreadcrumbViewModel>
+{
+        new BreadcrumbViewModel("Uczelnie"),
+        new BreadcrumbViewModel("Edycja uczelni")
+    };
+
+    private UniversityViewModel _university;
+    private string _display = "hidden";
+
+    protected override void OnInitialized()
+    {
+        var university = TraversalService.GetUniversity(UniversityId);
+
+        _university = new UniversityViewModel
+        {
+            Id = university.UniversityId,
+            TitleOrFullName = university.Name,
+            SubtitleOrAbbreviation = university.Abbreviation
+        };
+    }
+
+    private void OnEdit()
+    {
+        var universityToEdit = TraversalService.GetUniversity(_university.Id);
+        if (universityToEdit == null)
+        {
+            NavigationManager.NavigateTo($"ResourceNotFound/{Errors.UniversityNotFound}");
+        }
+
+        universityToEdit.Update(_university.TitleOrFullName, _university.SubtitleOrAbbreviation);
+
+        bool success = ManagementService.UpdateUniversity(universityToEdit);
+
+        if (!success)
+        {
+            _display = "block";
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities");
+        }
+    }
+
+    private void ClearError()
+    {
+        if (_display != "hidden")
+        {
+            _display = "hidden";
+        }
+    }
+}

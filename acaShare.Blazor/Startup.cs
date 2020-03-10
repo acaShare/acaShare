@@ -33,6 +33,7 @@ namespace acaShare.Blazor
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUniversityTreeTraversalService, UniversityTreeTraversalService>();
+            services.AddScoped<IUniversityTreeManagementService, UniversityTreeManagementService>();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRolesManagementService, RolesManagementService>();
