@@ -23,7 +23,7 @@
                     <label for="Model.SubtitleOrAbbreviation">Skrót</label>
                     <div class="input-field">
                         <InputText @bind-Value="_university.SubtitleOrAbbreviation" @oninput="ClearError" class="validate" />
-                        <ValidationMessage For="@(() => _university.TitleOrFullName)" />
+                        <ValidationMessage For="@(() => _university.SubtitleOrAbbreviation)" />
                     </div>
                 </div>
 

@@ -8,22 +8,22 @@
 
     <div class="home-content">
         <div class="material-container">
-            <EditForm Model="_university" OnValidSubmit="OnEdit" class="col s12">
+            <EditForm Model="_universityViewModel" OnValidSubmit="OnEdit" class="col s12">
                 <DataAnnotationsValidator />
                 <div class="text-danger @_display">Uczelnia o takiej nazwie lub skrócie już istnieje</div>
 
                 <div>
                     <label for="Model.TitleOrFullName">Pełna nazwa uczelni</label>
                     <div class="input-field">
-                        <InputText @bind-Value="_university.TitleOrFullName" class="validate" />
-                        <ValidationMessage For="@(() => _university.TitleOrFullName)" />
+                        <InputText @bind-Value="_universityViewModel.TitleOrFullName" class="validate" />
+                        <ValidationMessage For="@(() => _universityViewModel.TitleOrFullName)" />
                     </div>
                 </div>
                 <div>
                     <label for="Model.SubtitleOrAbbreviation">Skrót</label>
                     <div class="input-field">
-                        <InputText @bind-Value="_university.SubtitleOrAbbreviation" class="validate" />
-                        <ValidationMessage For="@(() => _university.TitleOrFullName)" />
+                        <InputText @bind-Value="_universityViewModel.SubtitleOrAbbreviation" class="validate" />
+                        <ValidationMessage For="@(() => _universityViewModel.SubtitleOrAbbreviation)" />
                     </div>
                 </div>
 
@@ -49,32 +49,32 @@
         new BreadcrumbViewModel("Edycja uczelni")
     };
 
-    private UniversityViewModel _university;
+    private BLL.Models.University _university;
+    private UniversityViewModel _universityViewModel;
     private string _display = "hidden";
 
     protected override void OnInitialized()
     {
-        var university = TraversalService.GetUniversity(UniversityId);
+        _university = TraversalService.GetUniversity(UniversityId);
 
-        _university = new UniversityViewModel
+        _universityViewModel = new UniversityViewModel
         {
-            Id = university.UniversityId,
-            TitleOrFullName = university.Name,
-            SubtitleOrAbbreviation = university.Abbreviation
+            Id = _university.UniversityId,
+            TitleOrFullName = _university.Name,
+            SubtitleOrAbbreviation = _university.Abbreviation
         };
     }
 
     private void OnEdit()
     {
-        var universityToEdit = TraversalService.GetUniversity(_university.Id);
-        if (universityToEdit == null)
+        if (_university == null)
         {
             NavigationManager.NavigateTo($"ResourceNotFound/{Errors.UniversityNotFound}");
         }
 
-        universityToEdit.Update(_university.TitleOrFullName, _university.SubtitleOrAbbreviation);
+        _university.Update(_universityViewModel.TitleOrFullName, _universityViewModel.SubtitleOrAbbreviation);
 
-        bool success = ManagementService.UpdateUniversity(universityToEdit);
+        bool success = ManagementService.UpdateUniversity(_university);
 
         if (!success)
         {

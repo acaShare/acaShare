@@ -8,22 +8,22 @@
 
     <div class="home-content">
         <div class="material-container">
-            <EditForm Model="_department" OnValidSubmit="OnEdit" class="col s12">
+            <EditForm Model="_departmentViewModel" OnValidSubmit="OnEdit" class="col s12">
                 <DataAnnotationsValidator />
                 <div class="text-danger @_display">Wydział o takiej nazwie lub skrócie już istnieje</div>
 
                 <div>
                     <label for="Model.TitleOrFullName">Nazwa wydziału</label>
                     <div class="input-field">
-                        <InputText @bind-Value="_department.TitleOrFullName" @oninput="ClearError" class="validate" />
-                        <ValidationMessage For="@(() => _department.TitleOrFullName)" />
+                        <InputText @bind-Value="_departmentViewModel.TitleOrFullName" @oninput="ClearError" class="validate" />
+                        <ValidationMessage For="@(() => _departmentViewModel.TitleOrFullName)" />
                     </div>
                 </div>
                 <div>
                     <label for="Model.SubtitleOrAbbreviation">Skrót</label>
                     <div class="input-field">
-                        <InputText @bind-Value="_department.SubtitleOrAbbreviation" @oninput="ClearError" class="validate" />
-                        <ValidationMessage For="@(() => _department.TitleOrFullName)" />
+                        <InputText @bind-Value="_departmentViewModel.SubtitleOrAbbreviation" @oninput="ClearError" class="validate" />
+                        <ValidationMessage For="@(() => _departmentViewModel.SubtitleOrAbbreviation)" />
                     </div>
                 </div>
 
@@ -48,26 +48,27 @@
 
     private IReadOnlyCollection<BreadcrumbViewModel> _breadcrumbsItems;
     private BLL.Models.University _university;
-    private DepartmentViewModel _department;
+    private BLL.Models.Department _department;
+    private DepartmentViewModel _departmentViewModel;
     private string _display = "hidden";
 
 
     protected override void OnInitialized()
     {
-        var department = TraversalService.GetDepartment(DepartmentId);
-        if (department == null)
+        _department = TraversalService.GetDepartment(DepartmentId);
+        if (_department == null)
         {
             NavigationManager.NavigateTo($"ResourceNotFound/{Errors.DepartmentNotFound}");
         }
 
-        _department = new DepartmentViewModel
+        _departmentViewModel = new DepartmentViewModel
         {
-            DepartmentId = department.DepartmentId,
-            TitleOrFullName = department.Name,
-            SubtitleOrAbbreviation = department.Abbreviation
+            DepartmentId = _department.DepartmentId,
+            TitleOrFullName = _department.Name,
+            SubtitleOrAbbreviation = _department.Abbreviation
         };
 
-        _university = department.University;
+        _university = _department.University;
         if (_university.UniversityId != UniversityId)
         {
             NavigationManager.NavigateTo($"ResourceNotFound/{Errors.UniversityNotFound}");
@@ -88,15 +89,14 @@
             NavigationManager.NavigateTo($"ResourceNotFound/{Errors.UniversityNotFound}");
         }
 
-        var departmentToEdit = TraversalService.GetDepartment(DepartmentId);
-        if (departmentToEdit == null)
+        if (_department == null)
         {
             NavigationManager.NavigateTo($"ResourceNotFound/{Errors.DepartmentNotFound}");
         }
 
-        departmentToEdit.Update(_department.TitleOrFullName, _department.SubtitleOrAbbreviation, _university);
+        _department.Update(_departmentViewModel.TitleOrFullName, _departmentViewModel.SubtitleOrAbbreviation, _university);
 
-        bool success = ManagementService.UpdateDepartment(departmentToEdit);
+        bool success = ManagementService.UpdateDepartment(_department);
 
         if (!success)
         {

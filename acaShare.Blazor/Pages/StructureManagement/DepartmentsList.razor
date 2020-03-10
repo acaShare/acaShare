@@ -39,8 +39,8 @@
     {
         ChangePageTitle(pageTitle);
 
-        var universityName = TraversalService.GetUniversity(UniversityId)?.Name;
-        if (universityName == null)
+        var university = TraversalService.GetUniversity(UniversityId);
+        if (university == null)
         {
             NavigationManager.NavigateTo($"ResourceNotFound/{Errors.UniversityNotFound}");
         }
@@ -48,7 +48,7 @@
         _breadcrumbsItems = new List<BreadcrumbViewModel>
         {
             new BreadcrumbViewModel("Uczelnie", "/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities"),
-            new BreadcrumbViewModel(universityName)
+            new BreadcrumbViewModel(university.Abbreviation)
         };
 
         RefreshData();

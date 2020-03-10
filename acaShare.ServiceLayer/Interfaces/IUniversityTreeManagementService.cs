@@ -23,7 +23,7 @@ namespace acaShare.ServiceLayer.Interfaces
 
         // Lesson
         bool AddLesson(Lesson lesson);
-        bool UpdateLesson(Lesson lesson);
+        bool UpdateLesson(int lessonId, string subjectName, string subjectAbbreviation);
         void DeleteLesson(int lessonId);
     }
 }

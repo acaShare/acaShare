@@ -46,8 +46,8 @@
         _breadcrumbsItems = new List<BreadcrumbViewModel>
         {
             new BreadcrumbViewModel("Uczelnie", "/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities"),
-            new BreadcrumbViewModel(university.Name, $"/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities/{UniversityId}/Departments"),
-            new BreadcrumbViewModel(department.Name)
+            new BreadcrumbViewModel(university.Abbreviation, $"/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities/{UniversityId}/Departments"),
+            new BreadcrumbViewModel(department.Abbreviation)
         };
 
         RefreshData();

@@ -23,7 +23,7 @@
                     <label for="Model.SubtitleOrAbbreviation">Skrót</label>
                     <div class="input-field">
                         <InputText @bind-Value="_department.SubtitleOrAbbreviation" @oninput="ClearError" class="validate" />
-                        <ValidationMessage For="@(() => _department.TitleOrFullName)" />
+                        <ValidationMessage For="@(() => _department.SubtitleOrAbbreviation)" />
                     </div>
                 </div>
 
@@ -60,7 +60,7 @@
         _breadcrumbsItems = new List<BreadcrumbViewModel>
         {
             new BreadcrumbViewModel("Uczelnie", "/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities"),
-            new BreadcrumbViewModel(_university.Name, $"/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities/{UniversityId}/Departments"),
+            new BreadcrumbViewModel(_university.Abbreviation, $"/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities/{UniversityId}/Departments"),
             new BreadcrumbViewModel("Dodawanie wydziału")
         };
     }

@@ -9,5 +9,7 @@ namespace acaShare.Blazor.ApplicationServices.Constants
         public const string EditSuggestionNotFound = "Sugestia edycji o podanym id nie istnieje.";
         public const string UniversityNotFound = "Uczelnia o podanym id nie istnieje.";
         public const string DepartmentNotFound = "Wydział o podanym id nie istnieje.";
+        public const string SemesterNotFound = "Semestr o podanym id nie istnieje.";
+        public const string LessonNotFound = "Przedmiot o podanym id nie istnieje.";
     }
 }
