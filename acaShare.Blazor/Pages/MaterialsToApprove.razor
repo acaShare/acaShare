@@ -5,15 +5,7 @@
 @inject IMaterialStateChangeService MaterialStateChangeService
 
     <div class="data-container">
-        <nav class="colornav">
-            <div class="nav-wrapper path-header-wrapper">
-                <div class="col s12 tree-path">
-                    <a class="breadcrumb">
-                        @pageTitle
-                    </a>
-                </div>
-            </div>
-        </nav>
+        <Breadcrumbs BreadcrumbsItems="@_breadcrumbsItems"/>
 
         <div class="home-content">
             <AcaCollection Items="_materials" TItem="BLL.Models.Material">
@@ -35,6 +27,10 @@
     private IReadOnlyCollection<BLL.Models.Material> _materials;
     private const string pageTitle = "Materiały oczekujące na zatwierdzenie";
     private ConfirmationDialog Modal { get; set; }
+    private IReadOnlyCollection<BreadcrumbViewModel> _breadcrumbsItems = new List<BreadcrumbViewModel> 
+    { 
+        new BreadcrumbViewModel(pageTitle)
+    };
 
     protected override void OnInitialized()
     {
