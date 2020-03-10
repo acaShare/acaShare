@@ -9,7 +9,7 @@ namespace acaShare.Blazor.Models
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane")]
         [MaxLength(126, ErrorMessage = "Maksymalna długość pola \"{0}\" to {1} znaków")]
-        [Display(Name = "Pełna nazwa uczelni")]
+        [Display(Name = "Nazwa wydziału")]
         public string TitleOrFullName { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane")]

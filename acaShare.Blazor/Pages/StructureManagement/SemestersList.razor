@@ -1,45 +1,69 @@
 ﻿@*@attribute [Microsoft.AspNetCore.Components.RouteAttribute(RouteConstants.ModeratorPanelRoute + "/MaterialsToApprove")]*@
-@page "/Moderator/ModeratorPanel/UniversitiesStructureManagement/Semesters"
+@page "/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities/{UniversityId:int}/Departments/{DepartmentId:int}/Semesters"
 @attribute [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole + ", " + Roles.ModeratorRole)]
 @inject IUniversityTreeTraversalService TraversalService
-@inject IUniversityTreeManagementService ManagementService
+@inject NavigationManager NavigationManager
 
-<div class="data-container">
-    <Breadcrumbs BreadcrumbsItems="@_breadcrumbsItems" />
+    <div class="data-container">
+        <Breadcrumbs BreadcrumbsItems="@_breadcrumbsItems" />
 
-    <div class="home-content">
-        <AcaCollection Items="_universities">
-            <ListItemTemplate>
-                <UniversityListItem Model="context" />
-            </ListItemTemplate>
-        </AcaCollection>
+        <div class="home-content">
+            <AcaCollection Items="_semesters">
+                <ListItemTemplate>
+                    <SemesterListItem Model="context" />
+                </ListItemTemplate>
+            </AcaCollection>
+        </div>
     </div>
-</div>
-
 
 @code {
-    private IReadOnlyCollection<UniversityViewModel> _universities;
-    private const string pageTitle = "Uczelnie";
-    private IReadOnlyCollection<BreadcrumbViewModel> _breadcrumbsItems = new List<BreadcrumbViewModel>
-{
-        new BreadcrumbViewModel(pageTitle)
-    };
+    [Parameter]
+    public int UniversityId { get; set; }
+
+    [Parameter]
+    public int DepartmentId { get; set; }
+
+    private IReadOnlyCollection<SemesterViewModel> _semesters;
+    private const string pageTitle = "Semestry";
+    private IReadOnlyCollection<BreadcrumbViewModel> _breadcrumbsItems;
 
     protected override void OnInitialized()
     {
         ChangePageTitle(pageTitle);
+
+        var department = TraversalService.GetDepartment(DepartmentId);
+        if (department == null)
+        {
+            NavigationManager.NavigateTo($"ResourceNotFound/{Errors.DepartmentNotFound}");
+        }
+
+        var university = department.University;
+        if (university.UniversityId != UniversityId)
+        {
+            NavigationManager.NavigateTo($"ResourceNotFound/{Errors.UniversityNotFound}");
+        }
+
+        _breadcrumbsItems = new List<BreadcrumbViewModel>
+        {
+            new BreadcrumbViewModel("Uczelnie", "/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities"),
+            new BreadcrumbViewModel(university.Name, $"/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities/{UniversityId}/Departments"),
+            new BreadcrumbViewModel(department.Name)
+        };
+
         RefreshData();
     }
 
     private void RefreshData()
     {
-        _universities = TraversalService.GetUniversities()
-            .Select(u => new UniversityViewModel 
+        _semesters = TraversalService.GetSemesters()
+            .Select(s => new SemesterViewModel
             {
-                Id = u.UniversityId,
-                TitleOrFullName = u.Name,
-                SubtitleOrAbbreviation = u.Abbreviation
+                SemesterId = s.SemesterId,
+                UniversityId = UniversityId,
+                DepartmentId = DepartmentId,
+                Number = s.Number
             })
+            .OrderBy(s => s.SemesterId)
             .ToList();
     }
 

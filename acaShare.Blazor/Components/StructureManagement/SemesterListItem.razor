@@ -1,0 +1,13 @@
+﻿<NavLink class="item-link" 
+         href=@($"/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities/{Model.UniversityId}/Departments/{Model.DepartmentId}/Semesters/{Model.SemesterId}/Subjects")
+         @onclick="@(() => ChangePageTitle(Model.Number))">
+    <span class="path-list-item-title">@Model.Number</span>
+</NavLink>
+
+@code {
+    [Parameter]
+    public SemesterViewModel Model { get; set; }
+
+    [CascadingParameter]
+    public Action<string> ChangePageTitle { get; set; }
+}
