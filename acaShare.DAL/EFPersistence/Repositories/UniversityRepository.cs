@@ -18,7 +18,7 @@ namespace acaShare.DAL.EFPersistence.Repositories
 
         public IEnumerable<Department> GetDepartmentsFromUniversity(int universityId)
         {
-            IEnumerable<Department> departments = _dbSet.Find(universityId).Departments;
+            IEnumerable<Department> departments = _dbSet.FirstOrDefault(d => d.UniversityId == universityId)?.Departments;
             return departments;
         }
 

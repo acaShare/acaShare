@@ -1,46 +1,99 @@
 ﻿@*@attribute [Microsoft.AspNetCore.Components.RouteAttribute(RouteConstants.ModeratorPanelRoute + "/MaterialsToApprove")]*@
-@page "/Moderator/ModeratorPanel/UniversitiesStructureManagement/Departments"
+@page "/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities/{UniversityId:int}/Departments"
 @attribute [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole + ", " + Roles.ModeratorRole)]
 @inject IUniversityTreeTraversalService TraversalService
 @inject IUniversityTreeManagementService ManagementService
+@inject IFormFilesManagement FilesManagement
+@inject IMaterialsService MaterialsService
+@inject NavigationManager NavigationManager
 
-<div class="data-container">
-    <Breadcrumbs BreadcrumbsItems="@_breadcrumbsItems" />
+    <div class="data-container">
+        <Breadcrumbs BreadcrumbsItems="@_breadcrumbsItems" />
 
-    <div class="home-content">
-        <AcaCollection Items="_universities">
-            <ListItemTemplate>
-                <UniversityListItem Model="context" />
-            </ListItemTemplate>
-        </AcaCollection>
+        <div class="home-content">
+            <AcaCollection Items="_departments">
+                <ListItemTemplate>
+                    <DepartmentListItem Model="context" Modal="@ConfirmationDialog" OnDelete="OnDelete" />
+                </ListItemTemplate>
+            </AcaCollection>
+            <NavLink href=@($"/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities/{UniversityId}/Departments/Add") class="add-button">
+                Dodaj
+            </NavLink>
+        </div>
     </div>
-</div>
 
+<ConfirmationDialog @ref="ConfirmationDialog">
+    @ConfirmationDialog.InnerText
+</ConfirmationDialog>
 
 @code {
-    private IReadOnlyCollection<UniversityViewModel> _universities;
-    private const string pageTitle = "Uczelnie";
-    private IReadOnlyCollection<BreadcrumbViewModel> _breadcrumbsItems = new List<BreadcrumbViewModel>
-{
-        new BreadcrumbViewModel(pageTitle)
-    };
+    [Parameter]
+    public int UniversityId { get; set; }
+
+    private IReadOnlyCollection<DepartmentViewModel> _departments;
+    private const string pageTitle = "Wydziały";
+    private ConfirmationDialog ConfirmationDialog;
+    private IReadOnlyCollection<BreadcrumbViewModel> _breadcrumbsItems;
 
     protected override void OnInitialized()
     {
         ChangePageTitle(pageTitle);
+
+        var universityName = TraversalService.GetUniversity(UniversityId)?.Name;
+        if (universityName == null)
+        {
+            NavigationManager.NavigateTo($"ResourceNotFound/{Errors.UniversityNotFound}");
+        }
+
+        _breadcrumbsItems = new List<BreadcrumbViewModel>
+        {
+            new BreadcrumbViewModel("Uczelnie", "/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities"),
+            new BreadcrumbViewModel(universityName)
+        };
+
         RefreshData();
     }
 
     private void RefreshData()
     {
-        _universities = TraversalService.GetUniversities()
-            .Select(u => new UniversityViewModel 
+        _departments = TraversalService.GetDepartmentsFromUniversity(UniversityId)
+            ?.Select(u => new DepartmentViewModel
             {
-                Id = u.UniversityId,
+                DepartmentId = u.DepartmentId,
+                UniversityId = u.UniversityId,
                 TitleOrFullName = u.Name,
                 SubtitleOrAbbreviation = u.Abbreviation
             })
-            .ToList();
+            ?.ToList();
+
+        if (_departments == null)
+        {
+            NavigationManager.NavigateTo($"ResourceNotFound/{Errors.UniversityNotFound}");
+        }
+    }
+
+    private void OnDelete(CallbackArgs callbackArgs)
+    {
+        var departmentToDelete = TraversalService.GetDepartment(callbackArgs.Id);
+        if (departmentToDelete == null)
+        {
+            NavigationManager.NavigateTo($"ResourceNotFound/{Errors.UniversityNotFound}");
+        }
+
+        // First - delete materials due to database constraints betwee Lesson and Material
+        foreach (var lesson in departmentToDelete.Lessons)
+        {
+            foreach (var materialToDelete in lesson.Materials)
+            {
+                FilesManagement.DeleteWholeMaterialFolder(materialToDelete.MaterialId);
+                MaterialsService.DeleteMaterial(materialToDelete);
+            }
+        }
+
+        // actually delete
+        ManagementService.DeleteDepartment(departmentToDelete);
+
+        RefreshData();
     }
 
     [CascadingParameter]
