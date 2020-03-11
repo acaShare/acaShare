@@ -1,0 +1,65 @@
+﻿<a class="item-link" href="/Moderator/ModeratorPanel/MaterialsToApprove/MaterialApprovalDecision/@(Material.MaterialId)"
+            @onclick="@(() => ChangePageTitle("Materiał"))">
+    <span class="path-list-item-title">@Material.Name</span>
+    <br>
+    <span class="path-list-item-subtitle">
+        @Material.UploadDate.ToString("d.MM.yyyy, HH:mm") &nbsp;&nbsp;~&nbsp;&nbsp;
+
+        @if (Material.Description?.Length > maxDescriptionLength)
+        {
+            @Material.Description.Substring(0, maxDescriptionLength);
+            @:[...]
+        }
+        else
+        {
+            @Material.Description;
+        }
+    </span>
+</a>
+
+<div class="icons-row-container">
+    <a class="approve-material" @onclick="OnApproveClick">
+        <i class="material-icons list-icon icon-edit tooltipped" data-position="top" data-tooltip="Zatwierdź">check</i>
+    </a>
+    <a class="reject-material" @onclick="OnRejectClick">
+        <i class="material-icons list-icon icon-delete tooltipped" data-position="top" data-tooltip="Odrzuć">not_interested</i>
+    </a>
+</div>
+
+@code {
+    private const int maxDescriptionLength = 100;
+
+    [Parameter]
+    public BLL.Models.Material Material { get; set; }
+    
+    [Parameter]
+    public ConfirmationDialog Modal { get; set; }
+
+    private void OnApproveClick()
+    {
+        Modal.InnerText = "Czy na pewno chcesz zatwierdzić ten materiał?";
+        ActionClick(() => OnApproveMaterialClickCallback.InvokeAsync(new CallbackArgs(Material.MaterialId)));
+    }
+
+    private void OnRejectClick()
+    {
+        Modal.InnerText = "Czy na pewno chcesz odrzucić ten materiał?";
+        ActionClick(() => OnRejectMaterialClickCallback.InvokeAsync(new CallbackArgs(Material.MaterialId)));
+    }
+
+    private void ActionClick(Action handler)
+    {
+        Modal.OnSubmit += handler;
+        Modal.ToggleModal();
+    }
+
+    //Callbacks
+    [Parameter]
+    public EventCallback<CallbackArgs> OnApproveMaterialClickCallback { get; set; }
+
+    [Parameter]
+    public EventCallback<CallbackArgs> OnRejectMaterialClickCallback { get; set; }
+
+    [CascadingParameter]
+    public Action<string> ChangePageTitle { get; set; }
+}

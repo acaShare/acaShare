@@ -1,0 +1,15 @@
+﻿<nav class="colornav">
+    <div class="nav-wrapper path-header-wrapper">
+        <div class="col s12 tree-path">
+            @foreach (var breadcrumb in BreadcrumbsItems)
+            {
+                <Breadcrumb Model="@breadcrumb" />
+            }
+        </div>
+    </div>
+</nav>
+
+@code {
+    [Parameter]
+    public IReadOnlyCollection<BreadcrumbViewModel> BreadcrumbsItems { get; set; }
+}

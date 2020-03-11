@@ -156,9 +156,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
                 return RedirectToAction("ResourceNotFound", "Error", new { error = "przedmiot o takim Id nie istnieje." });
             }
 
-            lessonToEdit.Update(vm.TitleOrFullName, vm.SubtitleOrAbbreviation);
-            
-            bool success = _managementService.UpdateLesson(lessonToEdit);
+            bool success = _managementService.UpdateLesson(lessonToEdit.LessonId, vm.TitleOrFullName, vm.SubtitleOrAbbreviation);
 
             if (!success)
             {

@@ -46,44 +46,7 @@ namespace acaShare.ServiceLayer.Services
             return true;
         }
 
-        public bool AddLesson(Lesson lesson)
-        {
-            var subject = AddSubjectIfNotExistsOrGetOtherwise(lesson.Subject);
-
-            lesson.ReplaceSubjectForNew(subject);
-
-            if (subject.IsInLesson(lesson))
-            {
-                return false;
-            }
-
-            if (_uow.Lessons.IsSubjectWithSameNameOrAbbreviationExistInDepartment(lesson))
-            {
-                return false;
-            }
-           
-            _uow.Lessons.Add(lesson);
-            _uow.SaveChanges();
-
-            return true;
-        }
-
-        public Subject AddSubjectIfNotExistsOrGetOtherwise(Subject subject)
-        {
-            var existingSubject = _uow.Subjects.GetByNaming(subject.Name, subject.Abbreviation);
-            if (existingSubject != null)
-            {
-                return existingSubject;
-            }
-
-            _uow.Subjects.Add(subject);
-            _uow.SaveChanges();
-
-            return subject;
-        }
-
-
-
+        
         public void DeleteUniversity(University universityToDelete)
         {
             _uow.Universities.Delete(universityToDelete);
@@ -131,7 +94,7 @@ namespace acaShare.ServiceLayer.Services
             return true;
         }
 
-        public bool UpdateLesson(Lesson lesson)
+        public bool AddLesson(Lesson lesson)
         {
             var subject = AddSubjectIfNotExistsOrGetOtherwise(lesson.Subject);
 
@@ -146,11 +109,50 @@ namespace acaShare.ServiceLayer.Services
             {
                 return false;
             }
-            
+
+            _uow.Lessons.Add(lesson);
+            _uow.SaveChanges();
+
+            return true;
+        }
+
+        public bool UpdateLesson(int lessonId, string subjectName, string subjectAbbreviation)
+        {
+            var lesson = _uow.Lessons.FindById(lessonId);
+
+            var lessonsSubject = new Subject(subjectName, subjectAbbreviation);
+            var subject = AddSubjectIfNotExistsOrGetOtherwise(lessonsSubject);
+
+            lesson.ReplaceSubjectForNew(subject);
+
+            if (subject.IsInLesson(lesson))
+            {
+                return false;
+            }
+
+            if (_uow.Lessons.IsSubjectWithSameNameOrAbbreviationExistInDepartment(lesson))
+            {
+                return false;
+            }
+
             _uow.Lessons.Update(lesson);
             _uow.SaveChanges();
 
             return true;
+        }
+
+        public Subject AddSubjectIfNotExistsOrGetOtherwise(Subject subject)
+        {
+            var existingSubject = _uow.Subjects.GetByNaming(subject.Name, subject.Abbreviation);
+            if (existingSubject != null)
+            {
+                return existingSubject;
+            }
+
+            _uow.Subjects.Add(subject);
+            _uow.SaveChanges();
+
+            return subject;
         }
     }
 }

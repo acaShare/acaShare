@@ -1,0 +1,101 @@
+﻿@*@attribute [Microsoft.AspNetCore.Components.RouteAttribute(RouteConstants.ModeratorPanelRoute + "/MaterialsToApprove")]*@
+@page "/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities/{UniversityId:int}/Departments"
+@attribute [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole + ", " + Roles.ModeratorRole)]
+@inject IUniversityTreeTraversalService TraversalService
+@inject IUniversityTreeManagementService ManagementService
+@inject IFormFilesManagement FilesManagement
+@inject IMaterialsService MaterialsService
+@inject NavigationManager NavigationManager
+
+    <div class="data-container">
+        <Breadcrumbs BreadcrumbsItems="@_breadcrumbsItems" />
+
+        <div class="home-content">
+            <AcaCollection Items="_departments">
+                <ListItemTemplate>
+                    <DepartmentListItem Model="context" Modal="@ConfirmationDialog" OnDelete="OnDelete" />
+                </ListItemTemplate>
+            </AcaCollection>
+            <NavLink href=@($"/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities/{UniversityId}/Departments/Add") class="add-button">
+                Dodaj
+            </NavLink>
+        </div>
+    </div>
+
+<ConfirmationDialog @ref="ConfirmationDialog">
+    @ConfirmationDialog.InnerText
+</ConfirmationDialog>
+
+@code {
+    [Parameter]
+    public int UniversityId { get; set; }
+
+    private IReadOnlyCollection<DepartmentViewModel> _departments;
+    private const string pageTitle = "Wydziały";
+    private ConfirmationDialog ConfirmationDialog;
+    private IReadOnlyCollection<BreadcrumbViewModel> _breadcrumbsItems;
+
+    protected override void OnInitialized()
+    {
+        ChangePageTitle(pageTitle);
+
+        var university = TraversalService.GetUniversity(UniversityId);
+        if (university == null)
+        {
+            NavigationManager.NavigateTo($"ResourceNotFound/{Errors.UniversityNotFound}");
+        }
+
+        _breadcrumbsItems = new List<BreadcrumbViewModel>
+        {
+            new BreadcrumbViewModel("Uczelnie", "/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities"),
+            new BreadcrumbViewModel(university.Abbreviation)
+        };
+
+        RefreshData();
+    }
+
+    private void RefreshData()
+    {
+        _departments = TraversalService.GetDepartmentsFromUniversity(UniversityId)
+            ?.Select(u => new DepartmentViewModel
+            {
+                DepartmentId = u.DepartmentId,
+                UniversityId = u.UniversityId,
+                TitleOrFullName = u.Name,
+                SubtitleOrAbbreviation = u.Abbreviation
+            })
+            ?.ToList();
+
+        if (_departments == null)
+        {
+            NavigationManager.NavigateTo($"ResourceNotFound/{Errors.UniversityNotFound}");
+        }
+    }
+
+    private void OnDelete(CallbackArgs callbackArgs)
+    {
+        var departmentToDelete = TraversalService.GetDepartment(callbackArgs.Id);
+        if (departmentToDelete == null)
+        {
+            NavigationManager.NavigateTo($"ResourceNotFound/{Errors.UniversityNotFound}");
+        }
+
+        // First - delete materials due to database constraints betwee Lesson and Material
+        foreach (var lesson in departmentToDelete.Lessons)
+        {
+            foreach (var materialToDelete in lesson.Materials)
+            {
+                FilesManagement.DeleteWholeMaterialFolder(materialToDelete.MaterialId);
+                MaterialsService.DeleteMaterial(materialToDelete);
+            }
+        }
+
+        // actually delete
+        ManagementService.DeleteDepartment(departmentToDelete);
+
+        RefreshData();
+    }
+
+    [CascadingParameter]
+    public Action<string> ChangePageTitle { get; set; }
+}

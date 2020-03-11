@@ -1,0 +1,49 @@
+﻿@*@attribute [Microsoft.AspNetCore.Components.RouteAttribute(RouteConstants.ModeratorPanelRoute + "/MaterialsToApprove")]*@
+@page "/Moderator/ModeratorPanel/MaterialsToApprove"
+@attribute [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole + ", " + Roles.ModeratorRole)]
+@inject IMaterialsService MaterialsService
+@inject IMaterialStateChangeService MaterialStateChangeService
+
+    <div class="data-container">
+        <Breadcrumbs BreadcrumbsItems="@_breadcrumbsItems"/>
+
+        <div class="home-content">
+            <AcaCollection Items="_materials" TItem="BLL.Models.Material">
+                <ListItemTemplate>
+                    <MaterialToApproveListItem Material="context"
+                                               Modal="Modal"
+                                               OnApproveMaterialClickCallback="MaterialStateChangeService.OnApproveMaterialClickCallback"
+                                               OnRejectMaterialClickCallback="MaterialStateChangeService.OnRejectMaterialClickCallback" />
+                </ListItemTemplate>
+            </AcaCollection>
+        </div>
+    </div>
+
+    <ConfirmationDialog @ref="Modal">
+        @Modal.InnerText
+    </ConfirmationDialog>
+
+@code {
+    private IReadOnlyCollection<BLL.Models.Material> _materials;
+    private const string pageTitle = "Materiały oczekujące na zatwierdzenie";
+    private ConfirmationDialog Modal { get; set; }
+    private IReadOnlyCollection<BreadcrumbViewModel> _breadcrumbsItems = new List<BreadcrumbViewModel> 
+    { 
+        new BreadcrumbViewModel(pageTitle)
+    };
+
+    protected override void OnInitialized()
+    {
+        ChangePageTitle(pageTitle);
+        RefreshData();
+        MaterialStateChangeService.OnEndProcessing += RefreshData;
+    }
+
+    private void RefreshData()
+    {
+        _materials = MaterialsService.GetMaterialsToApprove() as IReadOnlyCollection<BLL.Models.Material>;
+    }
+
+    [CascadingParameter]
+    public Action<string> ChangePageTitle { get; set; }
+}

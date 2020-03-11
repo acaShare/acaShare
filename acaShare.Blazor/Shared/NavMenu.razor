@@ -1,0 +1,72 @@
+﻿@inject INotificationService NotificationService
+@inject IUserService UserService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JsRuntime
+@using System.Security.Claims
+
+<nav>
+    <div class="nav-wrapper">
+        <a href="" class="brand-logo">acaShare</a>
+        <div id="notification-bell-mobile" class="notifications-bell-mobile-wrapper">
+            <a class="notifications-bell-mobile" id="notification-mobile">
+                <i class="material-icons">notifications</i>
+            </a>
+        </div>
+
+        <a href="#" data-target="mobile-hamburger" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+            <li id="notifications-li">
+                <a id="notification">
+                    <i class="material-icons">notifications</i>
+                </a>
+            </li>
+
+            <li>
+                <NavLink class="nav-link" href="/Moderator/ModeratorPanel/MaterialsToApprove">
+                    Panel moderatora
+                </NavLink>
+            </li>
+               
+            <li>
+                <LoginDisplay />
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<ul class="sidenav" id="mobile-hamburger">
+    <li><a href="">Strona główna</a></li>
+
+    <li>
+        <NavLink class="nav-link" href="/Moderator/ModeratorPanel/MaterialsToApprove">
+            Panel moderatora
+        </NavLink>
+    </li>
+    
+    <li>
+        <LoginDisplay />
+    </li>
+</ul>
+
+<div class="notificationContainer">
+    <ul class="notificationList" id="notificationList"></ul>
+</div>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var loggedUser = UserService.FindByIdentityUserId(authState.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var notifications = loggedUser.Notifications.Select(n => new
+        {
+            n.Content,
+            n.Date,
+            n.IsRead,
+            n.MaterialId,
+            n.NotificationId,
+            n.UserId
+        }).ToList();
+
+        await JsRuntime.InvokeVoidAsync(JsFunctions.InitializeNotifications, notifications);
+    }
+}

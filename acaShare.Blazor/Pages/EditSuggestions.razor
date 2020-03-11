@@ -1,0 +1,18 @@
+﻿@page "/Moderator/ModeratorPanel/EditSuggestions"
+@inject IMaterialsService _service
+@attribute [Authorize]
+
+<AcaCollection Items="_editRequests" TItem="BLL.Models.EditRequest">
+    <ListItemTemplate>
+        <EditSuggestionListItem EditRequest="context" />
+    </ListItemTemplate>
+</AcaCollection>
+
+@code {
+    private IReadOnlyCollection<BLL.Models.EditRequest> _editRequests;
+
+    protected override void OnInitialized()
+    {
+        _editRequests = _service.GetPendingEditSuggestions() as IReadOnlyCollection<BLL.Models.EditRequest>;
+    }
+}

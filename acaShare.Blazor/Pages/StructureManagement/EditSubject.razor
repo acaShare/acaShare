@@ -1,0 +1,134 @@
+﻿@page "/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities/{UniversityId:int}/Departments/{DepartmentId:int}/Semesters/{SemesterId:int}/Subjects/{LessonId:int}/Edit"
+@inject IUniversityTreeTraversalService TraversalService
+@inject IUniversityTreeManagementService ManagementService
+@inject NavigationManager NavigationManager
+
+<div class="data-container">
+    <Breadcrumbs BreadcrumbsItems="@_breadcrumbsItems" />
+
+    <div class="home-content">
+        <div class="material-container">
+            <EditForm Model="_subject" OnValidSubmit="OnEdit" class="col s12">
+                <DataAnnotationsValidator />
+                <div class="text-danger @_display">Przedmiot o takiej nazwie lub skrócie istnieje już na tym wydziale w tym semestrze</div>
+
+                <div>
+                    <label for="Model.TitleOrFullName">Nazwa przedmiotu</label>
+                    <div class="input-field">
+                        <InputText @bind-Value="_subject.TitleOrFullName" @oninput="ClearError" class="validate" />
+                        <ValidationMessage For="@(() => _subject.TitleOrFullName)" />
+                    </div>
+                </div>
+                <div>
+                    <label for="Model.SubtitleOrAbbreviation">Skrót</label>
+                    <div class="input-field">
+                        <InputText @bind-Value="_subject.SubtitleOrAbbreviation" @oninput="ClearError" class="validate" />
+                        <ValidationMessage For="@(() => _subject.SubtitleOrAbbreviation)" />
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <button type="submit" class="btn btn-default accept-button">Aktualizuj</button>
+                    <NavLink href=@($"/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities/{UniversityId}/Departments/{DepartmentId}/Semesters/{SemesterId}/Subjects") class="btn btn-default back-button">
+                        <span class="back-button-large">Wróć do listy przedmiotów</span>
+                        <span class="back-button-small">Cofnij</span>
+                    </NavLink>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int UniversityId { get; set; }
+
+    [Parameter]
+    public int DepartmentId { get; set; }
+
+    [Parameter]
+    public int SemesterId { get; set; }
+
+    [Parameter]
+    public int LessonId { get; set; }
+
+    private IReadOnlyCollection<BreadcrumbViewModel> _breadcrumbsItems;
+    private BLL.Models.Lesson _lesson;
+    private SubjectViewModel _subject;
+    private string _display = "hidden";
+
+
+    protected override void OnInitialized()
+    {
+        var department = TraversalService.GetDepartment(DepartmentId);
+        if (department == null)
+        {
+            NavigationManager.NavigateTo($"ResourceNotFound/{Errors.DepartmentNotFound}");
+        }
+
+        var university = department.University;
+        if (university.UniversityId != UniversityId)
+        {
+            NavigationManager.NavigateTo($"ResourceNotFound/{Errors.UniversityNotFound}");
+        }
+
+        var semester = TraversalService.GetSemester(SemesterId);
+        if (semester == null)
+        {
+            NavigationManager.NavigateTo($"ResourceNotFound/{Errors.SemesterNotFound}");
+        }
+
+        _lesson = TraversalService.GetLesson(LessonId);
+        if (_lesson == null)
+        {
+            NavigationManager.NavigateTo($"ResourceNotFound/{Errors.LessonNotFound}");
+        }
+
+        _subject = new SubjectViewModel
+        {
+            LessonId = _lesson.LessonId,
+            SemesterId = _lesson.SemesterId,
+            DepartmentId = _lesson.DepartmentId,
+            UniversityId = UniversityId,
+            TitleOrFullName = _lesson.Subject.Name,
+            SubtitleOrAbbreviation = _lesson.Subject.Abbreviation
+        };
+
+        var baseUrl = "/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities";
+        _breadcrumbsItems = new List<BreadcrumbViewModel>
+        {
+            new BreadcrumbViewModel("Uczelnie", baseUrl),
+            new BreadcrumbViewModel(university.Abbreviation, $"{baseUrl}/{UniversityId}/Departments"),
+            new BreadcrumbViewModel(department.Abbreviation, $"{baseUrl}/{UniversityId}/Departments/{DepartmentId}/Semesters"),
+            new BreadcrumbViewModel(semester.Number, $"{baseUrl}/{UniversityId}/Departments/{DepartmentId}/Semesters/{SemesterId}/Subjects"),
+            new BreadcrumbViewModel("Edycja przedmiotu")
+        };
+    }
+
+    private void OnEdit()
+    {
+        if (_lesson == null)
+        {
+            NavigationManager.NavigateTo($"ResourceNotFound/{Errors.LessonNotFound}");
+        }
+
+        bool success = ManagementService.UpdateLesson(_lesson.LessonId, _subject.TitleOrFullName, _subject.SubtitleOrAbbreviation);
+
+        if (!success)
+        {
+            _display = "block";
+        }
+        else
+        {
+            NavigationManager.NavigateTo($"/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities/{UniversityId}/Departments/{DepartmentId}/Semesters/{SemesterId}/Subjects");
+        }
+    }
+
+    private void ClearError()
+    {
+        if (_display != "hidden")
+        {
+            _display = "hidden";
+        }
+    }
+}

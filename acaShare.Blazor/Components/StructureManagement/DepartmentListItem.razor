@@ -1,0 +1,38 @@
+﻿<NavLink class="item-link" href=@($"/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities/{Model.UniversityId}/Departments/{Model.DepartmentId}/Semesters")
+   @onclick="@(() => ChangePageTitle(Model.TitleOrFullName))">
+    <span class="path-list-item-title">@Model.TitleOrFullName</span>
+    <br>
+    <span class="path-list-item-subtitle">
+        @Model.SubtitleOrAbbreviation
+    </span>
+</NavLink>
+
+<div class="icons-row-container">
+    <NavLink href=@($"/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities/{Model.UniversityId}/Departments/{Model.DepartmentId}/Edit") class="tooltipped" data-position="top" data-tooltip="Edytuj">
+        <i class="material-icons list-icon icon-edit">edit</i>
+    </NavLink>
+    <a @onclick="OnDeleteClick" class="tooltipped" data-position="top" data-tooltip="Usuń">
+        <i class="material-icons list-icon icon-delete tooltipped" data-position="top" data-tooltip="Usuń">delete</i>
+    </a>
+</div>
+
+@code {
+    [Parameter]
+    public DepartmentViewModel Model { get; set; }
+
+    [Parameter]
+    public EventCallback<CallbackArgs> OnDelete { get; set; }
+
+    [Parameter]
+    public ConfirmationDialog Modal { get; set; }
+
+    [CascadingParameter]
+    public Action<string> ChangePageTitle { get; set; }
+
+    private void OnDeleteClick()
+    {
+        Modal.InnerText = @$"UWAGA! Czy na pewno chcesz usunąć wydział ""{Model.TitleOrFullName}""? Wiąże się to z usunięciem całej jego dalszej struktury oraz wszystkich materiałów z nim związanych.";
+        Modal.OnSubmit += () => OnDelete.InvokeAsync(new CallbackArgs(Model.DepartmentId));
+        Modal.ToggleModal();
+    }
+}

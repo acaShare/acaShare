@@ -1,0 +1,40 @@
+﻿@*<a class="item-link" href="/Moderator/ModeratorPanel/MaterialApprovalDecision/@EditRequest.MaterialId">
+    <span class="path-list-item-title">@EditRequest.Name</span>
+    <br>
+    <span class="path-list-item-subtitle">
+        @EditRequest.UploadDate.ToString("d.MM.yyyy, HH:mm") &nbsp;&nbsp;~&nbsp;&nbsp;
+
+        @if (EditRequest.Description?.Length > maxDescriptionLength)
+        {
+            @EditRequest.Description.Substring(0, maxDescriptionLength);
+            @:[...]
+        }
+        else
+        {
+            @EditRequest.Description;
+        }
+    </span>
+</a>*@
+
+<div class="icons-row-container">
+    <a class="approve-material" @onclick="() => OnApproveEditRequestClickCallback.InvokeAsync(new EditRequestCallbackArgs(EditRequest.EditRequestId))">
+        <i class="material-icons list-icon icon-edit tooltipped" data-position="top" data-tooltip="Zatwierdź">check</i>
+    </a>
+    <a class="reject-material" @onclick="() => OnRejectEditRequestClickCallback.InvokeAsync(new EditRequestCallbackArgs(EditRequest.EditRequestId))">
+        <i class="material-icons list-icon icon-delete tooltipped" data-position="top" data-tooltip="Odrzuć">not_interested</i>
+    </a>
+</div>
+
+@code {
+    [Parameter]
+    public BLL.Models.EditRequest EditRequest { get; set; }
+
+    private const int maxDescriptionLength = 100;
+
+    //Callbacks
+    [Parameter]
+    public EventCallback<EditRequestCallbackArgs> OnApproveEditRequestClickCallback { get; set; }
+
+    [Parameter]
+    public EventCallback<EditRequestCallbackArgs> OnRejectEditRequestClickCallback { get; set; }
+}

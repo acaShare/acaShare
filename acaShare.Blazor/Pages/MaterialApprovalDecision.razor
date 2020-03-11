@@ -1,0 +1,178 @@
+﻿@page "/Moderator/ModeratorPanel/MaterialsToApprove/MaterialApprovalDecision/{MaterialId:int}"
+@inject IMaterialsService _service
+@inject IMaterialStateChangeService MaterialStateChangeService
+@inject NavigationManager NavigationManager
+@attribute [Authorize]
+
+<div class="data-container">
+    <Breadcrumbs BreadcrumbsItems="@_breadcrumbsItems" />
+
+    <div class="home-content">
+        <div class="material-container">
+            <header class="material-header">
+                <h1 class="material-header-title">
+                    @_model.Name
+                </h1>
+
+                <div class="material-header-action-buttons">
+                    <a @onclick="OnApproveClick"
+                       class="sep action-button tooltipped approve-material" data-position="top" data-tooltip="Zatwierdź">
+
+                        <i class="material-icons lh">check</i>
+                    </a>
+
+                    <a @onclick="OnApproveClick"
+                       class="sep action-button tooltipped approve-material" data-position="top" data-tooltip="Zatwierdź i przejdź do materiału">
+
+                        <i class="material-icons lh">subdirectory_arrow_right</i>
+                    </a>
+
+                    <a @onclick="OnRejectClick"
+                       class="sep action-button tooltipped reject-material" data-position="top" data-tooltip="Odrzuć">
+
+                        <i class="material-icons lh">not_interested</i>
+                    </a>
+                </div>
+            </header>
+
+            <div class="material-content material-to-approve-content">
+                <section class="material-content-files">
+                    <h2 class="material-content-files-header">Pliki</h2>
+
+                    <div class="files-wrapper">
+                        @{
+                            int i = 1;
+                            foreach (var file in _model.Files)
+                            {
+                                if (file.IsImage)
+                                {
+                                    <div class="material-file material-image" onclick="openModal();currentSlide(@(i++))">
+                                        <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName-thumbnail" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="material-file">
+                                        <a href="_Uploads/@file.RelativePath" download="@file.FileName" class="material-file-download">
+                                            <i class="material-icons">description</i>
+                                        </a>
+                                    </div>
+                                }
+                            }
+                        }
+                    </div>
+
+                    <!-- The Modal/Lightbox -->
+                    <div id="gallery-modal" class="gallery-modal" onclick="closeModalOnBackgroundClick(event)">
+                        <div id="current-slide-info" class="current-slide-info"></div>
+                        <span class="close" onclick="closeModal()">&times;</span>
+                        <div class="modal-content">
+                            @foreach (var file in _model.Files)
+                            {
+                                if (file.IsImage)
+                                {
+                                    <div class="gallery-item">
+                                        <img src="~/_Uploads/@file.RelativePath" alt="@file.FileName" />
+                                    </div>
+                                }
+                            }
+                        </div>
+
+                        <!-- Next/previous controls -->
+                        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="material-content-description-header">
+                        Opis
+                    </h2>
+
+                    <div class="material-content-description">
+                        @_model.Description
+                    </div>
+                </section>
+            </div>
+
+            <footer class="material-footer">
+                <p class="material-footer-content">
+                    <span>
+                        Autor: @_model.CreatorUsername
+                    </span>
+
+                    <span>
+                        @{ var uploadDate = _model.UploadDate.ToString("d MMMM yyyy, HH:mm");}
+                        Dodano: @uploadDate
+                    </span>
+                </p>
+            </footer>
+        </div>
+    </div>
+</div>
+
+<ConfirmationDialog @ref="Modal">
+    @_confirmationModalText
+</ConfirmationDialog>
+
+@code {
+    [Parameter]
+    public int MaterialId { get; set; }
+
+    private MaterialToApproveViewModel _model;
+    private ConfirmationDialog Modal { get; set; }
+    private string _confirmationModalText;
+    private IReadOnlyCollection<BreadcrumbViewModel> _breadcrumbsItems = new List<BreadcrumbViewModel>
+{
+        new BreadcrumbViewModel("Materiały oczekujące na zatwierdzenie", "/Moderator/ModeratorPanel/MaterialsToApprove"),
+        new BreadcrumbViewModel("Materiał")
+    };
+
+    protected override void OnInitialized()
+    {
+        var materialToApprove = _service.GetMaterialToApprove(MaterialId);
+
+        if (materialToApprove == null)
+        {
+            NavigationManager.NavigateTo($"ResourceNotFound/{Errors.MaterialToApproveNotValid}");
+        }
+        else
+        {
+            _model = new MaterialToApproveViewModel
+            {
+                MaterialId = materialToApprove.MaterialId,
+                Name = materialToApprove.Name,
+                Description = materialToApprove.Description,
+                CreatorUsername = materialToApprove.Creator.Username,
+                UploadDate = materialToApprove.UploadDate,
+                Files = materialToApprove.Files.Select(f =>
+                    new FileViewModel
+                    {
+                        FileId = f.FileId,
+                        FileName = f.FileName,
+                        RelativePath = f.RelativePath,
+                        ContentType = f.ContentType
+                    }
+                ).ToList()
+            };
+        }
+    }
+
+    private void OnApproveClick()
+    {
+        _confirmationModalText = "Czy na pewno chcesz zatwierdzić ten materiał?";
+        ActionClick(() => MaterialStateChangeService.OnApproveMaterialClickCallback(new CallbackArgs(_model.MaterialId)));
+    }
+
+    private void OnRejectClick()
+    {
+        _confirmationModalText = "Czy na pewno chcesz odrzucić ten materiał?";
+        ActionClick(() => MaterialStateChangeService.OnRejectMaterialClickCallback(new CallbackArgs(_model.MaterialId)));
+    }
+
+    private void ActionClick(Action handler)
+    {
+        Modal.OnSubmit += handler;
+        Modal.ToggleModal();
+    }
+}

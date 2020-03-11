@@ -1,0 +1,8 @@
+﻿<NavLink class="breadcrumb" href="@Model.Href" Match="NavLinkMatch.All">
+    @Model.LinkText
+</NavLink>
+
+@code {
+    [Parameter]
+    public BreadcrumbViewModel Model { get; set; }
+}

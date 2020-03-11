@@ -1,0 +1,75 @@
+﻿@page "/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities/Add"
+@inject IUniversityTreeTraversalService TraversalService
+@inject IUniversityTreeManagementService ManagementService
+@inject NavigationManager NavigationManager
+
+<div class="data-container">
+    <Breadcrumbs BreadcrumbsItems="@_breadcrumbsItems" />
+
+    <div class="home-content">
+        <div class="material-container">
+            <EditForm Model="_university" OnValidSubmit="OnAdd" class="col s12">
+                <DataAnnotationsValidator />
+                <div class="text-danger @_display">Uczelnia o takiej nazwie lub skrócie już istnieje</div>
+
+                <div>
+                    <label for="Model.TitleOrFullName">Pełna nazwa uczelni</label>
+                    <div class="input-field">
+                        <InputText @bind-Value="_university.TitleOrFullName" @oninput="ClearError" class="validate" />
+                        <ValidationMessage For="@(() => _university.TitleOrFullName)" />
+                    </div>
+                </div>
+                <div>
+                    <label for="Model.SubtitleOrAbbreviation">Skrót</label>
+                    <div class="input-field">
+                        <InputText @bind-Value="_university.SubtitleOrAbbreviation" @oninput="ClearError" class="validate" />
+                        <ValidationMessage For="@(() => _university.SubtitleOrAbbreviation)" />
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <button type="submit" class="btn btn-default accept-button">Dodaj</button>
+                    <NavLink href="/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities" class="btn btn-default back-button">
+                        <span class="back-button-large">Wróć do listy uczelni</span>
+                        <span class="back-button-small">Cofnij</span>
+                    </NavLink>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    private IReadOnlyCollection<BreadcrumbViewModel> _breadcrumbsItems = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel("Uczelnie", "/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities"),
+        new BreadcrumbViewModel("Dodawanie uczelni")
+    };
+
+    private UniversityViewModel _university = new UniversityViewModel();
+    private string _display = "hidden";
+
+    private void OnAdd()
+    {
+        var universityToAdd = new BLL.Models.University(_university.TitleOrFullName, _university.SubtitleOrAbbreviation);
+
+        var success = ManagementService.AddUniversity(universityToAdd);
+
+        if (!success)
+        {
+            _display = "block";
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities");
+        }
+    }
+
+    private void ClearError()
+    {
+        if (_display != "hidden")
+        {
+            _display = "hidden";
+        }
+    }
+}

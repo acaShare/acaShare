@@ -1,0 +1,37 @@
+﻿<ModalTemplate OpenModalClass="@OpenModalClass" @ref="Modal">
+    <ModalContent ToggleModal="ToggleModal" OnSubmit="OnSubmitLocal">
+        @ChildContent
+    </ModalContent>
+</ModalTemplate>
+
+@code {
+    [Parameter]
+    public string OpenModalClass { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public string SubmitButtonText { get; set; }
+
+    [Parameter]
+    public string CloseButtonText { get; set; }
+
+    public string InnerText { get; set; }
+
+    public event Action OnSubmit;
+
+    public void OnSubmitLocal()
+    {
+        OnSubmit();
+        ToggleModal();
+    }
+
+
+    private ModalTemplate Modal { get; set; }
+
+    public void ToggleModal()
+    {
+        Modal.ToggleModal();
+    }
+}

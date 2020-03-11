@@ -1,0 +1,39 @@
+﻿@typeparam TModel
+
+<ModalTemplate OpenModalClass="@OpenModalClass" @ref="ModalTemplate">
+    <EditForm Model="Model" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator />
+
+        <ModalContent SubmitButtonText="@SubmitButtonText" CloseButtonText="@CancelButtonText" ToggleModal="ToggleModal">
+            @ChildContent
+        </ModalContent>
+    </EditForm>
+</ModalTemplate>
+
+@code {
+    [Parameter]
+    public string OpenModalClass { get; set; }
+
+    [Parameter]
+    public string SubmitButtonText { get; set; } = "Zatwierdź";
+
+    [Parameter]
+    public string CancelButtonText { get; set; } = "Anuluj";
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public TModel Model { get; set; }
+
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+
+
+    private ModalTemplate ModalTemplate { get; set; }
+
+    public void ToggleModal()
+    {
+        ModalTemplate.ToggleModal();
+    }
+}

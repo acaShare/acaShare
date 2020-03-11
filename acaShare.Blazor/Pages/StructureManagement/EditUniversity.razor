@@ -1,0 +1,96 @@
+﻿@page "/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities/{UniversityId:int}/Edit"
+@inject IUniversityTreeTraversalService TraversalService
+@inject IUniversityTreeManagementService ManagementService
+@inject NavigationManager NavigationManager
+
+<div class="data-container">
+    <Breadcrumbs BreadcrumbsItems="@_breadcrumbsItems" />
+
+    <div class="home-content">
+        <div class="material-container">
+            <EditForm Model="_universityViewModel" OnValidSubmit="OnEdit" class="col s12">
+                <DataAnnotationsValidator />
+                <div class="text-danger @_display">Uczelnia o takiej nazwie lub skrócie już istnieje</div>
+
+                <div>
+                    <label for="Model.TitleOrFullName">Pełna nazwa uczelni</label>
+                    <div class="input-field">
+                        <InputText @bind-Value="_universityViewModel.TitleOrFullName" class="validate" />
+                        <ValidationMessage For="@(() => _universityViewModel.TitleOrFullName)" />
+                    </div>
+                </div>
+                <div>
+                    <label for="Model.SubtitleOrAbbreviation">Skrót</label>
+                    <div class="input-field">
+                        <InputText @bind-Value="_universityViewModel.SubtitleOrAbbreviation" class="validate" />
+                        <ValidationMessage For="@(() => _universityViewModel.SubtitleOrAbbreviation)" />
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <button type="submit" class="btn btn-default accept-button">Aktualizuj</button>
+                    <NavLink href="/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities" class="btn btn-default back-button">
+                        <span class="back-button-large">Wróć do listy uczelni</span>
+                        <span class="back-button-small">Cofnij</span>
+                    </NavLink>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int UniversityId { get; set; }
+
+    private IReadOnlyCollection<BreadcrumbViewModel> _breadcrumbsItems = new List<BreadcrumbViewModel>
+{
+        new BreadcrumbViewModel("Uczelnie", "/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities"),
+        new BreadcrumbViewModel("Edycja uczelni")
+    };
+
+    private BLL.Models.University _university;
+    private UniversityViewModel _universityViewModel;
+    private string _display = "hidden";
+
+    protected override void OnInitialized()
+    {
+        _university = TraversalService.GetUniversity(UniversityId);
+
+        _universityViewModel = new UniversityViewModel
+        {
+            Id = _university.UniversityId,
+            TitleOrFullName = _university.Name,
+            SubtitleOrAbbreviation = _university.Abbreviation
+        };
+    }
+
+    private void OnEdit()
+    {
+        if (_university == null)
+        {
+            NavigationManager.NavigateTo($"ResourceNotFound/{Errors.UniversityNotFound}");
+        }
+
+        _university.Update(_universityViewModel.TitleOrFullName, _universityViewModel.SubtitleOrAbbreviation);
+
+        bool success = ManagementService.UpdateUniversity(_university);
+
+        if (!success)
+        {
+            _display = "block";
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/Moderator/ModeratorPanel/UniversitiesStructureManagement/Universities");
+        }
+    }
+
+    private void ClearError()
+    {
+        if (_display != "hidden")
+        {
+            _display = "hidden";
+        }
+    }
+}

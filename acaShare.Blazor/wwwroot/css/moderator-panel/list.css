@@ -1,0 +1,74 @@
+﻿.moderator-actions {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+.list-view-wrapper {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.add-button {
+    height: 2em;
+    width: 12em;
+    display: block;
+    text-align: center;
+    background-color: #4db6ac; /*#4db69f;*/
+    padding: .15em;
+    color: white;
+    margin: 0 auto;
+
+    border-radius: 3px;
+    /*
+    position: absolute;
+    bottom: -1.5em;
+    left: 50%;
+    transform: translateX(-50%);
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    */
+}
+
+.icon-edit, .icon-delete {
+    transition: .2s ease-in-out;
+}
+
+.icons-row-container a {
+    display: flex;
+    margin-left: 1.325em;
+    transition: .2s ease-in-out;
+}
+
+.icon-edit:hover {
+    color: #1c66ea;
+    transition: .2s ease-in-out;
+}
+
+.icon-delete:hover {
+    color: red;
+    transition: .2s ease-in-out;
+}
+
+/*
+    .aca-collection {
+        width: 100%;
+        margin: .5em 0 1em 0;
+    }
+
+    .aca-collection-item {
+        display: flex;
+    }
+
+    .aca-collection hr {
+        border: 0;
+        height: 1px;
+        color: #c2c2c2;
+        background-image: linear-gradient(to right, rgba(0, 0, 0, 0), #c2c2c2, rgba(0, 0, 0, 0));
+    
+        margin: 0 2em 0px 2em;
+    }
+*/

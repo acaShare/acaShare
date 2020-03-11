@@ -1,0 +1,29 @@
+﻿@using ServiceLayer.Interfaces;
+@inject IUniversityTreeTraversalService _service
+@layout MainLayout
+@attribute [Authorize]
+@page "/"
+
+<br />
+<br />
+<br />
+<h1>Uczelnie:</h1>
+<br />
+
+<ul>
+    @foreach (var university in _universities)
+    {
+        <li>
+            @university.Name
+        </li>
+    }
+</ul>
+
+@code {
+    private IEnumerable<BLL.Models.University> _universities;
+
+    protected override void OnInitialized()
+    {
+        _universities = _service.GetUniversities();
+    }
+}

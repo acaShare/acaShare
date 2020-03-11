@@ -1,0 +1,40 @@
+﻿<!-- BEGIN: Modal -->
+<div class="modal @_currentModalClass">
+    @ChildContent
+</div>
+
+<div class="modal-overlay @_currentModalClass" @onclick="OnBackgroundClick"></div>
+<!-- END: Modal -->
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public string OpenModalClass { get; set; }
+
+    // State management
+    private string _defaultOpenModalClass = "modal-open";
+    private string _currentModalClass = string.Empty;
+    private bool _isOpen = false;
+
+    public void ToggleModal()
+    {
+        if (_isOpen)
+        {
+            _currentModalClass = string.Empty;
+        }
+        else
+        {
+            _currentModalClass = OpenModalClass ?? _defaultOpenModalClass;
+        }
+
+        _isOpen = !_isOpen;
+        StateHasChanged();
+    }
+
+    private void OnBackgroundClick()
+    {
+        ToggleModal();
+    }
+}

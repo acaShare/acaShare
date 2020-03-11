@@ -1,0 +1,29 @@
+﻿@typeparam TItem
+
+<div class="list-view-wrapper">
+    <div class="list-container">
+        <ul class="aca-collection">
+            @if (Items.Count != 0)
+            {
+                @foreach (var item in Items)
+                {
+                    <li class="aca-collection-item path-list-item">
+                        @ListItemTemplate(item)
+                    </li>
+                }
+            }
+            else
+            {
+                <p class="empty-list">~ Pusto ~</p>
+            }
+        </ul>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public IReadOnlyCollection<TItem> Items { get; set; } = Array.Empty<TItem>();
+
+    [Parameter]
+    public RenderFragment<TItem> ListItemTemplate { get; set; }
+}

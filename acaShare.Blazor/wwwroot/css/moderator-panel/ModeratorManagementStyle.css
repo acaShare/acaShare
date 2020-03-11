@@ -1,0 +1,35 @@
+﻿body {
+}
+
+.table:not(:last-child) {
+    table-layout: fixed;
+    margin-bottom: 3.5rem;
+}
+
+.title {
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+th, td {
+    text-align: left;
+    width: 40%;
+}
+
+.legend {
+    display: inline-block;
+}
+
+.moderator-management-wrapper {
+    max-height: 69vh;
+    overflow-y: auto;
+}
+
+select {
+    display: block;
+}
+
+.add-button {
+    display: inline-block;
+    border: 0px;
+}

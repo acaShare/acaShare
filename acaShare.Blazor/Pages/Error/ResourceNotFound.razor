@@ -1,0 +1,19 @@
+﻿@page "/ResourceNotFound/{ErrorMessage}"
+@layout MainLayout
+
+<div class="main-container-error">
+    <h1 class="my-error">UPS!</h1>
+    <h3 class="my-error">@ErrorMessage</h3>
+    <div><img src="/images/PageNotFound.png" /></div>
+    <h3 class="my-error">BŁĄD</h3>
+    <h4 class="my-error">Wróć na <a href="javascript:void(0)" onclick="window.history.back()">poprzednią</a> stronę i spróbuj ponownie</h4>
+    <h4 class="my-error">
+        lub wróć na
+        <a asp-area="Main" asp-controller="List" asp-action="AvailableUniversities">STRONĘ GŁÓWNĄ</a>
+    </h4>
+</div>
+
+@code {
+    [Parameter]
+    public string ErrorMessage { get; set; }
+}

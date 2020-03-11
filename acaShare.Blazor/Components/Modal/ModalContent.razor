@@ -1,0 +1,39 @@
+﻿<div class="modal-content" style="display:block;">
+    @ChildContent
+</div>
+<div class="progress @display">
+    <div class="indeterminate"></div>
+</div>
+<div class="modal-footer">
+    <button type="submit" class="modal-button waves-effect waves-green btn-flat" @onclick="OnSubmitLocal">@SubmitButtonText</button>
+    <a class="modal-button waves-effect waves-green btn-flat" @onclick="ToggleModal">@CloseButtonText</a>
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public string SubmitButtonText { get; set; } = "Tak";
+
+    [Parameter]
+    public string CloseButtonText { get; set; } = "Anuluj";
+
+    [Parameter]
+    public EventCallback ToggleModal { get; set; }
+
+    [Parameter]
+    public Action OnSubmit { get; set; }
+
+
+    private string display = "hidden";
+    private void OnSubmitLocal()
+    {
+        if (OnSubmit != null) // in edit modal it's null, in confirmation modal it's a handler
+        {
+            display = string.Empty;
+            OnSubmit();
+            display = "hidden";
+        }
+    }
+}
