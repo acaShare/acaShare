@@ -2,7 +2,7 @@
 
 namespace acaShare.WebAPI.Models.StructureTraversal
 {
-    public class DepartmentViewModel : IListItemViewModel
+    public class DepartmentViewModel
     {
         public int Id { get; set; }
 
