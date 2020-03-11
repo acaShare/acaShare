@@ -2,6 +2,7 @@
 using acaShare.WebAPI.Models;
 using acaShare.WebAPI.Models.StructureTraversal;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,8 @@ using System.Linq;
 namespace acaShare.WebAPI.Controllers.StructureManagement
 {
     [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole)]
-    [Area("Moderator")]
+    [ApiController]
+    [Route("api/v1/[controller]")]
     public class SemestersManagementController : Controller
     {
         private readonly IUniversityTreeTraversalService _traversalService;
@@ -19,20 +21,21 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
             _traversalService = traversalService;
         }
 
-        public IActionResult Semesters(int departmentId)
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<IEnumerable<SemesterViewModel>> Get(int departmentId)
         {
             var department = _traversalService.GetDepartment(departmentId);
             if (department == null)
             {
-                return RedirectToAction("ResourceNotFound", "Error", new { error = "wydział o podanym Id nie istnieje." });
+                return NotFound("Wydział o takim id nie istnieje.");
             }
-
-            ConfigureBreadcrumbs(department);
 
             var semesters = _traversalService.GetSemesters();
 
-            var semesterViewModels =
-                semesters.Select(s =>
+            return semesters
+                .Select(s =>
                     new SemesterViewModel
                     {
                         Id = s.SemesterId,
@@ -40,49 +43,6 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
                     })
                 .OrderBy(s => s.Id)
                 .ToList();
-
-            var vm = new ListViewModel<SemesterViewModel>
-            {
-                Items = semesterViewModels,
-                HelperId = departmentId
-            };
-
-            return View(vm);
-        }
-
-        private void ConfigureBreadcrumbs(BLL.Models.Department department)
-        {
-            var university = department.University;
-
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "UniversitiesManagement",
-                    Action = "Universities",
-                    Title = "Uczelnie"
-                },
-                new Breadcrumb
-                {
-                    Controller = "DepartmentsManagement",
-                    Action = "Departments",
-                    Title = university.Abbreviation,
-                    Params = new Dictionary<string, string>
-                    {
-                        { "universityId", university.UniversityId.ToString() }
-                    }
-                },
-                new Breadcrumb
-                {
-                    Controller = "SemestersManagement",
-                    Action = "Semesters",
-                    Title = department.Abbreviation,
-                    Params = new Dictionary<string, string>
-                    {
-                        { "departmentId", department.DepartmentId.ToString() }
-                    }
-                }
-            };
         }
     }
 }
