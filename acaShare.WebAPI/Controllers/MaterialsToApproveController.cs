@@ -28,12 +28,12 @@ namespace acaShare.WebAPI.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IEnumerable<MaterialToApproveViewModel> Get()
+        public IEnumerable<MaterialViewModel> Get()
         {
             var materialsToApprove = _materialsService.GetMaterialsToApprove();
 
             return materialsToApprove.Select(m =>
-                new MaterialToApproveViewModel
+                new MaterialViewModel
                 {
                     MaterialId = m.MaterialId,
                     Name = m.Name,
@@ -47,7 +47,7 @@ namespace acaShare.WebAPI.Controllers
         [HttpGet("{materialId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<MaterialToApproveViewModel> Get(int materialId)
+        public ActionResult<MaterialViewModel> Get(int materialId)
         {
             var materialToApprove = _materialsService.GetMaterialToApprove(materialId);
             if (materialToApprove == null)
@@ -55,7 +55,7 @@ namespace acaShare.WebAPI.Controllers
                 return NotFound();
             }
 
-            return new MaterialToApproveViewModel
+            return new MaterialViewModel
             {
                 MaterialId = materialToApprove.MaterialId,
                 Name = materialToApprove.Name,

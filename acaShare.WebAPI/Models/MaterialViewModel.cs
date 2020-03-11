@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace acaShare.WebAPI.Models
 {
-    public class MaterialToApproveViewModel
+    public class MaterialViewModel
     {
         public int MaterialId { get; set; }
 

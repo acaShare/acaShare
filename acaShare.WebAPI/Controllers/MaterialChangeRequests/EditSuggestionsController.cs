@@ -66,9 +66,9 @@ namespace acaShare.WebAPI.Controllers.MaterialChangeRequests
 
             ConfigureSuggestionBreadcrumbs(editRequestId);
 
-            var vm = new ChangeRequestApprovalDecision
+            var vm = new EditRequestApprovalDecision
             {
-                MaterialViewModel = new MaterialToApproveViewModel
+                MaterialViewModel = new MaterialViewModel
                 {
                     MaterialId = editRequest.MaterialToUpdateId,
                     CreatorUsername = editRequest.MaterialToUpdate.Creator.Username,
