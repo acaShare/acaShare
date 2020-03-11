@@ -1,6 +1,7 @@
 ﻿using acaShare.ServiceLayer.Interfaces;
 using acaShare.WebAPI.Common;
 using acaShare.WebAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Security.Claims;
 
 namespace acaShare.WebAPI.Controllers
 {
+    [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole + ", " + Roles.ModeratorRole)]
     [ApiController]
     [Route("api/v1/[controller]")]
     public class MaterialsToApproveController : ControllerBase
@@ -25,11 +27,12 @@ namespace acaShare.WebAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public IEnumerable<MaterialToApproveViewModel> Get()
         {
             var materialsToApprove = _materialsService.GetMaterialsToApprove();
 
-            var vm = materialsToApprove.Select(m =>
+            return materialsToApprove.Select(m =>
                 new MaterialToApproveViewModel
                 {
                     MaterialId = m.MaterialId,
@@ -39,8 +42,6 @@ namespace acaShare.WebAPI.Controllers
                     UploadDate = m.UploadDate
                 }
             ).ToList();
-
-            return vm;
         }
 
         [HttpGet("{materialId}")]
@@ -73,8 +74,10 @@ namespace acaShare.WebAPI.Controllers
             };
         }
 
-        [HttpPost]
-        public IActionResult Update(MaterialToApproveDto dto)
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult ChangeMaterialState(MaterialToApproveDto dto)
         {
             var loggedUser = _userService.FindByIdentityUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
 

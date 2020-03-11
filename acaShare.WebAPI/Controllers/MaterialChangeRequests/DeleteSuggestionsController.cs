@@ -3,6 +3,7 @@ using acaShare.WebAPI.Common;
 using acaShare.WebAPI.Models;
 using acaShare.WebAPI.Models.MaterialChangeRequests;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,8 @@ using System.Security.Claims;
 namespace acaShare.WebAPI.Controllers.MaterialChangeRequests
 {
     [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole + ", " + Roles.ModeratorRole)]
-    [Area("Moderator")]
+    [ApiController]
+    [Route("api/v1/[controller]")]
     public class DeleteSuggestionsController : Controller
     {
         private readonly IMaterialsService _materialsService;
@@ -26,50 +28,37 @@ namespace acaShare.WebAPI.Controllers.MaterialChangeRequests
             _filesManagement = formFilesManagement;
         }
 
-        public IActionResult DeleteSuggestions()
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IEnumerable<DeleteRequestViewModel> Get()
         {
-            ConfigureBreadcrumbs();
-
-            var vms = _materialsService.GetPendingDeleteSuggestions().Select(ds =>
-                new DeleteRequestViewModel
-                {
-                    DeleteRequestId = ds.DeleteRequestId,
-                    MaterialName = ds.MaterialToDelete.Name,
-                    ReasonId = ds.DeleteReasonId,
-                    Reason = ds.DeleteReason.Reason,
-                    AdditionalComment = ds.AdditionalComment,
-                    DeleterName = ds.Deleter.Username,
-                    RequestDate = ds.RequestDate
-                }
-            ).ToList();
-
-            return View(vms);
+            return _materialsService.GetPendingDeleteSuggestions()
+                .Select(ds =>
+                    new DeleteRequestViewModel
+                    {
+                        DeleteRequestId = ds.DeleteRequestId,
+                        MaterialName = ds.MaterialToDelete.Name,
+                        ReasonId = ds.DeleteReasonId,
+                        Reason = ds.DeleteReason.Reason,
+                        AdditionalComment = ds.AdditionalComment,
+                        DeleterName = ds.Deleter.Username,
+                        RequestDate = ds.RequestDate
+                    }
+                ).ToList();
         }
 
-        private void ConfigureBreadcrumbs()
-        {
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "DeleteSuggestions",
-                    Action = "DeleteSuggestions",
-                    Title = "Sugestie usunięcia"
-                }
-            };
-        }
-
-        public IActionResult DeleteRequestApprovalDecision(int deleteRequestId)
+        [HttpGet("{deleteRequestId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<ChangeRequestApprovalDecision> Get(int deleteRequestId)
         {
             var deleteRequest = _materialsService.GetDeleteRequest(deleteRequestId);
             if (deleteRequest == null)
             {
-                return RedirectToAction("ResourceNotFound", "Error", new { error = "sugestia usunięcia o podanym Id nie istnieje." });
+                return NotFound();
             }
 
-            ConfigureSuggestionBreadcrumbs(deleteRequestId);
-
-            var vm = new ChangeRequestApprovalDecision
+            return new ChangeRequestApprovalDecision
             {
                 MaterialViewModel = new MaterialToApproveViewModel
                 {
@@ -97,86 +86,39 @@ namespace acaShare.WebAPI.Controllers.MaterialChangeRequests
                     DeleterName = deleteRequest.Deleter.Username
                 }
             };
-
-            return View(vm);
         }
 
-        private void ConfigureSuggestionBreadcrumbs(int deleteRequestId)
-        {
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "DeleteSuggestions",
-                    Action = "DeleteRequestApprovalDecision",
-                    Title = "Podgląd materiału",
-                    Params = new Dictionary<string, string>() { { "deleteRequestId", deleteRequestId.ToString() } }
-                }
-            };
-        }
-
-        public IActionResult ApproveDeleteRequest(int deleteRequestId)
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult ChangeSuggestionState(DeleteRequestApprovalDecisionDto dto)
         {
             var loggedModerator = _userService.FindByIdentityUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
             try
             {
-                var deleteRequest = _materialsService.GetDeleteRequest(deleteRequestId);
-                if (deleteRequest == null)
+                if (dto.ShouldApprove)
                 {
-                    return RedirectToAction("ResourceNotFound", "Error", new { error = "sugestia usunięcia o podanym Id nie istnieje." });
+                    var deleteRequest = _materialsService.GetDeleteRequest(dto.DeleteRequestId);
+                    if (deleteRequest == null)
+                    {
+                        return NotFound();
+                    }
+                
+                    _filesManagement.DeleteWholeMaterialFolder(deleteRequest.MaterialToDeleteId.Value);
+                    _materialsService.ApproveDeleteRequest(deleteRequest, loggedModerator);
                 }
-
-                _filesManagement.DeleteWholeMaterialFolder(deleteRequest.MaterialToDeleteId.Value);
-                _materialsService.ApproveDeleteRequest(deleteRequest, loggedModerator);
+                else
+                {
+                    _materialsService.DeclineDeleteRequest(dto.DeleteRequestId, loggedModerator, dto.DeclineReason);
+                }
             }
             catch (ArgumentException)
             {
                 return BadRequest("Sugestia usunięcia o podanym Id nie istnieje");
             }
 
-            return RedirectToAction("DeleteSuggestions");
-        }
-
-        public IActionResult DeclineDeleteRequest(int deleteRequestId)
-        {
-            var deleteRequest = _materialsService.GetDeleteRequest(deleteRequestId);
-            if (deleteRequest == null)
-            {
-                return RedirectToAction("ResourceNotFound", "Error", new { error = "sugestia usunięcia o podanym Id nie istnieje." });
-            }
-
-            var vm = new DeleteRequestViewModel
-            {
-                DeleteRequestId = deleteRequestId,
-                MaterialName = deleteRequest.MaterialToDelete.Name,
-                ReasonId = deleteRequest.DeleteReasonId,
-                Reason = deleteRequest.DeleteReason.Reason
-            };
-
-            return View(vm);
-        }
-
-        [HttpPost]
-        public IActionResult DeclineDeleteRequest(DeleteRequestViewModel vm)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(vm);
-            }
-
-            var loggedModerator = _userService.FindByIdentityUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
-
-            try
-            {
-                _materialsService.DeclineDeleteRequest(vm.DeleteRequestId, loggedModerator, vm.DeclineReason);
-            }
-            catch (ArgumentException)
-            {
-                return RedirectToAction("ResourceNotFound", "Error", new { error = "sugestia usunięcia o podanym Id nie istnieje." });
-            }
-
-            return RedirectToAction("DeleteSuggestions");
+            return NoContent();
         }
     }
 }
