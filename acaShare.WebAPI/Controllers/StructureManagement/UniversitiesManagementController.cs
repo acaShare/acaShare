@@ -71,9 +71,9 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
         }
 
         [Authorize(Roles = Roles.AdministratorRole)]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        [HttpPost]
         public IActionResult Post(UniversityViewModel vm)
         {
             var universityToAdd = new BLL.Models.University(vm.TitleOrFullName, vm.SubtitleOrAbbreviation);
@@ -85,20 +85,20 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
                 return Conflict("Uczelnia o takiej nazwie lub skrócie już istnieje");
             }
 
-            return CreatedAtAction(nameof(Get), universityToAdd);
+            return NoContent();
         }
 
         [Authorize(Roles = Roles.AdministratorRole)]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        [HttpPut]
         public IActionResult Put(UniversityViewModel vm)
         {
             var universityToEdit = _traversalService.GetUniversity(vm.Id);
             if (universityToEdit == null)
             {
-                return NotFound();
+                return NotFound("Uczelnia o takim id nie istnieje.");
             }
 
             universityToEdit.Update(vm.TitleOrFullName, vm.SubtitleOrAbbreviation);
@@ -114,15 +114,15 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
         }
 
         [Authorize(Roles = Roles.AdministratorRole)]
+        [HttpDelete("{universityId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpDelete("{universityId}")]
         public IActionResult Delete(int universityId)
         {
             var universityToDelete = _traversalService.GetUniversity(universityId);
             if (universityToDelete == null)
             {
-                return NotFound();
+                return NotFound("Uczelnia o takim id nie istnieje.");
             }
             
             // First - delete materials due to database constraints betwee Lesson and Material
