@@ -10,6 +10,7 @@
 
     <!-- Set this to true if you enable server-side prerendering -->
     <BuildServerSideRenderer>false</BuildServerSideRenderer>
+    <UserSecretsId>7463c3e4-faf9-4610-913d-92d6c6f4cc34</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -37,6 +38,12 @@
   <ItemGroup>
     <ProjectReference Include="..\acaShare.BLL\acaShare.BLL.csproj" />
     <ProjectReference Include="..\acaShare.ServiceLayer\acaShare.ServiceLayer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Areas\Identity\Pages\Account\_Layout.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

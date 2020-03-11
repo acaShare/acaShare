@@ -1,13 +1,15 @@
+using acaShare.DAL.Configuration;
+using acaShare.DAL.Core;
+using acaShare.DAL.EFPersistence;
+using acaShare.ServiceLayer.Interfaces;
+using acaShare.ServiceLayer.Services;
+using acaShare.WebAPI.Common;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
-using acaShare.WebAPI.Data;
-using acaShare.WebAPI.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,25 +18,45 @@ namespace acaShare.WebAPI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             Configuration = configuration;
+            WebHostEnvironment = webHostEnvironment;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment WebHostEnvironment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUniversityTreeTraversalService, UniversityTreeTraversalService>();
+            services.AddScoped<IUniversityTreeManagementService, UniversityTreeManagementService>();
+            //services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRolesManagementService, RolesManagementService>();
+            services.AddScoped<IMaterialsService, MaterialsService>();
+            services.AddScoped<ISidebarService, SidebarService>();
+            services.AddScoped<IStatisticsService, StatisticsService>();
+            services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IMainModeratorService, MainModeratorService>();
+            services.AddSingleton<IFormFilesManagement>(f => new FormFilesManagement(WebHostEnvironment));
 
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddDbContext<AcaShareDbContext>(options =>
+            {
+                options.UseLazyLoadingProxies();
+                //options.UseSqlServer(Environment.GetEnvironmentVariable("SQLCONNSTR_ConnectionString"));
+                options.UseSqlServer(Configuration["AcaShareConfiguration:ConnectionString"]);
+            });
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+               .AddEntityFrameworkStores<AcaShareDbContext>()
+               .AddDefaultUI()
+               .AddDefaultTokenProviders();
 
             services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+                .AddApiAuthorization<IdentityUser, AcaShareDbContext>();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();

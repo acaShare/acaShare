@@ -2,18 +2,18 @@
 using acaShare.BLL.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
+using IdentityServer4.EntityFramework.Options;
+using Microsoft.Extensions.Options;
 
 namespace acaShare.DAL.Configuration
 {
-    public partial class AcaShareDbContext : IdentityDbContext<IdentityUser>
+    public partial class AcaShareDbContext : ApiAuthorizationDbContext<IdentityUser>
     {
-        public AcaShareDbContext()
-        {
-        }
-
-        public AcaShareDbContext(DbContextOptions<AcaShareDbContext> options)
-            : base(options)
+        public AcaShareDbContext(
+            DbContextOptions<AcaShareDbContext> options, 
+            IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
         }
 

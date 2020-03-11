@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewData["Title"] = "WelcomePage";
+}
+
+<link rel="stylesheet" href="~/css/login/WelcomePage.css">
+
+<div class="main-container">
+
+    <h2 class="welcome">Witaj w acaShare</h2>
+    <p class="description">acaShare to miejsce, w którym możesz dzielić się materiałami uczelnianymi ze światem!</p>
+
+    <a href="~/Identity/Account/Login?ReturnUrl=%2F%3Fpage%3D%252FIndex">
+        <div class="card">
+            <i class="material-icons" style="font-size: 10em">vpn_key</i>
+            <div class="container">
+                <b>Logowanie</b>
+            </div>
+        </div>
+    </a>
+    <a href="~/Identity/Account/Register?returnUrl=%2F%3Fpage%3D%252FIndex">
+        <div class="card" style="padding-top: 27px">
+            <i class="material-icons" style="font-size: 8em">border_color</i>
+            <div class="container" style="padding-top: 10px">
+                <b>Rejestracja</b>
+            </div>
+        </div>
+    </a>
+</div>
