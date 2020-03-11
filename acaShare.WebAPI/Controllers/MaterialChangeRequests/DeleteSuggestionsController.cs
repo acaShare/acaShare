@@ -50,7 +50,7 @@ namespace acaShare.WebAPI.Controllers.MaterialChangeRequests
         [HttpGet("{deleteRequestId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<ChangeRequestApprovalDecision> Get(int deleteRequestId)
+        public ActionResult<DeleteRequestApprovalDecision> Get(int deleteRequestId)
         {
             var deleteRequest = _materialsService.GetDeleteRequest(deleteRequestId);
             if (deleteRequest == null)
@@ -58,7 +58,7 @@ namespace acaShare.WebAPI.Controllers.MaterialChangeRequests
                 return NotFound();
             }
 
-            return new ChangeRequestApprovalDecision
+            return new DeleteRequestApprovalDecision
             {
                 MaterialViewModel = new MaterialViewModel
                 {

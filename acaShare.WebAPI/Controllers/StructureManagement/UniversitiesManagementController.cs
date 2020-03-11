@@ -3,6 +3,7 @@ using acaShare.WebAPI.Common;
 using acaShare.WebAPI.Models;
 using acaShare.WebAPI.Models.StructureTraversal;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,8 @@ using System.Security.Claims;
 namespace acaShare.WebAPI.Controllers.StructureManagement
 {
     [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole)]
-    [Area("Moderator")]
+    [ApiController]
+    [Route("api/v1/[controller]")]
     public class UniversitiesManagementController : Controller
     {
         private readonly IUniversityTreeTraversalService _traversalService;
@@ -32,11 +34,10 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
             _mainModeratorService = mainModeratorService;
         }
 
-
-        public IActionResult Universities()
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IEnumerable<UniversityViewModel> Get()
         {
-            ConfigureListBreadcrumbs();
-
             if (User.IsInRole(Roles.MainModeratorRole))
             {
                 var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -44,7 +45,7 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
                 var mainModeratorUniversity = _mainModeratorService.GetUniversityMainModerator(appUser.UserId);
                 var university = _traversalService.GetUniversity(mainModeratorUniversity.UniversityId);
 
-                var universityViewModel = new List<UniversityViewModel>
+                return new List<UniversityViewModel>
                 {
                     new UniversityViewModel
                     {
@@ -53,20 +54,12 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
                         SubtitleOrAbbreviation = university.Abbreviation
                     }
                 };
-
-                var vm = new ListViewModel<UniversityViewModel>
-                {
-                    Items = universityViewModel,
-                    IsWithSubtitles = true
-                };
-
-                return View(vm);
             }
             else
             {
                 var universities = _traversalService.GetUniversities();
 
-                var universityViewModels = universities.Select(u =>
+                return universities.Select(u =>
                     new UniversityViewModel
                     {
                         Id = u.UniversityId,
@@ -74,80 +67,38 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
                         SubtitleOrAbbreviation = u.Abbreviation,
                     }
                 ).ToList();
-
-                var vm = new ListViewModel<UniversityViewModel>
-                {
-                    Items = universityViewModels,
-                    IsWithSubtitles = true
-                };
-
-                return View(vm);
             }
         }
 
         [Authorize(Roles = Roles.AdministratorRole)]
-        public IActionResult Add()
-        {
-            ConfigureAddBreadcrumbs();
-            return View();
-        }
-
-        [Authorize(Roles = Roles.AdministratorRole)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [HttpPost]
-        public IActionResult Add(UniversityViewModel vm)
+        public IActionResult Post(UniversityViewModel vm)
         {
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
-
             var universityToAdd = new BLL.Models.University(vm.TitleOrFullName, vm.SubtitleOrAbbreviation);
 
             var success = _managementService.AddUniversity(universityToAdd);
 
             if (!success)
             {
-                ModelState.AddModelError("ERROR", "Uczelnia o takiej nazwie lub skrócie już istnieje");
-                return View(vm);
+                return Conflict("Uczelnia o takiej nazwie lub skrócie już istnieje");
             }
 
-            return RedirectToAction("Universities");
+            return CreatedAtAction(nameof(Get), universityToAdd);
         }
 
         [Authorize(Roles = Roles.AdministratorRole)]
-        public IActionResult Edit(int universityId)
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [HttpPut]
+        public IActionResult Put(UniversityViewModel vm)
         {
-            var universityToEdit = _traversalService.GetUniversity(universityId);
-            if (universityToEdit == null)
-            {
-                return RedirectToAction("ResourceNotFound", "Error", new { error = "uczelnia o podanym Id nie istnieje." });
-            }
-
-            ConfigureEditBreadcrumbs(universityId);
-
-            var vm = new UniversityViewModel
-            {
-                Id = universityToEdit.UniversityId,
-                TitleOrFullName = universityToEdit.Name,
-                SubtitleOrAbbreviation = universityToEdit.Abbreviation
-            };
-
-            return View(vm);
-        }
-
-        [Authorize(Roles = Roles.AdministratorRole)]
-        [HttpPost]
-        public IActionResult Edit(UniversityViewModel vm)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(vm);
-            }
-
             var universityToEdit = _traversalService.GetUniversity(vm.Id);
             if (universityToEdit == null)
             {
-                return RedirectToAction("ResourceNotFound", "Error", new { error = "uczelnia o podanym Id nie istnieje." });
+                return NotFound();
             }
 
             universityToEdit.Update(vm.TitleOrFullName, vm.SubtitleOrAbbreviation);
@@ -156,128 +107,41 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
 
             if (!success)
             {
-                ModelState.AddModelError("ERROR", "Uczelnia o takiej nazwie lub skrócie już istnieje");
-                return View(vm);
+                return Conflict("Uczelnia o takiej nazwie lub skrócie już istnieje");
             }
 
-            return RedirectToAction("Universities");
+            return NoContent();
         }
 
         [Authorize(Roles = Roles.AdministratorRole)]
-        public IActionResult Delete(int universityId, bool confirmation = false)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpDelete("{universityId}")]
+        public IActionResult Delete(int universityId)
         {
             var universityToDelete = _traversalService.GetUniversity(universityId);
             if (universityToDelete == null)
             {
-                return RedirectToAction("ResourceNotFound", "Error", new { error = "uczelnia o podanym Id nie istnieje." });
+                return NotFound();
             }
-
-            ConfigureDeleteBreadcrumbs(universityId);
-
-            if (!confirmation)
+            
+            // First - delete materials due to database constraints betwee Lesson and Material
+            foreach (var dept in universityToDelete.Departments)
             {
-                var vm = new UniversityViewModel
+                foreach (var lesson in dept.Lessons)
                 {
-                    Id = universityId,
-                    TitleOrFullName = universityToDelete.Name
-                };
-
-                return View(vm);
-            }
-            else
-            {
-                // First - delete materials due to database constraints betwee Lesson and Material
-                foreach (var dept in universityToDelete.Departments)
-                {
-                    foreach (var lesson in dept.Lessons)
+                    foreach (var materialToDelete in lesson.Materials)
                     {
-                        foreach (var materialToDelete in lesson.Materials)
-                        {
-                            _filesManagement.DeleteWholeMaterialFolder(materialToDelete.MaterialId);
-                            _materialsService.DeleteMaterial(materialToDelete);
-                        }
+                        _filesManagement.DeleteWholeMaterialFolder(materialToDelete.MaterialId);
+                        _materialsService.DeleteMaterial(materialToDelete);
                     }
                 }
-
-                // actually delete
-                _managementService.DeleteUniversity(universityToDelete);
-
-                return RedirectToAction("Universities");
             }
-        }
 
-        #region breadcrumbs
-        private void ConfigureListBreadcrumbs()
-        {
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "UniversitiesManagement",
-                    Action = "Universities",
-                    Title = "Uczelnie"
-                }
-            };
-        }
+            // actually delete
+            _managementService.DeleteUniversity(universityToDelete);
 
-        private void ConfigureAddBreadcrumbs()
-        {
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "UniversitiesManagement",
-                    Action = "Universities",
-                    Title = "Uczelnie"
-                },
-                 new Breadcrumb
-                {
-                    Controller = "UniversitiesManagement",
-                    Action = "Add",
-                    Title = "Dodawanie uczelni"
-                }
-            };
+            return NoContent();
         }
-
-        private void ConfigureEditBreadcrumbs(int universityId)
-        {
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "UniversitiesManagement",
-                    Action = "Universities",
-                    Title = "Uczelnie"
-                },
-                 new Breadcrumb
-                {
-                    Controller = "UniversitiesManagement",
-                    Action = "Edit",
-                    Title = "Edycja uczelni",
-                    Params = new Dictionary<string, string>() { { "universityId", universityId.ToString() } }
-                }
-            };
-        }
-
-        private void ConfigureDeleteBreadcrumbs(int universityId)
-        {
-            ViewBag.Breadcrumbs = new List<Breadcrumb>
-            {
-                new Breadcrumb
-                {
-                    Controller = "UniversitiesManagement",
-                    Action = "Universities",
-                    Title = "Uczelnie"
-                },
-                 new Breadcrumb
-                {
-                    Controller = "UniversitiesManagement",
-                    Action = "Delete",
-                    Title = "Usuwanie uczelni",
-                    Params = new Dictionary<string, string>() { { "universityId", universityId.ToString() } }
-                }
-            };
-        }
-        #endregion
     }
 }
