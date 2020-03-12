@@ -1,0 +1,59 @@
+﻿body {
+    overflow-y: auto;
+}
+
+.row {
+    text-align: center;
+}
+
+.main-container {
+    margin: 1em auto 0 auto;
+    width: 85%;
+}
+
+.wide {
+    width: 100%;
+}
+
+.short {
+    width: 50%;
+}
+
+.signup-button {
+    margin: 1.5rem 0 2rem 0;
+}
+
+.signin-button {
+    margin-top: .5rem;
+}
+
+.checkbox {
+    margin-top: 1.5em;
+    position: initial !important;
+    opacity: 1 !important;
+    pointer-events: all !important;
+}
+
+@media only screen and (min-width: 600px) {
+    .main-container {
+        width: 60%;
+    }
+}
+
+@media only screen and (min-width: 800px) {
+    .main-container {
+        width: 50%;
+    }
+}
+
+@media only screen and (min-width: 1000px) {
+    .main-container {
+        width: 40%;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    .main-container {
+        width: 30%;
+    }
+}

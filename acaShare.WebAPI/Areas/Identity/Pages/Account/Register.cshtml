@@ -1,0 +1,56 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+@section LoginRegisterCSS{ 
+    <link rel="stylesheet" href="~/css/login/Register.css">
+}
+
+<div class="row">
+    <h2>Rejestracja</h2>
+    <div class="main-container">
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group">
+                <input asp-for="Input.UserName" class="form-control" />
+                <label asp-for="Input.ConfirmPassword">@Html.DisplayNameFor(m => m.Input.UserName)</label><br />
+                <span asp-validation-for="Input.UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Input.Email" class="form-control" />
+                <label asp-for="Input.ConfirmPassword">@Html.DisplayNameFor(m => m.Input.Email)</label><br />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Input.Password" class="form-control" />
+                <label asp-for="Input.ConfirmPassword">@Html.DisplayNameFor(m => m.Input.Password)</label><br />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Input.ConfirmPassword" class="form-control" />
+                <label asp-for="Input.ConfirmPassword">@Html.DisplayNameFor(m => m.Input.ConfirmPassword)</label><br />
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" asp-for="Input.AcceptRegulations" class="checkbox" />
+                <label asp-for="Input.AcceptRegulations">Oświadczam, że zapoznałem się z <a asp-area="Main" asp-controller="List" asp-action="Regulations">regulaminem</a> strony</label><br />
+                <span asp-validation-for="Input.AcceptRegulations" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-default signup-button wide">Zarejestruj się</button>
+            Masz już konto?
+            <div class="form-group">
+                <p>
+                    <a class="btn btn-default signin-button short" asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">Zaloguj się</a>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

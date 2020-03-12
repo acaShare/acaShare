@@ -15,20 +15,331 @@ namespace acaShare.DAL.EFPersistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "3.1.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.DeviceFlowCodes", b =>
+                {
+                    b.Property<string>("UserCode")
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Data")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(50000);
+
+                    b.Property<string>("DeviceCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
+
+                    b.Property<DateTime?>("Expiration")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SubjectId")
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
+
+                    b.HasKey("UserCode");
+
+                    b.HasIndex("DeviceCode")
+                        .IsUnique();
+
+                    b.HasIndex("Expiration");
+
+                    b.ToTable("DeviceCodes");
+                });
+
+            modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.PersistedGrant", b =>
+                {
+                    b.Property<string>("Key")
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Data")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(50000);
+
+                    b.Property<DateTime?>("Expiration")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SubjectId")
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.HasKey("Key");
+
+                    b.HasIndex("Expiration");
+
+                    b.HasIndex("SubjectId", "ClientId", "Type");
+
+                    b.ToTable("PersistedGrants");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedName")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "51825ef9-7c53-41c0-88a2-53768f3fdb4b",
+                            ConcurrencyStamp = "c6f86064-ac00-4fa1-9e51-9c8c1ea6fce9",
+                            Name = "Administrator",
+                            NormalizedName = "ADMINISTRATOR"
+                        },
+                        new
+                        {
+                            Id = "b1f6687c-5bff-425f-af5c-5341b44c64c0",
+                            ConcurrencyStamp = "178c3ef7-ad05-44a6-93c4-a28c9bf72571",
+                            Name = "MainModerator",
+                            NormalizedName = "MAINMODERATOR"
+                        },
+                        new
+                        {
+                            Id = "2eb6a235-de89-4d75-9ef7-3f44b352fb58",
+                            ConcurrencyStamp = "4b976fc9-50fa-4c24-9544-d7fad5f7ab5a",
+                            Name = "Moderator",
+                            NormalizedName = "MODERATOR"
+                        },
+                        new
+                        {
+                            Id = "b64c4ab9-b764-49ba-aff9-8d5cf733751c",
+                            ConcurrencyStamp = "4284daa1-3427-48d3-8732-885b0c63addf",
+                            Name = "Member",
+                            NormalizedName = "MEMBER"
+                        });
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(22)")
+                        .HasMaxLength(22);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens");
+                });
 
             modelBuilder.Entity("acaShare.BLL.Models.ChangeReason", b =>
                 {
                     b.Property<int>("ChangeReasonId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ChangeType");
+                    b.Property<int>("ChangeType")
+                        .HasColumnType("int");
 
                     b.Property<string>("Reason")
                         .IsRequired()
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.HasKey("ChangeReasonId");
@@ -40,30 +351,58 @@ namespace acaShare.DAL.EFPersistence.Migrations
                     b.ToTable("ChangeReason");
 
                     b.HasData(
-                        new { ChangeReasonId = 1, ChangeType = 1, Reason = "Nieodpowiednie treści" },
-                        new { ChangeReasonId = 2, ChangeType = 1, Reason = "Naruszenie praw autorskich" },
-                        new { ChangeReasonId = 3, ChangeType = 1, Reason = "Bezwartościowe informacje" },
-                        new { ChangeReasonId = 4, ChangeType = 1, Reason = "Nieprawidłowa lokalizacja" },
-                        new { ChangeReasonId = 5, ChangeType = 1, Reason = "Inne" }
-                    );
+                        new
+                        {
+                            ChangeReasonId = 1,
+                            ChangeType = 1,
+                            Reason = "Nieodpowiednie treści"
+                        },
+                        new
+                        {
+                            ChangeReasonId = 2,
+                            ChangeType = 1,
+                            Reason = "Naruszenie praw autorskich"
+                        },
+                        new
+                        {
+                            ChangeReasonId = 3,
+                            ChangeType = 1,
+                            Reason = "Bezwartościowe informacje"
+                        },
+                        new
+                        {
+                            ChangeReasonId = 4,
+                            ChangeType = 1,
+                            Reason = "Nieprawidłowa lokalizacja"
+                        },
+                        new
+                        {
+                            ChangeReasonId = 5,
+                            ChangeType = 1,
+                            Reason = "Inne"
+                        });
                 });
 
             modelBuilder.Entity("acaShare.BLL.Models.Comment", b =>
                 {
                     b.Property<int>("CommentId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Content")
                         .IsRequired()
+                        .HasColumnType("nvarchar(512)")
                         .HasMaxLength(512);
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("MaterialId");
+                    b.Property<int>("MaterialId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("CommentId");
 
@@ -78,26 +417,34 @@ namespace acaShare.DAL.EFPersistence.Migrations
                 {
                     b.Property<int>("DeleteRequestId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AdditionalComment")
+                        .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
 
                     b.Property<string>("DeclineReason")
+                        .HasColumnType("nvarchar(1000)")
                         .HasMaxLength(1000);
 
-                    b.Property<int>("DeleteReasonId");
+                    b.Property<int>("DeleteReasonId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("DeleterId");
+                    b.Property<int>("DeleterId")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("MaterialToDeleteId");
+                    b.Property<int?>("MaterialToDeleteId")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("ModeratorId");
+                    b.Property<int?>("ModeratorId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("RequestState");
+                    b.Property<int>("RequestState")
+                        .HasColumnType("int");
 
                     b.HasKey("DeleteRequestId");
 
@@ -116,17 +463,21 @@ namespace acaShare.DAL.EFPersistence.Migrations
                 {
                     b.Property<int>("DepartmentId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Abbreviation")
                         .IsRequired()
+                        .HasColumnType("nvarchar(5)")
                         .HasMaxLength(5);
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<int>("UniversityId");
+                    b.Property<int>("UniversityId")
+                        .HasColumnType("int");
 
                     b.HasKey("DepartmentId");
 
@@ -147,14 +498,18 @@ namespace acaShare.DAL.EFPersistence.Migrations
                 {
                     b.Property<int>("EditRequestId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("MaterialToUpdateId");
+                    b.Property<int>("MaterialToUpdateId")
+                        .HasColumnType("int");
 
                     b.Property<string>("NewDescription")
+                        .HasColumnType("nvarchar(max)")
                         .HasMaxLength(10000);
 
                     b.Property<string>("NewName")
+                        .HasColumnType("nvarchar(80)")
                         .HasMaxLength(80);
 
                     b.Property<DateTime>("RequestDate")
@@ -162,9 +517,11 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
                     b.Property<string>("Summary")
                         .IsRequired()
+                        .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
 
-                    b.Property<int>("UpdaterId");
+                    b.Property<int>("UpdaterId")
+                        .HasColumnType("int");
 
                     b.HasKey("EditRequestId");
 
@@ -177,9 +534,11 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
             modelBuilder.Entity("acaShare.BLL.Models.Favorites", b =>
                 {
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("MaterialId");
+                    b.Property<int>("MaterialId")
+                        .HasColumnType("int");
 
                     b.HasKey("UserId", "MaterialId");
 
@@ -192,22 +551,28 @@ namespace acaShare.DAL.EFPersistence.Migrations
                 {
                     b.Property<int>("FileId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ContentType")
                         .IsRequired()
+                        .HasColumnType("nvarchar(300)")
                         .HasMaxLength(300);
 
-                    b.Property<int?>("EditRequestId");
+                    b.Property<int?>("EditRequestId")
+                        .HasColumnType("int");
 
                     b.Property<string>("FileName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<int?>("MaterialId");
+                    b.Property<int?>("MaterialId")
+                        .HasColumnType("int");
 
                     b.Property<string>("RelativePath")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("FileId");
 
@@ -222,13 +587,17 @@ namespace acaShare.DAL.EFPersistence.Migrations
                 {
                     b.Property<int>("LessonId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("DepartmentId");
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("SemesterId");
+                    b.Property<int>("SemesterId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("SubjectId");
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
 
                     b.HasKey("LessonId");
 
@@ -247,28 +616,36 @@ namespace acaShare.DAL.EFPersistence.Migrations
                 {
                     b.Property<int>("MaterialId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ApproverId");
+                    b.Property<int?>("ApproverId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("CreatorId");
+                    b.Property<int>("CreatorId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)")
                         .HasMaxLength(10000);
 
-                    b.Property<int>("LessonId");
+                    b.Property<int>("LessonId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("ModificationDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(80)")
                         .HasMaxLength(80);
 
-                    b.Property<int>("StateId");
+                    b.Property<int>("StateId")
+                        .HasColumnType("int");
 
-                    b.Property<int?>("UpdaterId");
+                    b.Property<int?>("UpdaterId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("UploadDate")
                         .HasColumnType("datetime");
@@ -292,10 +669,12 @@ namespace acaShare.DAL.EFPersistence.Migrations
                 {
                     b.Property<int>("StateId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.HasKey("StateId");
@@ -311,20 +690,25 @@ namespace acaShare.DAL.EFPersistence.Migrations
                 {
                     b.Property<int>("NotificationId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Content")
                         .IsRequired()
+                        .HasColumnType("nvarchar(1000)")
                         .HasMaxLength(1000);
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime");
 
-                    b.Property<bool>("IsRead");
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
 
-                    b.Property<int?>("MaterialId");
+                    b.Property<int?>("MaterialId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("NotificationId");
 
@@ -339,6 +723,7 @@ namespace acaShare.DAL.EFPersistence.Migrations
                 {
                     b.Property<int>("SemesterId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Number")
@@ -358,14 +743,17 @@ namespace acaShare.DAL.EFPersistence.Migrations
                 {
                     b.Property<int>("SubjectId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Abbreviation")
                         .IsRequired()
+                        .HasColumnType("nvarchar(5)")
                         .HasMaxLength(5);
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("SubjectId");
@@ -381,14 +769,17 @@ namespace acaShare.DAL.EFPersistence.Migrations
                 {
                     b.Property<int>("UniversityId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Abbreviation")
                         .IsRequired()
+                        .HasColumnType("nvarchar(5)")
                         .HasMaxLength(5);
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(126)")
                         .HasMaxLength(126);
 
                     b.HasKey("UniversityId");
@@ -406,17 +797,15 @@ namespace acaShare.DAL.EFPersistence.Migrations
 
             modelBuilder.Entity("acaShare.BLL.Models.UniversityMainModerator", b =>
                 {
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
-                    b.Property<int>("UniversityId");
+                    b.Property<int>("UniversityId")
+                        .HasColumnType("int");
 
                     b.HasKey("UserId", "UniversityId");
 
                     b.HasIndex("UniversityId");
-
-                    b.HasIndex("UserId", "UniversityId")
-                        .IsUnique()
-                        .HasName("UQ_UniversityMainModerator");
 
                     b.ToTable("UniversityMainModerator");
                 });
@@ -425,16 +814,19 @@ namespace acaShare.DAL.EFPersistence.Migrations
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("IdentityUserId")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("RegisterDate")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Username")
                         .IsRequired()
+                        .HasColumnType("nvarchar(22)")
                         .HasMaxLength(22);
 
                     b.HasKey("UserId");
@@ -443,175 +835,62 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .IsUnique()
                         .HasName("UQ_AspNetUsers_IdentityUserId");
 
-                    b.ToTable("User");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
+                    b.HasIndex("Username")
                         .IsUnique()
-                        .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
+                        .HasName("UQ_User_Username");
 
-                    b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new { Id = "51825ef9-7c53-41c0-88a2-53768f3fdb4b", ConcurrencyStamp = "c6f86064-ac00-4fa1-9e51-9c8c1ea6fce9", Name = "Administrator", NormalizedName = "ADMINISTRATOR" },
-                        new { Id = "b1f6687c-5bff-425f-af5c-5341b44c64c0", ConcurrencyStamp = "178c3ef7-ad05-44a6-93c4-a28c9bf72571", Name = "MainModerator", NormalizedName = "MAINMODERATOR" },
-                        new { Id = "2eb6a235-de89-4d75-9ef7-3f44b352fb58", ConcurrencyStamp = "4b976fc9-50fa-4c24-9544-d7fad5f7ab5a", Name = "Moderator", NormalizedName = "MODERATOR" },
-                        new { Id = "b64c4ab9-b764-49ba-aff9-8d5cf733751c", ConcurrencyStamp = "4284daa1-3427-48d3-8732-885b0c63addf", Name = "Member", NormalizedName = "MEMBER" }
-                    );
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ClaimType");
-
-                    b.Property<string>("ClaimValue");
-
-                    b.Property<string>("RoleId")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetRoleClaims");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("AccessFailedCount");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256);
-
-                    b.Property<bool>("EmailConfirmed");
-
-                    b.Property<bool>("LockoutEnabled");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("PasswordHash");
-
-                    b.Property<string>("PhoneNumber");
-
-                    b.Property<bool>("PhoneNumberConfirmed");
-
-                    b.Property<string>("SecurityStamp");
-
-                    b.Property<bool>("TwoFactorEnabled");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(22);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ClaimType");
-
-                    b.Property<string>("ClaimValue");
-
-                    b.Property<string>("UserId")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.Property<string>("LoginProvider");
-
-                    b.Property<string>("ProviderKey");
-
-                    b.Property<string>("ProviderDisplayName");
-
-                    b.Property<string>("UserId")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasKey("LoginProvider", "ProviderKey");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserLogins");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<string>("RoleId");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUserRoles");
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.Property<string>("UserId");
-
-                    b.Property<string>("LoginProvider");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("Value");
-
-                    b.HasKey("UserId", "LoginProvider", "Name");
-
-                    b.ToTable("AspNetUserTokens");
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("acaShare.BLL.Models.Comment", b =>
@@ -620,13 +899,15 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .WithMany("Comments")
                         .HasForeignKey("MaterialId")
                         .HasConstraintName("Comment_Material")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("acaShare.BLL.Models.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .HasConstraintName("Comment_User")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("acaShare.BLL.Models.DeleteRequest", b =>
@@ -634,13 +915,15 @@ namespace acaShare.DAL.EFPersistence.Migrations
                     b.HasOne("acaShare.BLL.Models.ChangeReason", "DeleteReason")
                         .WithMany()
                         .HasForeignKey("DeleteReasonId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("acaShare.BLL.Models.User", "Deleter")
                         .WithMany("DeleteRequests")
                         .HasForeignKey("DeleterId")
                         .HasConstraintName("DeleteRequest_User")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("acaShare.BLL.Models.Material", "MaterialToDelete")
                         .WithMany("DeleteRequests")
@@ -661,7 +944,8 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .WithMany("Departments")
                         .HasForeignKey("UniversityId")
                         .HasConstraintName("Department_University")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("acaShare.BLL.Models.EditRequest", b =>
@@ -670,13 +954,15 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .WithMany("EditRequests")
                         .HasForeignKey("MaterialToUpdateId")
                         .HasConstraintName("EditRequest_Material")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("acaShare.BLL.Models.User", "Updater")
                         .WithMany("EditRequests")
                         .HasForeignKey("UpdaterId")
                         .HasConstraintName("EditRequest_User")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("acaShare.BLL.Models.Favorites", b =>
@@ -685,13 +971,15 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .WithMany("Favorites")
                         .HasForeignKey("MaterialId")
                         .HasConstraintName("Favorites_Material")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("acaShare.BLL.Models.User", "User")
                         .WithMany("Favorites")
                         .HasForeignKey("UserId")
                         .HasConstraintName("Favorites_User")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("acaShare.BLL.Models.File", b =>
@@ -715,19 +1003,22 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .WithMany("Lessons")
                         .HasForeignKey("DepartmentId")
                         .HasConstraintName("Lesson_Department")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("acaShare.BLL.Models.Semester", "Semester")
                         .WithMany("Lessons")
                         .HasForeignKey("SemesterId")
                         .HasConstraintName("Subject_Semester")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("acaShare.BLL.Models.Subject", "Subject")
                         .WithMany("Lessons")
                         .HasForeignKey("SubjectId")
                         .HasConstraintName("Lesson_Subject")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("acaShare.BLL.Models.Material", b =>
@@ -741,19 +1032,22 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .WithMany("CreatedMaterials")
                         .HasForeignKey("CreatorId")
                         .HasConstraintName("Material_Creator")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("acaShare.BLL.Models.Lesson", "Lesson")
                         .WithMany("Materials")
                         .HasForeignKey("LessonId")
                         .HasConstraintName("Material_Lesson")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("acaShare.BLL.Models.MaterialState", "State")
                         .WithMany("Materials")
                         .HasForeignKey("StateId")
                         .HasConstraintName("Material_MaterialState")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("acaShare.BLL.Models.User", "Updater")
                         .WithMany("UpdatedMaterials")
@@ -773,7 +1067,8 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .WithMany("Notifications")
                         .HasForeignKey("UserId")
                         .HasConstraintName("FK_User_Notification")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("acaShare.BLL.Models.UniversityMainModerator", b =>
@@ -782,58 +1077,15 @@ namespace acaShare.DAL.EFPersistence.Migrations
                         .WithMany("UsersInUniversity")
                         .HasForeignKey("UniversityId")
                         .HasConstraintName("UniversityMainModerator_University")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("acaShare.BLL.Models.User", "User")
                         .WithMany("UsersInUniversity")
                         .HasForeignKey("UserId")
                         .HasConstraintName("UniversityMainModerator_User")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
