@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { University } from './university';
 import { HttpClient } from '@angular/common/http';
 
@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './home.component.html',
 })
 export class HomeComponent implements OnInit {
-  apiUrl = "api/v1/universitiesManagement";
+  apiUrl = "api/v1/UniversitiesManagement";
   universities: University[];
 
   constructor(private http: HttpClient) {}

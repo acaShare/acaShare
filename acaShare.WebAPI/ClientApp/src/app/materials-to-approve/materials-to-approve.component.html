@@ -1,0 +1,39 @@
+<div class="list-view-wrapper">
+    <div class="list-container">
+        <ul class="aca-collection">
+            <li *ngIf="!materials" class="aca-collection-item path-list-item">
+                <p class="empty-list">~ Pusto ~</p>
+            </li>
+
+            <li *ngFor="let material of materials" class="aca-collection-item path-list-item">
+                <a [routerLink]="['/moderator-panel/materials-to-approve/material-approval-decision', material.MaterialId]" class="item-link">
+                    <span class="path-list-item-title">{{material.Name}}</span>
+                    <br>
+                    <span class="path-list-item-subtitle">
+                        test
+                        <!-- @material.UploadDate.ToString("d.MM.yyyy, HH:mm") &nbsp;&nbsp;~&nbsp;&nbsp;
+
+                        @if (material.Description?.Length > 100)
+                        {
+                            @material.Description.Substring(0, 100);
+                            @:[...]
+                        }
+                        else
+                        {
+                            @material.Description;
+                        } -->
+                    </span>
+                </a>
+
+                <div class="icons-row-container">
+                    <a (click)="approveMaterial()" class="approve-material">
+                        <i class="material-icons list-icon icon-edit tooltipped" data-position="top" data-tooltip="Zatwierdź">check</i>
+                    </a>
+                    <a (click)="rejectMaterial()" class="reject-material">
+                        <i class="material-icons list-icon icon-delete tooltipped" data-position="top" data-tooltip="Odrzuć">not_interested</i>
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
