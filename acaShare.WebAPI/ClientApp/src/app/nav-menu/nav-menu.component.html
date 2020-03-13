@@ -1,6 +1,6 @@
 <nav>
   <div class="nav-wrapper">
-    <a [routerLink]="['/']" class="brand-logo">acaShare.WebAPI</a>
+    <a [routerLink]="['/']" class="brand-logo">acaShare.Angular</a>
 
     <div id="notification-bell-mobile" class="notifications-bell-mobile-wrapper">
       <a class="notifications-bell-mobile" id="notification-mobile" (click)="toggleNotifications()">
@@ -20,9 +20,7 @@
         <a [routerLink]="['/materialsToApprove']">Panel moderatora</a>
       </li>
 
-      <li>
-        <app-login-menu></app-login-menu>
-      </li>
+      <app-login-menu></app-login-menu>
     </ul>
   </div>
 </nav>
