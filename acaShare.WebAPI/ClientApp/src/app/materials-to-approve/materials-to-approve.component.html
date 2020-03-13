@@ -6,22 +6,19 @@
             </li>
 
             <li *ngFor="let material of materials" class="aca-collection-item path-list-item">
-                <a [routerLink]="['/moderator-panel/materials-to-approve/material-approval-decision', material.MaterialId]" class="item-link">
-                    <span class="path-list-item-title">{{material.Name}}</span>
+                <a [routerLink]="['/moderator-panel/materials-to-approve/material-approval-decision', material.materialId]" class="item-link">
+                    <span class="path-list-item-title">{{material.name}}</span>
                     <br>
                     <span class="path-list-item-subtitle">
-                        test
-                        <!-- @material.UploadDate.ToString("d.MM.yyyy, HH:mm") &nbsp;&nbsp;~&nbsp;&nbsp;
+                        {{ material.uploadDate | polishDate }} &nbsp;&nbsp;~&nbsp;&nbsp; 
 
-                        @if (material.Description?.Length > 100)
-                        {
-                            @material.Description.Substring(0, 100);
-                            @:[...]
-                        }
-                        else
-                        {
-                            @material.Description;
-                        } -->
+                        <span *ngIf="material.description?.length > 100">
+                            {{ material.description.substr(0, 100) }}[...]
+                        </span>
+
+                        <span *ngIf="material.description?.length <= 100">
+                            {{ material.description }}
+                        </span>
                     </span>
                 </a>
 

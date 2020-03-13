@@ -1,5 +1,3 @@
-export class University {
-    constructor(
-        public titleOrFullName: string
-    ){}
+export interface University {
+    titleOrFullName: string
 }

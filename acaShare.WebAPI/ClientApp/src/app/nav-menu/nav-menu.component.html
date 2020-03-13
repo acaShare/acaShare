@@ -1,6 +1,6 @@
 <nav>
   <div class="nav-wrapper">
-    <a [routerLink]="['/']" class="brand-logo">acaShare.Angular</a>
+    <a [routerLink]="(isAuthenticated | async) ? ['/home'] : ['/']" class="brand-logo">acaShare.Angular</a>
 
     <div id="notification-bell-mobile" class="notifications-bell-mobile-wrapper">
       <a class="notifications-bell-mobile" id="notification-mobile" (click)="toggleNotifications()">
@@ -9,7 +9,7 @@
     </div>
 
     <a href="#" data-target="mobile-hamburger" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-    <ul class="right hide-on-med-and-down">
+    <ul class="right hide-on-med-and-down" *ngIf="isAuthenticated | async">
       <li id="notifications-li">
         <a id="notification" (click)="toggleNotifications()">
           <i class="material-icons">notifications</i>
@@ -20,7 +20,9 @@
         <a [routerLink]="['/moderator-panel/materials-to-approve']">Panel moderatora</a>
       </li>
 
-      <app-login-menu></app-login-menu>
+      <li>
+        <a class="nav-link text-dark" [routerLink]='["/authentication/logout"]' [state]='{ local: true }' title="Wyloguj">Wyloguj</a>
+      </li>
     </ul>
   </div>
 </nav>

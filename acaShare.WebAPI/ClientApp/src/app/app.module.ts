@@ -7,19 +7,25 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
+import { WelcomePageComponent } from './welcome-page/welcome-page.component';
+import { ModeratorPanelComponent } from './moderator-panel/moderator-panel.component';
+import { MaterialsToApproveComponent } from './materials-to-approve/materials-to-approve.component';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { MaterialsToApproveComponent } from './materials-to-approve/materials-to-approve.component';
+import { PolishDatePipe } from './pipes/polish-date.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
+    WelcomePageComponent,
+    ModeratorPanelComponent,
+    MaterialsToApproveComponent,
     PageNotFoundComponent,
-    MaterialsToApproveComponent
+    PolishDatePipe
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -27,8 +33,16 @@ import { MaterialsToApproveComponent } from './materials-to-approve/materials-to
     FormsModule,
     ApiAuthorizationModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full', canActivate: [AuthorizeGuard] },
-      { path: 'moderator-panel/materials-to-approve', component: MaterialsToApproveComponent, canActivate: [AuthorizeGuard] },
+      { path: '', component: WelcomePageComponent, pathMatch: 'full' },
+      { path: 'home', component: HomeComponent, canActivate: [AuthorizeGuard] },
+      { path: 'moderator-panel', 
+        component: ModeratorPanelComponent,
+        canActivate: [AuthorizeGuard],
+        children: [
+          { path: '', pathMatch: 'full', redirectTo: 'materials-to-approve'},
+          { path: 'materials-to-approve', component: MaterialsToApproveComponent },
+        ]
+      },
       { path: '**', component: PageNotFoundComponent }
     ])
   ],

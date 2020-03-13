@@ -8,12 +8,12 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./materials-to-approve.component.css']
 })
 export class MaterialsToApproveComponent implements OnInit {
-  apiUrl: "api/v1/MaterialsToApprove"
+  apiUrl: string = "api/v1/MaterialsToApprove"
   materials: Material[];
 
   constructor(private http: HttpClient) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.http
       .get<Material[]>(this.apiUrl)
       .subscribe(materials => this.materials = materials, error => console.log(error));
