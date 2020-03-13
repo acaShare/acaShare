@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LoginMenuComponent } from './login-menu.component';
+import { MaterialsToApproveComponent } from './materials-to-approve.component';
 
-describe('LoginMenuComponent', () => {
-  let component: LoginMenuComponent;
-  let fixture: ComponentFixture<LoginMenuComponent>;
+describe('MaterialsToApproveComponent', () => {
+  let component: MaterialsToApproveComponent;
+  let fixture: ComponentFixture<MaterialsToApproveComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LoginMenuComponent ]
+      declarations: [ MaterialsToApproveComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LoginMenuComponent);
+    fixture = TestBed.createComponent(MaterialsToApproveComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

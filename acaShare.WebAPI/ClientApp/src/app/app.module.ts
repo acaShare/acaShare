@@ -7,19 +7,25 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
+import { WelcomePageComponent } from './welcome-page/welcome-page.component';
+import { ModeratorPanelComponent } from './moderator-panel/moderator-panel.component';
+import { MaterialsToApproveComponent } from './materials-to-approve/materials-to-approve.component';
 import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.module';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
+import { PolishDatePipe } from './pipes/polish-date.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
-    FetchDataComponent
+    WelcomePageComponent,
+    ModeratorPanelComponent,
+    MaterialsToApproveComponent,
+    PageNotFoundComponent,
+    PolishDatePipe
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -27,9 +33,17 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
     FormsModule,
     ApiAuthorizationModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent, canActivate: [AuthorizeGuard] },
-      { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
+      { path: '', component: WelcomePageComponent, pathMatch: 'full' },
+      { path: 'home', component: HomeComponent, canActivate: [AuthorizeGuard] },
+      { path: 'moderator-panel', 
+        component: ModeratorPanelComponent,
+        canActivate: [AuthorizeGuard],
+        children: [
+          { path: '', pathMatch: 'full', redirectTo: 'materials-to-approve'},
+          { path: 'materials-to-approve', component: MaterialsToApproveComponent },
+        ]
+      },
+      { path: '**', component: PageNotFoundComponent }
     ])
   ],
   providers: [

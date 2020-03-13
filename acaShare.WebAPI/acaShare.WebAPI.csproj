@@ -36,6 +36,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\list.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ClientApp\src\list.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\acaShare.BLL\acaShare.BLL.csproj" />
     <ProjectReference Include="..\acaShare.ServiceLayer\acaShare.ServiceLayer.csproj" />
   </ItemGroup>
