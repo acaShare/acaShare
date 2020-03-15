@@ -15,6 +15,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { PolishDatePipe } from './pipes/polish-date.pipe';
+import { DeleteSuggestionsComponent } from './delete-suggestions/delete-suggestions.component';
+import { AcaCollectionComponent } from './aca-collection/aca-collection.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { PolishDatePipe } from './pipes/polish-date.pipe';
     ModeratorPanelComponent,
     MaterialsToApproveComponent,
     PageNotFoundComponent,
-    PolishDatePipe
+    PolishDatePipe,
+    DeleteSuggestionsComponent,
+    AcaCollectionComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -41,6 +45,7 @@ import { PolishDatePipe } from './pipes/polish-date.pipe';
         children: [
           { path: '', pathMatch: 'full', redirectTo: 'materials-to-approve'},
           { path: 'materials-to-approve', component: MaterialsToApproveComponent },
+          { path: 'delete-suggestions', component: DeleteSuggestionsComponent },
         ]
       },
       { path: '**', component: PageNotFoundComponent }
