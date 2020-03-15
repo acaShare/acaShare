@@ -8,7 +8,7 @@ namespace acaShare.WebAPI.Controllers
 {
     [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole + ", " + Roles.ModeratorRole)]
     [Area("Moderator")]
-    public class StatisticsController : Controller
+    public class StatisticsController : Controller//Base
     {
         private readonly IStatisticsService _statisticsService;
 

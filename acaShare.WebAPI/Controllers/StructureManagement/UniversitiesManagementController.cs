@@ -14,7 +14,7 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
     [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole)]
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class UniversitiesManagementController : Controller
+    public class UniversitiesManagementController : ControllerBase
     {
         private readonly IUniversityTreeTraversalService _traversalService;
         private readonly IUniversityTreeManagementService _managementService;

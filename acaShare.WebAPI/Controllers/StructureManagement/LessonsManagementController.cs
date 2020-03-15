@@ -13,7 +13,7 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
     [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole)]
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class LessonsManagementController : Controller
+    public class LessonsManagementController : ControllerBase
     {
         /// <summary>
         /// The controller's CUD methods manage subjects in department, but show Lessons. It is a side effect of our db archritecture.

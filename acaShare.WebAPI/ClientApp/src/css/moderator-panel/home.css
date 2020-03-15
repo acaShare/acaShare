@@ -319,76 +319,8 @@ body {
     }
 }
 
-.notifications-bell-mobile-wrapper {
-    position: absolute;
-    top: 0;
-    right: 0;
+.hidden {
     display: none;
-    justify-content: center;
-    align-items: center;
-    width: 4em;
-    height: 100%;
-}
-
-.notifications-bell-mobile-wrapper .notifications-bell-mobile {
-    padding: 0 !important;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    color: white;
-    cursor: pointer;
-}
-
-.notifications-bell-mobile-wrapper .notifications-bell-mobile:hover {
-    color: #eeeeee;
-}
-
-.notificationList {
-    display: none;
-    position: absolute;
-    right: .5em;
-    margin-top: 2px;
-    margin-left: 1.35em;
-    max-height: 69vh;
-    overflow-y: auto;
-    background-color: white;
-    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.62);
-    border: 1px solid rgba(100, 100, 100, .4);
-    z-index: 500;
-}
-
-.notification-list-element {
-    padding-top: 1em;
-    padding-bottom: .7em;
-    cursor: default;
-    background-color: white;
-    border-bottom: 1px solid #e5e5e5;
-}
-
-.notification-list-element:hover, a.notification-list-button li.clickable:hover {
-    background-color: #eeeeee;
-}
-
-a.notification-list-button li {
-    font-weight: 700;
-    font-size: 14px;
-    color: #717171;
-}
-
-.clickable {
-    cursor: pointer;
-}
-
-.content-div {
-    text-align: center;
-    padding: 0 1em;
-    margin-bottom: .3em;
-}
-
-.date-div {
-    color: #81abf8;
-    text-align: center;
-    font-size: 12px;
 }
 
 .show {
@@ -605,43 +537,3 @@ a.notification-list-button li {
         font-size: 14px;
     }
 }
-
-
-
-.notifications-wrapper {
-    position: relative;
-}
-
-.notifications {
-    position: absolute;
-    right: 15.5em;
-    z-index: 500;
-    width: 25em;
-    height: 15em;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    background-color: whitesmoke;
-}
-
-
-
-/*.breadcrumb:last-child {
-    
-    float: right;
-    right: 2em;
-}*/
-
-/*.breadcrumb:last-child::after {
-    float: right;
-    right: 2em;
-    content: 'keyboard_arrow_left';
-    color: rgba(255,255,255,0.7);
-    vertical-align: top;
-    display: inline-block;
-    font-family: 'Material Icons';
-    font-weight: normal;
-    font-style: normal;
-    font-size: 25px;
-    margin: 0 10px 0 8px;
-    -webkit-font-smoothing: antialiased;
-}*/

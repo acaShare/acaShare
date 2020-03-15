@@ -15,7 +15,7 @@ namespace acaShare.WebAPI.Controllers.MaterialChangeRequests
     [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole + ", " + Roles.ModeratorRole)]
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class DeleteSuggestionsController : Controller
+    public class DeleteSuggestionsController : ControllerBase
     {
         private readonly IMaterialsService _materialsService;
         private readonly IUserService _userService;

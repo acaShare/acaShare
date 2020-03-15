@@ -13,7 +13,7 @@ namespace acaShare.WebAPI.Controllers.MaterialChangeRequests
 {
     [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole + ", " + Roles.ModeratorRole)]
     [Area("Moderator")]
-    public class EditSuggestionsController : Controller
+    public class EditSuggestionsController : Controller//Base
     {
         private readonly IMaterialsService _materialsService;
         private readonly IUserService _userService;

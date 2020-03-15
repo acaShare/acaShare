@@ -11,7 +11,7 @@ namespace acaShare.WebAPI.Controllers.ModeratorManagement
 {
     [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole)]
     [Area("Moderator")]
-    public class ModeratorManagementController : Controller
+    public class ModeratorManagementController : Controller//Base
     {
         private readonly IRolesManagementService _roleService;
         private readonly IUniversityTreeTraversalService _universityService;
