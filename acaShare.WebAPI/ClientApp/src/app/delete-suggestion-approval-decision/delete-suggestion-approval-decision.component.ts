@@ -37,9 +37,4 @@ export class DeleteSuggestionApprovalDecisionComponent implements OnInit {
     this.service.approveDeleteSuggestion(id);
     this.goToPrevPage();
   }
-
-  onRejectDeleteSuggestion(id: number, reason: string) {
-    this.service.rejectDeleteSuggestion(id, reason);
-    this.goToPrevPage();
-  }
 }

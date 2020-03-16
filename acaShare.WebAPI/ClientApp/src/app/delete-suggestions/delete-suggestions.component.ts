@@ -27,9 +27,4 @@ export class DeleteSuggestionsComponent implements OnInit {
     this.service.approveDeleteSuggestion(id);
     this.init();
   }
-
-  onRejectDeleteSuggestion(id: number, reason: string) {
-    this.service.rejectDeleteSuggestion(id, reason);
-    this.init();
-  }
 }

@@ -20,6 +20,7 @@ import { AcaCollectionComponent } from './aca-collection/aca-collection.componen
 import { DeleteSuggestionApprovalDecisionComponent } from './delete-suggestion-approval-decision/delete-suggestion-approval-decision.component';
 import { PolishFullDatePipe } from './pipes/polish-full-date.pipe';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
+import { RejectDeleteSuggestionComponent } from './reject-delete-suggestion/reject-delete-suggestion.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-
     AcaCollectionComponent,
     DeleteSuggestionApprovalDecisionComponent,
     PolishFullDatePipe,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    RejectDeleteSuggestionComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -53,6 +55,7 @@ import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-
           { path: 'materials-to-approve', component: MaterialsToApproveComponent },
           { path: 'delete-suggestions', component: DeleteSuggestionsComponent },
           { path: 'delete-suggestions/delete-suggestion-approval-decision/:id', component: DeleteSuggestionApprovalDecisionComponent },
+          { path: 'delete-suggestions/decline-delete-request/:id', component: RejectDeleteSuggestionComponent },
         ]
       },
       { path: '**', component: PageNotFoundComponent }

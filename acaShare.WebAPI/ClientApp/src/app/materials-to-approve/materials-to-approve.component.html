@@ -12,6 +12,10 @@
             <div class="list-container">
                 <ul class="aca-collection">
                     <li *ngIf="!materials" class="aca-collection-item path-list-item">
+                        <p class="empty-list">~ Pobieranie danych... ~</p>
+                    </li>
+
+                    <li *ngIf="materials && materials.length === 0" class="aca-collection-item path-list-item">
                         <p class="empty-list">~ Pusto ~</p>
                     </li>
 

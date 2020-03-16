@@ -1,0 +1,28 @@
+<div class="data-container">
+    <nav class="colornav">
+        <div class="nav-wrapper path-header-wrapper">
+            <div class="col s12 tree-path">
+                Odrzucenie sugestii usunięcia materiału
+            </div>
+        </div>
+    </nav>
+
+    <div class="home-content">
+        <div class="row">
+            <form (ngSubmit)="rejectDeleteSuggestion()" #rejectForm="ngForm" class="col s12">
+                <div>
+                    <div class="input-field">
+                        <label for="DeclineReason"></label>
+                        <input [(ngModel)]="suggestion.declineReason" #reason="ngModel" required maxlength="1000" name="declineReason" class="validate" />
+                        <span [hidden]="reason.valid || reason.pristine" class="text-danger input-error-small"></span>
+                    </div>
+                </div>
+        
+                <div class="buttons">
+                    <button [disabled]="!rejectForm.form.valid" type="submit" class="btn btn-default accept-button">Odrzuć sugestię usunięcia</button>
+                    <a (click)="goToPrevPage()" class="btn btn-default back-button">Wróć na listę sugestii usunięcia</a>
+                </div>
+            </form> 
+        </div>
+    </div>
+</div>

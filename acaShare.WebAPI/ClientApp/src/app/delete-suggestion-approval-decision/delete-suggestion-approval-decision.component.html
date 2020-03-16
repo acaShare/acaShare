@@ -23,7 +23,7 @@
 
                             <i class="material-icons lh">delete_forever</i>
                         </a>
-                        <a (click)="rejectDialog.toggleModal('Czy na pewno chcesz odrzucić tę sugestię usunięcia?', decision.deleteSuggestion.deleteRequestId)"
+                        <a [routerLink]="['/moderator-panel/delete-suggestions/decline-delete-request', decision.deleteSuggestion.deleteRequestId]"
                            class="sep action-button tooltipped" data-position="top" data-tooltip="Odrzuć sugestię">
 
                             <i class="material-icons lh">not_interested</i>
@@ -133,4 +133,3 @@
 </div>
 
 <app-confirmation-dialog #approveDialog (submit)="onApproveDeleteSuggestion($event)"></app-confirmation-dialog>
-<app-confirmation-dialog #rejectDialog (submit)="onRejectDeleteSuggestion(costam)"></app-confirmation-dialog>
