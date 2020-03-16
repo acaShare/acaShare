@@ -19,6 +19,7 @@ import { DeleteSuggestionsComponent } from './delete-suggestions/delete-suggesti
 import { AcaCollectionComponent } from './aca-collection/aca-collection.component';
 import { DeleteSuggestionApprovalDecisionComponent } from './delete-suggestion-approval-decision/delete-suggestion-approval-decision.component';
 import { PolishFullDatePipe } from './pipes/polish-full-date.pipe';
+import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { PolishFullDatePipe } from './pipes/polish-full-date.pipe';
     DeleteSuggestionsComponent,
     AcaCollectionComponent,
     DeleteSuggestionApprovalDecisionComponent,
-    PolishFullDatePipe
+    PolishFullDatePipe,
+    ConfirmationDialogComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

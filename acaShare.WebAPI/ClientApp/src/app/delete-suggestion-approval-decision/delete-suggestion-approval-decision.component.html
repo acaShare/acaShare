@@ -18,12 +18,12 @@
                     </h1>
 
                     <div class="upper-box-header-action-buttons">
-                        <a (click)="onApproveClick()"
+                        <a (click)="approveDialog.toggleModal('Czy na pewno chcesz zatwierdzić tę sugestię usunięcia?', decision.deleteSuggestion.deleteRequestId)"
                            class="sep action-button tooltipped approve-delete-request" data-position="top" data-tooltip="Zatwierdź - usuń materiał">
 
                             <i class="material-icons lh">delete_forever</i>
                         </a>
-                        <a (click)="toggleModal()"
+                        <a (click)="rejectDialog.toggleModal('Czy na pewno chcesz odrzucić tę sugestię usunięcia?', decision.deleteSuggestion.deleteRequestId)"
                            class="sep action-button tooltipped" data-position="top" data-tooltip="Odrzuć sugestię">
 
                             <i class="material-icons lh">not_interested</i>
@@ -131,3 +131,6 @@
         </div>
     </div>
 </div>
+
+<app-confirmation-dialog #approveDialog (submit)="onApproveDeleteSuggestion($event)"></app-confirmation-dialog>
+<app-confirmation-dialog #rejectDialog (submit)="onRejectDeleteSuggestion(costam)"></app-confirmation-dialog>

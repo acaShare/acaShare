@@ -3,6 +3,7 @@ import { Location } from '@angular/common'
 import { DeleteSuggestionApprovalDecision } from './DeleteSuggestionApprovalDecision';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { DeleteSuggestionsService } from '../delete-suggestions/delete-suggestions.service';
 
 @Component({
   selector: 'app-delete-suggestion-approval-decision',
@@ -17,10 +18,11 @@ export class DeleteSuggestionApprovalDecisionComponent implements OnInit {
     private http: HttpClient,
     private location: Location,
     private route: ActivatedRoute,
+    private service: DeleteSuggestionsService
     ) { }
 
   ngOnInit() {
-    let id = this.route.snapshot.paramMap.get('id');
+    const id = this.route.snapshot.paramMap.get('id');
 
     this.http
       .get<DeleteSuggestionApprovalDecision>(`${this.apiUrl}/${id}`)
@@ -31,7 +33,13 @@ export class DeleteSuggestionApprovalDecisionComponent implements OnInit {
     this.location.back();
   }
 
-  onApproveClick() {
+  onApproveDeleteSuggestion(id: number) {
+    this.service.approveDeleteSuggestion(id);
+    this.goToPrevPage();
+  }
 
+  onRejectDeleteSuggestion(id: number, reason: string) {
+    this.service.rejectDeleteSuggestion(id, reason);
+    this.goToPrevPage();
   }
 }

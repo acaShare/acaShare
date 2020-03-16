@@ -1,0 +1,29 @@
+.modal, .modal-overlay {
+    display: block;
+}
+
+.modal {
+    z-index: 999;
+    animation-name: zoom;
+    animation-duration: .6s;
+    top: 35%;
+}
+
+.modal .modal-footer .modal-button:hover {
+    background-color: rgba(0,0,0,0.1);
+}
+
+.modal-overlay {
+    background-color: rgba(0,0,0,0.15);
+    z-index: 997;
+}
+
+@keyframes zoom {
+    from {
+        transform: scale(0)
+    }
+
+    to {
+        transform: scale(1)
+    }
+}

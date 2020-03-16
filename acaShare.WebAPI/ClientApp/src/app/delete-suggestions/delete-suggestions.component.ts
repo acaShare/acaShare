@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { DeleteSuggestion } from './deletesuggestion';
+import { DeleteSuggestionsService } from './delete-suggestions.service';
 
 @Component({
   selector: 'app-delete-suggestions',
@@ -8,23 +8,28 @@ import { DeleteSuggestion } from './deletesuggestion';
   styleUrls: ['./delete-suggestions.component.css']
 })
 export class DeleteSuggestionsComponent implements OnInit {
-  private apiUrl = "api/v1/deletesuggestions";
   deleteSuggestions: DeleteSuggestion[];
   iconClass = "material-icons list-icon change-request-type-icon tooltipped";
 
-  constructor(private http: HttpClient) { }
+  constructor(private service: DeleteSuggestionsService) { }
 
   ngOnInit() {
-    this.http
-      .get<DeleteSuggestion[]>(this.apiUrl)
+    this.init();
+  }
+
+  init() {
+    this.service
+      .getDeleteSuggestions()
       .subscribe(s => this.deleteSuggestions = s, error => console.log(error));
   }
 
-  approveDeleteSuggestion() {
-
+  onApproveDeleteSuggestion(id: number) {
+    this.service.approveDeleteSuggestion(id);
+    this.init();
   }
 
-  rejectDeleteSuggestion() {
-
+  onRejectDeleteSuggestion(id: number, reason: string) {
+    this.service.rejectDeleteSuggestion(id, reason);
+    this.init();
   }
 }

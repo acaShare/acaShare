@@ -1,0 +1,16 @@
+<!-- BEGIN: Modal -->
+<div class="modal" *ngIf="isVisible">
+    <div class="modal-content" style="display:block;">
+        {{ innerText }}
+    </div>
+    <div class="progress" *ngIf="isLoading">
+        <div class="indeterminate"></div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="modal-button waves-effect waves-green btn-flat" (click)="onSubmit()">{{ submitButtonText }}</button>
+        <a class="modal-button waves-effect waves-green btn-flat" (click)="toggleModal()">{{ closeButtonText }}</a>
+    </div>
+</div>
+
+<div class="modal-overlay" *ngIf="isVisible" (click)="toggleModal()"></div>
+<!-- END: Modal -->

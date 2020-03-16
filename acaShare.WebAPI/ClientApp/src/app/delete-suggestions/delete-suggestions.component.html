@@ -2,7 +2,7 @@
     <nav class="colornav">
         <div class="nav-wrapper path-header-wrapper">
             <div class="col s12 tree-path">
-                Tytuł zakładki
+                Sugestie usunięcia
             </div>
         </div>
     </nav>
@@ -68,11 +68,11 @@
                         </a>
 
                         <div class="icons-row-container">
-                            <a (click)="approveDeleteSuggestion()" class="approve-delete-request">
+                            <a (click)="approveDialog.toggleModal('Czy na pewno chcesz zatwierdzić tę sugestię usunięcia?', deleteSuggestion.deleteRequestId)" class="approve-delete-request">
                                 <i class="material-icons list-icon icon-edit tooltipped" data-position="top"
                                     data-tooltip="Zatwierdź - usuń materiał">delete_forever</i>
                             </a>
-                            <a (click)="rejectDeleteSuggestion()">
+                            <a (click)="rejectDialog.toggleModal('Czy na pewno chcesz odrzucić tę sugestię usunięcia?', deleteSuggestion.deleteRequestId)">
                                 <i class="material-icons list-icon icon-delete tooltipped" data-position="top"
                                     data-tooltip="Odrzuć sugestię">not_interested</i>
                             </a>
@@ -83,3 +83,6 @@
         </div>
     </div>
 </div>
+
+<app-confirmation-dialog #approveDialog (submit)="onApproveDeleteSuggestion($event)"></app-confirmation-dialog>
+<app-confirmation-dialog #rejectDialog (submit)="onRejectDeleteSuggestion($event)"></app-confirmation-dialog>

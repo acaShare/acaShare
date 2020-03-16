@@ -91,7 +91,7 @@ namespace acaShare.WebAPI.Controllers.MaterialChangeRequests
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult ChangeSuggestionState(DeleteRequestApprovalDecisionDto dto)
+        public IActionResult ChangeSuggestionState([FromBody] DeleteRequestApprovalDecisionDto dto)
         {
             var loggedModerator = _userService.FindByIdentityUserId(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
