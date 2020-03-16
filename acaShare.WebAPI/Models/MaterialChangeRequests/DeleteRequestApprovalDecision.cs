@@ -2,7 +2,7 @@
 {
     public class DeleteRequestApprovalDecision
     {
-        public MaterialViewModel MaterialViewModel { get; set; }
-        public DeleteRequestViewModel DeleteRequestViewModel { get; set; }
+        public MaterialViewModel Material { get; set; }
+        public DeleteRequestViewModel DeleteSuggestion { get; set; }
     }
 }

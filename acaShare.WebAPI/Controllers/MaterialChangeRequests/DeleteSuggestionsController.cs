@@ -60,7 +60,7 @@ namespace acaShare.WebAPI.Controllers.MaterialChangeRequests
 
             return new DeleteRequestApprovalDecision
             {
-                MaterialViewModel = new MaterialViewModel
+                Material = new MaterialViewModel
                 {
                     MaterialId = deleteRequest.MaterialToDeleteId.Value,
                     CreatorUsername = deleteRequest.MaterialToDelete.Creator.Username,
@@ -77,7 +77,7 @@ namespace acaShare.WebAPI.Controllers.MaterialChangeRequests
                         }
                     ).ToList()
                 },
-                DeleteRequestViewModel = new DeleteRequestViewModel
+                DeleteSuggestion = new DeleteRequestViewModel
                 {
                     DeleteRequestId = deleteRequest.DeleteRequestId,
                     ReasonId = deleteRequest.DeleteReasonId,

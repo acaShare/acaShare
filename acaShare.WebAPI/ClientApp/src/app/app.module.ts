@@ -17,6 +17,8 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
 import { PolishDatePipe } from './pipes/polish-date.pipe';
 import { DeleteSuggestionsComponent } from './delete-suggestions/delete-suggestions.component';
 import { AcaCollectionComponent } from './aca-collection/aca-collection.component';
+import { DeleteSuggestionApprovalDecisionComponent } from './delete-suggestion-approval-decision/delete-suggestion-approval-decision.component';
+import { PolishFullDatePipe } from './pipes/polish-full-date.pipe';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { AcaCollectionComponent } from './aca-collection/aca-collection.componen
     PageNotFoundComponent,
     PolishDatePipe,
     DeleteSuggestionsComponent,
-    AcaCollectionComponent
+    AcaCollectionComponent,
+    DeleteSuggestionApprovalDecisionComponent,
+    PolishFullDatePipe
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -46,6 +50,7 @@ import { AcaCollectionComponent } from './aca-collection/aca-collection.componen
           { path: '', pathMatch: 'full', redirectTo: 'materials-to-approve'},
           { path: 'materials-to-approve', component: MaterialsToApproveComponent },
           { path: 'delete-suggestions', component: DeleteSuggestionsComponent },
+          { path: 'delete-suggestions/delete-suggestion-approval-decision/:id', component: DeleteSuggestionApprovalDecisionComponent },
         ]
       },
       { path: '**', component: PageNotFoundComponent }

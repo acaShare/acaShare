@@ -1,36 +1,51 @@
-<div class="list-view-wrapper">
-    <div class="list-container">
-        <ul class="aca-collection">
-            <li *ngIf="!materials" class="aca-collection-item path-list-item">
-                <p class="empty-list">~ Pusto ~</p>
-            </li>
+<div class="data-container">
+    <nav class="colornav">
+        <div class="nav-wrapper path-header-wrapper">
+            <div class="col s12 tree-path">
+                Tytuł zakładki
+            </div>
+        </div>
+    </nav>
 
-            <li *ngFor="let material of materials" class="aca-collection-item path-list-item">
-                <a [routerLink]="['/moderator-panel/materials-to-approve/material-approval-decision', material.materialId]" class="item-link">
-                    <span class="path-list-item-title">{{material.name}}</span>
-                    <br>
-                    <span class="path-list-item-subtitle">
-                        {{ material.uploadDate | polishDate }} &nbsp;&nbsp;~&nbsp;&nbsp; 
+    <div class="home-content">
+        <div class="list-view-wrapper">
+            <div class="list-container">
+                <ul class="aca-collection">
+                    <li *ngIf="!materials" class="aca-collection-item path-list-item">
+                        <p class="empty-list">~ Pusto ~</p>
+                    </li>
 
-                        <span *ngIf="material.description?.length > 100">
-                            {{ material.description.substr(0, 100) }}[...]
-                        </span>
+                    <li *ngFor="let material of materials" class="aca-collection-item path-list-item">
+                        <a [routerLink]="['/moderator-panel/materials-to-approve/material-approval-decision', material.materialId]"
+                            class="item-link">
+                            <span class="path-list-item-title">{{material.name}}</span>
+                            <br>
+                            <span class="path-list-item-subtitle">
+                                {{ material.uploadDate | polishDate }} &nbsp;&nbsp;~&nbsp;&nbsp;
 
-                        <span *ngIf="material.description?.length <= 100">
-                            {{ material.description }}
-                        </span>
-                    </span>
-                </a>
+                                <span *ngIf="material.description?.length > 100">
+                                    {{ material.description.substr(0, 100) }}[...]
+                                </span>
 
-                <div class="icons-row-container">
-                    <a (click)="approveMaterial()" class="approve-material">
-                        <i class="material-icons list-icon icon-edit tooltipped" data-position="top" data-tooltip="Zatwierdź">check</i>
-                    </a>
-                    <a (click)="rejectMaterial()" class="reject-material">
-                        <i class="material-icons list-icon icon-delete tooltipped" data-position="top" data-tooltip="Odrzuć">not_interested</i>
-                    </a>
-                </div>
-            </li>
-        </ul>
+                                <span *ngIf="material.description?.length <= 100">
+                                    {{ material.description }}
+                                </span>
+                            </span>
+                        </a>
+
+                        <div class="icons-row-container">
+                            <a (click)="approveMaterial()" class="approve-material">
+                                <i class="material-icons list-icon icon-edit tooltipped" data-position="top"
+                                    data-tooltip="Zatwierdź">check</i>
+                            </a>
+                            <a (click)="rejectMaterial()" class="reject-material">
+                                <i class="material-icons list-icon icon-delete tooltipped" data-position="top"
+                                    data-tooltip="Odrzuć">not_interested</i>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>

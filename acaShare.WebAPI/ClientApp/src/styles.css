@@ -3,3 +3,5 @@
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 @import './css/moderator-panel/home.css';
 @import './css/moderator-panel/list.css';
+@import './css/moderator-panel/material.css';
+@import './css/moderator-panel/upper-manage-box.css';

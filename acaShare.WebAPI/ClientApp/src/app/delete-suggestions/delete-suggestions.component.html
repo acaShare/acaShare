@@ -1,57 +1,85 @@
-<div class="list-view-wrapper">
-    <div class="list-container">
-        <ul class="aca-collection">
-            <li *ngIf="!deleteSuggestions" class="aca-collection-item path-list-item">
-                <p class="empty-list">~ Pusto ~</p>
-            </li>
+<div class="data-container">
+    <nav class="colornav">
+        <div class="nav-wrapper path-header-wrapper">
+            <div class="col s12 tree-path">
+                Tytuł zakładki
+            </div>
+        </div>
+    </nav>
 
-            <li *ngFor="let deleteSuggestion of deleteSuggestions" class="aca-collection-item path-list-item">
-                <i  class="material-icons list-icon change-request-type-icon tooltipped" 
-                    [class]="deleteSuggestion.reasonId === 2 ? 'smaller' : ''"
-                    data-position="top" 
-                    data-tooltip="deleteRequest.Reason">
+    <div class="home-content">
 
-                    <!-- {{ getIcon(deleteSuggestion.reasonId) }} -->
+        <div class="list-view-wrapper">
+            <div class="list-container">
+                <ul class="aca-collection">
+                    <li *ngIf="!deleteSuggestions" class="aca-collection-item path-list-item">
+                        <p class="empty-list">~ Pusto ~</p>
+                    </li>
 
-                    <ng-container [ngSwitch]="deleteSuggestion.reasonId">
-                        <ng-container *ngSwitchCase="1">warning</ng-container>
-                        <ng-container *ngSwitchCase="2">pan_tool</ng-container>
-                        <ng-container *ngSwitchCase="3">receipt</ng-container>
-                        <ng-container *ngSwitchCase="4">location_off</ng-container>
-                        <ng-container *ngSwitchCase="5">feedback</ng-container>
-                    </ng-container>
-                </i>
-                <a [routerLink]="['/moderator-panel/delete-suggestions/delete-suggestion-approval-decision', deleteSuggestion.deleteRequestId]" class="item-link">
-                    <span class="path-list-item-title">
-                        {{ deleteSuggestion.materialName }}
-                    </span>
-                    <br>
-                    <span class="path-list-item-subtitle">
-                        {{ deleteSuggestion.requestDate | polishDate }} &nbsp;&nbsp;~&nbsp;&nbsp; 
+                    <li *ngFor="let deleteSuggestion of deleteSuggestions"
+                        class="aca-collection-item path-list-item" [ngSwitch]="deleteSuggestion.reasonId">
 
-                        <span *ngIf="!deleteSuggestion.additionalComment">
-                            Autor: {{ deleteSuggestion.deleterName }} nie dołączył dodatkowego wyjaśnienia.
-                        </span>
+                        <i [ngClass]="iconClass" data-position="top" [attr.data-tooltip]="deleteSuggestion.reason"
+                            *ngSwitchCase="1">
+                            warning
+                        </i>
 
-                        <span *ngIf="deleteSuggestion.additionalComment?.length > 100">
-                            {{ deleteSuggestion.additionalComment.substr(0, 100) }}[...]
-                        </span>
+                        <i [ngClass]="iconClass" data-position="top" [attr.data-tooltip]="deleteSuggestion.reason"
+                            *ngSwitchCase="2">
+                            pan_tool
+                        </i>
 
-                        <span *ngIf="deleteSuggestion.additionalComment?.length <= 100">
-                            {{ deleteSuggestion.additionalComment }}
-                        </span>
-                    </span>
-                </a>
+                        <i [ngClass]="iconClass" data-position="top" [attr.data-tooltip]="deleteSuggestion.reason"
+                            *ngSwitchCase="3">
+                            receipt
+                        </i>
 
-                <div class="icons-row-container">
-                    <a (click)="approveDeleteSuggestion()" class="approve-delete-request">
-                        <i class="material-icons list-icon icon-edit tooltipped" data-position="top" data-tooltip="Zatwierdź - usuń materiał">delete_forever</i>
-                    </a>
-                    <a (click)="rejectDeleteSuggestion()">
-                        <i class="material-icons list-icon icon-delete tooltipped" data-position="top" data-tooltip="Odrzuć sugestię">not_interested</i>
-                    </a>
-                </div>
-            </li>
-        </ul>
+                        <i [ngClass]="iconClass" data-position="top" [attr.data-tooltip]="deleteSuggestion.reason"
+                            *ngSwitchCase="4">
+                            location_off
+                        </i>
+
+                        <i [ngClass]="iconClass" data-position="top" [attr.data-tooltip]="deleteSuggestion.reason"
+                            *ngSwitchCase="5">
+                            feedback
+                        </i>
+
+                        <a [routerLink]="['/moderator-panel/delete-suggestions/delete-suggestion-approval-decision', deleteSuggestion.deleteRequestId]"
+                            class="item-link">
+                            <span class="path-list-item-title">
+                                {{ deleteSuggestion.materialName }}
+                            </span>
+                            <br>
+                            <span class="path-list-item-subtitle">
+                                {{ deleteSuggestion.requestDate | polishDate }} &nbsp;&nbsp;~&nbsp;&nbsp;
+
+                                <span *ngIf="!deleteSuggestion.additionalComment">
+                                    Autor: {{ deleteSuggestion.deleterName }} nie dołączył dodatkowego wyjaśnienia.
+                                </span>
+
+                                <span *ngIf="deleteSuggestion.additionalComment?.length > 100">
+                                    {{ deleteSuggestion.additionalComment.substr(0, 100) }}[...]
+                                </span>
+
+                                <span *ngIf="deleteSuggestion.additionalComment?.length <= 100">
+                                    {{ deleteSuggestion.additionalComment }}
+                                </span>
+                            </span>
+                        </a>
+
+                        <div class="icons-row-container">
+                            <a (click)="approveDeleteSuggestion()" class="approve-delete-request">
+                                <i class="material-icons list-icon icon-edit tooltipped" data-position="top"
+                                    data-tooltip="Zatwierdź - usuń materiał">delete_forever</i>
+                            </a>
+                            <a (click)="rejectDeleteSuggestion()">
+                                <i class="material-icons list-icon icon-delete tooltipped" data-position="top"
+                                    data-tooltip="Odrzuć sugestię">not_interested</i>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>

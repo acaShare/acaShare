@@ -10,6 +10,7 @@ import { DeleteSuggestion } from './deletesuggestion';
 export class DeleteSuggestionsComponent implements OnInit {
   private apiUrl = "api/v1/deletesuggestions";
   deleteSuggestions: DeleteSuggestion[];
+  iconClass = "material-icons list-icon change-request-type-icon tooltipped";
 
   constructor(private http: HttpClient) { }
 
@@ -18,22 +19,6 @@ export class DeleteSuggestionsComponent implements OnInit {
       .get<DeleteSuggestion[]>(this.apiUrl)
       .subscribe(s => this.deleteSuggestions = s, error => console.log(error));
   }
-
-  // getIcon(reasonId: number) {
-  //   switch (reasonId)
-  //   {
-  //       case 1:
-  //           return "warning";
-  //       case 2:
-  //           return "pan_tool";
-  //       case 3:
-  //         return "receipt";
-  //       case 4:
-  //         return "location_off";
-  //       case 5:
-  //         return "feedback";
-  //   }
-  // }
 
   approveDeleteSuggestion() {
 

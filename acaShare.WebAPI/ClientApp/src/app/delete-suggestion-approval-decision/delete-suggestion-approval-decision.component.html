@@ -1,0 +1,133 @@
+<div class="upper-manage-box" *ngIf="decision">
+    <div class="data-container">
+        <nav class="colornav">
+            <div class="nav-wrapper path-header-wrapper">
+                <div class="action-button back-arrow tooltipped" data-position="top" data-tooltip="Wróć do listy sugestii usunięcia">
+                    <a (click)="goToPrevPage()"><i class="material-icons">arrow_back</i></a>
+                </div>
+                <div class="summary">
+                    Podsumowanie sugestii usunięcia
+                </div>
+            </div>
+        </nav>
+        <div class="home-content">
+            <div class="material-container">
+                <header class="upper-box-header">
+                    <h1 class="upper-box-header-title">
+                        Powód: {{ decision.deleteSuggestion.reason }}
+                    </h1>
+
+                    <div class="upper-box-header-action-buttons">
+                        <a (click)="onApproveClick()"
+                           class="sep action-button tooltipped approve-delete-request" data-position="top" data-tooltip="Zatwierdź - usuń materiał">
+
+                            <i class="material-icons lh">delete_forever</i>
+                        </a>
+                        <a (click)="toggleModal()"
+                           class="sep action-button tooltipped" data-position="top" data-tooltip="Odrzuć sugestię">
+
+                            <i class="material-icons lh">not_interested</i>
+                        </a>
+                    </div>
+                </header>
+                <section class="upper-manage-box-content">
+                    <h2>Dodatkowy komentarz</h2>:
+                    <p class="additional-comment">
+                        <ng-container *ngIf="decision.deleteSuggestion.additionalComment">
+                            {{ decision.deleteSuggestion.additionalComment }}
+                        </ng-container>
+
+                        <ng-container *ngIf="!decision.deleteSuggestion.additionalComment">
+                            Brak
+                        </ng-container>
+                    </p>
+                </section>
+            </div>
+
+            <footer class="material-footer upper-manage-box-footer">
+                <p class="material-footer-content">
+                    <span>
+                        Sugestia utworzona przez: {{ decision.deleteSuggestion.deleterName }}
+                    </span>
+                </p>
+            </footer>
+        </div>
+    </div>
+</div>
+
+<div class="data-container" *ngIf="decision">
+    <nav class="colornav">
+        <div class="nav-wrapper path-header-wrapper">
+            <div class="col s12 tree-path">
+                <a class="breadcrumb">
+                    Podgląd materiału
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="home-content">
+        <div class="material-container">
+            <header class="material-header">
+                <h1 class="material-header-title">
+                    {{ decision.material.name }}
+                </h1>
+            </header>
+
+            <div class="material-content material-to-approve-content">
+                <section class="material-content-files">
+                    <h2 class="material-content-files-header">Pliki</h2>
+
+                    <div class="files-wrapper">
+                        <ng-container *ngFor="let file of decision.material.files; let i=index;">
+                            <div *ngIf="file.isImage" class="material-file material-image" (click)="openModal()"><!--";currentSlide(i++)">-->
+                                <img src="/_Uploads/@file.RelativePath" alt="{{ file.fileName }}-thumbnail" />
+                            </div>
+                            <div *ngIf="!file.isImage" class="material-file">
+                                <a href="_Uploads/file.RelativePath" download="{{ file.fileName }}" class="material-file-download">
+                                    <i class="material-icons">description</i>
+                                </a>
+                            </div>
+                        </ng-container>
+                    </div>
+
+                    <!-- The Modal/Lightbox -->
+                    <!-- <div id="gallery-modal" class="gallery-modal" onclick="closeModalOnBackgroundClick(event)">
+                        <div id="current-slide-info" class="current-slide-info"></div>
+                        <span class="close" onclick="closeModal()">&times;</span>
+                        <div class="modal-content">
+                            <div *ngFor="let file of decision.material.files" class="gallery-item">
+                                <img *ngIf="file.isImage" src="/_Uploads/@file.RelativePath" alt="@file.FileName" />
+                            </div>
+                        </div>
+
+                        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                    </div> -->
+                </section>
+
+                <section>
+                    <h2 class="material-content-description-header">
+                        Opis
+                    </h2>
+
+                    <div class="material-content-description">
+                        {{ decision.material.description }}
+                    </div>
+                </section>
+            </div>
+
+            <footer class="material-footer">
+                <p class="material-footer-content">
+                    <span>
+                        Autor: {{ decision.material.creatorUsername }}
+                    </span>
+
+                    <span>
+                        Dodano: {{ decision.material.uploadDate | polishFullDate }}
+                    </span>
+                </p>
+            </footer>
+        </div>
+    </div>
+</div>
