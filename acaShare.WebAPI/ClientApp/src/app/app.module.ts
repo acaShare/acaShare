@@ -21,6 +21,7 @@ import { DeleteSuggestionApprovalDecisionComponent } from './delete-suggestion-a
 import { PolishFullDatePipe } from './pipes/polish-full-date.pipe';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 import { RejectDeleteSuggestionComponent } from './reject-delete-suggestion/reject-delete-suggestion.component';
+import { UniversitiesManagementComponent } from './universities-management/universities-management.component';
 
 @NgModule({
   declarations: [
@@ -37,17 +38,18 @@ import { RejectDeleteSuggestionComponent } from './reject-delete-suggestion/reje
     DeleteSuggestionApprovalDecisionComponent,
     PolishFullDatePipe,
     ConfirmationDialogComponent,
-    RejectDeleteSuggestionComponent
+    RejectDeleteSuggestionComponent,
+    UniversitiesManagementComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
-    ApiAuthorizationModule,
     RouterModule.forRoot([
       { path: '', component: WelcomePageComponent, pathMatch: 'full' },
       { path: 'home', component: HomeComponent, canActivate: [AuthorizeGuard] },
-      { path: 'moderator-panel', 
+      { 
+        path: 'moderator-panel', 
         component: ModeratorPanelComponent,
         canActivate: [AuthorizeGuard],
         children: [
@@ -56,12 +58,14 @@ import { RejectDeleteSuggestionComponent } from './reject-delete-suggestion/reje
           { path: 'delete-suggestions', component: DeleteSuggestionsComponent },
           { path: 'delete-suggestions/delete-suggestion-approval-decision/:id', component: DeleteSuggestionApprovalDecisionComponent },
           { path: 'delete-suggestions/decline-delete-request/:id', component: RejectDeleteSuggestionComponent },
+          { path: 'university-tree-management/universities', component: UniversitiesManagementComponent },
         ]
       },
       { path: '**', component: PageNotFoundComponent }
-    ])
-  ],
-  providers: [
+    ]),
+    ApiAuthorizationModule
+],
+providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]

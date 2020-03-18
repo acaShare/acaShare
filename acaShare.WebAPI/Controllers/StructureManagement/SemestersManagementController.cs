@@ -39,7 +39,7 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
                     new SemesterViewModel
                     {
                         Id = s.SemesterId,
-                        TitleOrFullName = s.Number
+                        Name = s.Number
                     })
                 .OrderBy(s => s.Id)
                 .ToList();

@@ -8,10 +8,10 @@ namespace acaShare.WebAPI.Models.StructureTraversal
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane")]
         [Display(Name = "Numer semestru")]
-        public string TitleOrFullName { get; set; }
+        public string Name { get; set; }
 
         // Not used
-        public string SubtitleOrAbbreviation { get; set; }
+        public string Abbreviation { get; set; }
 
         // helper variable
         public int DepartmentId { get; set; }

@@ -50,8 +50,8 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
                     new UniversityViewModel
                     {
                         Id = university.UniversityId,
-                        TitleOrFullName = university.Name,
-                        SubtitleOrAbbreviation = university.Abbreviation
+                        Name = university.Name,
+                        Abbreviation = university.Abbreviation
                     }
                 };
             }
@@ -63,8 +63,8 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
                     new UniversityViewModel
                     {
                         Id = u.UniversityId,
-                        TitleOrFullName = u.Name,
-                        SubtitleOrAbbreviation = u.Abbreviation,
+                        Name = u.Name,
+                        Abbreviation = u.Abbreviation,
                     }
                 ).ToList();
             }
@@ -76,7 +76,7 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public IActionResult Post(UniversityViewModel vm)
         {
-            var universityToAdd = new BLL.Models.University(vm.TitleOrFullName, vm.SubtitleOrAbbreviation);
+            var universityToAdd = new BLL.Models.University(vm.Name, vm.Abbreviation);
 
             var success = _managementService.AddUniversity(universityToAdd);
 
@@ -101,7 +101,7 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
                 return NotFound("Uczelnia o takim id nie istnieje.");
             }
 
-            universityToEdit.Update(vm.TitleOrFullName, vm.SubtitleOrAbbreviation);
+            universityToEdit.Update(vm.Name, vm.Abbreviation);
 
             bool success = _managementService.UpdateUniversity(universityToEdit);
 

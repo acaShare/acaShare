@@ -8,11 +8,11 @@ namespace acaShare.WebAPI.Models.StructureTraversal
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane")]
         [Display(Name = "Nazwa wydziału")]
-        public string TitleOrFullName { get; set; }
+        public string Name { get; set; }
 
         [Required(ErrorMessage = "Pole \"{0}\" jest wymagane")]
         [Display(Name = "Skrót")]
-        public string SubtitleOrAbbreviation { get; set; }
+        public string Abbreviation { get; set; }
 
         // Helper properties
         public int MaterialsCount { get; set; }

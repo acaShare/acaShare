@@ -56,8 +56,8 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
                 new LessonViewModel
                 {
                     Id = l.LessonId,
-                    TitleOrFullName = l.Subject.Name,
-                    SubtitleOrAbbreviation = l.Subject.Abbreviation
+                    Name = l.Subject.Name,
+                    Abbreviation = l.Subject.Abbreviation
                 }
             ).ToList();
         }
@@ -80,7 +80,7 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
                 return NotFound("Wydział o takim Id nie istnieje");
             }
 
-            var lesson = new BLL.Models.Lesson(vm.SemesterId, department, vm.TitleOrFullName, vm.SubtitleOrAbbreviation);
+            var lesson = new BLL.Models.Lesson(vm.SemesterId, department, vm.Name, vm.Abbreviation);
             var success = _managementService.AddLesson(lesson);
 
             if (!success)
@@ -104,7 +104,7 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
                 return NotFound("Przedmiot o takim Id nie istnieje.");
             }
 
-            bool success = _managementService.UpdateLesson(lessonToEdit.LessonId, vm.TitleOrFullName, vm.SubtitleOrAbbreviation);
+            bool success = _managementService.UpdateLesson(lessonToEdit.LessonId, vm.Name, vm.Abbreviation);
 
             if (!success)
             {

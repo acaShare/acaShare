@@ -3,7 +3,7 @@
     public interface IListItemViewModel
     {
         int Id { get; set; }
-        string TitleOrFullName { get; set; }
-        string SubtitleOrAbbreviation { get; set; }
+        string Name { get; set; }
+        string Abbreviation { get; set; }
     }
 }
