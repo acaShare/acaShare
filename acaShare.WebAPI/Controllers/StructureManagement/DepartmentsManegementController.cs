@@ -29,7 +29,7 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
             _filesManagement = formFilesManagement;
         }
 
-        [HttpGet("universities/{universityId}/departments")]
+        [HttpGet("/api/v1/universities/{universityId}/departments")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<IEnumerable<DepartmentViewModel>> Get(int universityId)
@@ -46,10 +46,31 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
                 new DepartmentViewModel
                 {
                     Id = d.DepartmentId,
-                    TitleOrFullName = d.Name,
-                    SubtitleOrAbbreviation = d.Abbreviation
+                    Name = d.Name,
+                    Abbreviation = d.Abbreviation
                 }
             ).ToList();
+        }
+
+
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<DepartmentViewModel> Get(int id, string fakeParam = null)
+        {
+            var department = _traversalService.GetDepartment(id);
+
+            if (department == null)
+            {
+                return NotFound();
+            }
+
+            return new DepartmentViewModel
+            {
+                Id = department.DepartmentId,
+                Name = department.Name,
+                Abbreviation = department.Abbreviation
+            };
         }
 
         [HttpPost]
@@ -63,7 +84,7 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
                 return NotFound("Uczelnia o takim id nie istnieje.");
             }
 
-            var departmentToAdd = new BLL.Models.Department(vm.TitleOrFullName, vm.SubtitleOrAbbreviation, university);
+            var departmentToAdd = new BLL.Models.Department(vm.Name, vm.Abbreviation, university);
 
             var success = _managementService.AddDepartment(departmentToAdd);
 
@@ -94,7 +115,7 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
                 return NotFound("Wydział o takim id nie istnieje.");
             }
 
-            departmentToEdit.Update(vm.TitleOrFullName, vm.SubtitleOrAbbreviation, university);
+            departmentToEdit.Update(vm.Name, vm.Abbreviation, university);
 
             bool success = _managementService.UpdateDepartment(departmentToEdit);
 

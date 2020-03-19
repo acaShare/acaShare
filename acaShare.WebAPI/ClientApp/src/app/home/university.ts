@@ -1,3 +1,3 @@
 export interface University {
-    titleOrFullName: string
+    name: string
 }

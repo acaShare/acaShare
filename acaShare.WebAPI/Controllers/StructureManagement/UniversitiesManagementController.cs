@@ -70,6 +70,46 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
             }
         }
 
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<UniversityViewModel> Get(int id)
+        {
+            BLL.Models.University university;
+
+            if (User.IsInRole(Roles.MainModeratorRole))
+            {
+                var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var appUser = _userservice.FindByIdentityUserId(identityUserId);
+                var mainModeratorUniversity = _mainModeratorService.GetUniversityMainModerator(appUser.UserId);
+               
+                if (mainModeratorUniversity.UniversityId == id)
+                {
+                    university = _traversalService.GetUniversity(mainModeratorUniversity.UniversityId);
+                }
+                else
+                {
+                    return Forbid();
+                }
+            }
+            else
+            {
+                university = _traversalService.GetUniversity(id);
+            }
+
+            if (university == null)
+            {
+                return NotFound();
+            }
+
+            return new UniversityViewModel
+            {
+                Id = university.UniversityId,
+                Name = university.Name,
+                Abbreviation = university.Abbreviation,
+            };
+        }
+
         [Authorize(Roles = Roles.AdministratorRole)]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]

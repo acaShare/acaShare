@@ -22,6 +22,10 @@ import { PolishFullDatePipe } from './pipes/polish-full-date.pipe';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 import { RejectDeleteSuggestionComponent } from './reject-delete-suggestion/reject-delete-suggestion.component';
 import { UniversitiesManagementComponent } from './universities-management/universities-management.component';
+import { DepartmentsManagementComponent } from './departments-management/departments-management.component';
+import { SemestersManagementComponent } from './semesters-management/semesters-management.component';
+import { SubjectsManagementComponent } from './subjects-management/subjects-management.component';
+import { ManageUniversityTreeElementComponent } from './manage-university-tree-element/manage-university-tree-element.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +43,11 @@ import { UniversitiesManagementComponent } from './universities-management/unive
     PolishFullDatePipe,
     ConfirmationDialogComponent,
     RejectDeleteSuggestionComponent,
-    UniversitiesManagementComponent
+    UniversitiesManagementComponent,
+    DepartmentsManagementComponent,
+    SemestersManagementComponent,
+    SubjectsManagementComponent,
+    ManageUniversityTreeElementComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -59,6 +67,17 @@ import { UniversitiesManagementComponent } from './universities-management/unive
           { path: 'delete-suggestions/delete-suggestion-approval-decision/:id', component: DeleteSuggestionApprovalDecisionComponent },
           { path: 'delete-suggestions/decline-delete-request/:id', component: RejectDeleteSuggestionComponent },
           { path: 'university-tree-management/universities', component: UniversitiesManagementComponent },
+          { path: 'university-tree-management/universities/add-university', component: ManageUniversityTreeElementComponent },
+          { path: 'university-tree-management/universities/:id/edit-university', component: ManageUniversityTreeElementComponent },
+          { path: 'university-tree-management/universities/:id/departments', component: DepartmentsManagementComponent },
+          { path: 'university-tree-management/universities/:id/departments/add-department', component: ManageUniversityTreeElementComponent },
+          { path: 'university-tree-management/universities/:id/departments/:id/edit-department', component: ManageUniversityTreeElementComponent },
+          { path: 'university-tree-management/universities/:universityId/departments/:departmentId/semesters', component: SemestersManagementComponent },
+          { path: 'university-tree-management/universities/:universityId/departments/:departmentId/semesters/add-semester', component: ManageUniversityTreeElementComponent },
+          { path: 'university-tree-management/universities/:universityId/departments/:departmentId/semesters/:id/edit-semester', component: ManageUniversityTreeElementComponent },
+          { path: 'university-tree-management/universities/:universityId/departments/:departmentId/semesters/:semesterId/subjects', component: SubjectsManagementComponent },
+          { path: 'university-tree-management/universities/:universityId/departments/:departmentId/semesters/:semesterId/subjects/add-subject', component: ManageUniversityTreeElementComponent },
+          { path: 'university-tree-management/universities/:universityId/departments/:departmentId/semesters/:semesterId/subjects/:id/edit-subject', component: ManageUniversityTreeElementComponent },
         ]
       },
       { path: '**', component: PageNotFoundComponent }

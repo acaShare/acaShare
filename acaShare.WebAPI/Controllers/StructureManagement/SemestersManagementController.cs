@@ -21,7 +21,7 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
             _traversalService = traversalService;
         }
 
-        [HttpGet]
+        [HttpGet("/api/v1/universities/{universityId}/departments/{departmentId}/semesters")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<IEnumerable<SemesterViewModel>> Get(int departmentId)

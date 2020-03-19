@@ -1,0 +1,48 @@
+<div class="data-container">
+    <nav class="colornav">
+        <div class="nav-wrapper path-header-wrapper">
+            <div class="col s12 tree-path">
+                Przedmioty
+            </div>
+        </div>
+    </nav>
+
+    <div class="home-content">
+        <div class="list-view-wrapper">
+            <div class="list-container">
+                <ul class="aca-collection">
+                    <li *ngIf="!subjects" class="aca-collection-item path-list-item">
+                        <p class="empty-list">~ Pobieranie danych... ~</p>
+                    </li>
+               
+                    <li *ngIf="subjects && subjects.length === 0" class="aca-collection-item path-list-item">
+                        <p class="empty-list">~ Pusto ~</p>
+                    </li>
+
+                    <li *ngFor="let subject of subjects" class="aca-collection-item path-list-item">
+                        <a class="item-link @rowClass">
+                            <span class="path-list-item-title">{{ subject.name }}</span>
+                            <br>
+                            <span class="path-list-item-subtitle">{{ subject.abbreviation }}</span>
+                        </a>
+    
+                        <div class="icons-row-container">
+                            <a [routerLink]="[subject.id, 'edit-subject']" class="tooltipped" data-position="top" data-tooltip="Edytuj">
+                                <i class="material-icons list-icon icon-edit">edit</i>
+                            </a>
+                            <a (click)="confirmDialog.toggleModal('Czy na pewno chcesz usunąć ten przedmiot?', subject.id)" class="tooltipped" data-position="top" data-tooltip="Usuń">
+                                <i class="material-icons list-icon icon-delete tooltipped" data-position="top" data-tooltip="Usuń">delete</i>
+                            </a>
+                        </div>                
+                    </li>
+                </ul>
+            </div>
+            
+            <a [routerLink]="['add-subject']" class="add-button">
+                Dodaj
+            </a>
+        </div>
+    </div>
+</div>
+
+<app-confirmation-dialog #confirmDialog (submit)="onApproveDeleteSubject($event)"></app-confirmation-dialog>

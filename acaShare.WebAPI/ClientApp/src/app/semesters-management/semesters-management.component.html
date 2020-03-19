@@ -1,0 +1,34 @@
+<div class="data-container">
+    <nav class="colornav">
+        <div class="nav-wrapper path-header-wrapper">
+            <div class="col s12 tree-path">
+                Semestry
+            </div>
+        </div>
+    </nav>
+
+    <div class="home-content">
+        <div class="list-view-wrapper">
+            <div class="list-container">
+                <ul class="aca-collection">
+                    <li *ngIf="!semesters" class="aca-collection-item path-list-item">
+                        <p class="empty-list">~ Pobieranie danych... ~</p>
+                    </li>
+               
+                    <li *ngIf="semesters && semesters.length === 0" class="aca-collection-item path-list-item">
+                        <p class="empty-list">~ Pusto ~</p>
+                    </li>
+
+                    <li *ngFor="let semester of semesters" class="aca-collection-item path-list-item">
+                        <a [routerLink]="[semester.id, 'subjects']" class="item-link @rowClass">
+                            <span class="path-list-item-title">{{ semester.name }}</span>
+                        </a>
+    
+                        <div class="icons-row-container">
+                        </div>                
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

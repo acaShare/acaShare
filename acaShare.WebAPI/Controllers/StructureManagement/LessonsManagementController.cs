@@ -33,7 +33,7 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
             _filesManagement = formFilesManagement;
         }
 
-        [HttpGet]
+        [HttpGet("/api/v1/universities/{universityId}/departments/{departmentId}/semesters/{semesterId}/subjects")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<IEnumerable<LessonViewModel>> Get(int semesterId, int departmentId)
@@ -60,6 +60,26 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
                     Abbreviation = l.Subject.Abbreviation
                 }
             ).ToList();
+        }
+
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<LessonViewModel> Get(int id)
+        {
+            var lesson = _traversalService.GetLesson(id);
+
+            if (lesson == null)
+            {
+                return NotFound();
+            }
+
+            return new LessonViewModel
+            {
+                Id = lesson.LessonId,
+                Name = lesson.Subject.Name,
+                Abbreviation = lesson.Subject.Abbreviation
+            };
         }
 
         [HttpPost]
