@@ -112,7 +112,7 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
         }
 
 
-        [HttpPost]
+        [HttpPut("{id:int}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

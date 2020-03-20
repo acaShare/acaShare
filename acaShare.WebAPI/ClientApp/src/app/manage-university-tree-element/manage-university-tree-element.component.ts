@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { UniversityTreeElement } from './universityTreeElement';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { UniversityTreeManagementService } from './university-tree-management.service';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -11,15 +10,17 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./manage-university-tree-element.component.css']
 })
 export class ManageUniversityTreeElementComponent implements OnInit {
-  private headerActionName: string;
-  private whatToAddOrEdit: string;
-  private backActionName: string;
-  private submitActionName: string;
-  private model: UniversityTreeElement;
+  headerActionName: string;
+  whatToAddOrEdit: string;
+  backActionName: string;
+  submitActionName: string;
+  model: UniversityTreeElement;
+
+  private action: string;
+  private apiUrl: string;
 
   constructor(
     private http: HttpClient,
-    private service: UniversityTreeManagementService,
     private route: ActivatedRoute,
     private location: Location) {
       this.model = new UniversityTreeElement();
@@ -27,25 +28,25 @@ export class ManageUniversityTreeElementComponent implements OnInit {
 
   ngOnInit() {
     let elementType: string;
-    let action: string;
     this.route.url.subscribe(u => {
-      action = u[u.length-1].path;
+      this.action = u[u.length-1].path;
       
-      if (action.startsWith('add')) {
+      if (this.action.startsWith('add')) {
         elementType = u[u.length-2].path;
         this.headerActionName = "Dodawanie";
         this.submitActionName = "Dodaj";
+        this.apiUrl = `api/v1/${elementType}Management`;
       }
-      else if (action.startsWith('edit')) {
+      else if (this.action.startsWith('edit')) {
         elementType = u[u.length-3].path;
         this.headerActionName = "Edycja";
         this.submitActionName = "Zapisz";
 
         const id = this.route.snapshot.paramMap.get('id');
         const routeName = elementType === 'subjects' ? 'lessons' : elementType;
-        const apiUrl = `api/v1/${routeName}Management/${id}`;
+        this.apiUrl = `api/v1/${routeName}Management/${id}`;
         this.http
-          .get<UniversityTreeElement>(apiUrl)
+          .get<UniversityTreeElement>(this.apiUrl)
           .subscribe(ute => this.model = ute, error => console.log(error));
       }
       else {
@@ -75,5 +76,20 @@ export class ManageUniversityTreeElementComponent implements OnInit {
 
   goToPrevPage() {
     this.location.back();
+  }
+
+  onSubmit() {
+    if (this.action.startsWith('add')) {
+      this.http
+        .post<UniversityTreeElement>(this.apiUrl, this.model)
+        .subscribe();
+    }
+    else if (this.action.startsWith('edit')) {
+      this.http
+        .put<UniversityTreeElement>(this.apiUrl, this.model)
+        .subscribe();
+    }
+
+    this.goToPrevPage();
   }
 }

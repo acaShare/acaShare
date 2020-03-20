@@ -44,7 +44,7 @@ export class SubjectsManagementComponent implements OnInit {
         error => console.log(error),
         () => {
           const subjectToDelete = this.subjects.filter(u => u.id === id)[0];
-          this.subjects.splice(this.subjects.indexOf(subjectToDelete, 1));
+          this.subjects.splice(this.subjects.indexOf(subjectToDelete), 1);
         }
     );
   }

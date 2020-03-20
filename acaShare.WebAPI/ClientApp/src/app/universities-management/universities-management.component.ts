@@ -28,7 +28,7 @@ export class UniversitiesManagementComponent implements OnInit {
         error => console.log(error),
         () => {
           const universityToDelete = this.universities.filter(u => u.id === id)[0];
-          this.universities.splice(this.universities.indexOf(universityToDelete, 1));
+          this.universities.splice(this.universities.indexOf(universityToDelete), 1);
         }
     );
   }

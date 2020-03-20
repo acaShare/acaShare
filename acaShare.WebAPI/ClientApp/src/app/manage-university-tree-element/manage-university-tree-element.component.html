@@ -9,25 +9,25 @@
 
     <div class="home-content">
         <div class="material-container">
-            <form method="post" class="col s12">
+            <form (ngSubmit)="onSubmit()" #form="ngForm" class="col s12">
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div>
                     <label for="name">Nazwa {{ whatToAddOrEdit }}</label>
                     <div class="input-field">
-                        <input [(ngModel)]="model.name" name="name" class="validate" />
-                        <span validation-for="name" class="text-danger input-error-small"></span>
+                        <input [(ngModel)]="model.name" name="name" class="validate" #name="ngModel" required maxlength="100" />
+                        <span [hidden]="name.valid || name.pristine" class="text-danger input-error-small"></span>
                     </div>
                 </div>
                 <div>
                     <label for="abbreviation">Skrót</label>
                     <div class="input-field">
-                        <input name="abbreviation" [(ngModel)]="model.abbreviation" name="abbreviation" />
-                        <span validation-for="abbreviation" class="text-danger input-error-small"></span>
+                        <input [(ngModel)]="model.abbreviation" name="abbreviation" #abbreviation="ngModel" required maxlength="5"/>
+                        <span [hidden]="abbreviation.valid || abbreviation.pristine" class="text-danger input-error-small"></span>
                     </div>
                 </div>
 
                 <div class="buttons">
-                    <button type="submit" class="btn btn-default accept-button">{{ submitActionName }}</button>
+                    <button [disabled]="!form.form.valid" type="submit" class="btn btn-default accept-button">{{ submitActionName }}</button>
                     <a (click)="goToPrevPage()" class="btn btn-default back-button">
                         <span class="back-button-large">Wróć do listy {{ backActionName }}</span>
                         <span class="back-button-small">Cofnij</span>

@@ -97,16 +97,15 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
         }
 
 
-        [HttpPut]
+        [HttpPut("{id:int}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public IActionResult Edit(DepartmentViewModel vm)
+        public IActionResult Edit(int id, DepartmentViewModel vm)
         {
-            var university = _traversalService.GetUniversity(vm.UniversityId);
-            if (university == null)
+            if (id != vm.Id)
             {
-                return NotFound("Uczelnia o takim id nie istnieje.");
+                return BadRequest();
             }
 
             var departmentToEdit = _traversalService.GetDepartment(vm.Id);
@@ -115,7 +114,7 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
                 return NotFound("Wydział o takim id nie istnieje.");
             }
 
-            departmentToEdit.Update(vm.Name, vm.Abbreviation, university);
+            departmentToEdit.Update(vm.Name, vm.Abbreviation);
 
             bool success = _managementService.UpdateDepartment(departmentToEdit);
 

@@ -129,12 +129,18 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
         }
 
         [Authorize(Roles = Roles.AdministratorRole)]
-        [HttpPut]
+        [HttpPut("{id:int}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public IActionResult Put(UniversityViewModel vm)
+        public IActionResult Put(int id, [FromBody]UniversityViewModel vm)
         {
+            if (id != vm.Id)
+            {
+                return BadRequest();
+            }
+
             var universityToEdit = _traversalService.GetUniversity(vm.Id);
             if (universityToEdit == null)
             {

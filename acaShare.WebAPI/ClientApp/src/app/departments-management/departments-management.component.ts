@@ -35,7 +35,7 @@ export class DepartmentsManagementComponent implements OnInit {
         error => console.log(error),
         () => {
           const departmentToDelete = this.departments.filter(u => u.id === id)[0];
-          this.departments.splice(this.departments.indexOf(departmentToDelete, 1));
+          this.departments.splice(this.departments.indexOf(departmentToDelete), 1);
         }
     );
   }

@@ -8,7 +8,7 @@ namespace acaShare.BLL.Models
     {
         public Department(string name, string abbreviation, University university)
         {
-            Update(name, abbreviation, university);
+            Update(name, abbreviation);
         }
 
         protected Department()
@@ -24,12 +24,10 @@ namespace acaShare.BLL.Models
         public virtual University University { get; private set; }
         public virtual ICollection<Lesson> Lessons { get; private set; }
 
-        public void Update(string name, string abbreviation, University university)
+        public void Update(string name, string abbreviation)
         {
             Name = name;
             Abbreviation = abbreviation;
-            University = university;
-            UniversityId = university.UniversityId;
         }
     }
 }
