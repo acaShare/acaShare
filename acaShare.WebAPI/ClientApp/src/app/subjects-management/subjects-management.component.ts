@@ -10,7 +10,7 @@ import { Subject } from './subject';
 })
 export class SubjectsManagementComponent implements OnInit {
   private apiPrefix = 'api/v1';
-  private apiUrl: string = `api/v1/SubjectsManagement`;
+  private apiUrl: string = `api/v1/subjects`;
   private universityIdPlaceholder: string = '[_universityID-PLACEHOLDER_]';
   private departmentIdPlaceholder: string = '[_departmentID-PLACEHOLDER_]';
   private semesterIdPlaceholder: string = '[_semesterID-PLACEHOLDER_]';

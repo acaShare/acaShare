@@ -17,7 +17,9 @@ export class ManageUniversityTreeElementComponent implements OnInit {
   model: UniversityTreeElement;
 
   private action: string;
-  private apiUrl: string;
+  private apiBaseUrl: string = "api/v1/universities";
+  private getAndPutApiUrl: string = this.apiBaseUrl;
+  private postApiUrl: string = this.apiBaseUrl;
 
   constructor(
     private http: HttpClient,
@@ -35,19 +37,11 @@ export class ManageUniversityTreeElementComponent implements OnInit {
         elementType = u[u.length-2].path;
         this.headerActionName = "Dodawanie";
         this.submitActionName = "Dodaj";
-        this.apiUrl = `api/v1/${elementType}Management`;
       }
       else if (this.action.startsWith('edit')) {
         elementType = u[u.length-3].path;
         this.headerActionName = "Edycja";
         this.submitActionName = "Zapisz";
-
-        const id = this.route.snapshot.paramMap.get('id');
-        const routeName = elementType === 'subjects' ? 'lessons' : elementType;
-        this.apiUrl = `api/v1/${routeName}Management/${id}`;
-        this.http
-          .get<UniversityTreeElement>(this.apiUrl)
-          .subscribe(ute => this.model = ute, error => console.log(error));
       }
       else {
         throw new Error('error -> manage-university-tree-element.component.ts [line: 37]');
@@ -57,16 +51,55 @@ export class ManageUniversityTreeElementComponent implements OnInit {
         case "universities":
           this.backActionName = "uczelni";
           this.whatToAddOrEdit = "uczelni";
+
+          if (this.action.startsWith('edit')) {
+            const universityId = this.route.snapshot.paramMap.get('id');
+            this.getAndPutApiUrl = `${this.getAndPutApiUrl}/${universityId}`;
+            this.http
+              .get<UniversityTreeElement>(this.getAndPutApiUrl)
+              .subscribe(ute => this.model = ute, error => console.log(error));
+          }
           break;
         case "departments":
           this.backActionName = "wydziałów";
           this.whatToAddOrEdit = "wydziału";
+
+          if (this.action.startsWith('add')) {
+            const universityId = this.route.snapshot.paramMap.get('id');
+            this.postApiUrl = `${this.apiBaseUrl}/${universityId}/departments`;
+          }
+          else if (this.action.startsWith('edit')) {
+            const universityId = this.route.snapshot.paramMap.get('universityId');
+            const departmentId = this.route.snapshot.paramMap.get('departmentId');
+            this.getAndPutApiUrl = `${this.getAndPutApiUrl}/${universityId}/departments/${departmentId}`;
+            this.http
+              .get<UniversityTreeElement>(this.getAndPutApiUrl)
+              .subscribe(ute => this.model = ute, error => console.log(error));
+          }
+
           break;
         case "semesters":
           throw new Error('route not supported error -> manage-university-tree-element.component.ts [line: 37]');
         case "subjects":
           this.backActionName = "przedmiotów";
           this.whatToAddOrEdit = "przedmiotu";
+
+          if (this.action.startsWith('add')) {
+            const universityId = this.route.snapshot.paramMap.get('universityId');
+            const departmentId = this.route.snapshot.paramMap.get('departmentId');
+            const semesterId = this.route.snapshot.paramMap.get('semesterId');
+            this.postApiUrl = `${this.apiBaseUrl}/${universityId}/departments/${departmentId}/semesters/${semesterId}/subjects`;
+          }
+          else if (this.action.startsWith('edit')) {
+            const universityId = this.route.snapshot.paramMap.get('universityId');
+            const departmentId = this.route.snapshot.paramMap.get('departmentId');
+            const semesterId = this.route.snapshot.paramMap.get('semesterId');
+            const subjectId = this.route.snapshot.paramMap.get('subjectId');
+            this.getAndPutApiUrl = `${this.getAndPutApiUrl}/${universityId}/departments/${departmentId}/semesters/${semesterId}/subjects/${subjectId}`;
+            this.http
+              .get<UniversityTreeElement>(this.getAndPutApiUrl)
+              .subscribe(ute => this.model = ute, error => console.log(error));
+          }
           break;
         default:
           throw new Error('route not supported error -> manage-university-tree-element.component.ts [line: 37]');
@@ -81,12 +114,12 @@ export class ManageUniversityTreeElementComponent implements OnInit {
   onSubmit() {
     if (this.action.startsWith('add')) {
       this.http
-        .post<UniversityTreeElement>(this.apiUrl, this.model)
+        .post<UniversityTreeElement>(this.postApiUrl, this.model)
         .subscribe();
     }
     else if (this.action.startsWith('edit')) {
       this.http
-        .put<UniversityTreeElement>(this.apiUrl, this.model)
+        .put<UniversityTreeElement>(this.getAndPutApiUrl, this.model)
         .subscribe();
     }
 

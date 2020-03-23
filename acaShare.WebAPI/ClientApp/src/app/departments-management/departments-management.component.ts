@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class DepartmentsManagementComponent implements OnInit {
   private apiPrefix = 'api/v1';
-  private apiUrl: string = `api/v1/DepartmentsManagement`;
+  private apiUrl: string = `api/v1/departments`;
   private idPlaceholder: string = '[_ID-PLACEHOLDER_]';
   private fetchApiUrl: string = `${this.apiPrefix}/universities/${this.idPlaceholder}/departments`;
   departments: Department[];

@@ -12,7 +12,7 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
 {
     [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole)]
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/universities/{universityId:int}/departments")]
     public class DepartmentsManagementController : ControllerBase
     {
         private readonly IUniversityTreeTraversalService _traversalService;
@@ -29,7 +29,7 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
             _filesManagement = formFilesManagement;
         }
 
-        [HttpGet("/api/v1/universities/{universityId}/departments")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<IEnumerable<DepartmentViewModel>> Get(int universityId)
@@ -53,12 +53,12 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
         }
 
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{departmentId:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<DepartmentViewModel> Get(int id, string fakeParam = null)
+        public ActionResult<DepartmentViewModel> Get(int departmentId, string fakeParam = null)
         {
-            var department = _traversalService.GetDepartment(id);
+            var department = _traversalService.GetDepartment(departmentId);
 
             if (department == null)
             {
@@ -76,9 +76,9 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public IActionResult Post(DepartmentViewModel vm)
+        public IActionResult Post(int universityId, DepartmentViewModel vm)
         {
-            var university = _traversalService.GetUniversity(vm.UniversityId);
+            var university = _traversalService.GetUniversity(universityId);
             if (university == null)
             {
                 return NotFound("Uczelnia o takim id nie istnieje.");
@@ -97,17 +97,12 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
         }
 
 
-        [HttpPut("{id:int}")]
+        [HttpPut("{departmentId:int}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public IActionResult Edit(int id, DepartmentViewModel vm)
+        public IActionResult Edit(int departmentId, DepartmentViewModel vm)
         {
-            if (id != vm.Id)
-            {
-                return BadRequest();
-            }
-
             var departmentToEdit = _traversalService.GetDepartment(vm.Id);
             if (departmentToEdit == null)
             {
@@ -127,7 +122,7 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
         }
 
 
-        [HttpDelete("{departmentId}")]
+        [HttpDelete("/api/v1/departments/{departmentId:int}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Delete(int departmentId)
         {

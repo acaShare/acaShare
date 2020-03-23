@@ -71,13 +71,11 @@ import { ManageUniversityTreeElementComponent } from './manage-university-tree-e
           { path: 'university-tree-management/universities/:id/edit-university', component: ManageUniversityTreeElementComponent },
           { path: 'university-tree-management/universities/:id/departments', component: DepartmentsManagementComponent },
           { path: 'university-tree-management/universities/:id/departments/add-department', component: ManageUniversityTreeElementComponent },
-          { path: 'university-tree-management/universities/:id/departments/:id/edit-department', component: ManageUniversityTreeElementComponent },
+          { path: 'university-tree-management/universities/:universityId/departments/:departmentId/edit-department', component: ManageUniversityTreeElementComponent },
           { path: 'university-tree-management/universities/:universityId/departments/:departmentId/semesters', component: SemestersManagementComponent },
-          { path: 'university-tree-management/universities/:universityId/departments/:departmentId/semesters/add-semester', component: ManageUniversityTreeElementComponent },
-          { path: 'university-tree-management/universities/:universityId/departments/:departmentId/semesters/:id/edit-semester', component: ManageUniversityTreeElementComponent },
           { path: 'university-tree-management/universities/:universityId/departments/:departmentId/semesters/:semesterId/subjects', component: SubjectsManagementComponent },
           { path: 'university-tree-management/universities/:universityId/departments/:departmentId/semesters/:semesterId/subjects/add-subject', component: ManageUniversityTreeElementComponent },
-          { path: 'university-tree-management/universities/:universityId/departments/:departmentId/semesters/:semesterId/subjects/:id/edit-subject', component: ManageUniversityTreeElementComponent },
+          { path: 'university-tree-management/universities/:universityId/departments/:departmentId/semesters/:semesterId/subjects/:subjectId/edit-subject', component: ManageUniversityTreeElementComponent },
         ]
       },
       { path: '**', component: PageNotFoundComponent }

@@ -13,7 +13,7 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
 {
     [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole)]
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/universities")]
     public class UniversitiesManagementController : ControllerBase
     {
         private readonly IUniversityTreeTraversalService _traversalService;
@@ -129,18 +129,13 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
         }
 
         [Authorize(Roles = Roles.AdministratorRole)]
-        [HttpPut("{id:int}")]
+        [HttpPut("{universityId:int}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public IActionResult Put(int id, [FromBody]UniversityViewModel vm)
+        public IActionResult Put(int universityId, UniversityViewModel vm)
         {
-            if (id != vm.Id)
-            {
-                return BadRequest();
-            }
-
             var universityToEdit = _traversalService.GetUniversity(vm.Id);
             if (universityToEdit == null)
             {
@@ -160,7 +155,7 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
         }
 
         [Authorize(Roles = Roles.AdministratorRole)]
-        [HttpDelete("{universityId}")]
+        [HttpDelete("/api/v1/universities/{universityId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Delete(int universityId)

@@ -11,7 +11,7 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
 {
     [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole)]
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/universities/{universityId:int}/departments/{departmentId:int}/semesters")]
     public class SemestersManagementController : ControllerBase
     {
         private readonly IUniversityTreeTraversalService _traversalService;
@@ -21,7 +21,7 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
             _traversalService = traversalService;
         }
 
-        [HttpGet("/api/v1/universities/{universityId}/departments/{departmentId}/semesters")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<IEnumerable<SemesterViewModel>> Get(int departmentId)

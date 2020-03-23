@@ -9,6 +9,8 @@ namespace acaShare.BLL.Models
         public Department(string name, string abbreviation, University university)
         {
             Update(name, abbreviation);
+            University = university;
+            UniversityId = university.UniversityId;
         }
 
         protected Department()

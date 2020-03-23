@@ -12,7 +12,7 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
 {
     [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole)]
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/universities/{universityId}/departments/{departmentId}/semesters/{semesterId}/subjects")]
     public class LessonsManagementController : ControllerBase
     {
         /// <summary>
@@ -33,7 +33,7 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
             _filesManagement = formFilesManagement;
         }
 
-        [HttpGet("/api/v1/universities/{universityId}/departments/{departmentId}/semesters/{semesterId}/subjects")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<IEnumerable<LessonViewModel>> Get(int semesterId, int departmentId)
@@ -62,12 +62,12 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
             ).ToList();
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{subjectId:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<LessonViewModel> Get(int id)
+        public ActionResult<LessonViewModel> Get(int subjectId)
         {
-            var lesson = _traversalService.GetLesson(id);
+            var lesson = _traversalService.GetLesson(subjectId);
 
             if (lesson == null)
             {
@@ -86,21 +86,21 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public IActionResult Post(SubjectDepartmentViewModel vm)
+        public IActionResult Post(int departmentId, int semesterId, SubjectDepartmentViewModel vm)
         {
-            var semester = _traversalService.GetSemester(vm.SemesterId);
+            var semester = _traversalService.GetSemester(semesterId);
             if (semester == null)
             {
                 return NotFound("Semestr o takim Id nie istnieje.");
             }
 
-            var department = _traversalService.GetDepartment(vm.DepartmentId);
+            var department = _traversalService.GetDepartment(departmentId);
             if (department == null)
             {
                 return NotFound("Wydział o takim Id nie istnieje");
             }
 
-            var lesson = new BLL.Models.Lesson(vm.SemesterId, department, vm.Name, vm.Abbreviation);
+            var lesson = new BLL.Models.Lesson(semesterId, department, vm.Name, vm.Abbreviation);
             var success = _managementService.AddLesson(lesson);
 
             if (!success)
@@ -112,11 +112,11 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
         }
 
 
-        [HttpPut("{id:int}")]
+        [HttpPut("{subjectId:int}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public IActionResult Put(LessonViewModel vm)
+        public IActionResult Put(int subjectId, LessonViewModel vm)
         {
             var lessonToEdit = _traversalService.GetLesson(vm.Id);
             if (lessonToEdit == null)
@@ -135,13 +135,13 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
         }
 
 
-        [HttpDelete]
+        [HttpDelete("/api/v1/subjects/{subjectId:int}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public IActionResult Delete(int lessonId)
+        public IActionResult Delete(int subjectId)
         {
-            var lessonToDelete = _traversalService.GetLesson(lessonId);
+            var lessonToDelete = _traversalService.GetLesson(subjectId);
             if (lessonToDelete == null)
             {
                 return NotFound("Przedmiot o takim Id nie istnieje.");

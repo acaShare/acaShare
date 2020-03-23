@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./universities-management.component.css']
 })
 export class UniversitiesManagementComponent implements OnInit {
-  apiUrl: string = "api/v1/UniversitiesManagement";
+  apiUrl: string = "api/v1/universities";
   universities: University[];
   isAdmin = false;
 
