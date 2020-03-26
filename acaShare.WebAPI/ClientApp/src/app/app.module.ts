@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -54,36 +54,47 @@ import { ManageUniversityTreeElementComponent } from './manage-university-tree-e
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component: WelcomePageComponent, pathMatch: 'full' },
-      { path: 'home', component: HomeComponent, canActivate: [AuthorizeGuard] },
+      { path: '', component: WelcomePageComponent, pathMatch: 'full', data: { title: 'Witamy' } },
+      { path: 'home', component: HomeComponent, canActivate: [AuthorizeGuard], data: { title: 'Strona główna' }  },
       { 
         path: 'moderator-panel', 
         component: ModeratorPanelComponent,
         canActivate: [AuthorizeGuard],
         children: [
-          { path: '', pathMatch: 'full', redirectTo: 'materials-to-approve'},
-          { path: 'materials-to-approve', component: MaterialsToApproveComponent },
-          { path: 'delete-suggestions', component: DeleteSuggestionsComponent },
-          { path: 'delete-suggestions/delete-suggestion-approval-decision/:id', component: DeleteSuggestionApprovalDecisionComponent },
-          { path: 'delete-suggestions/decline-delete-request/:id', component: RejectDeleteSuggestionComponent },
-          { path: 'university-tree-management/universities', component: UniversitiesManagementComponent },
-          { path: 'university-tree-management/universities/add-university', component: ManageUniversityTreeElementComponent },
-          { path: 'university-tree-management/universities/:id/edit-university', component: ManageUniversityTreeElementComponent },
-          { path: 'university-tree-management/universities/:id/departments', component: DepartmentsManagementComponent },
-          { path: 'university-tree-management/universities/:id/departments/add-department', component: ManageUniversityTreeElementComponent },
-          { path: 'university-tree-management/universities/:universityId/departments/:departmentId/edit-department', component: ManageUniversityTreeElementComponent },
-          { path: 'university-tree-management/universities/:universityId/departments/:departmentId/semesters', component: SemestersManagementComponent },
-          { path: 'university-tree-management/universities/:universityId/departments/:departmentId/semesters/:semesterId/subjects', component: SubjectsManagementComponent },
-          { path: 'university-tree-management/universities/:universityId/departments/:departmentId/semesters/:semesterId/subjects/add-subject', component: ManageUniversityTreeElementComponent },
-          { path: 'university-tree-management/universities/:universityId/departments/:departmentId/semesters/:semesterId/subjects/:subjectId/edit-subject', component: ManageUniversityTreeElementComponent },
+          { path: '', pathMatch: 'full', redirectTo: 'materials-to-approve' },
+          { path: 'materials-to-approve', component: MaterialsToApproveComponent, data: { title: 'Materiały oczekujące na zatwierdzenie' }  },
+          { path: 'delete-suggestions', component: DeleteSuggestionsComponent, data: { title: 'Sugestie usunięcia' }  },
+          { path: 'delete-suggestions/delete-suggestion-approval-decision/:id', component: DeleteSuggestionApprovalDecisionComponent, data: { title: 'Podsumowanie sugestii usunięcia' }  },
+          { path: 'delete-suggestions/decline-delete-request/:id', component: RejectDeleteSuggestionComponent, data: { title: 'Odrzucenie sugestii usunięcia materiału' }  },
+          {
+            path: 'university-tree-management',
+            children: [
+              { 
+                path: '', 
+                redirectTo: 'universities', 
+                pathMatch: 'full' 
+              },
+              { path: 'universities', component: UniversitiesManagementComponent, data: { title: 'Uczelnie' }  },
+              { path: 'universities/add-university', component: ManageUniversityTreeElementComponent, data: { title: 'Dodawnie uczelni' }  },
+              { path: 'universities/:id/edit-university', component: ManageUniversityTreeElementComponent, data: { title: 'Edycja uczelni' }  },
+              { path: 'universities/:id/departments', component: DepartmentsManagementComponent, data: { title: 'Wydziały' }  },
+              { path: 'universities/:id/departments/add-department', component: ManageUniversityTreeElementComponent, data: { title: 'Dodawnie wydziału' }  },
+              { path: 'universities/:universityId/departments/:departmentId/edit-department', component: ManageUniversityTreeElementComponent, data: { title: 'Edycja wydziału' }  },
+              { path: 'universities/:universityId/departments/:departmentId/semesters', component: SemestersManagementComponent, data: { title: 'Semestry' }  },
+              { path: 'universities/:universityId/departments/:departmentId/semesters/:semesterId/subjects', component: SubjectsManagementComponent, data: { title: 'Przedmioty' }  },
+              { path: 'universities/:universityId/departments/:departmentId/semesters/:semesterId/subjects/add-subject', component: ManageUniversityTreeElementComponent, data: { title: 'Dodawnie przedmiotu' }  },
+              { path: 'universities/:universityId/departments/:departmentId/semesters/:semesterId/subjects/:subjectId/edit-subject', component: ManageUniversityTreeElementComponent, data: { title: 'Edycja przedmiotu' }  },
+            ]
+          }
         ]
       },
       { path: '**', component: PageNotFoundComponent }
     ]),
     ApiAuthorizationModule
-],
-providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }
+  ],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
+    Title
   ],
   bootstrap: [AppComponent]
 })

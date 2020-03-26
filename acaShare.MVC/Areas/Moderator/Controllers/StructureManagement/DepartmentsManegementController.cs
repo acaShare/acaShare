@@ -148,7 +148,7 @@ namespace acaShare.MVC.Areas.Moderator.Controllers.StructureManagement
                 return RedirectToAction("ResourceNotFound", "Error", new { error = "wydział o podanym Id nie istnieje." });
             }
 
-            departmentToEdit.Update(vm.TitleOrFullName, vm.SubtitleOrAbbreviation, university);
+            departmentToEdit.Update(vm.TitleOrFullName, vm.SubtitleOrAbbreviation);
 
             bool success = _managementService.UpdateDepartment(departmentToEdit);
 
