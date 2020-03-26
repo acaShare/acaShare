@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Semester } from './semester';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { University } from '../universities-management/university';
+import { Department } from '../departments-management/department';
 
 @Component({
   selector: 'app-semesters-management',
@@ -14,6 +16,9 @@ export class SemestersManagementComponent implements OnInit {
   private departmentIdPlaceholder: string = '[_departmentID-PLACEHOLDER_]';
   private fetchApiUrl: string = `${this.apiPrefix}/universities/${this.universityIdPlaceholder}/departments/${this.departmentIdPlaceholder}/semesters`;
   semesters: Semester[];
+  universityId: string;
+  universityAbbreviation: string;
+  departmentAbbreviation: string;
 
   constructor(
     private http: HttpClient,
@@ -21,11 +26,19 @@ export class SemestersManagementComponent implements OnInit {
   }
 
   ngOnInit() {
-    const universityId = this.route.snapshot.paramMap.get('universityId');
+    this.universityId = this.route.snapshot.paramMap.get('universityId');
     const departmentId = this.route.snapshot.paramMap.get('departmentId');
-    const apiUrl = this.fetchApiUrl.replace(this.universityIdPlaceholder, universityId).replace(this.departmentIdPlaceholder, departmentId); 
+
+    this.http
+      .get<University>(`${this.apiPrefix}/universities/${this.universityId}`)
+      .subscribe(university => this.universityAbbreviation = university.abbreviation, error => console.log(error));
+    this.http
+      .get<Department>(`${this.apiPrefix}/universities/${this.universityId}/departments/${departmentId}`)
+      .subscribe(dept => this.departmentAbbreviation = dept.abbreviation, error => console.log(error));
+
+    const apiUrl = this.fetchApiUrl.replace(this.universityIdPlaceholder, this.universityId).replace(this.departmentIdPlaceholder, departmentId); 
     this.http
       .get<Semester[]>(apiUrl)
-      .subscribe(d => this.semesters = d, error => console.log(error));
+      .subscribe(s => this.semesters = s, error => console.log(error));
   }
 }

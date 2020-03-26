@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Department } from './department';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { University } from '../universities-management/university';
 
 @Component({
   selector: 'app-departments-management',
@@ -14,6 +15,7 @@ export class DepartmentsManagementComponent implements OnInit {
   private idPlaceholder: string = '[_ID-PLACEHOLDER_]';
   private fetchApiUrl: string = `${this.apiPrefix}/universities/${this.idPlaceholder}/departments`;
   departments: Department[];
+  universityAbbreviation: string;
 
   constructor(
     private http: HttpClient,
@@ -21,9 +23,14 @@ export class DepartmentsManagementComponent implements OnInit {
   }
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
+    const universityId = this.route.snapshot.paramMap.get('id');
+    
     this.http
-      .get<Department[]>(this.fetchApiUrl.replace(this.idPlaceholder, id))
+      .get<University>(`${this.apiPrefix}/universities/${universityId}`)
+      .subscribe(university => this.universityAbbreviation = university.abbreviation, error => console.log(error));
+
+    this.http
+      .get<Department[]>(this.fetchApiUrl.replace(this.idPlaceholder, universityId))
       .subscribe(d => this.departments = d, error => console.log(error));
   }
 

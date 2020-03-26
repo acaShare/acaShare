@@ -44,5 +44,23 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
                 .OrderBy(s => s.Id)
                 .ToList();
         }
+
+        [HttpGet("{semesterId:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<SemesterViewModel> GetSemester(int semesterId)
+        {
+            var semester = _traversalService.GetSemester(semesterId);
+            if (semester == null)
+            {
+                return NotFound("Semestr o takim id nie istnieje.");
+            }
+
+            return new SemesterViewModel
+            {
+                Id = semester.SemesterId,
+                Name = semester.Number
+            };
+        }
     }
 }

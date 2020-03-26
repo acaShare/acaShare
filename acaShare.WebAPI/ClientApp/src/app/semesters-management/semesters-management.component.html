@@ -2,7 +2,21 @@
     <nav class="colornav">
         <div class="nav-wrapper path-header-wrapper">
             <div class="col s12 tree-path">
-                Semestry
+                <a [routerLink]="['/moderator-panel/university-tree-management/universities']" class="breadcrumb">
+                    Uczelnie
+                </a>
+                <a [routerLink]="['/moderator-panel/university-tree-management/universities', universityId, 'departments']" class="breadcrumb">
+                    {{ universityAbbreviation }}
+                </a>
+                <a [routerLink]="['/moderator-panel/university-tree-management/universities', universityId, 'departments']" class="breadcrumb">
+                    Wydziały
+                </a>
+                <a [routerLink]="['./']" class="breadcrumb">
+                    {{ departmentAbbreviation }}
+                </a>
+                <a class="breadcrumb">
+                    Semestry
+                </a>
             </div>
         </div>
     </nav>
