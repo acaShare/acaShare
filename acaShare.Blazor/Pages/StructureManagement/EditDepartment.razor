@@ -94,7 +94,7 @@
             NavigationManager.NavigateTo($"ResourceNotFound/{Errors.DepartmentNotFound}");
         }
 
-        _department.Update(_departmentViewModel.TitleOrFullName, _departmentViewModel.SubtitleOrAbbreviation, _university);
+        _department.Update(_departmentViewModel.TitleOrFullName, _departmentViewModel.SubtitleOrAbbreviation);
 
         bool success = ManagementService.UpdateDepartment(_department);
 
