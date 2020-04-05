@@ -1,40 +1,81 @@
-﻿@*<a class="item-link" href="/Moderator/ModeratorPanel/MaterialApprovalDecision/@EditRequest.MaterialId">
-    <span class="path-list-item-title">@EditRequest.Name</span>
+﻿<NavLink class="item-link" href=@($"/Moderator/ModeratorPanel/EditSuggestions/EditRequestApprovalDecision/{Suggestion.EditRequestId}")>
+    <span class="path-list-item-title">@Suggestion.MaterialName</span>
     <br>
     <span class="path-list-item-subtitle">
-        @EditRequest.UploadDate.ToString("d.MM.yyyy, HH:mm") &nbsp;&nbsp;~&nbsp;&nbsp;
+        @Suggestion.RequestDate.ToString("d.MM.yyyy, HH:mm") &nbsp;&nbsp;~&nbsp;&nbsp;
 
-        @if (EditRequest.Description?.Length > maxDescriptionLength)
+        @if (Suggestion.Summary?.Length > maxCommentLength)
         {
-            @EditRequest.Description.Substring(0, maxDescriptionLength);
+            @Suggestion.Summary.Substring(0, maxCommentLength);
             @:[...]
+        }
+        else if (Suggestion.Summary?.Length > 0)
+        {
+            @Suggestion.Summary;
         }
         else
         {
-            @EditRequest.Description;
+            @:Autor: @Suggestion.UpdaterName nie dołączył dodatkowego wyjaśnienia.
         }
     </span>
-</a>*@
+</NavLink>
 
 <div class="icons-row-container">
-    <a class="approve-material" @onclick="() => OnApproveEditRequestClickCallback.InvokeAsync(new EditRequestCallbackArgs(EditRequest.EditRequestId))">
-        <i class="material-icons list-icon icon-edit tooltipped" data-position="top" data-tooltip="Zatwierdź">check</i>
+    <a class="approve-edit-request" @onclick="OnApproveClick">
+        <i class="material-icons list-icon icon-edit tooltipped" data-position="top" data-tooltip="Zatwierdź - usuń materiał">check</i>
     </a>
-    <a class="reject-material" @onclick="() => OnRejectEditRequestClickCallback.InvokeAsync(new EditRequestCallbackArgs(EditRequest.EditRequestId))">
-        <i class="material-icons list-icon icon-delete tooltipped" data-position="top" data-tooltip="Odrzuć">not_interested</i>
+    <a @onclick="ToggleModal">
+        <i class="material-icons list-icon icon-delete tooltipped" data-position="top" data-tooltip="Odrzuć sugestię">not_interested</i>
     </a>
 </div>
 
+<EditModelModal Model="Suggestion" SubmitButtonText="Odrzuć sugestię usunięcia" OnValidSubmit="OnRejectClick" @ref="EditModal">
+    <div class="row">
+        <div class="col s12">
+            <div>
+                <label for="Suggestion.DeclineReason">Powód odrzucenia sugestii</label>
+                <div class="input-field">
+                    <InputText @bind-Value="Suggestion.DeclineReason" class="validate" />
+                    <ValidationMessage For="@(() => Suggestion.DeclineReason)" />
+                </div>
+            </div>
+        </div>
+    </div>
+</EditModelModal>
+
+
 @code {
     [Parameter]
-    public BLL.Models.EditRequest EditRequest { get; set; }
+    public EditRequestViewModel Suggestion { get; set; }
 
-    private const int maxDescriptionLength = 100;
+    [Parameter]
+    public ConfirmationDialog ConfirmationModal { get; set; }
 
     //Callbacks
     [Parameter]
-    public EventCallback<EditRequestCallbackArgs> OnApproveEditRequestClickCallback { get; set; }
+    public EventCallback<CallbackArgs> OnApproveSuggestionClickCallback { get; set; }
 
     [Parameter]
-    public EventCallback<EditRequestCallbackArgs> OnRejectEditRequestClickCallback { get; set; }
+    public EventCallback<RejectSuggestionCallbackArgs> OnRejectSuggestionClickCallback { get; set; }
+
+    private EditModelModal<EditRequestViewModel> EditModal { get; set; }
+
+    private const int maxCommentLength = 100;
+
+    private void OnApproveClick()
+    {
+        ConfirmationModal.OnSubmit += () => OnApproveSuggestionClickCallback.InvokeAsync(new CallbackArgs(Suggestion.EditRequestId));
+        ConfirmationModal.ToggleModal();
+    }
+
+    private void OnRejectClick()
+    {
+        OnRejectSuggestionClickCallback.InvokeAsync(new RejectSuggestionCallbackArgs(Suggestion.EditRequestId, Suggestion.DeclineReason));
+    }
+
+    private void ToggleModal()
+    {
+        Suggestion.DeclineReason = null;
+        EditModal.ToggleModal();
+    }
 }
