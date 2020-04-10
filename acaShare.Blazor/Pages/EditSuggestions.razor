@@ -1,18 +1,56 @@
 ﻿@page "/Moderator/ModeratorPanel/EditSuggestions"
-@inject IMaterialsService _service
-@attribute [Authorize]
+@attribute [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole + ", " + Roles.ModeratorRole)]
+@inject IMaterialsService MaterialsService
+@inject ISuggestionsService SuggestionsService
 
-<AcaCollection Items="_editRequests" TItem="BLL.Models.EditRequest">
-    <ListItemTemplate>
-        <EditSuggestionListItem EditRequest="context" />
-    </ListItemTemplate>
-</AcaCollection>
+<div class="data-container">
+    <Breadcrumbs BreadcrumbsItems="@_breadcrumbsItems" />
+
+    <div class="home-content">
+        <AcaCollection Items="_editRequests">
+            <ListItemTemplate>
+                <EditSuggestionListItem Suggestion="context" 
+                                          ConfirmationModal="ConfirmationModal"
+                                          OnApproveSuggestionClickCallback="SuggestionsService.OnApproveEditSuggestionClickCallback"
+                                          OnRejectSuggestionClickCallback="SuggestionsService.OnRejectEditSuggestionClickCallback" />
+            </ListItemTemplate>
+        </AcaCollection>
+    </div>
+</div>
+
+<ConfirmationDialog @ref="ConfirmationModal">
+    Czy na pewno chcesz zatwierdzić tę sugestię edycji?
+</ConfirmationDialog>
 
 @code {
-    private IReadOnlyCollection<BLL.Models.EditRequest> _editRequests;
+    private IReadOnlyCollection<EditRequestViewModel> _editRequests;
+    private const string pageTitle = "Sugestie edycji";
+    private ConfirmationDialog ConfirmationModal { get; set; }
+    private IReadOnlyCollection<BreadcrumbViewModel> _breadcrumbsItems = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel(pageTitle)
+    };
 
     protected override void OnInitialized()
     {
-        _editRequests = _service.GetPendingEditSuggestions() as IReadOnlyCollection<BLL.Models.EditRequest>;
+        ChangePageTitle(pageTitle);
+        RefreshData();
+        SuggestionsService.OnEndProcessing += RefreshData;
     }
+
+    private void RefreshData()
+    {
+        _editRequests = MaterialsService.GetPendingEditSuggestions()
+            .Select(es =>
+                new EditRequestViewModel
+                {
+                    EditRequestId = es.EditRequestId,
+                    MaterialName = es.MaterialToUpdate.Name,
+                    Summary = es.Summary,
+                    RequestDate = es.RequestDate
+                }
+            ).ToList();
+    }
+    [CascadingParameter]
+    public Action<string> ChangePageTitle { get; set; }
 }

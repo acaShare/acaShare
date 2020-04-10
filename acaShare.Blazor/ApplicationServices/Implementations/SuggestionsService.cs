@@ -82,8 +82,8 @@ namespace acaShare.Blazor.ApplicationServices.Implementations
             try
             {
                 int materialToUpdateId = editRequest.MaterialToUpdateId;
-                _materialsService.ApproveEditRequest(editRequest);
-                _filesManagement.ReplaceMaterialFilesWithEditRequestFiles(materialToUpdateId, editRequest.EditRequestId, editRequest.Files);
+                //_materialsService.ApproveEditRequest(editRequest);
+                //_filesManagement.ReplaceMaterialFilesWithEditRequestFiles(materialToUpdateId, editRequest.EditRequestId, editRequest.Files);
             }
             catch (ArgumentException)
             {
@@ -94,18 +94,26 @@ namespace acaShare.Blazor.ApplicationServices.Implementations
                 _filesManagement.RemoveFilesFromFileSystem(editRequest.Files);
                 _navigationManager.NavigateTo($"ResourceNotFound/{Errors.EditSuggestionNotFound}");
             }
+
+            _navigationManager.NavigateTo($"Moderator/ModeratorPanel/EditSuggestions");
+
+            OnEndProcessing?.Invoke();
         }
 
         public void OnRejectEditSuggestionClickCallback(RejectSuggestionCallbackArgs callbackArgs)
         {
             try
             {
-                _materialsService.DeclineEditRequest(callbackArgs.Id, callbackArgs.Reason);
+                //_materialsService.DeclineEditRequest(callbackArgs.Id, callbackArgs.Reason);
             }
             catch (ArgumentException)
             {
                 _navigationManager.NavigateTo($"ResourceNotFound/{Errors.EditSuggestionNotFound}");
             }
+
+            _navigationManager.NavigateTo($"Moderator/ModeratorPanel/EditSuggestions");
+
+            OnEndProcessing?.Invoke();
         }
     }
 }
