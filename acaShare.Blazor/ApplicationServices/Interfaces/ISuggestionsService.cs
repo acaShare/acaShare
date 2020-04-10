@@ -7,6 +7,8 @@ namespace acaShare.Blazor.ApplicationServices.Interfaces
     {
         void OnApproveSuggestionClickCallback(CallbackArgs callbackArgs);
         void OnRejectSuggestionClickCallback(RejectSuggestionCallbackArgs callbackArgs);
+        void OnApproveEditSuggestionClickCallback(CallbackArgs callbackArgs);
+        void OnRejectEditSuggestionClickCallback(RejectSuggestionCallbackArgs callbackArgs);
         event Action OnEndProcessing;
     }
 }

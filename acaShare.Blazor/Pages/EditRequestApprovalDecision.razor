@@ -10,7 +10,7 @@
         <nav class="colornav">
             <div class="nav-wrapper path-header-wrapper">
                 <div class="action-button back-arrow tooltipped" data-position="top" data-tooltip="Wróć do listy sugestii edycji">
-                    <NavLink href="/Moderator/ModeratorPanel/DeleteSuggestions"><i class="material-icons">arrow_back</i></NavLink>
+                    <NavLink href="/Moderator/ModeratorPanel/EditSuggestions"><i class="material-icons">arrow_back</i></NavLink>
                 </div>
                 <div class="summary">
                     Podsumowanie sugestii edycji
@@ -21,7 +21,7 @@
             <div class="material-container">
                 <header class="upper-box-header">
                     <div class="upper-box-header-action-buttons">
-                        <a @*@onclick="OnApproveClick" *@
+                        <a @onclick="OnApproveClick"
                            class="sep action-button tooltipped approve-edit-request" data-position="top" data-tooltip="Zatwierdź sugestię">
 
                             <i class="material-icons lh">check</i>
@@ -31,7 +31,7 @@
 
                             <i class="material-icons lh">subdirectory_arrow_right</i>
                         </a>
-                        <a @*@onclick="ToggleModal" *@
+                        <a @onclick="ToggleModal"
                            class="sep action-button tooltipped" data-position="top" data-tooltip="Odrzuć sugestię">
 
                             <i class="material-icons lh">not_interested</i>
@@ -85,7 +85,7 @@
                     @Decision.Material.Name
                 </h1>
                 <div class="material-header-action-buttons">
-                    <a @*@onclick="handleShowPreviousMaterialVersion(Decision.Material.MaterialId)"*@
+                    <a @*@onclick="handleShowPreviousMaterialVersion(Decision.Material.MaterialId)" *@
                        class="sep action-button tooltipped" data-position="top" data-tooltip="Pokaż poprzednią wersję">
 
                         <i class="material-icons lh">history</i>
@@ -167,11 +167,31 @@
     </div>
 </div>
 
+<EditModelModal Model="Decision.EditSuggestion" SubmitButtonText="Odrzuć sugestię edycji" OnValidSubmit="OnRejectClick" @ref="Modal">
+    <div class="row">
+        <div class="col s12">
+            <div>
+                <label for="Suggestion.DeclineReason">Powód odrzucenia sugestii</label>
+                <div class="input-field">
+                    <InputText @bind-Value="Decision.EditSuggestion.DeclineReason" class="validate" />
+                    <ValidationMessage For="@(() => Decision.EditSuggestion.DeclineReason)" />
+                </div>
+            </div>
+        </div>
+    </div>
+</EditModelModal>
+
+<ConfirmationDialog @ref="ConfirmationModal">
+    Czy na pewno chcesz zatwierdzić tę sugestię edycji?
+</ConfirmationDialog>
+
 @code {
     [Parameter]
     public int EditSuggestionId { get; set; }
 
     private ChangeRequestApprovalDecision Decision;
+    private EditModelModal<EditRequestViewModel> Modal { get; set; }
+    private ConfirmationDialog ConfirmationModal { get; set; }
 
     protected override void OnInitialized()
     {
@@ -211,5 +231,22 @@
                 }
             };
         }
+    }
+
+    private void OnApproveClick()
+    {
+        ConfirmationModal.OnSubmit += () => SuggestionsService.OnApproveEditSuggestionClickCallback(new CallbackArgs(Decision.EditSuggestion.EditRequestId));
+        ConfirmationModal.ToggleModal();
+    }
+
+    private void OnRejectClick()
+    {
+        SuggestionsService.OnRejectEditSuggestionClickCallback(new RejectSuggestionCallbackArgs(Decision.EditSuggestion.EditRequestId, Decision.EditSuggestion.DeclineReason));
+    }
+
+    private void ToggleModal()
+    {
+        Decision.EditSuggestion.DeclineReason = null;
+        Modal.ToggleModal();
     }
 }

@@ -11,15 +11,15 @@
             <ListItemTemplate>
                 <EditSuggestionListItem Suggestion="context" 
                                           ConfirmationModal="ConfirmationModal"
-                                          OnApproveSuggestionClickCallback="SuggestionsService.OnApproveSuggestionClickCallback"
-                                          OnRejectSuggestionClickCallback="SuggestionsService.OnRejectSuggestionClickCallback" />
+                                          OnApproveSuggestionClickCallback="SuggestionsService.OnApproveEditSuggestionClickCallback"
+                                          OnRejectSuggestionClickCallback="SuggestionsService.OnRejectEditSuggestionClickCallback" />
             </ListItemTemplate>
         </AcaCollection>
     </div>
 </div>
 
 <ConfirmationDialog @ref="ConfirmationModal">
-    Czy na pewno chcesz zatwierdzić tę sugestię usunięcia?
+    Czy na pewno chcesz zatwierdzić tę sugestię edycji?
 </ConfirmationDialog>
 
 @code {

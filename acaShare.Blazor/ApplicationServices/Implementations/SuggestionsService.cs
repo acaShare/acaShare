@@ -47,7 +47,7 @@ namespace acaShare.Blazor.ApplicationServices.Implementations
             //_filesManagement.DeleteWholeMaterialFolder(deleteRequest.MaterialToDeleteId.Value);
             //_materialsService.ApproveDeleteRequest(deleteRequest, loggedModerator);
 
-            _navigationManager.NavigateTo($"Moderator/ModeratorPanel/DeleteSuggestions_");
+            _navigationManager.NavigateTo($"Moderator/ModeratorPanel/DeleteSuggestions");
            
             OnEndProcessing?.Invoke();
         }
@@ -66,7 +66,52 @@ namespace acaShare.Blazor.ApplicationServices.Implementations
                 _navigationManager.NavigateTo($"ResourceNotFound/{Errors.DeleteSuggestionNotFound}");
             }
 
-            _navigationManager.NavigateTo($"Moderator/ModeratorPanel/DeleteSuggestions_");
+            _navigationManager.NavigateTo($"Moderator/ModeratorPanel/DeleteSuggestions");
+
+            OnEndProcessing?.Invoke();
+        }
+
+        public void OnApproveEditSuggestionClickCallback(CallbackArgs callbackArgs)
+        {
+            var editRequest = _materialsService.GetEditRequest(callbackArgs.Id);
+            if (editRequest == null)
+            {
+                _navigationManager.NavigateTo($"ResourceNotFound/{Errors.EditSuggestionNotFound}");
+            }
+
+            try
+            {
+                int materialToUpdateId = editRequest.MaterialToUpdateId;
+                //_materialsService.ApproveEditRequest(editRequest);
+                //_filesManagement.ReplaceMaterialFilesWithEditRequestFiles(materialToUpdateId, editRequest.EditRequestId, editRequest.Files);
+            }
+            catch (ArgumentException)
+            {
+                _navigationManager.NavigateTo($"ResourceNotFound/{Errors.EditSuggestionNotFound}");
+            }
+            catch (Exception)
+            {
+                _filesManagement.RemoveFilesFromFileSystem(editRequest.Files);
+                _navigationManager.NavigateTo($"ResourceNotFound/{Errors.EditSuggestionNotFound}");
+            }
+
+            _navigationManager.NavigateTo($"Moderator/ModeratorPanel/EditSuggestions");
+
+            OnEndProcessing?.Invoke();
+        }
+
+        public void OnRejectEditSuggestionClickCallback(RejectSuggestionCallbackArgs callbackArgs)
+        {
+            try
+            {
+                //_materialsService.DeclineEditRequest(callbackArgs.Id, callbackArgs.Reason);
+            }
+            catch (ArgumentException)
+            {
+                _navigationManager.NavigateTo($"ResourceNotFound/{Errors.EditSuggestionNotFound}");
+            }
+
+            _navigationManager.NavigateTo($"Moderator/ModeratorPanel/EditSuggestions");
 
             OnEndProcessing?.Invoke();
         }
