@@ -1,0 +1,27 @@
+﻿@typeparam TItem
+
+<h4 class="title">@TableTitle</h4>
+
+<table class="table">
+    <thead>
+        <tr>@TableHeader</tr>
+    </thead>
+
+    <tbody>
+        @foreach (var user in Users)
+        {
+            <tr>@TableRowTemplate(user)</tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    [Parameter]
+    public string TableTitle { get; set; }
+    [Parameter]
+    public RenderFragment TableHeader { get; set; }
+    [Parameter]
+    public RenderFragment<TItem> TableRowTemplate { get; set; }
+    [Parameter]
+    public IReadOnlyList<TItem> Users { get; set; }
+}
