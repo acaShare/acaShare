@@ -11,5 +11,6 @@ namespace acaShare.Blazor.ApplicationServices.Constants
         public const string DepartmentNotFound = "Wydział o podanym id nie istnieje.";
         public const string SemesterNotFound = "Semestr o podanym id nie istnieje.";
         public const string LessonNotFound = "Przedmiot o podanym id nie istnieje.";
+        public const string UserNotFound = "Użytkownik o podanym id nie istnieje";
     }
 }

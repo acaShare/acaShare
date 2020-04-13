@@ -1,0 +1,265 @@
+﻿@page "/Moderator/ModeratorPanel/ModeratorManagement"
+@inject IRolesManagementService _roleService
+@inject IUniversityTreeTraversalService _universityService
+@inject IMainModeratorService _mainModeratorService
+@inject IUserService _userService
+@inject NavigationManager _navigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserManager<IdentityUser> userManager
+@attribute [Authorize]
+
+<div class="data-container">
+    <Breadcrumbs BreadcrumbsItems="@_breadcrumbsItems" />
+    <div class="home-content">
+        <div class="moderator-management-wrapper">
+            @if (isAdmin)
+            {
+                <ModeratorTable TableTitle="Administratorzy" Users="@admins">
+                    <TableHeader>
+                        <th>Nazwa użytkownika</th>
+                        <th>E-mail</th>
+                        <th></th>
+                        <th></th>
+                    </TableHeader>
+                    <TableRowTemplate Context="user">
+                        <td>@user.UserName</td>
+                        <td>@user.Email</td>
+                        <td></td>
+                        <td></td>
+                    </TableRowTemplate>
+                </ModeratorTable>
+
+                <ModeratorTable TableTitle="Główni Moderatorzy" Users="@mainModerators">
+                    <TableHeader>
+                        <th>Nazwa użytkownika</th>
+                        <th>E-mail</th>
+                        <th>Opcje</th>
+                        <th>Uczelnia</th>
+                    </TableHeader>
+                    <TableRowTemplate Context="user">
+                        <td>@user.UserName</td>
+                        <td>@user.Email</td>
+                        <td>
+                            <img style="visibility: hidden;" src="/images/one-arrow-up.png" />
+                            <img style="visibility: hidden;" src="/images/two-arrows-up.png" />
+                            <a @onclick="(() => DemoteToMember(user.Id))" style="cursor: pointer">
+                                <img src="/images/cross.png" class="tooltipped" data-position="top" data-tooltip="Degraduj" />
+                            </a>
+                        </td>
+                        <td>
+                            <MainModeratorUniversitySelectBox User="user"
+                                                              Universities="universities"
+                                                              ModeratorsInUniversities="universitiesMainModeratorsWithIdentityId"
+                                                              AssignModeratorToUniversity="AssignModeratorToUniversity">
+                            </MainModeratorUniversitySelectBox>
+                        </td>
+                    </TableRowTemplate>
+                </ModeratorTable>
+            }
+
+            <ModeratorTable TableTitle="Moderatorzy" Users="@moderators">
+                <TableHeader>
+                    <th>Nazwa użytkownika</th>
+                    <th>E-mail</th>
+                    <th>Opcje</th>
+                    <th></th>
+                </TableHeader>
+                <TableRowTemplate Context="user">
+                    <td>@user.UserName</td>
+                    <td>@user.Email</td>
+                    <td>
+                        <img style="visibility: hidden;" src="/images/one-arrow-up.png" />
+                        <a @onclick="(() => PromoteToMainModerator(user.Id))" style="cursor: pointer">
+                            <img src="/images/two-arrows-up.png" class="tooltipped" data-position="top" data-tooltip="Awansuj na moderatora głównego" />
+                        </a>
+                        <a @onclick="(() => DemoteToMember(user.Id))" style="cursor: pointer">
+                            <img src="/images/cross.png" class="tooltipped" data-position="top" data-tooltip="Degraduj" />
+                        </a>
+                    </td>
+                    <td></td>
+                </TableRowTemplate>
+            </ModeratorTable>
+
+            <ModeratorTable TableTitle="Użytkownicy" Users="@members">
+                <TableHeader>
+                    <th>Nazwa użytkownika</th>
+                    <th>E-mail</th>
+                    <th>Opcje</th>
+                    <th></th>
+                </TableHeader>
+                <TableRowTemplate Context="user">
+                    <td>@user.UserName</td>
+                    <td>@user.Email</td>
+                    <td>
+                        <a @onclick="(() => PromoteToModerator(user.Id))" style="cursor: pointer">
+                            <img src="/images/one-arrow-up.png" class="tooltipped" data-position="top" data-tooltip="Awansuj na moderatora" />
+                        </a>
+                        <a @onclick="(() => PromoteToMainModerator(user.Id))" style="cursor: pointer">
+                            <img src="/images/two-arrows-up.png" class="tooltipped" data-position="top" data-tooltip="Awansuj na moderatora głównego" />
+                        </a>
+                        <img style="visibility: hidden;" src="/images/cross.png" />
+                    </td>
+                    <td></td>
+                </TableRowTemplate>
+            </ModeratorTable>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private List<IdentityUser> admins = new List<IdentityUser>();
+    private List<IdentityUser> mainModerators = new List<IdentityUser>();
+    private List<IdentityUser> moderators = new List<IdentityUser>();
+    private List<IdentityUser> members = new List<IdentityUser>();
+    private List<University> universities = new List<University>();
+    private List<MainModeratorAppIdIdentityIdViewModel> universitiesMainModeratorsWithIdentityId = new List<MainModeratorAppIdIdentityIdViewModel>();
+
+    bool isAdmin;
+
+    private const string pageTitle = "Zarządzaj moderatorami";
+    private IReadOnlyCollection<BreadcrumbViewModel> _breadcrumbsItems = new List<BreadcrumbViewModel>
+{
+        new BreadcrumbViewModel(pageTitle)
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshData();
+    }
+
+    private async Task RefreshData()
+    {
+        admins = (await _roleService
+                .GetUsersInRoleAsync(Roles.AdministratorRole))
+                .ToList();
+
+        mainModerators = (await _roleService
+            .GetUsersInRoleAsync(Roles.MainModeratorRole))
+            .ToList();
+
+        moderators = (await _roleService
+            .GetUsersInRoleAsync(Roles.ModeratorRole))
+            .ToList();
+
+        members = (await _roleService
+            .GetUsersInRoleAsync(Roles.MemberRole))
+            .ToList();
+
+        universities = _universityService
+            .GetUniversities().ToList();
+
+        var universitiesMainModerators = _mainModeratorService
+            .GetAllUniversitiesMainModerators();
+
+        universitiesMainModeratorsWithIdentityId = new List<MainModeratorAppIdIdentityIdViewModel>();
+
+        for (int i = 0; i < mainModerators.Count; i++)
+        {
+            var appUser = _userService.FindByIdentityUserId(mainModerators[i].Id);
+
+            foreach (var item in universitiesMainModerators)
+            {
+                if (appUser.UserId == item.UserId)
+                {
+                    universitiesMainModeratorsWithIdentityId.Add(new MainModeratorAppIdIdentityIdViewModel
+                    {
+                        IdentityId = appUser.IdentityUserId,
+                        UniversityId = item.UniversityId
+                    });
+                }
+            }
+        }
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        var currentUser = await userManager.GetUserAsync(user);
+        isAdmin = currentUser != null && await userManager.IsInRoleAsync(currentUser, Roles.AdministratorRole);
+    }
+
+    private async Task PromoteToMainModerator(string userId)
+    {
+        var userToPromote = await _roleService.FindByIdAsync(userId);
+
+        if (userToPromote == null)
+        {
+            _navigationManager.NavigateTo($"ResourceNotFound/{Errors.UserNotFound}");
+        }
+
+        var userRoles = (await _roleService.GetRolesAsync(userToPromote)).ToArray();
+        await _roleService.RemoveFromRolesAsync(userToPromote, userRoles);
+        await _roleService.AddToRoleAsync(userToPromote, Roles.MainModeratorRole);
+
+        await RefreshData();
+    }
+
+    private async Task PromoteToModerator(string userId)
+    {
+        var userToPromote = await _roleService.FindByIdAsync(userId);
+
+        if (userToPromote == null)
+        {
+            _navigationManager.NavigateTo($"ResourceNotFound/{Errors.UserNotFound}");
+        }
+
+        var userRoles = (await _roleService.GetRolesAsync(userToPromote)).ToArray();
+        await _roleService.RemoveFromRolesAsync(userToPromote, userRoles);
+        await _roleService.AddToRoleAsync(userToPromote, Roles.ModeratorRole);
+
+        await RefreshData();
+    }
+
+    private async Task DemoteToMember(string userId)
+    {
+        var userToDemote = await _roleService.FindByIdAsync(userId);
+
+        if (userToDemote == null)
+        {
+            _navigationManager.NavigateTo($"ResourceNotFound/{Errors.UserNotFound}");
+        }
+
+        var userRoles = (await _roleService.GetRolesAsync(userToDemote)).ToArray();
+        await _roleService.RemoveFromRolesAsync(userToDemote, userRoles);
+        await _roleService.AddToRoleAsync(userToDemote, Roles.MemberRole);
+
+        var appUser = _userService.FindByIdentityUserId(userId);
+        var moderatorInUniversity = _mainModeratorService.GetUniversityMainModerator(appUser.UserId);
+
+        if (moderatorInUniversity != null)
+        {
+            _mainModeratorService.UnassignMainModeratorFromUniversity(moderatorInUniversity);
+        }
+
+        await RefreshData();
+    }
+
+    private void AssignModeratorToUniversity(MainModeratorAppIdIdentityIdViewModel moderatorUniversity)
+    {
+        var appUser = _userService.FindByIdentityUserId(moderatorUniversity.IdentityId);
+
+        if (appUser == null)
+        {
+            _navigationManager.NavigateTo($"ResourceNotFound/{Errors.UserNotFound}");
+        }
+
+        if (moderatorUniversity.UniversityId == 0)
+        {
+            _navigationManager.NavigateTo("/Moderator/ModeratorPanel/ModeratorManagement");
+        }
+
+        var newMainModInUniversity = new UniversityMainModerator
+        {
+            UserId = appUser.UserId,
+            UniversityId = moderatorUniversity.UniversityId
+        };
+
+        if (_mainModeratorService.UniversityMainModeratorExists(appUser.UserId))
+        {
+            _mainModeratorService.EditMainModeratorAssignement(newMainModInUniversity);
+        }
+        else
+        {
+            _mainModeratorService.AssignMainModeratorToUniversity(newMainModInUniversity);
+        }
+    }
+}

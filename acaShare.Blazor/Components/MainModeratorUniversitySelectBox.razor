@@ -1,0 +1,45 @@
+﻿<select @bind="_universityId"
+        id="@User.Id">
+    <option value="0">Wybierz Uczelnię...</option>
+    @foreach (var uni in Universities)
+    {
+        if (uni.UniversityId == _moderatedUniversityId)
+        {
+            <option value="@uni.UniversityId" selected>@uni.Name</option>
+        }
+        else
+        {
+            <option value="@uni.UniversityId">@uni.Name</option>
+        }
+    }
+</select>
+<input name="userId" asp-for="@User.Id" type="hidden" />
+<button class="add-button" @onclick="InvokeAssign">Wybierz Uczelnię</button>
+
+@code {
+    [Parameter]
+    public IdentityUser User { get; set; }
+    [Parameter]
+    public IReadOnlyList<University> Universities { get; set; }
+    [Parameter]
+    public IReadOnlyList<MainModeratorAppIdIdentityIdViewModel> ModeratorsInUniversities { get; set; }
+    [Parameter]
+    public Action<MainModeratorAppIdIdentityIdViewModel> AssignModeratorToUniversity { get; set; }
+
+    private int _moderatedUniversityId;
+    private int _universityId;
+
+    protected override void OnInitialized()
+    {
+        foreach (var mod in ModeratorsInUniversities)
+        {
+            if (mod.IdentityId.Equals(User.Id))
+                _moderatedUniversityId = mod.UniversityId;
+        }
+    }
+
+    private void InvokeAssign()
+    {
+        AssignModeratorToUniversity?.Invoke(new MainModeratorAppIdIdentityIdViewModel { IdentityId = User.Id, UniversityId = _universityId});
+    }
+}
