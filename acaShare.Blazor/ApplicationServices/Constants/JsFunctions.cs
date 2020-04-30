@@ -10,6 +10,7 @@ namespace acaShare.Blazor.ApplicationServices.Constants
         public static readonly string InitializeNotifications = CreateAbsoluteIdentifier("initializeNotifications");
         public static readonly string SetDocumentTitle = CreateAbsoluteIdentifier("setDocumentTitle");
         public static readonly string OpenModal = CreateAbsoluteIdentifier("openModal");
+        public static readonly string InitializeStatistics = CreateAbsoluteIdentifier("initializeStatistics");
         private static string CreateAbsoluteIdentifier(string v)
         {
             return $"{_prefix}.{v}";

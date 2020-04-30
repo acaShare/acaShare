@@ -1,0 +1,49 @@
+﻿@page "/Moderator/ModeratorPanel/Statistics/DeleteRequestsGroupedByReason"
+@attribute [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole + ", " + Roles.ModeratorRole)]
+@inject IStatisticsService StatisticsService
+@inject IJSRuntime JSRuntime
+
+<link rel="stylesheet" href="/css/delete-requests-chart.css" />
+
+<div class="data-container">
+    <Breadcrumbs BreadcrumbsItems="@_breadcrumbsItems" />
+    <div class="home-content">
+        <div class="additional-info">
+            Liczba zaakceptowanych sugestii usunięcia w stosunku do wszyskich:
+            @statistics.CountOfActuallyDeleted / @statistics.RequestsCount
+        </div>
+
+        <div class="chart-wrapper">
+            <canvas id="myChart" class="chart-canvas"></canvas>
+        </div>
+    </div>
+</div>
+
+@code {
+    private IDeleteRequestsStatisticsData statistics;
+    private const string pageTitle = "Sugestie usunięcia pogrupowane według przyczyny";
+    private ConfirmationDialog ConfirmationModal { get; set; }
+    private IReadOnlyCollection<BreadcrumbViewModel> _breadcrumbsItems = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel("Statystyki", "/Moderator/ModeratorPanel/Statistics"),
+        new BreadcrumbViewModel("Statystyki sugestii usunięcia", "/Moderator/ModeratorPanel/Statistics/DeleteRequestsStatistics"),
+        new BreadcrumbViewModel(pageTitle)
+    };
+
+    protected override void OnInitialized()
+    {
+        ChangePageTitle(pageTitle);
+        RefreshData();
+    }
+
+    private void RefreshData()
+    {
+        statistics = StatisticsService.GetDeleteRequestsGroupedByReason();
+
+        var jsonStatistics = System.Text.Json.JsonSerializer.Serialize(statistics.ReasonsStatistics);
+        JSRuntime.InvokeVoidAsync(JsFunctions.InitializeStatistics, statistics.ReasonsStatistics);
+    }
+
+    [CascadingParameter]
+    public Action<string> ChangePageTitle { get; set; }
+}

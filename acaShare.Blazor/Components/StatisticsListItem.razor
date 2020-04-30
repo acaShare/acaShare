@@ -1,0 +1,34 @@
+﻿@inject NavigationManager NavigationManager
+
+<NavLink class="item-link" @onclick="DeleteRequestStatistics" style="cursor: pointer">
+    <span class="path-list-item-title">@Statistic.Name</span>
+    <br>
+    <span class="path-list-item-subtitle">
+        @if (Statistic.Description?.Length > 100)
+        {
+            @Statistic.Description.Substring(0, 100);
+            @:[...]
+        }
+        else
+        {
+            @Statistic.Description;
+        }
+    </span>
+</NavLink>
+
+@code {
+    [Parameter]
+    public Statistics Statistic { get; set; }
+
+    private void DeleteRequestStatistics()
+    {
+        if (Statistic.Action.Equals("DeleteRequestsStatistics"))
+        {
+            NavigationManager.NavigateTo($"/Moderator/ModeratorPanel/Statistics/DeleteRequestsStatistics");
+        }
+        else if (Statistic.Action.Equals("DeleteRequestsGroupedByReason"))
+        {
+            NavigationManager.NavigateTo($"/Moderator/ModeratorPanel/Statistics/DeleteRequestsGroupedByReason");
+        }
+    }
+}

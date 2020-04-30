@@ -16,14 +16,14 @@ namespace acaShare.ServiceLayer.Interfaces
             _uow = uow;
         }
 
-        public ICollection<Statistics> GetAvailableStatistics()
+        public IReadOnlyCollection<Statistics> GetAvailableStatistics()
         {
             return new List<Statistics> {
                 new Statistics { Name = "Statystyki sugestii usunięcia", Action = "DeleteRequestsStatistics" }
             };
         }
 
-        public ICollection<Statistics> GetAvailableDeleteRequestsStatistics()
+        public IReadOnlyCollection<Statistics> GetAvailableDeleteRequestsStatistics()
         {
             return new List<Statistics> {
                 new Statistics { Name = "Sugestie usunięcia pogrupowane według przyczyny", Action = "DeleteRequestsGroupedByReason" }
