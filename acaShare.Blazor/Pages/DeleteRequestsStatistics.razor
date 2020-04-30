@@ -1,0 +1,39 @@
+﻿@page "/Moderator/ModeratorPanel/Statistics/DeleteRequestsStatistics"
+@attribute [Authorize(Roles = Roles.AdministratorRole + ", " + Roles.MainModeratorRole + ", " + Roles.ModeratorRole)]
+@inject IStatisticsService StatisticsService
+
+<div class="data-container">
+    <Breadcrumbs BreadcrumbsItems="@_breadcrumbsItems" />
+    <div class="home-content">
+        <AcaCollection Items="statistics">
+            <ListItemTemplate>
+                <StatisticsListItem Statistic="context" />
+            </ListItemTemplate>
+        </AcaCollection>
+    </div>
+</div>
+
+@code {
+    private IReadOnlyCollection<Statistics> statistics;
+    private const string pageTitle = "Statystyki sugestii usunięcia";
+    private ConfirmationDialog ConfirmationModal { get; set; }
+    private IReadOnlyCollection<BreadcrumbViewModel> _breadcrumbsItems = new List<BreadcrumbViewModel>
+    {
+        new BreadcrumbViewModel("Statystyki", "/Moderator/ModeratorPanel/Statistics"),
+        new BreadcrumbViewModel(pageTitle)
+    };
+
+    protected override void OnInitialized()
+    {
+        ChangePageTitle(pageTitle);
+        RefreshData();
+    }
+
+    private void RefreshData()
+    {
+        statistics = StatisticsService.GetAvailableDeleteRequestsStatistics();
+    }
+
+    [CascadingParameter]
+    public Action<string> ChangePageTitle { get; set; }
+}
