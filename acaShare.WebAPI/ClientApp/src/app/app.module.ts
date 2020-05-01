@@ -26,6 +26,7 @@ import { DepartmentsManagementComponent } from './departments-management/departm
 import { SemestersManagementComponent } from './semesters-management/semesters-management.component';
 import { SubjectsManagementComponent } from './subjects-management/subjects-management.component';
 import { ManageUniversityTreeElementComponent } from './manage-university-tree-element/manage-university-tree-element.component';
+import { RegulationsComponent } from './regulations/regulations.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { ManageUniversityTreeElementComponent } from './manage-university-tree-e
     SemestersManagementComponent,
     SubjectsManagementComponent,
     ManageUniversityTreeElementComponent,
+    RegulationsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -85,7 +87,8 @@ import { ManageUniversityTreeElementComponent } from './manage-university-tree-e
               { path: 'universities/:universityId/departments/:departmentId/semesters/:semesterId/subjects/add-subject', component: ManageUniversityTreeElementComponent, data: { title: 'Dodawnie przedmiotu' }  },
               { path: 'universities/:universityId/departments/:departmentId/semesters/:semesterId/subjects/:subjectId/edit-subject', component: ManageUniversityTreeElementComponent, data: { title: 'Edycja przedmiotu' }  },
             ]
-          }
+          },
+          { path: 'regulations', component: RegulationsComponent, data: { title: "Regulamin" } }
         ]
       },
       { path: '**', component: PageNotFoundComponent }
