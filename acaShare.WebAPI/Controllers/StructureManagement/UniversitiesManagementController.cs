@@ -23,8 +23,13 @@ namespace acaShare.WebAPI.Controllers.StructureManagement
         private readonly IUserService _userservice;
         private readonly IMainModeratorService _mainModeratorService;
 
-        public UniversitiesManagementController(IUniversityTreeTraversalService traversalService, IUniversityTreeManagementService managementService,
-            IMaterialsService materialsService, IFormFilesManagement formFilesManagement, IUserService userService, IMainModeratorService mainModeratorService)
+        public UniversitiesManagementController(
+            IUniversityTreeTraversalService traversalService, 
+            IUniversityTreeManagementService managementService,
+            IMaterialsService materialsService, 
+            IFormFilesManagement formFilesManagement, 
+            IUserService userService, 
+            IMainModeratorService mainModeratorService)
         {
             _traversalService = traversalService;
             _managementService = managementService;
