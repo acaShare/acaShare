@@ -84,6 +84,7 @@ namespace acaShare.WebAPI
                 app.UseHsts();
             }
 
+            app.UseMiddleware<ResponseTimeMiddleware>();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             if (!env.IsDevelopment())

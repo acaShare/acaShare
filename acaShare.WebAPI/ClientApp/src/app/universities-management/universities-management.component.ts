@@ -11,7 +11,8 @@ import { Subscription } from 'rxjs';
 export class UniversitiesManagementComponent implements OnInit, OnDestroy {
   apiUrl = 'api/v1/universities';
   universities: University[];
-  activeSubscriptions: Subscription[] = [];
+
+  private activeSubscriptions: Subscription[] = [];
 
   constructor(private http: HttpClient) { }
 

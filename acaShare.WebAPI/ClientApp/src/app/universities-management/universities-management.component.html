@@ -14,7 +14,7 @@
                     <li *ngIf="!universities" class="aca-collection-item path-list-item">
                         <p class="empty-list">~ Pobieranie danych... ~</p>
                     </li>
-               
+
                     <li *ngIf="universities && universities.length === 0" class="aca-collection-item path-list-item">
                         <p class="empty-list">~ Pusto ~</p>
                     </li>
@@ -25,19 +25,22 @@
                             <br>
                             <span class="path-list-item-subtitle">{{ university.abbreviation }}</span>
                         </a>
-    
+
                         <div class="icons-row-container">
-                            <a [routerLink]="[university.id, 'edit-university']" class="tooltipped" data-position="top" data-tooltip="Edytuj">
+                            <a [routerLink]="[university.id, 'edit-university']" class="tooltipped" data-position="top"
+                                data-tooltip="Edytuj">
                                 <i class="material-icons list-icon icon-edit">edit</i>
                             </a>
-                            <a (click)="confirmDialog.toggleModal('Czy na pewno chcesz usunąć tę uczelnię?', university.id)" class="tooltipped" data-position="top" data-tooltip="Usuń">
-                                <i class="material-icons list-icon icon-delete tooltipped" data-position="top" data-tooltip="Usuń">delete</i>
+                            <a (click)="confirmDialog.toggleModal('Czy na pewno chcesz usunąć tę uczelnię?', university.id)"
+                                class="tooltipped" data-position="top" data-tooltip="Usuń">
+                                <i class="material-icons list-icon icon-delete tooltipped" data-position="top"
+                                    data-tooltip="Usuń">delete</i>
                             </a>
-                        </div>                
+                        </div>
                     </li>
                 </ul>
             </div>
-            
+
             <a [routerLink]="['add-university']" class="add-button">
                 Dodaj
             </a>
